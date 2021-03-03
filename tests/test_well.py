@@ -1,9 +1,10 @@
 import os
+import time
 import unittest
 
 from storage import Storage
 from well import Well
-from well import WellDataset, WellDataset2
+from well import WellDataset, WellDataset2, WellDatasetColumns
 
 PATH_TO_TEST_DATA = os.path.join('test_data')
 
@@ -155,28 +156,117 @@ class TestWellDataset(unittest.TestCase):
         curves = dataset.info['Curves']
         assert mnemonic_2 in curves and mnemonic_3 in curves
 
+    def test_get_data_time(self):
+        wellname = '15_9-13'
+        dataset_name = 'one'
+        well = Well(wellname, new=True)
+        dataset = WellDataset(well, dataset_name)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        start = time.time()
+        data = dataset.get_data()
+        end = time.time()
+        assert end - start < 1
 
-# class TestWellDataset2(unittest.TestCase):
-#     def setUp(self) -> None:
-#         _s = Storage()
-#         _s.flush_db()
-#         _s.init_db()
-#         self.path_to_test_data = PATH_TO_TEST_DATA
-#
-#     def test_create_and_delete_datasets(self):
-#         f = '7_1-2 S.las'
-#         wellname = f.replace(".las", "")
-#         well = Well(wellname, new=True)
-#
-#         dataset = WellDataset2(well, "one")
-#         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
-#         assert 'one' in well.datasets
-#         dataset = WellDataset2(well, "two")
-#         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
-#         dataset = WellDataset2(well, "one")
-#         dataset.delete()
-#         assert 'one' not in well.datasets
-#         assert 'two' in well.datasets
+
+class TestWellDatasetColumns(unittest.TestCase):
+    def setUp(self) -> None:
+        _s = Storage()
+        _s.flush_db()
+        _s.init_db()
+        self.path_to_test_data = PATH_TO_TEST_DATA
+
+    def test_create_and_delete_datasets(self):
+        f = '7_1-2 S.las'
+        wellname = f.replace(".las", "")
+        well = Well(wellname, new=True)
+
+        dataset = WellDatasetColumns(well, "one")
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        assert 'one' in well.datasets
+        dataset = WellDatasetColumns(well, "two")
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        dataset = WellDatasetColumns(well, "one")
+        dataset.delete()
+        assert 'one' not in well.datasets
+        assert 'two' in well.datasets
+
+    def test_dataset_get_data(self):
+        ref_depth = 2000.0880000
+        wellname = '15_9-13'
+        dataset_name = 'one'
+        well = Well(wellname, new=True)
+        dataset = WellDatasetColumns(well, dataset_name)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
+        true_answer = {'GR': 46.731338501, 'SP': 63.879390717, 'DTC': 143.6020813, 'PEF': 6.3070640564, 'ROP': 38.207931519, 'RXO': None, 'CALI': 18.639200211,
+                       'DRHO': 0.0151574211, 'NPHI': 0.5864710212, 'RDEP': 0.4988202751, 'RHOB': 1.8031704426, 'RMED': 0.4965194166, 'RSHA': None, 'X_LOC': 437627.5625,
+                       'Y_LOC': 6470980.0, 'Z_LOC': -1974.846802, 'DEPTH_MD': 2000.0880127, 'MUDWEIGHT': 0.1366020888, 'FORCE_2020_LITHOFACIES_LITHOLOGY': 30000.0,
+                       'FORCE_2020_LITHOFACIES_CONFIDENCE': 1.0}
+        for key in true_answer.keys():
+            assert data[ref_depth][key] == true_answer[key]
+
+    def test_get_data_time(self):
+        wellname = '15_9-13'
+        dataset_name = 'one'
+        well = Well(wellname, new=True)
+        dataset = WellDatasetColumns(well, dataset_name)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        start = time.time()
+        data = dataset.get_data()
+        end = time.time()
+        assert end - start < 1
+
+    def test_dataset_insert_row(self):
+        wellname = 'random_well'
+        dataset_name = 'insert_row'
+        reference = 450
+        reference_2 = 800
+        row = {"GR": 87.81237987, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
+        row_2 = {"GR": 97.2, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
+        well = Well(wellname, new=True)
+        dataset = WellDatasetColumns(well, dataset_name)
+        dataset.register()
+        dataset.add_log("GR", float)
+        dataset.add_log("PS", float)
+        dataset.add_log("LITHO", int)
+        dataset.add_log("STRING", str)
+
+        dataset.insert({reference: row})
+        assert dataset.get_data(start=reference, end=reference) == {reference: row}
+        dataset.insert({reference: row_2})
+        assert dataset.get_data(start=reference, end=reference) == {reference: row_2}
+        assert dataset.get_data(logs=["GR", "PS"], start=reference, end=reference) == {reference: {"GR": 97.2, "PS": -0.234235555667, }}
+        assert dataset.get_data(logs=["GR", ], start=reference, end=reference) == {reference: {"GR": 97.2, }}
+
+        dataset.insert({reference_2: row})
+        assert dataset.get_data(logs=["GR", ], start=reference, end=reference) == {reference: {"GR": 97.2, }}
+        dataset.insert({reference_2: row_2})
+        assert dataset.get_data(start=reference_2, end=reference_2) == {reference_2: row_2}
+        assert dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, "PS": -0.234235555667, }}
+        assert dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, }}
+
+
+class TestWellDataset2(unittest.TestCase):
+    def setUp(self) -> None:
+        _s = Storage()
+        _s.flush_db()
+        _s.init_db()
+        self.path_to_test_data = PATH_TO_TEST_DATA
+
+    def test_create_and_delete_datasets(self):
+        f = '7_1-2 S.las'
+        wellname = f.replace(".las", "")
+        well = Well(wellname, new=True)
+
+        dataset = WellDataset2(well, "one")
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        assert 'one' in well.datasets
+        dataset = WellDataset2(well, "two")
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        dataset = WellDataset2(well, "one")
+        dataset.delete()
+        assert 'one' not in well.datasets
+        assert 'two' in well.datasets
 #
 #     def test_dataset_info(self):
 #         wellname = 'new_test_well'
