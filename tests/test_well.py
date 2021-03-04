@@ -1,6 +1,9 @@
 import os
+import string
 import time
 import unittest
+from datetime import datetime, timedelta
+from random import randint, random, choice
 
 from storage import Storage
 from well import Well
@@ -244,6 +247,100 @@ class TestWellDatasetColumns(unittest.TestCase):
         assert dataset.get_data(start=reference_2, end=reference_2) == {reference_2: row_2}
         assert dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, "PS": -0.234235555667, }}
         assert dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, }}
+
+    def test_add_many_logs(self):
+        log_count = 10
+        LOG_TYPES = (float, str, int, bool, datetime,)
+        wellname = 'thousand_logs'
+        datasetname = 'this_dataset'
+        well = Well(wellname, new=True)
+        dataset = WellDatasetColumns(well, datasetname)
+        # load some real data
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
+
+        # create logs in the dataset
+        new_logs = [f"LOG_{l}" for l in range(0, log_count)]
+        log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
+
+        # get depths
+        existing_data = dataset.get_data(logs=["reference", ])
+
+        # add data to the logs
+        def dummy_data(dtype):
+            generators = {
+                float: 400 * random() - 200,
+                str: ''.join(choice(string.ascii_letters) for i in range(64)),
+                int: randint(-1000, 1000),
+                datetime: datetime.now() + random() * timedelta(days=1),
+                bool: 1 == randint(0, 1)
+            }
+            return generators[dtype]
+
+        def dummy_row(logs, dtypes):
+            return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
+
+        data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
+
+        start = time.time()
+        dataset.add_log(new_logs, log_types)
+        dataset.insert(data)
+        end = time.time()
+        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+
+        for _ in range(5):
+            start = time.time()
+            d = dataset.get_data()
+            end = time.time()
+            print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
+            print("Pause 5s")
+            time.sleep(5)
+
+    def test_add_many_logs_read_ten_random(self):
+        log_count = 10
+        LOG_TYPES = (float, str, int, bool, datetime,)
+        wellname = 'thousand_logs'
+        datasetname = 'this_dataset'
+        well = Well(wellname, new=True)
+        dataset = WellDatasetColumns(well, datasetname)
+        # load some real data
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
+
+        # create logs in the dataset
+        new_logs = [f"LOG_{l}" for l in range(0, log_count)]
+        log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
+
+        # get depths
+        existing_data = dataset.get_data(logs=["reference", ])
+
+        # add data to the logs
+        def dummy_data(dtype):
+            generators = {
+                float: 400 * random() - 200,
+                str: ''.join(choice(string.ascii_letters) for i in range(64)),
+                int: randint(-1000, 1000),
+                datetime: datetime.now() + random() * timedelta(days=1),
+                bool: 1 == randint(0, 1)
+            }
+            return generators[dtype]
+
+        def dummy_row(logs, dtypes):
+            return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
+
+        data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
+
+        start = time.time()
+        dataset.add_log(new_logs, log_types)
+        dataset.insert(data)
+        end = time.time()
+        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+
+        for _ in range(5):
+            start = time.time()
+            d = dataset.get_data(logs=[new_logs[randint(0, len(new_logs) - 1)] for _ in range(0, 10)])
+            end = time.time()
+            print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
+            print("Pause 5s")
+            time.sleep(5)
 
 
 class TestWellDataset2(unittest.TestCase):

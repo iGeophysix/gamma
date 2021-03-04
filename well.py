@@ -1,8 +1,8 @@
 import logging
+from collections.abc import Iterable
 
 import lasio
 import pandas as pd
-from numpy import nan
 from sqlalchemy import create_engine
 
 from settings import MISSING_VALUE, META_REFERENCE
@@ -305,7 +305,14 @@ class WellDatasetColumns:
 
     def add_log(self, name, dtype):
         _s = ColumnStorage()
-        _s.add_log(self._well, self._name, log_name=name, log_type=_s.get_data_type(dtype))
+        if type(name) == str:
+            _s.add_log(self._well, self._name, log_name=name, log_type=_s.get_data_type(dtype))
+        elif isinstance(name, Iterable):
+            for n, d in zip(name, dtype):
+                _s.add_log(self._well, self._name, log_name=n, log_type=_s.get_data_type(d), autocommit=False)
+            _s.commit()
+        else:
+            raise Exception("Log name is neither a str nor an iterable")
 
     def delete_log(self, name):
         _s = ColumnStorage()
