@@ -119,6 +119,7 @@ class ColumnStorage:
     def get_dataset_info(self, wellname, datasetname):
         query = f"""SELECT info FROM datasets d where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
         self._conn.execute(query)
+        return self._conn.fetchone()[0]
 
     def set_dataset_info(self, wellname, datasetname, info, autocommit=True):
         query = f"""UPDATE datasets d SET info = '{json.dumps(info)}' where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""

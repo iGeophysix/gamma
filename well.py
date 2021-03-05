@@ -64,6 +64,16 @@ class WellDataset:
         _storage = ColumnStorage()
         self._dataset_table_name = _storage.create_dataset(self._well, self._name)
 
+    @property
+    def info(self):
+        _s = ColumnStorage()
+        return _s.get_dataset_info(self._well, self._name)
+
+    @info.setter
+    def info(self, info):
+        _s = ColumnStorage()
+        return _s.set_dataset_info(self._well, self._name, info)
+
     @staticmethod
     def __get_las_headers(sections, keys=None, exclude=('data', 'json')):
         def section_to_dict(section, keys=None, exclude=('data', 'json')):
