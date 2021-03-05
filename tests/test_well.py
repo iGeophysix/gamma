@@ -1,6 +1,7 @@
 import os
-import time
 import unittest
+
+import psycopg2
 
 from storage import ColumnStorage
 from well import Well, WellDatasetColumns
@@ -17,12 +18,12 @@ class TestWell(unittest.TestCase):
 
     def test_create_well(self):
         w = Well("test_well", new=True)
-        assert w.info == {}
+        self.assertEqual(w.info, {})
         info = {"test_info": "test_key"}
         w.info = info
-        assert w.info == info
+        self.assertEqual(w.info, info)
         w.delete()
-        assert str(w) == "test_well"
+        self.assertEqual(str(w), "test_well")
 
     def test_create_well_and_add_dataset(self):
         wellname = "well2"
@@ -39,7 +40,18 @@ class TestWell(unittest.TestCase):
         dataset.register()
         dataset.add_log(dataset_info.keys(), dataset_info.values())
         dataset.insert(test_data)
-        assert 'one' in well.datasets
+        self.assertIn('one', well.datasets)
         dataset.delete()
-        assert 'one' not in well.datasets
+        self.assertNotIn('one', well.datasets)
         well.delete()
+
+    def test_insert_two_datasets_with_same_name(self):
+        f = 'well1'
+        wellname = f.replace(".las", "")
+        well = Well(wellname, new=True)
+
+        dataset1 = WellDatasetColumns(well, "one")
+        dataset1.register()
+        dataset2 = WellDatasetColumns(well, "one")
+        with self.assertRaises(psycopg2.errors.DuplicateTable):
+            dataset2.register()

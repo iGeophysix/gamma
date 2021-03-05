@@ -11,15 +11,13 @@ class TestStorage(unittest.TestCase):
 
     def test_create_well(self):
         self._s.create_well("test_well")
-        assert self._s.get_well_info("test_well") == {}
-        info = {"wellname": "TEST WELL 2", "other_key":2}
+        self.assertEqual(self._s.get_well_info("test_well"), {})
+        info = {"wellname": "TEST WELL 2", "other_key": 2}
         self._s.update_well_info("test_well_2", info)
-        assert self._s.get_well_info("test_well_2") == info
+        self.assertEqual(self._s.get_well_info("test_well_2"), info)
 
     def test_delete_well(self):
         self._s.create_well("test_well")
-        assert self._s.get_well_info("test_well") == {}
+        self.assertEqual(self._s.get_well_info("test_well"), {})
         self._s.delete_well("test_well")
-        assert "test_well" not in self._s.list_wells()
-
-
+        self.assertNotIn("test_well", self._s.list_wells())

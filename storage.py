@@ -118,10 +118,11 @@ class ColumnStorage:
         query = f"""SELECT info FROM datasets d where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
         self._conn.execute(query)
 
-    def set_dataset_info(self, wellname, datasetname, info):
-        query = f"""UPDATE datasets d SET d.info = '{json.dumps(info)}' where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
+    def set_dataset_info(self, wellname, datasetname, info, autocommit=True):
+        query = f"""UPDATE datasets d SET info = '{json.dumps(info)}' where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
         self._conn.execute(query)
-        self.commit()
+        if autocommit:
+            self.commit()
 
     def delete_dataset(self, wellname, datasetname):
         self._unregister_dataset(wellname, datasetname, autocommit=False)
@@ -130,7 +131,7 @@ class ColumnStorage:
         self._engine.commit()
 
     @my_timer
-    def bulk_load_dataset(self, well_name, dataset_name, logs: dict, values: dict, size: int = 8192, trunc=True) -> None:
+    def bulk_load_dataset(self, well_name, dataset_name, logs: dict, values: dict, size: int = 8192, trunc=True, autocommit=True) -> None:
         with self._engine.cursor() as cursor:
             if trunc:
                 try:
@@ -148,7 +149,8 @@ class ColumnStorage:
 
             cursor.copy_from(data_to_insert, f'"{self.__generate_dataset_name(well_name, dataset_name)}"', sep='|', size=size, null=str(MISSING_VALUE))
 
-        self.commit()
+        if autocommit:
+            self.commit()
 
     @my_timer
     def read_dataset(self, well_name, dataset_name, logs=None, depth=None, depth__gt=None, depth__lt=None):

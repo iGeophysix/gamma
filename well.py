@@ -41,20 +41,6 @@ class Well:
         datasets = _s.get_datasets(self._name).keys()
         return datasets
 
-    # def register_dataset(self, dataset_name, dataset_table_name):
-    #     _s = ColumnStorage()
-    #     well_info = _s.get_well_info(self._name)
-    #     dataset_info = self.info['datasets'] if 'datasets' in well_info.keys() else {}
-    #     dataset_info[dataset_name] = dataset_table_name
-    #     well_info['datasets'] = dataset_info
-    #     self.info = well_info
-    #
-    # def unregister_dataset(self, dataset_name):
-    #     _s = ColumnStorage()
-    #     well_info = self.info
-    #     well_info['datasets'].pop(dataset_name, None)
-    #     self.info = well_info
-
     def delete(self):
         for dataset in self.datasets:
             d = WellDatasetColumns(self, dataset)
@@ -78,6 +64,23 @@ class WellDatasetColumns:
         _storage = ColumnStorage()
         self._dataset_table_name = _storage.create_dataset(self._well, self._name)
 
+    @staticmethod
+    def __get_las_headers(sections, keys=None, exclude=('data', 'json')):
+        def section_to_dict(section, keys=None, exclude=('data', 'json')):
+            if type(section) == str:
+                return section
+
+            _out = {}
+            for field, item in section.items():
+                _out[field] = {}
+                if keys is None:
+                    keys = [key for key in item.__dict__.keys() if key not in exclude]
+                _out[field].update({key: item[key] for key in keys})
+
+            return _out
+
+        return {section: section_to_dict(sections[section], keys, exclude) for section in sections}
+
     def read_las(self, filename: str):
         debug.debug(f"Reading file: {filename}")
         _storage = ColumnStorage()
@@ -86,9 +89,9 @@ class WellDatasetColumns:
         temp_df = well_data.df().fillna(MISSING_VALUE)
         values = temp_df.to_dict('index')
         logs = {log: float for log in temp_df.columns}
-        _storage.bulk_load_dataset(well_name=self._well, dataset_name=self._name, logs=logs, values=values)
-        # _storage.update_dataset(self._dataset_table_name, META_REFERENCE, self.__get_las_headers(well_data.sections))
-        # _storage.commit()
+        _storage.bulk_load_dataset(well_name=self._well, dataset_name=self._name, logs=logs, values=values, autocommit=False)
+        _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections), autocommit=False)
+        _storage.commit()
 
     def delete(self):
         _s = ColumnStorage()

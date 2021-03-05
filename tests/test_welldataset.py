@@ -22,13 +22,13 @@ class TestWellDatasetColumns(unittest.TestCase):
 
         dataset = WellDatasetColumns(well, "one")
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
-        assert 'one' in well.datasets
+        self.assertIn('one', well.datasets)
         dataset = WellDatasetColumns(well, "two")
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         dataset = WellDatasetColumns(well, "one")
         dataset.delete()
-        assert 'one' not in well.datasets
-        assert 'two' in well.datasets
+        self.assertNotIn('one', well.datasets)
+        self.assertIn('two', well.datasets)
 
     def test_dataset_get_data(self):
         ref_depth = 2000.0880000
@@ -43,7 +43,7 @@ class TestWellDatasetColumns(unittest.TestCase):
                        'Y_LOC': 6470980.0, 'Z_LOC': -1974.846802, 'DEPTH_MD': 2000.0880127, 'MUDWEIGHT': 0.1366020888, 'FORCE_2020_LITHOFACIES_LITHOLOGY': 30000.0,
                        'FORCE_2020_LITHOFACIES_CONFIDENCE': 1.0}
         for key in true_answer.keys():
-            assert data[ref_depth][key] == true_answer[key]
+            self.assertEqual(data[ref_depth][key], true_answer[key])
 
     def test_get_data_time(self):
         wellname = '15_9-13'
@@ -52,9 +52,9 @@ class TestWellDatasetColumns(unittest.TestCase):
         dataset = WellDatasetColumns(well, dataset_name)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
         start = time.time()
-        data = dataset.get_data()
+        dataset.get_data()
         end = time.time()
-        assert end - start < 1
+        self.assertLess(end - start, 1)
 
     def test_dataset_insert_row(self):
         wellname = 'random_well'
@@ -72,18 +72,18 @@ class TestWellDatasetColumns(unittest.TestCase):
         dataset.add_log("STRING", str)
 
         dataset.insert({reference: row})
-        assert dataset.get_data(start=reference, end=reference) == {reference: row}
+        self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row})
         dataset.insert({reference: row_2})
-        assert dataset.get_data(start=reference, end=reference) == {reference: row_2}
-        assert dataset.get_data(logs=["GR", "PS"], start=reference, end=reference) == {reference: {"GR": 97.2, "PS": -0.234235555667, }}
-        assert dataset.get_data(logs=["GR", ], start=reference, end=reference) == {reference: {"GR": 97.2, }}
+        self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row_2})
+        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference, end=reference), {reference: {"GR": 97.2, "PS": -0.234235555667, }})
+        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
 
         dataset.insert({reference_2: row})
-        assert dataset.get_data(logs=["GR", ], start=reference, end=reference) == {reference: {"GR": 97.2, }}
+        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
         dataset.insert({reference_2: row_2})
-        assert dataset.get_data(start=reference_2, end=reference_2) == {reference_2: row_2}
-        assert dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, "PS": -0.234235555667, }}
-        assert dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2) == {reference_2: {"GR": 97.2, }}
+        self.assertEqual(dataset.get_data(start=reference_2, end=reference_2), {reference_2: row_2})
+        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, "PS": -0.234235555667, }})
+        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, }})
 
     # def test_add_many_logs(self):
     #     log_count = 10
