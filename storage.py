@@ -56,24 +56,28 @@ class ColumnStorage:
         self._conn.execute('select wellname from wells')
         return [well for well in self._conn]
 
-    def create_well(self, name):
-        self._conn.execute(f"INSERT INTO wells VALUES ('{name}','{{}}')")
+    def create_well(self, wellname):
+        self._conn.execute(f"INSERT INTO wells VALUES ('{wellname}','{{}}')")
         self._engine.commit()
 
-    def update_well_info(self, name, info):
+    def update_well_info(self, wellname, info):
         _info = json.dumps(info)
-        sql = f"""INSERT INTO wells (wellname, info) VALUES ('{name}', '{_info}') 
+        sql = f"""INSERT INTO wells (wellname, info) VALUES ('{wellname}', '{_info}') 
             ON CONFLICT (wellname) DO UPDATE 
-            SET info = '{_info}' WHERE wells.wellname = '{name}'"""
+            SET info = '{_info}' WHERE wells.wellname = '{wellname}'"""
         self._conn.execute(sql)
         self._engine.commit()
 
-    def get_well_info(self, name):
-        self._conn.execute(f"SELECT info FROM wells where wells.wellname = '{name}'")
+    def get_well_info(self, wellname):
+        self._conn.execute(f"SELECT info FROM wells where wells.wellname = '{wellname}'")
         return self._conn.fetchone()[0]
 
-    def delete_well(self, well):
-        self._conn.execute(f"DELETE FROM wells where wellname = '{well}'")
+    def get_datasets(self, wellname):
+        self._conn.execute(f"SELECT datasetname, info FROM datasets d WHERE d.wellname = '{wellname}'")
+        return {d[0]: d[1] for d in self._conn}
+
+    def delete_well(self, wellname):
+        self._conn.execute(f"DELETE FROM wells where wellname = '{wellname}'")
 
     # DATASETS
 
@@ -81,21 +85,47 @@ class ColumnStorage:
     def __generate_dataset_name(well, name):
         return f"{well}__{name}"
 
-    def create_dataset(self, well, name):
-        query = f'''create table IF NOT EXISTS "{self.__generate_dataset_name(well, name)}"
+    def create_dataset(self, wellname, datasetname):
+        dataset_id = self.__generate_dataset_name(wellname, datasetname)
+        query = f'''create table "{dataset_id}"
     (
     	reference double precision not null
-    		constraint "{well}__{name}_pk"
+    		constraint "{wellname}__{datasetname}_pk"
     			primary key
     );
-    create unique index IF NOT EXISTS "{self.__generate_dataset_name(well, name)}_reference_uindex"
-    	on "{self.__generate_dataset_name(well, name)}" (reference);'''
+    create unique index IF NOT EXISTS "{dataset_id}_reference_uindex"
+    	on "{dataset_id}" (reference);'''
         self._conn.execute(query)
+        self._register_dataset(wellname, datasetname, {}, autocommit=False)
         self._engine.commit()
-        return f"{well}__{name}"
+        return f"{wellname}__{datasetname}"
 
-    def delete_dataset(self, well, name):
-        query = f'''DROP TABLE "{self.__generate_dataset_name(well, name)}";'''
+    def _register_dataset(self, wellname, datasetname, info, autocommit=True):
+        _info = json.dumps(info)
+        query = f"""INSERT INTO datasets (wellname, datasetname, info) 
+        VALUES ('{wellname}', '{datasetname}', '{_info}')"""
+        self._conn.execute(query)
+        if autocommit:
+            self.commit()
+
+    def _unregister_dataset(self, wellname, datasetname, autocommit=True):
+        query = f"""DELETE FROM datasets d where d.wellname = '{wellname}' and d.datasetname = '{datasetname}';"""
+        self._conn.execute(query)
+        if autocommit:
+            self.commit()
+
+    def get_dataset_info(self, wellname, datasetname):
+        query = f"""SELECT info FROM datasets d where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
+        self._conn.execute(query)
+
+    def set_dataset_info(self, wellname, datasetname, info):
+        query = f"""UPDATE datasets d SET d.info = '{json.dumps(info)}' where d.wellname = '{wellname}' and d.datasetname='{datasetname}'"""
+        self._conn.execute(query)
+        self.commit()
+
+    def delete_dataset(self, wellname, datasetname):
+        self._unregister_dataset(wellname, datasetname, autocommit=False)
+        query = f'''DROP TABLE "{self.__generate_dataset_name(wellname, datasetname)}";'''
         self._conn.execute(query)
         self._engine.commit()
 

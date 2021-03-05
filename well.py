@@ -38,22 +38,22 @@ class Well:
     @property
     def datasets(self):
         _s = ColumnStorage()
-        datasets = _s.get_well_info(self._name).get('datasets', {}).keys()
+        datasets = _s.get_datasets(self._name).keys()
         return datasets
 
-    def register_dataset(self, dataset_name, dataset_table_name):
-        _s = ColumnStorage()
-        well_info = _s.get_well_info(self._name)
-        dataset_info = self.info['datasets'] if 'datasets' in well_info.keys() else {}
-        dataset_info[dataset_name] = dataset_table_name
-        well_info['datasets'] = dataset_info
-        self.info = well_info
-
-    def unregister_dataset(self, dataset_name):
-        _s = ColumnStorage()
-        well_info = self.info
-        well_info['datasets'].pop(dataset_name, None)
-        self.info = well_info
+    # def register_dataset(self, dataset_name, dataset_table_name):
+    #     _s = ColumnStorage()
+    #     well_info = _s.get_well_info(self._name)
+    #     dataset_info = self.info['datasets'] if 'datasets' in well_info.keys() else {}
+    #     dataset_info[dataset_name] = dataset_table_name
+    #     well_info['datasets'] = dataset_info
+    #     self.info = well_info
+    #
+    # def unregister_dataset(self, dataset_name):
+    #     _s = ColumnStorage()
+    #     well_info = self.info
+    #     well_info['datasets'].pop(dataset_name, None)
+    #     self.info = well_info
 
     def delete(self):
         for dataset in self.datasets:
@@ -77,8 +77,6 @@ class WellDatasetColumns:
     def register(self):
         _storage = ColumnStorage()
         self._dataset_table_name = _storage.create_dataset(self._well, self._name)
-        well = Well(self._well)
-        well.register_dataset(self._name, self._dataset_table_name)
 
     def read_las(self, filename: str):
         debug.debug(f"Reading file: {filename}")
@@ -94,8 +92,6 @@ class WellDatasetColumns:
 
     def delete(self):
         _s = ColumnStorage()
-        well = Well(self._well)
-        well.unregister_dataset(self._name)
         _s.delete_dataset(self._well, self._name)
         _s.commit()
 
@@ -108,7 +104,7 @@ class WellDatasetColumns:
                 _s.add_log(self._well, self._name, log_name=n, log_type=_s.get_data_type(d), autocommit=False)
             _s.commit()
         else:
-            raise Exception("Log name is neither a str nor an iterable")
+            raise Exception("Log wellname is neither a str nor an iterable")
 
     def delete_log(self, name):
         _s = ColumnStorage()

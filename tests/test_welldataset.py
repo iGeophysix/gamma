@@ -90,8 +90,8 @@ class TestWellDatasetColumns(unittest.TestCase):
     #     LOG_TYPES = (float, str, int, bool, datetime,)
     #     wellname = 'thousand_logs'
     #     datasetname = 'this_dataset'
-    #     well = Well(wellname, new=True)
-    #     dataset = WellDatasetColumns(well, datasetname)
+    #     wellname = Well(wellname, new=True)
+    #     dataset = WellDatasetColumns(wellname, datasetname)
     #     # load some real data
     #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
     #
@@ -137,8 +137,8 @@ class TestWellDatasetColumns(unittest.TestCase):
     #     LOG_TYPES = (float, str, int, bool, datetime,)
     #     wellname = 'thousand_logs'
     #     datasetname = 'this_dataset'
-    #     well = Well(wellname, new=True)
-    #     dataset = WellDatasetColumns(well, datasetname)
+    #     wellname = Well(wellname, new=True)
+    #     dataset = WellDatasetColumns(wellname, datasetname)
     #     # load some real data
     #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
     #

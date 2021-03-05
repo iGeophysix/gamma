@@ -12,7 +12,7 @@ class TestStorage(unittest.TestCase):
     def test_create_well(self):
         self._s.create_well("test_well")
         assert self._s.get_well_info("test_well") == {}
-        info = {"name": "TEST WELL 2", "other_key":2}
+        info = {"wellname": "TEST WELL 2", "other_key":2}
         self._s.update_well_info("test_well_2", info)
         assert self._s.get_well_info("test_well_2") == info
 
