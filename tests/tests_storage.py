@@ -1,12 +1,11 @@
 import unittest
 
-from storage import Storage
+from storage import ColumnStorage
 
 
 class TestStorage(unittest.TestCase):
     def setUp(self) -> None:
-        self.db = 'test_db'
-        self._s = Storage(db=self.db)
+        self._s = ColumnStorage()
         self._s.flush_db()
         self._s.init_db()
 
@@ -14,7 +13,7 @@ class TestStorage(unittest.TestCase):
         self._s.create_well("test_well")
         assert self._s.get_well_info("test_well") == {}
         info = {"name": "TEST WELL 2", "other_key":2}
-        self._s.update_well("test_well_2", info)
+        self._s.update_well_info("test_well_2", info)
         assert self._s.get_well_info("test_well_2") == info
 
     def test_delete_well(self):
