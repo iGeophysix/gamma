@@ -104,7 +104,7 @@ class WellDatasetColumns:
                 _s.add_log(self._well, self._name, log_name=n, log_type=_s.get_data_type(d), autocommit=False)
             _s.commit()
         else:
-            raise Exception("Log wellname is neither a str nor an iterable")
+            raise TypeError("Log wellname is neither a str nor an iterable")
 
     def delete_log(self, name):
         _s = ColumnStorage()

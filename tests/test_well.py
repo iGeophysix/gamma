@@ -38,6 +38,7 @@ class TestWell(unittest.TestCase):
         dataset = WellDatasetColumns(well, "one")
         dataset.register()
         dataset.add_log(dataset_info.keys(), dataset_info.values())
+        dataset.insert(test_data)
         assert 'one' in well.datasets
         dataset.delete()
         assert 'one' not in well.datasets
