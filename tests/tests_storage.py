@@ -15,6 +15,7 @@ class TestStorage(unittest.TestCase):
         info = {"wellname": "TEST WELL 2", "other_key": 2}
         self._s.update_well_info("test_well_2", info)
         self.assertEqual(self._s.get_well_info("test_well_2"), info)
+        self._s.delete_well("test_well")
 
     def test_delete_well(self):
         self._s.create_well("test_well")

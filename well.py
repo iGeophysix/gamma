@@ -43,22 +43,22 @@ class Well:
 
     def delete(self):
         for dataset in self.datasets:
-            d = WellDatasetColumns(self, dataset)
+            d = WellDataset(self, dataset)
             d.delete()
         _s = ColumnStorage()
-        _s.delete_well(self._name)
-        _s.commit()
+        _s.delete_well(self._name, autocommit=True)
 
 
-class WellDatasetColumns:
+class WellDataset:
     def __init__(self, well: Well, name: str) -> None:
         self._well = well.name
         self._name = name
-        self._dataset_table_name = self._get_dataset_table_name()
+        self._dataset_table_name = None
 
-    def _get_dataset_table_name(self):
+    def delete(self):
         _s = ColumnStorage()
-        return _s.get_well_info(self._well).get('datasets', {}).get(self._name, None)
+        _s.delete_dataset(self._well, self._name)
+        _s.commit()
 
     def register(self):
         _storage = ColumnStorage()
@@ -93,11 +93,6 @@ class WellDatasetColumns:
         _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections), autocommit=False)
         _storage.commit()
 
-    def delete(self):
-        _s = ColumnStorage()
-        _s.delete_dataset(self._well, self._name)
-        _s.commit()
-
     def add_log(self, name, dtype):
         _s = ColumnStorage()
         if type(name) == str:
@@ -123,6 +118,6 @@ class WellDatasetColumns:
             result = _storage.read_dataset(self._well, self._name)
         return result
 
-    def insert(self, data):
+    def set_data(self, data):
         _storage = ColumnStorage()
         _storage.update_dataset(self._well, self._name, data)

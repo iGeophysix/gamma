@@ -3,7 +3,7 @@ import time
 import unittest
 
 from storage import ColumnStorage
-from well import Well, WellDatasetColumns
+from well import Well, WellDataset
 
 PATH_TO_TEST_DATA = os.path.join('test_data')
 
@@ -20,12 +20,12 @@ class TestWellDatasetColumns(unittest.TestCase):
         wellname = f.replace(".las", "")
         well = Well(wellname, new=True)
 
-        dataset = WellDatasetColumns(well, "one")
+        dataset = WellDataset(well, "one")
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         self.assertIn('one', well.datasets)
-        dataset = WellDatasetColumns(well, "two")
+        dataset = WellDataset(well, "two")
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
-        dataset = WellDatasetColumns(well, "one")
+        dataset = WellDataset(well, "one")
         dataset.delete()
         self.assertNotIn('one', well.datasets)
         self.assertIn('two', well.datasets)
@@ -35,7 +35,7 @@ class TestWellDatasetColumns(unittest.TestCase):
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
-        dataset = WellDatasetColumns(well, dataset_name)
+        dataset = WellDataset(well, dataset_name)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
         data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'GR': 46.731338501, 'SP': 63.879390717, 'DTC': 143.6020813, 'PEF': 6.3070640564, 'ROP': 38.207931519, 'RXO': None, 'CALI': 18.639200211,
@@ -49,7 +49,7 @@ class TestWellDatasetColumns(unittest.TestCase):
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
-        dataset = WellDatasetColumns(well, dataset_name)
+        dataset = WellDataset(well, dataset_name)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
         start = time.time()
         dataset.get_data()
@@ -64,23 +64,23 @@ class TestWellDatasetColumns(unittest.TestCase):
         row = {"GR": 87.81237987, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
         row_2 = {"GR": 97.2, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
         well = Well(wellname, new=True)
-        dataset = WellDatasetColumns(well, dataset_name)
+        dataset = WellDataset(well, dataset_name)
         dataset.register()
         dataset.add_log("GR", float)
         dataset.add_log("PS", float)
         dataset.add_log("LITHO", int)
         dataset.add_log("STRING", str)
 
-        dataset.insert({reference: row})
+        dataset.set_data({reference: row})
         self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row})
-        dataset.insert({reference: row_2})
+        dataset.set_data({reference: row_2})
         self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row_2})
         self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference, end=reference), {reference: {"GR": 97.2, "PS": -0.234235555667, }})
         self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
 
-        dataset.insert({reference_2: row})
+        dataset.set_data({reference_2: row})
         self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
-        dataset.insert({reference_2: row_2})
+        dataset.set_data({reference_2: row_2})
         self.assertEqual(dataset.get_data(start=reference_2, end=reference_2), {reference_2: row_2})
         self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, "PS": -0.234235555667, }})
         self.assertEqual(dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, }})
@@ -91,7 +91,7 @@ class TestWellDatasetColumns(unittest.TestCase):
     #     wellname = 'thousand_logs'
     #     datasetname = 'this_dataset'
     #     wellname = Well(wellname, new=True)
-    #     dataset = WellDatasetColumns(wellname, datasetname)
+    #     dataset = WellDataset(wellname, datasetname)
     #     # load some real data
     #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
     #
@@ -138,7 +138,7 @@ class TestWellDatasetColumns(unittest.TestCase):
     #     wellname = 'thousand_logs'
     #     datasetname = 'this_dataset'
     #     wellname = Well(wellname, new=True)
-    #     dataset = WellDatasetColumns(wellname, datasetname)
+    #     dataset = WellDataset(wellname, datasetname)
     #     # load some real data
     #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
     #

@@ -76,8 +76,10 @@ class ColumnStorage:
         self._conn.execute(f"SELECT datasetname, info FROM datasets d WHERE d.wellname = '{wellname}'")
         return {d[0]: d[1] for d in self._conn}
 
-    def delete_well(self, wellname):
+    def delete_well(self, wellname, autocommit=True):
         self._conn.execute(f"DELETE FROM wells where wellname = '{wellname}'")
+        if autocommit:
+            self.commit()
 
     # DATASETS
 

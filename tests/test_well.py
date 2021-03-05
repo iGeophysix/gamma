@@ -4,7 +4,7 @@ import unittest
 import psycopg2
 
 from storage import ColumnStorage
-from well import Well, WellDatasetColumns
+from well import Well, WellDataset
 
 PATH_TO_TEST_DATA = os.path.join('test_data')
 
@@ -36,10 +36,10 @@ class TestWell(unittest.TestCase):
         }
 
         well = Well(wellname, new=True)
-        dataset = WellDatasetColumns(well, "one")
+        dataset = WellDataset(well, "one")
         dataset.register()
         dataset.add_log(dataset_info.keys(), dataset_info.values())
-        dataset.insert(test_data)
+        dataset.set_data(test_data)
         self.assertIn('one', well.datasets)
         dataset.delete()
         self.assertNotIn('one', well.datasets)
@@ -50,8 +50,8 @@ class TestWell(unittest.TestCase):
         wellname = f.replace(".las", "")
         well = Well(wellname, new=True)
 
-        dataset1 = WellDatasetColumns(well, "one")
+        dataset1 = WellDataset(well, "one")
         dataset1.register()
-        dataset2 = WellDatasetColumns(well, "one")
+        dataset2 = WellDataset(well, "one")
         with self.assertRaises(psycopg2.errors.DuplicateTable):
             dataset2.register()
