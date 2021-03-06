@@ -309,7 +309,7 @@ class TestWellDatasetColumns(unittest.TestCase):
         logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": 'float', "FORCE_2020_LITHOFACIES_LITHOLOGY": 'float', "CALI": 'float', "BS": 'float', "ROPA": 'float', "ROP": 'float', "RDEP": 'float',
                 "RSHA": 'float', "RMED": 'float', "DTS": 'float', "DTC": 'float', "NPHI": 'float', "PEF": 'float', "GR": 'float', "RHOB": 'float', "DRHO": 'float', "DEPTH_MD": 'float', "X_LOC": 'float',
                 "Y_LOC": 'float', "Z_LOC": 'float'}
-        for i in range(50):
+        for i in range(5):
             async_read_las.delay(wellname, datasetname=i, filename=os.path.join('tests', self.path_to_test_data, f), logs=json.dumps(logs))
         print("Done")
         # self.assertIn('one', well.datasets)
