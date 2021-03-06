@@ -13,7 +13,7 @@ def my_timer(func):
         start = time.time()
         result = func(*args, **kwargs)
         task_time = int((time.time() - start) * 1000)
-        debug.debug(f"{func.__name__} took {task_time} ms")
+        debug.info(f"{func.__name__} took {task_time} ms")
         return result
 
     return wrapper

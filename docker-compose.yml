@@ -1,0 +1,28 @@
+version: '3.4'
+services:
+  redis:
+    image: redis
+    container_name: gamma_redis
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres
+    container_name: gamma_postgres
+    ports:
+    - "5432:5432"
+    environment:
+      - POSTGRES_DB=test_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gamma_celery
+    command: [celery, -A, tasks, worker, --loglevel=INFO, --concurrency=4]
+    environment:
+      - REDIS_HOST=redis
+      - STORAGE_HOST=postgres
+    depends_on:
+      - redis
+      - postgres

@@ -1,8 +1,13 @@
 import os
+import string
 import time
+import json
 import unittest
+from datetime import datetime, timedelta
+from random import randint, random, choice
 
 from storage import ColumnStorage
+from tasks import async_read_las
 from well import Well, WellDataset
 
 PATH_TO_TEST_DATA = os.path.join('test_data')
@@ -21,10 +26,13 @@ class TestWellDatasetColumns(unittest.TestCase):
         well = Well(wellname, new=True)
 
         dataset = WellDataset(well, "one")
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "BS": float, "ROPA": float, "ROP": float, "RDEP": float,
+                "RSHA": float, "RMED": float, "DTS": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
+                "Y_LOC": float, "Z_LOC": float}
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f), logs=logs)
         self.assertIn('one', well.datasets)
         dataset = WellDataset(well, "two")
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f), logs=logs)
         dataset = WellDataset(well, "one")
         dataset.delete()
         self.assertNotIn('one', well.datasets)
@@ -36,7 +44,10 @@ class TestWellDatasetColumns(unittest.TestCase):
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "ROP": float, "RDEP": float,
+                "RSHA": float, "RMED": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
+                "Y_LOC": float, "Z_LOC": float, "SP": float, "RXO": float, "MUDWEIGHT": float}
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'), logs=logs)
         data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'GR': 46.731338501, 'SP': 63.879390717, 'DTC': 143.6020813, 'PEF': 6.3070640564, 'ROP': 38.207931519, 'RXO': None, 'CALI': 18.639200211,
                        'DRHO': 0.0151574211, 'NPHI': 0.5864710212, 'RDEP': 0.4988202751, 'RHOB': 1.8031704426, 'RMED': 0.4965194166, 'RSHA': None, 'X_LOC': 437627.5625,
@@ -50,7 +61,10 @@ class TestWellDatasetColumns(unittest.TestCase):
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "ROP": float, "RDEP": float,
+                "RSHA": float, "RMED": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
+                "Y_LOC": float, "Z_LOC": float}
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'), logs=logs)
         start = time.time()
         dataset.get_data()
         end = time.time()
@@ -90,7 +104,10 @@ class TestWellDatasetColumns(unittest.TestCase):
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "ROP": float, "RDEP": float,
+                "RSHA": float, "RMED": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
+                "Y_LOC": float, "Z_LOC": float, }
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'), logs=logs)
         true_info = {
             "Well": {"API": {"unit": "", "descr": "API NUMBER", "value": "", "mnemonic": "API", "original_mnemonic": "API"},
                      "FLD": {"unit": "", "descr": "FIELD", "value": "", "mnemonic": "FLD", "original_mnemonic": "FLD"},
@@ -184,96 +201,115 @@ class TestWellDatasetColumns(unittest.TestCase):
         self.assertEqual(true_info, dataset.info)
         well.delete()
 
-    # def test_add_many_logs(self):
-    #     log_count = 10
-    #     LOG_TYPES = (float, str, int, bool, datetime,)
-    #     wellname = 'thousand_logs'
-    #     datasetname = 'this_dataset'
-    #     wellname = Well(wellname, new=True)
-    #     dataset = WellDataset(wellname, datasetname)
-    #     # load some real data
-    #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
-    #
-    #     # create logs in the dataset
-    #     new_logs = [f"LOG_{l}" for l in range(0, log_count)]
-    #     log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
-    #
-    #     # get depths
-    #     existing_data = dataset.get_data(logs=["reference", ])
-    #
-    #     # add data to the logs
-    #     def dummy_data(dtype):
-    #         generators = {
-    #             float: 400 * random() - 200,
-    #             str: ''.join(choice(string.ascii_letters) for i in range(64)),
-    #             int: randint(-1000, 1000),
-    #             datetime: datetime.now() + random() * timedelta(days=1),
-    #             bool: 1 == randint(0, 1)
-    #         }
-    #         return generators[dtype]
-    #
-    #     def dummy_row(logs, dtypes):
-    #         return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
-    #
-    #     data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
-    #
-    #     start = time.time()
-    #     dataset.add_log(new_logs, log_types)
-    #     dataset.insert(data)
-    #     end = time.time()
-    #     print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
-    #
-    #     for _ in range(5):
-    #         start = time.time()
-    #         d = dataset.get_data()
-    #         end = time.time()
-    #         print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
-    #         print("Pause 5s")
-    #         time.sleep(5)
-    #
-    # def test_add_many_logs_read_ten_random(self):
-    #     log_count = 10
-    #     LOG_TYPES = (float, str, int, bool, datetime,)
-    #     wellname = 'thousand_logs'
-    #     datasetname = 'this_dataset'
-    #     wellname = Well(wellname, new=True)
-    #     dataset = WellDataset(wellname, datasetname)
-    #     # load some real data
-    #     dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
-    #
-    #     # create logs in the dataset
-    #     new_logs = [f"LOG_{l}" for l in range(0, log_count)]
-    #     log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
-    #
-    #     # get depths
-    #     existing_data = dataset.get_data(logs=["reference", ])
-    #
-    #     # add data to the logs
-    #     def dummy_data(dtype):
-    #         generators = {
-    #             float: 400 * random() - 200,
-    #             str: ''.join(choice(string.ascii_letters) for i in range(64)),
-    #             int: randint(-1000, 1000),
-    #             datetime: datetime.now() + random() * timedelta(days=1),
-    #             bool: 1 == randint(0, 1)
-    #         }
-    #         return generators[dtype]
-    #
-    #     def dummy_row(logs, dtypes):
-    #         return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
-    #
-    #     data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
-    #
-    #     start = time.time()
-    #     dataset.add_log(new_logs, log_types)
-    #     dataset.insert(data)
-    #     end = time.time()
-    #     print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
-    #
-    #     for _ in range(5):
-    #         start = time.time()
-    #         d = dataset.get_data(logs=[new_logs[randint(0, len(new_logs) - 1)] for _ in range(0, 10)])
-    #         end = time.time()
-    #         print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
-    #         print("Pause 5s")
-    #         time.sleep(5)
+    @unittest.skip("Takes too long")
+    def test_add_many_logs(self):
+        log_count = 10
+        LOG_TYPES = (float, str, int, bool, datetime,)
+        wellname = 'thousand_logs'
+        datasetname = 'this_dataset'
+        wellname = Well(wellname, new=True)
+        dataset = WellDataset(wellname, datasetname)
+        # load some real data
+        logs = {"DEPTH": float, "FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "BS": float, "ROPA": float, "ROP": float,
+                "RDEP": float, "RSHA": float, "RMED": float, "DTS": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float,
+                "x_loc": float, "y_loc": float, "z_loc": float, }
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'), logs=logs)
+
+        # create logs in the dataset
+        new_logs = [f"LOG_{l}" for l in range(0, log_count)]
+        log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
+
+        # get depths
+        existing_data = dataset.get_data(logs=["reference", ])
+
+        # add data to the logs
+        def dummy_data(dtype):
+            generators = {
+                float: 400 * random() - 200,
+                str: ''.join(choice(string.ascii_letters) for i in range(64)),
+                int: randint(-1000, 1000),
+                datetime: datetime.now() + random() * timedelta(days=1),
+                bool: 1 == randint(0, 1)
+            }
+            return generators[dtype]
+
+        def dummy_row(logs, dtypes):
+            return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
+
+        data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
+
+        start = time.time()
+        dataset.add_log(new_logs, log_types)
+        dataset.set_data(data)
+        end = time.time()
+        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+
+        for _ in range(5):
+            start = time.time()
+            d = dataset.get_data()
+            end = time.time()
+            print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
+            time.sleep(1)
+
+    @unittest.skip("Takes too long")
+    def test_add_many_logs_read_random(self):
+        log_count = 5
+        LOG_TYPES = (float, str, int, bool, datetime,)
+        wellname = 'thousand_logs'
+        datasetname = 'this_dataset'
+        wellname = Well(wellname, new=True)
+        dataset = WellDataset(wellname, datasetname)
+        # load some real data
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "BS": float, "ROPA": float, "ROP": float, "RDEP": float,
+                "RSHA": float, "RMED": float, "DTS": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
+                "Y_LOC": float, "Z_LOC": float}
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'), logs=logs)
+
+        # create logs in the dataset
+        new_logs = [f"LOG_{l}" for l in range(0, log_count)]
+        log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
+
+        # get depths
+        existing_data = dataset.get_data(logs=["reference", ])
+
+        # add data to the logs
+        def dummy_data(dtype):
+            generators = {
+                float: 400 * random() - 200,
+                str: ''.join(choice(string.ascii_letters) for i in range(64)),
+                int: randint(-1000, 1000),
+                datetime: datetime.now() + random() * timedelta(days=1),
+                bool: 1 == randint(0, 1)
+            }
+            return generators[dtype]
+
+        def dummy_row(logs, dtypes):
+            return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
+
+        data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
+
+        start = time.time()
+        dataset.add_log(new_logs, log_types)
+        dataset.set_data(data)
+        end = time.time()
+        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+
+        for _ in range(3):
+            start = time.time()
+            d = dataset.get_data(logs=[new_logs[randint(0, len(new_logs) - 1)] for _ in range(0, 10)])
+            end = time.time()
+            print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
+            time.sleep(1)
+
+    def test_async_read_las(self):
+        f = '7_1-2 S.las'
+        wellname = f.replace(".las", "")
+        well = Well(wellname, new=True)
+
+        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": 'float', "FORCE_2020_LITHOFACIES_LITHOLOGY": 'float', "CALI": 'float', "BS": 'float', "ROPA": 'float', "ROP": 'float', "RDEP": 'float',
+                "RSHA": 'float', "RMED": 'float', "DTS": 'float', "DTC": 'float', "NPHI": 'float', "PEF": 'float', "GR": 'float', "RHOB": 'float', "DRHO": 'float', "DEPTH_MD": 'float', "X_LOC": 'float',
+                "Y_LOC": 'float', "Z_LOC": 'float'}
+        for i in range(50):
+            async_read_las.delay(wellname, datasetname=i, filename=os.path.join('tests', self.path_to_test_data, f), logs=json.dumps(logs))
+        print("Done")
+        # self.assertIn('one', well.datasets)

@@ -91,14 +91,13 @@ class WellDataset:
 
         return {section: section_to_dict(sections[section], keys, exclude) for section in sections}
 
-    def read_las(self, filename: str):
+    def read_las(self, filename: str, logs: dict):
         debug.debug(f"Reading file: {filename}")
         _storage = ColumnStorage()
         well_data = lasio.read(filename)
         self.register()
-        temp_df = well_data.df().fillna(MISSING_VALUE)
+        temp_df = well_data.df().fillna(MISSING_VALUE)[logs.keys()]
         values = temp_df.to_dict('index')
-        logs = {log: float for log in temp_df.columns}
         _storage.bulk_load_dataset(well_name=self._well, dataset_name=self._name, logs=logs, values=values, autocommit=False)
         _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections), autocommit=False)
         _storage.commit()
