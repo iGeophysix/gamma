@@ -27,13 +27,10 @@ class TestWellDatasetColumns(unittest.TestCase):
         well = Well(wellname, new=True)
 
         dataset = WellDataset(well, "one")
-        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "BS": float, "ROPA": float, "ROP": float, "RDEP": float,
-                "RSHA": float, "RMED": float, "DTS": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
-                "Y_LOC": float, "Z_LOC": float}
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f), logs=logs)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         self.assertIn('one', well.datasets)
         dataset = WellDataset(well, "two")
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f), logs=logs)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         dataset = WellDataset(well, "one")
         dataset.delete()
         self.assertNotIn('one', well.datasets)
@@ -54,15 +51,13 @@ class TestWellDatasetColumns(unittest.TestCase):
         for key in true_answer.keys():
             self.assertTrue(data[key][ref_depth] == true_answer[key] or (np.isnan(data[key][ref_depth]) and np.isnan(true_answer[key])))
 
+    @unittest.skip("Is not a test in fact")
     def test_get_data_time(self):
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name)
-        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "ROP": float, "RDEP": float,
-                "RSHA": float, "RMED": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
-                "Y_LOC": float, "Z_LOC": float}
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'), logs=logs)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
         start = time.time()
         dataset.get_data()
         end = time.time()
@@ -75,23 +70,21 @@ class TestWellDatasetColumns(unittest.TestCase):
         reference_2 = 800
         row = {"GR": 87.81237987, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
         row_2 = {"GR": 97.2, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
+
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name)
         dataset.register()
 
-        dataset.set_data({reference: row})
-        self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row})
-        dataset.set_data({reference: row_2})
-        self.assertEqual(dataset.get_data(start=reference, end=reference), {reference: row_2})
-        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference, end=reference), {reference: {"GR": 97.2, "PS": -0.234235555667, }})
-        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
+        def assemble_data(reference, row):
+            return {l: json.dumps({reference: v}) for l, v in row.items()}
 
-        dataset.set_data({reference_2: row})
-        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {reference: {"GR": 97.2, }})
-        dataset.set_data({reference_2: row_2})
-        self.assertEqual(dataset.get_data(start=reference_2, end=reference_2), {reference_2: row_2})
-        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, "PS": -0.234235555667, }})
-        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference_2, end=reference_2), {reference_2: {"GR": 97.2, }})
+        dataset.set_data(assemble_data(reference, row))
+        self.assertEqual(dataset.get_data(start=reference, end=reference),
+                         {'GR': {450.0: 87.81237987}, 'PS': {450.0: -0.234235555667}, 'LITHO': {450.0: 1}, 'STRING': {450.0: 'VALUE'}})
+        dataset.set_data(assemble_data(reference, row_2))
+        self.assertEqual(dataset.get_data(start=reference, end=reference), {'GR': {450.0: 97.2}, 'PS': {450.0: -0.234235555667}, 'LITHO': {450.0: 1}, 'STRING': {450.0: 'VALUE'}})
+        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference, end=reference), {'GR': {450.0: 97.2}, 'PS': {450.0: -0.234235555667}})
+        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {"GR": {450.0: 97.2, }})
 
     def test_check_las_header(self):
         wellname = '15_9-13'
@@ -247,10 +240,7 @@ class TestWellDatasetColumns(unittest.TestCase):
         wellname = Well(wellname, new=True)
         dataset = WellDataset(wellname, datasetname)
         # load some real data
-        logs = {"FORCE_2020_LITHOFACIES_CONFIDENCE": float, "FORCE_2020_LITHOFACIES_LITHOLOGY": float, "CALI": float, "BS": float, "ROPA": float, "ROP": float, "RDEP": float,
-                "RSHA": float, "RMED": float, "DTS": float, "DTC": float, "NPHI": float, "PEF": float, "GR": float, "RHOB": float, "DRHO": float, "DEPTH_MD": float, "X_LOC": float,
-                "Y_LOC": float, "Z_LOC": float}
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'), logs=logs)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
 
         # create logs in the dataset
         new_logs = [f"LOG_{l}" for l in range(0, log_count)]
