@@ -83,7 +83,7 @@ class WellDataset:
 
         return {section: section_to_dict(sections[section], keys, exclude) for section in sections}
 
-    def read_las(self, filename: str, *args):
+    def read_las(self, filename: str):
         debug.debug(f"Reading file: {filename}")
         _storage = RedisStorage()
         well_data = lasio.read(filename)

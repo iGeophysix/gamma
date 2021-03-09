@@ -359,8 +359,10 @@ class RedisStorage(Storage):
             top = top if top is not None else sys.float_info.min
             bottom = bottom if bottom is not None else sys.float_info.max
             return {float(k): v for k, v in data.items() if float(k) >= top and float(k) <= bottom}
+
         def beautify_depths(data):
             return {float(k): v for k, v in data.items()}
+
         if logs:
             out = {log: beautify_depths(json.loads(self.conn.hget(dataset_id, log))) for log in logs}
         else:

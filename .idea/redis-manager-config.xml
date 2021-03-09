@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistentConfig">
+    <option name="langCode" value="en" />
+    <option name="lastRedisServerNode">
+      <RedisServerNode>
+        <option name="auth" value="" />
+        <option name="comment" value="" />
+        <option name="connect" value="true" />
+        <option name="host" value="localhost" />
+        <option name="id" value="1" />
+        <option name="name" value="redis" />
+        <option name="port" value="6379" />
+      </RedisServerNode>
+    </option>
+    <option name="id" value="2" />
+    <option name="configs">
+      <map>
+        <entry key="1">
+          <value>
+            <RedisServerNode>
+              <option name="auth" value="" />
+              <option name="comment" value="" />
+              <option name="connect" value="true" />
+              <option name="host" value="localhost" />
+              <option name="id" value="1" />
+              <option name="name" value="redis" />
+              <option name="port" value="6379" />
+            </RedisServerNode>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="consoleFilePath" value="/var/folders/l7/_5z0zs_j6vl396nfnlw5khd80000gn/T/redis/8178e1c6-7586-4e1d-a25e-ed45c0b47a0f/console.redis" />
+    <option name="configList">
+      <list>
+        <RedisServerNode>
+          <option name="auth" value="" />
+          <option name="comment" value="" />
+          <option name="connect" value="true" />
+          <option name="host" value="localhost" />
+          <option name="id" value="1" />
+          <option name="name" value="redis" />
+          <option name="port" value="6379" />
+        </RedisServerNode>
+      </list>
+    </option>
+  </component>
+</project>

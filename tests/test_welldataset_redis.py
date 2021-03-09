@@ -8,16 +8,16 @@ from random import randint, random, choice
 
 import numpy as np
 
-from storage import ColumnStorage
-from tasks import async_read_las
+from storage import RedisStorage
+from tasks_redis import async_read_las, async_normalize_log
 from well_redis import Well, WellDataset
 
 PATH_TO_TEST_DATA = os.path.join('test_data')
 
 
-class TestWellDatasetColumns(unittest.TestCase):
+class TestWellDatasetRedis(unittest.TestCase):
     def setUp(self) -> None:
-        _s = ColumnStorage()
+        _s = RedisStorage()
         _s.flush_db()
         self.path_to_test_data = PATH_TO_TEST_DATA
 
@@ -277,6 +277,38 @@ class TestWellDatasetColumns(unittest.TestCase):
             print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
             time.sleep(1)
 
+
+
+
+
+
+class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
+    def setUp(self) -> None:
+        _s = RedisStorage()
+        _s.flush_db()
+
+        self.path_to_test_data = PATH_TO_TEST_DATA
+
+        self.f = '15_9-14.las'
+        self.wellname = self.f.replace(".las", "")
+        self.number_of_datasets = 200
+        well = Well(self.wellname, new=True)
+        dataset = WellDataset(well, "0")
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{self.wellname}.las'), )
+        data = dataset.get_data()
+        for i in range(1, self.number_of_datasets):
+            d = WellDataset(well, str(i))
+            d.set_data({log: json.dumps(val) for log, val in data.items()})
+
+
+    def test_async_normalization(self):
+
+        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"}, "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
+
+        for i in range(self.number_of_datasets):
+            async_normalize_log.delay(self.wellname, datasetname=str(i), logs=logs)
+        # self.assertIn('one', well.datasets)
+
     def test_async_read_las(self):
         f = '7_1-2 S.las'
         wellname = f.replace(".las", "")
@@ -290,4 +322,3 @@ class TestWellDatasetColumns(unittest.TestCase):
         for i in range(50):
             async_read_las.delay(wellname, datasetname=str(i), filename=os.path.join('tests', self.path_to_test_data, f), logs=json.dumps(logs))
         print("Done")
-        # self.assertIn('one', well.datasets)
