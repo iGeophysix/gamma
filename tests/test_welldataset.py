@@ -10,7 +10,7 @@ from storage import ColumnStorage
 from tasks import async_read_las
 from well import Well, WellDataset
 
-PATH_TO_TEST_DATA = os.path.join('test_data')
+PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
 
 class TestWellDatasetColumns(unittest.TestCase):

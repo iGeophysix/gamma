@@ -12,7 +12,7 @@ from storage import RedisStorage
 from tasks_redis import async_read_las, async_normalize_log
 from well_redis import Well, WellDataset
 
-PATH_TO_TEST_DATA = os.path.join('test_data')
+PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
 
 class TestWellDatasetRedis(unittest.TestCase):
@@ -278,10 +278,6 @@ class TestWellDatasetRedis(unittest.TestCase):
             time.sleep(1)
 
 
-
-
-
-
 class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
     def setUp(self) -> None:
         _s = RedisStorage()
@@ -299,7 +295,6 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         for i in range(1, self.number_of_datasets):
             d = WellDataset(well, str(i))
             d.set_data({log: json.dumps(val) for log, val in data.items()})
-
 
     def test_async_normalization(self):
 
@@ -322,3 +317,7 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         for i in range(50):
             async_read_las.delay(wellname, datasetname=str(i), filename=os.path.join('tests', self.path_to_test_data, f), logs=json.dumps(logs))
         print("Done")
+
+
+if __name__ == '__main__':
+    unittest.main()
