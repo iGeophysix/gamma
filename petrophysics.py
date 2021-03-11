@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def normalize(data: dict, min_value: float = 0, max_value: float = 100) -> dict[dict]:
+def normalize(data: dict, min_value: float = 0, max_value: float = 100) -> dict:
     '''
     This function applies linear normalization to the whole curve. NaN values remain NaN
     :param data:

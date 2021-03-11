@@ -25,8 +25,6 @@ K
 well.py,7/4/74712a3e0341820cd3a2a2931aab3ba3035b0325
 B
 tests/test_well.py,9/9/99c617b9d52d01ebf467127610499519ed0a0c13
-P
- tests/test_data/huge_dataset.csv,a/3/a354e7ebd43fc8c0ded1e14a4f83481b2c76b6fb
 =
 .dockerignore,0/5/05a721ebe3ba0754116825ed1359ff1785f4bbac
 @
@@ -41,3 +39,13 @@ I
 tasks.py,8/1/81724b6c348c66b3ce4a7f36d24d0849ab270dfe
 ;
 rstorage.py,f/2/f286a025fc53e43347bd9808b62428b16834ea40
+=
+well_redis.py,1/3/13582e9df03d5ac036ebec9779b1a6562cdc730d
+>
+tasks_redis.py,2/e/2e36cbfe4e71e6ec913bd23f469470d71db18b75
+A
+tests/__init__.py,8/e/8e911f6351f3fa0cd30fc10a701473fbb56707e6
+O
+tests/test_welldataset_redis.py,5/9/596a69736e0cf2912e2ec5efebde6566e9d4a3bd
+?
+petrophysics.py,4/1/416187e69ab988b079e28b712beee0e7a8e7b969

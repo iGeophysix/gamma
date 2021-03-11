@@ -1,8 +1,10 @@
 import logging
+from collections.abc import Iterable
 
 import lasio
 
-from storage import RedisStorage
+from settings import MISSING_VALUE
+from storage import ColumnStorage
 
 logging.basicConfig()
 debug = logging.getLogger("petrotool")
@@ -24,22 +26,27 @@ class Well:
 
     @property
     def info(self):
-        _s = RedisStorage()
+        _s = ColumnStorage()
         return _s.get_well_info(self._name)
 
     @info.setter
     def info(self, info):
-        _storage = RedisStorage()
+        _storage = ColumnStorage()
         _storage.update_well_info(self._name, info)
+        _storage.commit()
 
     @property
     def datasets(self):
-        _s = RedisStorage()
-        return _s.get_datasets(self._name)
+        _s = ColumnStorage()
+        datasets = _s.get_datasets(self._name).keys()
+        return datasets
 
     def delete(self):
-        _s = RedisStorage()
-        _s.delete_well(self._name)
+        for dataset in self.datasets:
+            d = WellDataset(self, dataset)
+            d.delete()
+        _s = ColumnStorage()
+        _s.delete_well(self._name, autocommit=True)
 
 
 class WellDataset:
@@ -49,21 +56,22 @@ class WellDataset:
         self._dataset_table_name = None
 
     def delete(self):
-        _s = RedisStorage()
+        _s = ColumnStorage()
         _s.delete_dataset(self._well, self._name)
+        _s.commit()
 
     def register(self):
-        _storage = RedisStorage()
+        _storage = ColumnStorage()
         self._dataset_table_name = _storage.create_dataset(self._well, self._name)
 
     @property
     def info(self):
-        _s = RedisStorage()
+        _s = ColumnStorage()
         return _s.get_dataset_info(self._well, self._name)
 
     @info.setter
     def info(self, info):
-        _s = RedisStorage()
+        _s = ColumnStorage()
         return _s.set_dataset_info(self._well, self._name, info)
 
     @staticmethod
@@ -83,22 +91,34 @@ class WellDataset:
 
         return {section: section_to_dict(sections[section], keys, exclude) for section in sections}
 
-    def read_las(self, filename: str):
+    def read_las(self, filename: str, logs: dict):
         debug.debug(f"Reading file: {filename}")
-        _storage = RedisStorage()
+        _storage = ColumnStorage()
         well_data = lasio.read(filename)
         self.register()
-        temp_df = well_data.df()
-        values = temp_df.to_dict()
-        _storage.bulk_load_dataset(wellname=self._well, datasetname=self._name, values=values)
-        _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections))
+        temp_df = well_data.df().fillna(MISSING_VALUE)[logs.keys()]
+        values = temp_df.to_dict('index')
+        _storage.bulk_load_dataset(wellname=self._well, datasetname=self._name, logs=logs, values=values, autocommit=False)
+        _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections), autocommit=False)
+        _storage.commit()
+
+    def add_log(self, name, dtype):
+        _s = ColumnStorage()
+        if type(name) == str:
+            _s.add_log(self._well, self._name, log_name=name, log_type=_s.get_data_type(dtype))
+        elif isinstance(name, Iterable):
+            for n, d in zip(name, dtype):
+                _s.add_log(self._well, self._name, log_name=n, log_type=_s.get_data_type(d), autocommit=False)
+            _s.commit()
+        else:
+            raise TypeError("Log wellname is neither a str nor an iterable")
 
     def delete_log(self, name):
-        _s = RedisStorage()
+        _s = ColumnStorage()
         _s.delete_log(self._well, self._name, log_name=name)
 
     def get_data(self, logs=None, start=None, end=None):
-        _storage = RedisStorage()
+        _storage = ColumnStorage()
         if start != end:
             result = _storage.read_dataset(self._well, self._name, logs, depth__gt=start, depth__lt=end)
         elif start == end:
@@ -108,5 +128,5 @@ class WellDataset:
         return result
 
     def set_data(self, data):
-        _storage = RedisStorage()
+        _storage = ColumnStorage()
         _storage.update_dataset(self._well, self._name, data)

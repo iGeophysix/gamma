@@ -25,4 +25,4 @@ services:
     depends_on:
       - redis
 #      - postgres
-    command: [celery, -A, tasks_redis, worker, --loglevel=INFO, --concurrency=4]
+    command: [celery, -A, tasks, worker, --loglevel=INFO, --concurrency=4]

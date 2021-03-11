@@ -9,4 +9,3 @@ RUN rm requirements.txt
 
 COPY . /app
 WORKDIR /app
-RUN ls -l
