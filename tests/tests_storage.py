@@ -1,11 +1,11 @@
 import unittest
 
-from storage import ColumnStorage
+from storage import RedisStorage
 
 
 class TestStorage(unittest.TestCase):
     def setUp(self) -> None:
-        self._s = ColumnStorage()
+        self._s = RedisStorage()
         self._s.flush_db()
         self._s.init_db()
 
