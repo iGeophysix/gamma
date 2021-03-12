@@ -44,10 +44,12 @@ class Well:
 
 
 class WellDataset:
-    def __init__(self, well: Well, name: str) -> None:
+    def __init__(self, well: Well, name: str, new=False) -> None:
         self._well = well.name
         self._name = name
         self._dataset_table_name = None
+        if new:
+            self.register()
 
     def delete(self):
         _s = RedisStorage()
@@ -60,7 +62,7 @@ class WellDataset:
     @property
     def info(self):
         _s = RedisStorage()
-        return _s.get_dataset_info(self._well, self._name)
+        return _s.get_dataset_info(self._well, self._name)['meta']
 
     @info.setter
     def info(self, info):
@@ -88,10 +90,9 @@ class WellDataset:
         debug.debug(f"Reading file: {filename}")
         _storage = RedisStorage()
         well_data = lasio.read(filename)
-        self.register()
         temp_df = well_data.df()
         values = temp_df.to_dict()
-        _storage.bulk_load_dataset(wellname=self._well, datasetname=self._name, values=values)
+        _storage.update_logs(wellname=self._well, datasetname=self._name, data=values)
         _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections))
 
     def delete_log(self, name):

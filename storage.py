@@ -27,20 +27,47 @@ class RedisStorage:
         return str(hashlib.md5(wellname.encode()).hexdigest())
 
     def create_well(self, wellname):
-        self.update_well_info(wellname, {'name': wellname, 'datasets': [], })
+        wellid = self._get_well_id(wellname)
+        try:
+            with self.conn.lock(f'wells:{wellid}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
+                self.conn.hset('wells', wellid, json.dumps({'name': wellname, 'datasets': [], 'meta': {}}))
+        except redis.exceptions.LockError:
+            logger.error("Couldn't acquire lock in wells. Please try again later...")
+            raise
 
     def list_wells(self):
         data = [json.loads(d) for d in self.conn.hgetall("wells").values()]
         return {d['name']: d for d in data}
 
+    def get_well_name(self, wellname):
+        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['name']
+
+    def get_well_datasets(self, wellname):
+        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['datasets']
+
+    # def append_well_datasets(self, wellname, datasetname):
+    #     try:
+    #         wellid = self._get_well_id(wellname)
+    #         dataset_id = self._get_dataset_id(wellname, datasetname)
+    #         with self.conn.lock(f'wells:{wellid}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
+    #             current_info = json.loads(self.conn.hget('wells', wellid))
+    #             current_info['datasets'].append(dataset_id)
+    #             self.conn.hset("wells", wellid, json.dumps(current_info))
+    #     except redis.exceptions.LockError:
+    #         logger.error("Couldn't acquire lock in wells. Please try again later...")
+    #         raise
+    #     return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['datasets']
+
     def get_well_info(self, wellname):
-        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))
+        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['meta']
 
     def update_well_info(self, wellname, info):
         try:
             wellid = self._get_well_id(wellname)
             with self.conn.lock(f'wells:{wellid}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
-                return self.conn.hset("wells", wellid, json.dumps(info))
+                current_info = json.loads(self.conn.hget('wells', wellid))
+                current_info['meta'] = info
+                self.conn.hset("wells", wellid, json.dumps(current_info))
         except redis.exceptions.LockError:
             logger.error("Couldn't acquire lock in wells. Please try again later...")
             raise
@@ -53,8 +80,8 @@ class RedisStorage:
         self.conn.hdel('wells', self._get_well_id(wellname))
 
     def get_datasets(self, wellname):
-        wellinfo = self.get_well_info(wellname)
-        return wellinfo.get('datasets', [])
+        dataset_ids = self.get_well_datasets(wellname)
+        return [json.loads(self.conn.hget('datasets', d))['name'] for d in dataset_ids]
 
     # DATASETS
     @staticmethod
@@ -63,33 +90,77 @@ class RedisStorage:
 
     def create_dataset(self, wellname, datasetname):
         well_id = self._get_well_id(wellname)
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+        dataset_info = {'name': datasetname, 'logs': [], 'meta': {}}
+        # append dataset to well
+        with self.conn.pipeline() as pipe:
+            while True:
+                try:
+                    pipe.watch(f'wells:{well_id}')
+                    pipe.watch(f'datasets:{dataset_id}')
+                    wellinfo = json.loads(pipe.hget('wells', well_id))
+                    if 'datasets' not in wellinfo:
+                        wellinfo['datasets'] = []
+                    wellinfo['datasets'].append(dataset_id)
+                    pipe.multi()
+                    pipe.hset("wells", well_id, json.dumps(wellinfo))
+                    pipe.hset("datasets", dataset_id, json.dumps(dataset_info))
+                    pipe.execute()
+                    break
+                except redis.exceptions.WatchError:
+                    continue
 
-        try:
-            # append dataset to well
-            with self.conn.lock(f'well:{well_id}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
-                wellinfo = self.get_well_info(wellname)
-                if 'datasets' not in wellinfo:
-                    wellinfo['datasets'] = []
-                wellinfo['datasets'].append(datasetname)
-                self.update_well_info(wellname, wellinfo)
-                return self._get_dataset_id(wellname, datasetname)
-        except redis.exceptions.LockError:
-            logger.error("Couldn't acquire lock in wells. Please try again later...")
-            raise
+        return dataset_id
 
-    def set_dataset_info(self, wellname, datasetname, info):
-        self.conn.hset('datasets', self._get_dataset_id(wellname, datasetname), json.dumps(info))
+    def get_dataset_name(self, wellname, datasetname):
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+        return json.loads(self.conn.hget('datasets', dataset_id))['name']
+
+    def get_dataset_logs(self, wellname, datasetname):
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+        return json.loads(self.conn.hget('datasets', dataset_id))['logs']
 
     def get_dataset_info(self, wellname, datasetname):
-        return json.loads(self.conn.hget('datasets', self._get_dataset_id(wellname, datasetname)))
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+        if self.conn.hexists('datasets', dataset_id):
+            return json.loads(self.conn.hget('datasets', dataset_id))
+        else:
+            raise FileNotFoundError(f"Dataset {datasetname} was not found in well {wellname}")
+
+    def set_dataset_info(self, wellname, datasetname, info):
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+
+        with self.conn.pipeline() as pipe:
+            while True:
+                try:
+                    pipe.watch(f'datasets:{dataset_id}')
+                    current_info = self.get_dataset_info(wellname, datasetname)
+                    pipe.multi()
+                    current_info['meta'] = info
+                    pipe.hset('datasets', dataset_id, json.dumps(current_info))
+                    pipe.execute()
+                    break
+                except redis.exceptions.WatchError:
+                    continue
 
     def delete_dataset(self, wellname, datasetname):
         dataset_id = self._get_dataset_id(wellname, datasetname)
-        self.conn.delete(dataset_id)
-        self.conn.hdel('datasets', dataset_id)
-        wellinfo = self.get_well_info(wellname)
-        wellinfo['datasets'].remove(datasetname)
-        self.update_well_info(wellname, wellinfo)
+        well_id = self._get_well_id(wellname)
+        with self.conn.pipeline() as pipe:
+            while True:
+                try:
+                    pipe.watch(f'datasets:{dataset_id}')
+                    pipe.watch(f'wells:{well_id}')
+                    pipe.multi()
+                    pipe.delete(dataset_id)
+                    pipe.hdel('datasets', dataset_id)
+                    wellinfo = json.loads(self.conn.hget('wells', well_id))
+                    wellinfo['datasets'].remove(dataset_id)
+                    pipe.hset('wells', well_id, json.dumps(wellinfo))
+                    pipe.execute()
+                    break
+                except redis.exceptions.WatchError:
+                    continue
 
     def read_dataset(self, wellname, datasetname, logs=None, depth=None, depth__gt=None, depth__lt=None):
         dataset_id = self._get_dataset_id(wellname, datasetname)
@@ -105,7 +176,7 @@ class RedisStorage:
         if logs:
             out = {log: beautify_depths(json.loads(self.conn.hget(dataset_id, log))) for log in logs}
         else:
-            out = {k.decode('utf-8'): json.loads(v) for k, v in self.conn.hgetall(dataset_id).items()}
+            out = {k.decode('utf-8'): beautify_depths(json.loads(v)) for k, v in self.conn.hgetall(dataset_id).items()}
 
         # apply slicing
         if depth is None and depth__gt is None and depth__lt is None:
@@ -115,16 +186,12 @@ class RedisStorage:
         else:
             return {l: slice(v, depth, depth) for l, v in out.items()}
 
-    def bulk_load_dataset(self, wellname, datasetname, values: dict) -> None:
-        for k, v in values.items():
-            self.conn.hset(self._get_dataset_id(wellname, datasetname), k, json.dumps(v))
-
     # LOGS
     def add_log(self, wellname, datasetname, log_name):
         self.conn.hset(self._get_dataset_id(wellname, datasetname), log_name, '{}')
 
     def update_logs(self, wellname, datasetname, data):
-        self.conn.hset(self._get_dataset_id(wellname, datasetname), mapping=data)
+        self.conn.hset(self._get_dataset_id(wellname, datasetname), mapping={k: json.dumps(v) for k, v in data.items()})
 
     def delete_log(self, wellname, datasetname, log_name):
         self.conn.hdel(self._get_dataset_id(wellname, datasetname), log_name)

@@ -21,15 +21,30 @@ class TestWellDatasetRedis(unittest.TestCase):
         _s.flush_db()
         self.path_to_test_data = PATH_TO_TEST_DATA
 
+    def test_create_one_dataset(self):
+        well = Well('well2', new=True)
+        dataset = WellDataset(well, "one", new=True)
+        data = {"GR": {10: 1, 20: 2}, "PS": {10: 3, 20: 4}}
+        dataset.set_data(data)
+        self.assertEqual(dataset.get_data(), data)
+
+    def test_change_dataset_info(self):
+        well = Well('well2', new=True)
+        dataset = WellDataset(well, "one", new=True)
+        info = dataset.info
+        info['extra_data'] = 'toto'
+        dataset.info = info
+        self.assertEqual(dataset.info['extra_data'], 'toto')
+
     def test_create_and_delete_datasets(self):
-        f = '7_1-2 S.las'
+        f = 'small_file.las'
         wellname = f.replace(".las", "")
         well = Well(wellname, new=True)
 
-        dataset = WellDataset(well, "one")
+        dataset = WellDataset(well, "one", new=True)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         self.assertIn('one', well.datasets)
-        dataset = WellDataset(well, "two")
+        dataset = WellDataset(well, "two", new=True)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
         dataset = WellDataset(well, "one")
         dataset.delete()
@@ -37,61 +52,27 @@ class TestWellDatasetRedis(unittest.TestCase):
         self.assertIn('two', well.datasets)
 
     def test_dataset_get_data(self):
-        ref_depth = 2000.0880000
+        ref_depth = 200.14440000
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
-        dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'), )
+        dataset = WellDataset(well, dataset_name, new=True)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
         data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
-        true_answer = {'GR': 46.731338501, 'SP': 63.879390717, 'DTC': 143.6020813, 'PEF': 6.3070640564, 'ROP': 38.207931519, 'RXO': np.nan, 'CALI': 18.639200211,
-                       'DRHO': 0.0151574211, 'NPHI': 0.5864710212, 'RDEP': 0.4988202751, 'RHOB': 1.8031704426, 'RMED': 0.4965194166, 'RSHA': np.nan, 'X_LOC': 437627.5625,
-                       'Y_LOC': 6470980.0, 'Z_LOC': -1974.846802, 'DEPTH_MD': 2000.0880127, 'MUDWEIGHT': 0.1366020888, 'FORCE_2020_LITHOFACIES_LITHOLOGY': 30000.0,
-                       'FORCE_2020_LITHOFACIES_CONFIDENCE': 1.0}
+        true_answer = {'DRHO': np.nan, 'NPHI': np.nan, 'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan, 'PEF': np.nan, 'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan, 'CALI': np.nan,
+                       'Y_LOC': 6421723.0,
+                       'ROP': np.nan, 'RSHA': 1.4654846191, 'DTC': np.nan, 'RDEP': 1.0439596176, 'RHOB': np.nan, 'DEPTH_MD': 200.14439392, 'BS': 17.5, 'DTS': np.nan,
+                       'ROPA': np.nan,
+                       'GR': 9.0210666656, 'RMED': 1.7675967216, 'Z_LOC': -156.1439972, 'X_LOC': 444904.03125}
         for key in true_answer.keys():
             self.assertTrue(data[key][ref_depth] == true_answer[key] or (np.isnan(data[key][ref_depth]) and np.isnan(true_answer[key])))
-
-    @unittest.skip("Is not a test in fact")
-    def test_get_data_time(self):
-        wellname = '15_9-13'
-        dataset_name = 'one'
-        well = Well(wellname, new=True)
-        dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
-        start = time.time()
-        dataset.get_data()
-        end = time.time()
-        self.assertLess(end - start, 1)
-
-    def test_dataset_insert_row(self):
-        wellname = 'random_well'
-        dataset_name = 'insert_row'
-        reference = 450
-        reference_2 = 800
-        row = {"GR": 87.81237987, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
-        row_2 = {"GR": 97.2, "PS": -0.234235555667, "LITHO": 1, "STRING": "VALUE"}
-
-        well = Well(wellname, new=True)
-        dataset = WellDataset(well, dataset_name)
-        dataset.register()
-
-        def assemble_data(reference, row):
-            return {l: json.dumps({reference: v}) for l, v in row.items()}
-
-        dataset.set_data(assemble_data(reference, row))
-        self.assertEqual(dataset.get_data(start=reference, end=reference),
-                         {'GR': {450.0: 87.81237987}, 'PS': {450.0: -0.234235555667}, 'LITHO': {450.0: 1}, 'STRING': {450.0: 'VALUE'}})
-        dataset.set_data(assemble_data(reference, row_2))
-        self.assertEqual(dataset.get_data(start=reference, end=reference), {'GR': {450.0: 97.2}, 'PS': {450.0: -0.234235555667}, 'LITHO': {450.0: 1}, 'STRING': {450.0: 'VALUE'}})
-        self.assertEqual(dataset.get_data(logs=["GR", "PS"], start=reference, end=reference), {'GR': {450.0: 97.2}, 'PS': {450.0: -0.234235555667}})
-        self.assertEqual(dataset.get_data(logs=["GR", ], start=reference, end=reference), {"GR": {450.0: 97.2, }})
 
     def test_check_las_header(self):
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
-        dataset = WellDataset(well, dataset_name)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{wellname}.las'))
+        dataset = WellDataset(well, dataset_name, new=True)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'another_small_file.las'))
         true_info = {
             "Well": {"API": {"unit": "", "descr": "API NUMBER", "value": "", "mnemonic": "API", "original_mnemonic": "API"},
                      "FLD": {"unit": "", "descr": "FIELD", "value": "", "mnemonic": "FLD", "original_mnemonic": "FLD"},
@@ -185,16 +166,15 @@ class TestWellDatasetRedis(unittest.TestCase):
         self.assertEqual(true_info, dataset.info)
         well.delete()
 
-    @unittest.skip("Takes too long")
     def test_add_many_logs(self):
-        log_count = 50
+        log_count = 5
         LOG_TYPES = (float, str, int, bool, datetime,)
         wellname = 'thousand_logs'
         datasetname = 'this_dataset'
         wellname = Well(wellname, new=True)
-        dataset = WellDataset(wellname, datasetname)
+        dataset = WellDataset(wellname, datasetname, new=True)
         # load some real data
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'))
 
         # create logs in the dataset
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
@@ -216,7 +196,7 @@ class TestWellDatasetRedis(unittest.TestCase):
         def dummy_row(depths, dtype):
             return {depth: dummy_data(dtype) for depth in depths}
 
-        data = {log: json.dumps(dummy_row(existing_depths, log_type)) for log, log_type in new_logs.items()}
+        data = {log: dummy_row(existing_depths, log_type) for log, log_type in new_logs.items()}
 
         start = time.time()
         # dataset.add_log(new_logs, log_types)
@@ -224,58 +204,12 @@ class TestWellDatasetRedis(unittest.TestCase):
         end = time.time()
         print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
 
-        for _ in range(5):
-            start = time.time()
-            d = dataset.get_data()
-            end = time.time()
-            print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
-            time.sleep(1)
-
-    @unittest.skip("Takes too long")
-    def test_add_many_logs_read_random(self):
-        log_count = 5
-        LOG_TYPES = (float, str, int, bool, datetime,)
-        wellname = 'thousand_logs'
-        datasetname = 'this_dataset'
-        wellname = Well(wellname, new=True)
-        dataset = WellDataset(wellname, datasetname)
-        # load some real data
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'15_9-15.las'))
-
-        # create logs in the dataset
-        new_logs = [f"LOG_{l}" for l in range(0, log_count)]
-        log_types = [LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)]
-
-        # get depths
-        existing_data = dataset.get_data(logs=["reference", ])
-
-        # add data to the logs
-        def dummy_data(dtype):
-            generators = {
-                float: 400 * random() - 200,
-                str: ''.join(choice(string.ascii_letters) for i in range(64)),
-                int: randint(-1000, 1000),
-                datetime: datetime.now() + random() * timedelta(days=1),
-                bool: 1 == randint(0, 1)
-            }
-            return generators[dtype]
-
-        def dummy_row(logs, dtypes):
-            return {log: dummy_data(dtype) for log, dtype in zip(logs, dtypes)}
-
-        data = {depth: dummy_row(new_logs, log_types) for depth in existing_data.keys()}
-
         start = time.time()
-        dataset.set_data(data)
+        d = dataset.get_data()
         end = time.time()
-        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
-
-        for _ in range(3):
-            start = time.time()
-            d = dataset.get_data(logs=[new_logs[randint(0, len(new_logs) - 1)] for _ in range(0, 10)])
-            end = time.time()
-            print(f"Read of {len(d[25])} logs having {len(d)} rows took {int((end - start) * 1000)}ms.")
-            time.sleep(1)
+        print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
+        self.assertEqual(len(d), 20 + log_count)
+        self.assertEqual(len(d['LOG_1']), 84)
 
 
 class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
@@ -289,8 +223,8 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         self.wellname = self.f.replace(".las", "")
         self.number_of_datasets = 20
         well = Well(self.wellname, new=True)
-        dataset = WellDataset(well, "0")
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'{self.wellname}.las'), )
+        dataset = WellDataset(well, "0", new=True)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, self.f), )
         data = dataset.get_data()
         for i in range(1, self.number_of_datasets):
             d = WellDataset(well, str(i))

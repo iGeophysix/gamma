@@ -18,7 +18,7 @@ class TestWell(unittest.TestCase):
 
         w1 = Well('well1', new=True)
         wells_in_storage = s.list_wells()
-        true_result = {'well1': {'name': 'well1', 'datasets': []}, }
+        true_result = {'well1': {'name': 'well1', 'datasets': [], 'meta': {}}, }
         self.assertEqual(wells_in_storage, true_result)
 
     def test_create_two_well(self):
@@ -26,7 +26,7 @@ class TestWell(unittest.TestCase):
         w1 = Well('well1', new=True)
         w2 = Well('well2', new=True)
         wells_in_storage = s.list_wells()
-        true_result = {'well1': {'name': 'well1', 'datasets': []}, 'well2': {'name': 'well2', 'datasets': []}}
+        true_result = {'well1': {'name': 'well1', 'datasets': [], 'meta': {}}, 'well2': {'name': 'well2', 'datasets': [], 'meta': {}}}
         self.assertEqual(wells_in_storage, true_result)
 
     def test_set_well_info(self):
@@ -38,7 +38,7 @@ class TestWell(unittest.TestCase):
         w1.info = info
 
         wells_in_storage = s.list_wells()
-        true_result = {'name': 'well1', 'datasets': [], 'uwi': '1324267832'}
+        true_result = {'name': 'well1', 'datasets': [], 'meta': {'uwi': '1324267832'}}
         self.assertEqual(wells_in_storage['well1'], true_result)
 
     def test_check_no_datasets(self):
