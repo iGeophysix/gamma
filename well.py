@@ -13,7 +13,8 @@ class Well:
     def __init__(self, name: str, new=False):
         self._name = name
         if new:
-            self.info = {}
+            _s = RedisStorage()
+            _s.create_well(wellname=self._name)
 
     def __str__(self):
         return self._name
@@ -109,4 +110,4 @@ class WellDataset:
 
     def set_data(self, data):
         _storage = RedisStorage()
-        _storage.update_dataset(self._well, self._name, data)
+        _storage.update_logs(self._well, self._name, data)

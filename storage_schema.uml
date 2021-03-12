@@ -1,0 +1,26 @@
+@startuml
+object well{
+ key = "WELL_ID"
+ value = "{'name':'wellname', 'datasets':[DATASET_ID, ...], 'UWI':...,}"
+}
+
+object dataset {
+  key = "DATASET_ID"
+  value = "{'name':'dataset1',  logs: [LOG_ID,...], 'origin':...}"
+}
+
+object DATASET_ID__Meta {
+  key = "LOG_ID"
+  value = "{'name':'GR', 'units':'uR/h',..., 'history':{...}}
+}
+
+
+object DATASET_ID__Data {
+  key = "LOG_ID"
+  value = "{MD_1:VAL_1, MD_2:VAL_2,...}
+}
+
+well --> dataset
+dataset--> DATASET_ID__Data
+dataset--> DATASET_ID__Meta
+@enduml

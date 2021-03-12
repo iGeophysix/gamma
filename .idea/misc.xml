@@ -3,5 +3,8 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/storage_schema.uml" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.9.0+ (sftp://afilimonov@192.168.1.76:22/home/afilimonov/Programming/gamma/venv/bin/python)" project-jdk-type="Python SDK" />
 </project>
