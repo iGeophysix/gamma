@@ -1,35 +1,35 @@
-# Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
+1  # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
 
 import collections
-import re
-import os
 import math
+import os
+import re
+
 from chardet.universaldetector import UniversalDetector
 
-
 LasRequiredEntry = \
-        collections.namedtuple('LasRequiredEntry', \
-                               'value description')
+    collections.namedtuple('LasRequiredEntry', \
+                           'value description')
 
 AdditionalWellEntry = \
-        collections.namedtuple('AdditionalWellEntry', \
-                               'value units description')
+    collections.namedtuple('AdditionalWellEntry', \
+                           'value units description')
 
 LogMetricsEntry = \
-        collections.namedtuple('LogMetricsEntry', \
-                               'value units')
+    collections.namedtuple('LogMetricsEntry', \
+                           'value units')
 
 LoggingParameterEntry = \
-        collections.namedtuple('LoggingParameterEntry', \
-                               'value units description')
+    collections.namedtuple('LoggingParameterEntry', \
+                           'value units description')
 
 LogInformationEntry = \
-        collections.namedtuple('LogInformationEntry', \
-                               'units code description')
+    collections.namedtuple('LogInformationEntry', \
+                           'units code description')
+
 
 class Las():
-
     """
     The class instance that is returned by the function
     'parse_las_file'. The whole LAS structure is represented
@@ -56,10 +56,14 @@ class Las():
         self.logging_parameters = {}
         self.additional_well_entries = {}
 
+    def to_dict(self):
+        md_key = list(self.data.keys())[0]
+        md_list = self.data[md_key]
+        result = {log: {md: v for md, v in zip(md_list, values)} for log, values in self.data.items() if log != md_key}
+        return result
 
 
-def parse_las_file(filename, use_chardet = True) -> Las:
-
+def parse_las_file(filename, use_chardet=True) -> Las:
     """
     Function uses the `chardet` module in order to
     guess the file codepage. This could be essential
@@ -81,7 +85,7 @@ def parse_las_file(filename, use_chardet = True) -> Las:
 
             enc = detector.result['encoding']
 
-        f = open(filename, 'r', encoding = enc)
+        f = open(filename, 'r', encoding=enc)
 
         lines = f.readlines()
         lines = [l.strip() for l in lines]
@@ -102,7 +106,7 @@ def parse_las_file(filename, use_chardet = True) -> Las:
                 elif line.startswith('~P'):
                     i = _parse_logging_parameter_section(i, lines, las_file)
                 # elif line.startswith('~O'):
-                    # i = _parse_other_information_section(i, lines, las_file)
+                # i = _parse_other_information_section(i, lines, las_file)
                 elif line.startswith('~C'):
                     i = _parse_curve_information_section(i, lines, las_file)
                 elif line.startswith('~A'):
@@ -117,7 +121,6 @@ def parse_las_file(filename, use_chardet = True) -> Las:
 
     finally:
         f.close()
-
 
     return las_file
 
@@ -153,13 +156,12 @@ def _parse_well_information_section(i, lines, las_file):
     numeric_word = r'[+-]?(\d+([.]\d*)?|[.]\d+) *'
     numeric_field = base_field.format(numeric_word)
 
-
     # STRT.M        583.0:
     log_metrics_res = {
-      'STRT' : re.compile(numeric_field.format(name='STRT')),
-      'STOP' : re.compile(numeric_field.format(name='STOP')),
-      'STEP' : re.compile(numeric_field.format(name='STEP')),
-      'NULL' : re.compile(numeric_field.format(name='NULL'))
+        'STRT': re.compile(numeric_field.format(name='STRT')),
+        'STOP': re.compile(numeric_field.format(name='STOP')),
+        'STEP': re.compile(numeric_field.format(name='STEP')),
+        'NULL': re.compile(numeric_field.format(name='NULL'))
     }
 
     #  WELL.                WELL:   4832/116
@@ -167,18 +169,18 @@ def _parse_well_information_section(i, lines, las_file):
     specific_field = base_field.format(non_numeric_word)
 
     required_res = {
-      'WELL' : re.compile(specific_field.format(name='WELL')),
-      'COMP' : re.compile(specific_field.format(name='COMP')),
-      'SRVC' : re.compile(specific_field.format(name='SRVC')),
-      'FLD'  : re.compile(specific_field.format(name='FLD')),
-      'LOC'  : re.compile(specific_field.format(name='LOC')),
-      'DATE' : re.compile(specific_field.format(name='DATE')),
-      'CTRY' : re.compile(specific_field.format(name='CTRY')),
-      'STAT' : re.compile(specific_field.format(name='STAT')),
-      'CNTY' : re.compile(specific_field.format(name='CNTY')),
-      'PROV' : re.compile(specific_field.format(name='PROV')),
-      'API'  : re.compile(specific_field.format(name='API')),
-      'UWI'  : re.compile(specific_field.format(name='UWI'))
+        'WELL': re.compile(specific_field.format(name='WELL')),
+        'COMP': re.compile(specific_field.format(name='COMP')),
+        'SRVC': re.compile(specific_field.format(name='SRVC')),
+        'FLD': re.compile(specific_field.format(name='FLD')),
+        'LOC': re.compile(specific_field.format(name='LOC')),
+        'DATE': re.compile(specific_field.format(name='DATE')),
+        'CTRY': re.compile(specific_field.format(name='CTRY')),
+        'STAT': re.compile(specific_field.format(name='STAT')),
+        'CNTY': re.compile(specific_field.format(name='CNTY')),
+        'PROV': re.compile(specific_field.format(name='PROV')),
+        'API': re.compile(specific_field.format(name='API')),
+        'UWI': re.compile(specific_field.format(name='UWI'))
     }
 
     #  UWI .      UNIQUE WELL ID:326R000K116_F0W4832_
@@ -188,9 +190,8 @@ def _parse_well_information_section(i, lines, las_file):
     line_is_processed = False
 
     log_metrics_entries = {}
-    required_well_entries = {key:LasRequiredEntry('','') for key, _ in required_res.items()}
+    required_well_entries = {key: LasRequiredEntry('', '') for key, _ in required_res.items()}
     additional_well_entries = {}
-
 
     while i < len(lines):
         line = lines[i]
@@ -206,7 +207,7 @@ def _parse_well_information_section(i, lines, las_file):
 
             if r:
                 log_metrics_entries[r.group(1).strip()] = \
-                    LogMetricsEntry(value = r.group(3).strip(), units = r.group(2)[1:])
+                    LogMetricsEntry(value=r.group(3).strip(), units=r.group(2)[1:])
 
                 line_is_processed = True
                 break
@@ -250,12 +251,12 @@ def _parse_well_information_section(i, lines, las_file):
 
         i += 1
 
-
     las_file.log_metrics_entries = log_metrics_entries
     las_file.required_well_entries = required_well_entries
     las_file.additional_well_entries = additional_well_entries
 
     return i
+
 
 def _parse_logging_parameter_section(i, lines, las_file):
     i += 1
@@ -290,6 +291,7 @@ def _parse_logging_parameter_section(i, lines, las_file):
 
     return i
 
+
 def _parse_other_information_section(i, lines, las_file):
     return i
 
@@ -320,7 +322,6 @@ def _parse_curve_information_section(i, lines, las_file):
 
             if mnem in log_information_entries:
                 raise Exception('Duplicating curve mnem "{}"'.format(mnem))
-
 
             log_information_entries[mnem] = \
                 LogInformationEntry(units, code, description)

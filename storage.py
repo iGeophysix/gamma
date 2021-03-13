@@ -174,7 +174,7 @@ class RedisStorage:
             return {float(k): v for k, v in data.items()}
 
         if logs:
-            out = {log: beautify_depths(json.loads(self.conn.hget(dataset_id, log))) for log in logs}
+            out = {log: json.loads(self.conn.hget(dataset_id, log)) for log in logs}
         else:
             out = {k.decode('utf-8'): beautify_depths(json.loads(v)) for k, v in self.conn.hgetall(dataset_id).items()}
 

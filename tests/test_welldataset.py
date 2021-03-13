@@ -60,10 +60,10 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
         data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'DRHO': np.nan, 'NPHI': np.nan, 'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan, 'PEF': np.nan, 'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan, 'CALI': np.nan,
-                       'Y_LOC': 6421723.0,
+                       'y_loc': 6421723.0,
                        'ROP': np.nan, 'RSHA': 1.4654846191, 'DTC': np.nan, 'RDEP': 1.0439596176, 'RHOB': np.nan, 'DEPTH_MD': 200.14439392, 'BS': 17.5, 'DTS': np.nan,
                        'ROPA': np.nan,
-                       'GR': 9.0210666656, 'RMED': 1.7675967216, 'Z_LOC': -156.1439972, 'X_LOC': 444904.03125}
+                       'GR': 9.0210666656, 'RMED': 1.7675967216, 'z_loc': -156.1439972, 'x_loc': 444904.03125}
         for key in true_answer.keys():
             self.assertTrue(data[key][ref_depth] == true_answer[key] or (np.isnan(data[key][ref_depth]) and np.isnan(true_answer[key])))
 
@@ -74,45 +74,55 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset = WellDataset(well, dataset_name, new=True)
         dataset.read_las(filename=os.path.join(self.path_to_test_data, f'another_small_file.las'))
         true_info = {
-            "Well": {"API": {"unit": "", "descr": "API NUMBER", "value": "", "mnemonic": "API", "original_mnemonic": "API"},
-                     "FLD": {"unit": "", "descr": "FIELD", "value": "", "mnemonic": "FLD", "original_mnemonic": "FLD"},
-                     "LOC": {"unit": "", "descr": "LOCATION", "value": "", "mnemonic": "LOC", "original_mnemonic": "LOC"},
-                     "UWI": {"unit": "", "descr": "UNIQUE WELL ID", "value": "15/9-13", "mnemonic": "UWI", "original_mnemonic": "UWI"},
-                     "COMP": {"unit": "", "descr": "COMPANY", "value": "", "mnemonic": "COMP", "original_mnemonic": "COMP"},
-                     "DATE": {"unit": "", "descr": "ss}", "value": "2020-08-09 20:01:10   : Log Export Date {yyyy-MM-dd HH:mm", "mnemonic": "DATE",
-                              "original_mnemonic": "DATE"}, "NULL": {"unit": "", "descr": "", "value": -999.25, "mnemonic": "NULL", "original_mnemonic": "NULL"},
-                     "PROV": {"unit": "", "descr": "PROVINCE", "value": "", "mnemonic": "PROV", "original_mnemonic": "PROV"},
-                     "SRVC": {"unit": "", "descr": "SERVICE COMPANY", "value": "", "mnemonic": "SRVC", "original_mnemonic": "SRVC"},
-                     "STEP": {"unit": "m", "descr": "", "value": 0.152, "mnemonic": "STEP", "original_mnemonic": "STEP"},
-                     "STOP": {"unit": "m", "descr": "", "value": 3283.9641113, "mnemonic": "STOP", "original_mnemonic": "STOP"},
-                     "STRT": {"unit": "m", "descr": "", "value": 25.0, "mnemonic": "STRT", "original_mnemonic": "STRT"},
-                     "WELL": {"unit": "", "descr": "WELL", "value": "15/9-13 Sleipner East Appr", "mnemonic": "WELL", "original_mnemonic": "WELL"}}, "Other": "",
-            "Curves": {"GR": {"unit": "gAPI", "descr": "GR", "value": "", "mnemonic": "GR", "original_mnemonic": "GR"},
-                       "SP": {"unit": "mV", "descr": "SP", "value": "", "mnemonic": "SP", "original_mnemonic": "SP"},
-                       "DTC": {"unit": "us/ft", "descr": "DTC", "value": "", "mnemonic": "DTC", "original_mnemonic": "DTC"},
-                       "PEF": {"unit": "b/e", "descr": "PEF", "value": "", "mnemonic": "PEF", "original_mnemonic": "PEF"},
-                       "ROP": {"unit": "m/h", "descr": "ROP", "value": "", "mnemonic": "ROP", "original_mnemonic": "ROP"},
-                       "RXO": {"unit": "ohm.m", "descr": "RXO", "value": "", "mnemonic": "RXO", "original_mnemonic": "RXO"},
-                       "CALI": {"unit": "in", "descr": "CALI", "value": "", "mnemonic": "CALI", "original_mnemonic": "CALI"},
-                       "DEPT": {"unit": "m", "descr": "DEPTH", "value": "", "mnemonic": "DEPT", "original_mnemonic": "DEPT"},
-                       "DRHO": {"unit": "g/cm3", "descr": "DRHO", "value": "", "mnemonic": "DRHO", "original_mnemonic": "DRHO"},
-                       "NPHI": {"unit": "m3/m3", "descr": "NPHI", "value": "", "mnemonic": "NPHI", "original_mnemonic": "NPHI"},
-                       "RDEP": {"unit": "ohm.m", "descr": "RDEP", "value": "", "mnemonic": "RDEP", "original_mnemonic": "RDEP"},
-                       "RHOB": {"unit": "g/cm3", "descr": "RHOB", "value": "", "mnemonic": "RHOB", "original_mnemonic": "RHOB"},
-                       "RMED": {"unit": "ohm.m", "descr": "RMED", "value": "", "mnemonic": "RMED", "original_mnemonic": "RMED"},
-                       "RSHA": {"unit": "ohm.m", "descr": "RSHA", "value": "", "mnemonic": "RSHA", "original_mnemonic": "RSHA"},
-                       "X_LOC": {"unit": "_", "descr": "x_loc", "value": "", "mnemonic": "X_LOC", "original_mnemonic": "X_LOC"},
-                       "Y_LOC": {"unit": "_", "descr": "y_loc", "value": "", "mnemonic": "Y_LOC", "original_mnemonic": "Y_LOC"},
-                       "Z_LOC": {"unit": "_", "descr": "z_loc", "value": "", "mnemonic": "Z_LOC", "original_mnemonic": "Z_LOC"},
-                       "DEPTH_MD": {"unit": "_", "descr": "DEPTH_MD", "value": "", "mnemonic": "DEPTH_MD", "original_mnemonic": "DEPTH_MD"},
-                       "MUDWEIGHT": {"unit": "_", "descr": "MUDWEIGHT", "value": "", "mnemonic": "MUDWEIGHT", "original_mnemonic": "MUDWEIGHT"},
-                       "FORCE_2020_LITHOFACIES_LITHOLOGY": {"unit": "_", "descr": "FORCE_2020_LITHOFACIES_LITHOLOGY", "value": "", "mnemonic": "FORCE_2020_LITHOFACIES_LITHOLOGY",
-                                                            "original_mnemonic": "FORCE_2020_LITHOFACIES_LITHOLOGY"},
-                       "FORCE_2020_LITHOFACIES_CONFIDENCE": {"unit": "_", "descr": "FORCE_2020_LITHOFACIES_CONFIDENCE", "value": "",
-                                                             "mnemonic": "FORCE_2020_LITHOFACIES_CONFIDENCE", "original_mnemonic": "FORCE_2020_LITHOFACIES_CONFIDENCE"}},
-            "Version": {"VERS": {"unit": "", "descr": "", "value": 2.0, "mnemonic": "VERS", "original_mnemonic": "VERS"},
-                        "WRAP": {"unit": "", "descr": "", "value": "NO", "mnemonic": "WRAP", "original_mnemonic": "WRAP"}},
-            "Parameter": {}}
+            "WELL": [
+                "15/9-13 Sleipner East Appr",
+                "WELL"
+            ],
+            "COMP": [
+                "",
+                "COMPANY"
+            ],
+            "SRVC": [
+                "",
+                "SERVICE COMPANY"
+            ],
+            "FLD": [
+                "",
+                "FIELD"
+            ],
+            "LOC": [
+                "",
+                "LOCATION"
+            ],
+            "DATE": [
+                "2020-08-09 20:01:10   : Log Export Date {yyyy-MM-dd HH:mm",
+                "ss}"
+            ],
+            "CTRY": [
+                "",
+                ""
+            ],
+            "STAT": [
+                "",
+                ""
+            ],
+            "CNTY": [
+                "",
+                ""
+            ],
+            "PROV": [
+                "",
+                "PROVINCE"
+            ],
+            "API": [
+                "",
+                "API NUMBER"
+            ],
+            "UWI": [
+                "15/9-13",
+                "UNIQUE WELL ID"
+            ]
+        }
         self.assertEqual(true_info, dataset.info)
         well.delete()
 
@@ -219,7 +229,7 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
 
         self.path_to_test_data = PATH_TO_TEST_DATA
 
-        self.f = '15_9-14.las'
+        self.f = 'another_small_file.las'
         self.wellname = self.f.replace(".las", "")
         self.number_of_datasets = 20
         well = Well(self.wellname, new=True)

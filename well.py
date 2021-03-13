@@ -1,7 +1,6 @@
 import logging
 
-import lasio
-
+from importexport import las
 from storage import RedisStorage
 
 logging.basicConfig()
@@ -89,11 +88,10 @@ class WellDataset:
     def read_las(self, filename: str):
         debug.debug(f"Reading file: {filename}")
         _storage = RedisStorage()
-        well_data = lasio.read(filename)
-        temp_df = well_data.df()
-        values = temp_df.to_dict()
+        well_data = las.parse_las_file(filename)
+        values = well_data.to_dict()
         _storage.update_logs(wellname=self._well, datasetname=self._name, data=values)
-        _storage.set_dataset_info(self._well, self._name, self.__get_las_headers(well_data.sections))
+        _storage.set_dataset_info(self._well, self._name, well_data.required_well_entries)  # self.__get_las_headers(well_data.sectioцуns))
 
     def delete_log(self, name):
         _s = RedisStorage()
