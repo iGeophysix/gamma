@@ -6,7 +6,7 @@ from typing import Any
 
 import redis
 
-from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
 logger = logging.getLogger("storage")
 

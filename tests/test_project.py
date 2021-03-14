@@ -3,14 +3,18 @@ import os
 import string
 import time
 import unittest
+
 from datetime import datetime, timedelta
 from random import randint, random, choice
-from project import Project
+from tasks import async_normalize_log
+
 import numpy as np
 
-from storage import RedisStorage
-from tasks import async_normalize_log
-from well import Well, WellDataset
+from database.RedisStorage import RedisStorage
+
+from domain.Well import Well
+from domain.WellDataset import WellDataset
+from domain.Project import Project
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 

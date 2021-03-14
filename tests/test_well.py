@@ -1,8 +1,9 @@
 import os
 import unittest
 
-from storage import RedisStorage
-from well import Well
+from database.RedisStorage import RedisStorage
+from domain.Well import Well
+from domain.WellDataset import WellDataset
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 

@@ -4,7 +4,7 @@ import os
 from celery import Celery
 
 from petrophysics import normalize
-from well import WellDataset, Well
+from domain import WellDataset, Well
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 app = Celery('tasks', broker=f'redis://{REDIS_HOST}')

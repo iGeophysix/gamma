@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from storage import RedisStorage
+from database.RedisStorage import RedisStorage
 
 logging.basicConfig()
 debug = logging.getLogger("gamma")
