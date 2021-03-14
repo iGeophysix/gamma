@@ -89,7 +89,7 @@ class TestParallelAccessToData(unittest.TestCase):
 
     def test_parallel_append_history(self):
         pool = mp.Pool(4)
-        number_of_writes = 30
+        number_of_writes = 1000
 
         for i in range(number_of_writes):
             pool.apply_async(append_history, (self.wellname, "1", "GR", f"This is append {i}"))
@@ -97,7 +97,7 @@ class TestParallelAccessToData(unittest.TestCase):
         pool.join()
 
         well = Well(self.wellname)
-        for i in range(self.number_of_datasets):
-            d = WellDataset(well, "1")
-            dl = d.get_log_history(log='GR')
-            self.assertEqual(len(dl), number_of_writes + 1)  # one is added at the beginning when loading data from las
+
+        d = WellDataset(well, "1")
+        dl = d.get_log_history(log='GR')
+        self.assertEqual(len(dl), number_of_writes + 1)  # one is added at the beginning when loading data from las
