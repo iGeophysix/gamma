@@ -1,4 +1,3 @@
-import json
 import os
 import string
 import time
@@ -191,7 +190,7 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         # create logs in the dataset
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
-        new_logs_meta = {f"LOG_{i}": {"units":"some_units", "code":i, "description":f"Dummy log {i}"} for i in range(0, log_count)}
+        new_logs_meta = {f"LOG_{i}": {"units": "some_units", "code": i, "description": f"Dummy log {i}"} for i in range(0, log_count)}
         # get depths
         existing_depths = dataset.get_log_data(logs=["GR", ])["GR"].keys()
 
@@ -243,6 +242,7 @@ class TestWellDatasetRedis(unittest.TestCase):
         history = dataset.get_log_history("GR")
         self.assertEqual(f'Loaded from {f}', history[0][1])
 
+
 class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
     def setUp(self) -> None:
         _s = RedisStorage()
@@ -254,12 +254,9 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         self.wellname = self.f.replace(".las", "")
         self.number_of_datasets = 20
         well = Well(self.wellname, new=True)
-        dataset = WellDataset(well, "0", new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, self.f), )
-        data = dataset.get_data()
-        for i in range(1, self.number_of_datasets):
-            d = WellDataset(well, str(i))
-            d.set_data({log: json.dumps(val) for log, val in data.items()})
+        for i in range(self.number_of_datasets):
+            dataset = WellDataset(well, str(i), new=True)
+            dataset.read_las(filename=os.path.join(self.path_to_test_data, self.f), )
 
     def test_async_normalization(self):
 
@@ -268,4 +265,3 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         for i in range(self.number_of_datasets):
             async_normalize_log.delay(wellname=self.wellname, datasetname=str(i), logs=logs)
         # self.assertIn('one', well.datasets)
-

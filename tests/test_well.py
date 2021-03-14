@@ -16,15 +16,15 @@ class TestWell(unittest.TestCase):
     def test_create_one_well(self):
         s = RedisStorage()
 
-        w1 = Well('well1', new=True)
+        Well('well1', new=True)
         wells_in_storage = s.list_wells()
         true_result = {'well1': {'name': 'well1', 'datasets': [], 'meta': {}}, }
         self.assertEqual(wells_in_storage, true_result)
 
     def test_create_two_well(self):
         s = RedisStorage()
-        w1 = Well('well1', new=True)
-        w2 = Well('well2', new=True)
+        Well('well1', new=True)
+        Well('well2', new=True)
         wells_in_storage = s.list_wells()
         true_result = {'well1': {'name': 'well1', 'datasets': [], 'meta': {}}, 'well2': {'name': 'well2', 'datasets': [], 'meta': {}}}
         self.assertEqual(wells_in_storage, true_result)

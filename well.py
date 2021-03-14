@@ -110,11 +110,11 @@ class WellDataset:
     def get_log_data(self, logs=None, start=None, end=None):
         _storage = RedisStorage()
         if start != end:
-            result = _storage.read_dataset(self._well, self._name, logs, depth__gt=start, depth__lt=end)
+            result = _storage.get_logs_data(self._well, self._name, logs, depth__gt=start, depth__lt=end)
         elif start == end:
-            result = _storage.read_dataset(self._well, self._name, logs, depth=start)
+            result = _storage.get_logs_data(self._well, self._name, logs, depth=start)
         else:
-            result = _storage.read_dataset(self._well, self._name)
+            result = _storage.get_logs_data(self._well, self._name)
         return result
 
     def get_log_meta(self, logs=None):

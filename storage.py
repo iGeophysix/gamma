@@ -155,7 +155,11 @@ class RedisStorage:
                 except redis.exceptions.WatchError:
                     continue
 
-    def read_dataset(self, wellname, datasetname, logs=None, depth=None, depth__gt=None, depth__lt=None):
+    # LOGS
+    def add_log(self, wellname, datasetname, log_name):
+        self.conn.hset(self._get_dataset_id(wellname, datasetname), log_name, '{}')
+
+    def get_logs_data(self, wellname, datasetname, logs=None, depth=None, depth__gt=None, depth__lt=None):
         dataset_id = self._get_dataset_id(wellname, datasetname)
 
         def slice(data, top=None, bottom=None):
@@ -167,7 +171,7 @@ class RedisStorage:
             return {float(k): v for k, v in data.items()}
 
         if logs:
-            out = {log: json.loads(self.conn.hget(dataset_id, log)) for log in logs}
+            out = {log: beautify_depths(json.loads(self.conn.hget(dataset_id, log))) for log in logs}
         else:
             out = {k.decode('utf-8'): beautify_depths(json.loads(v)) for k, v in self.conn.hgetall(dataset_id).items()}
 
@@ -178,10 +182,6 @@ class RedisStorage:
             return {l: slice(v, depth__gt, depth__lt) for l, v in out.items()}
         else:
             return {l: slice(v, depth, depth) for l, v in out.items()}
-
-    # LOGS
-    def add_log(self, wellname, datasetname, log_name):
-        self.conn.hset(self._get_dataset_id(wellname, datasetname), log_name, '{}')
 
     def get_logs_meta(self, wellname, datasetname, logs=None):
         dataset_id = self._get_dataset_id(wellname, datasetname)
@@ -195,7 +195,10 @@ class RedisStorage:
 
     def update_logs(self, wellname, datasetname, data=None, meta=None):
         dataset_id = self._get_dataset_id(wellname, datasetname)
+
         if meta:
+            for log in meta.keys():
+                meta[log]['__history'] = meta[log].get('__history', [])
             self.conn.hset(f"{dataset_id}_meta", mapping={k: json.dumps(v) for k, v in meta.items()})
         if data:
             self.conn.hset(dataset_id, mapping={k: json.dumps(v) for k, v in data.items()})
@@ -210,18 +213,15 @@ class RedisStorage:
 
     def append_log_history(self, wellname, datasetname, log, event):
         dataset_id = self._get_dataset_id(wellname, datasetname)
-        with self.conn.pipeline() as pipe:
-            while True:
-                try:
-                    pipe.watch(f"{dataset_id}_meta:{log}")
-                    meta = json.loads(pipe.hget(f"{dataset_id}_meta", log))
-                    pipe.multi()
-                    if '__history' not in meta.keys():
-                        meta['__history'] = []
-                    meta['__history'].append(event)
-                    pipe.hset(f"{dataset_id}_meta", log, json.dumps(meta))
-                    pipe.execute()
-                    break
-                except redis.exceptions.WatchError:
-                    continue
 
+        with self.conn.lock(f"{dataset_id}_meta:{log}", blocking_timeout=BLOCKING_TIMEOUT) as lock:
+            try:
+                meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
+                if '__history' not in meta.keys():
+                    meta['__history'] = []
+                meta['__history'].append(event)
+                self.conn.hset(f"{dataset_id}_meta", log, json.dumps(meta))
+
+            except redis.exceptions.LockError:
+                logger.error("Couldn't acquire lock in wells. Please try again later...")
+                raise
