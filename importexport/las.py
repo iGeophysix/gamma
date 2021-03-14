@@ -1,4 +1,4 @@
-1  # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
+# Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
 
 import collections
@@ -61,6 +61,13 @@ class Las():
         md_list = self.data[md_key]
         result = {log: {md: v for md, v in zip(md_list, values)} for log, values in self.data.items() if log != md_key}
         return result
+
+    def well_info(self):
+        return self.required_well_entries | self.additional_well_entries
+
+    def logs_info(self):
+        md_key = list(self.data.keys())[0]
+        return {k: v._asdict() for k, v in self.log_information_entries.items() if k != md_key}
 
 
 def parse_las_file(filename, use_chardet=True) -> Las:

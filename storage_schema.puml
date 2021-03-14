@@ -6,7 +6,7 @@ object well{
 
 object dataset {
   key = "DATASET_ID"
-  value = "{'name':'dataset1',  logs: [LOG_ID,...], 'origin':...}"
+  value = "{'name':'dataset1', 'origin':...}"
 }
 
 object DATASET_ID__Meta {

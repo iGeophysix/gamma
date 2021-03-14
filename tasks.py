@@ -37,7 +37,7 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
 
     well = Well(wellname)
     dataset = WellDataset(well, datasetname)
-    data = dataset.get_data(logs=logs.keys())
+    data = dataset.get_log_data(logs=logs.keys())
     normalized_data = {}
     for curve, p in logs.items():
         normalized_data.update({p["output"]: json.dumps(normalize(data[curve], p["min_value"], p["max_value"]))})

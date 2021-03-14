@@ -25,8 +25,10 @@ class TestWellDatasetRedis(unittest.TestCase):
         well = Well('well2', new=True)
         dataset = WellDataset(well, "one", new=True)
         data = {"GR": {10: 1, 20: 2}, "PS": {10: 3, 20: 4}}
-        dataset.set_data(data)
-        self.assertEqual(dataset.get_data(), data)
+        meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"}, "PS": {"units": "uV", "code": "", "description": "PS"}}
+        dataset.set_data(data, meta)
+        self.assertEqual(dataset.get_log_data(), data)
+        self.assertEqual(dataset.get_log_meta(), meta)
 
     def test_change_dataset_info(self):
         well = Well('well2', new=True)
@@ -57,8 +59,9 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name, new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
-        data = dataset.get_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
+        well_info = dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
+        well.info = well_info
+        data = dataset.get_log_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'DRHO': np.nan, 'NPHI': np.nan, 'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan, 'PEF': np.nan, 'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan, 'CALI': np.nan,
                        'y_loc': 6421723.0,
                        'ROP': np.nan, 'RSHA': 1.4654846191, 'DTC': np.nan, 'RDEP': 1.0439596176, 'RHOB': np.nan, 'DEPTH_MD': 200.14439392, 'BS': 17.5, 'DTS': np.nan,
@@ -188,15 +191,15 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         # create logs in the dataset
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
-
+        new_logs_meta = {f"LOG_{i}": {"units":"some_units", "code":i, "description":f"Dummy log {i}"} for i in range(0, log_count)}
         # get depths
-        existing_depths = dataset.get_data(logs=["GR", ])["GR"].keys()
+        existing_depths = dataset.get_log_data(logs=["GR", ])["GR"].keys()
 
         # add data to the logs
         def dummy_data(dtype):
             generators = {
                 float: 400 * random() - 200,
-                str: ''.join(choice(string.ascii_letters) for i in range(64)),
+                str: ''.join(choice(string.ascii_letters) for _ in range(64)),
                 int: randint(-1000, 1000),
                 datetime: datetime.strftime(datetime.now() + random() * timedelta(days=1), "%Y-%m-%d %H:%M:%S.%f%z"),
                 bool: 1 == randint(0, 1)
@@ -210,17 +213,35 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         start = time.time()
         # dataset.add_log(new_logs, log_types)
-        dataset.set_data(data)
+        dataset.set_data(data, new_logs_meta)
         end = time.time()
         print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
 
         start = time.time()
-        d = dataset.get_data()
+        d = dataset.get_log_data()
         end = time.time()
         print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
         self.assertEqual(len(d), 20 + log_count)
         self.assertEqual(len(d['LOG_1']), 84)
 
+    def test_logs_list(self):
+        f = 'small_file.las'
+        wellname = f[:-4]
+        well = Well(wellname, new=True)
+        dataset = WellDataset(well, "one", new=True)
+        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+        log_list = dataset.get_log_list()
+        self.assertNotIn("DEPT", log_list)
+        self.assertIn("GR", log_list)
+
+    def test_log_history(self):
+        f = os.path.join(self.path_to_test_data, 'small_file.las')
+        wellname = "log_history_test"
+        well = Well(wellname, new=True)
+        dataset = WellDataset(well, "one", new=True)
+        dataset.read_las(filename=f)
+        history = dataset.get_log_history("GR")
+        self.assertEqual(f'Loaded from {f}', history[0][1])
 
 class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
     def setUp(self) -> None:
@@ -248,6 +269,3 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
             async_normalize_log.delay(wellname=self.wellname, datasetname=str(i), logs=logs)
         # self.assertIn('one', well.datasets)
 
-
-if __name__ == '__main__':
-    unittest.main()
