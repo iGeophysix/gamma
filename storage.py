@@ -104,16 +104,16 @@ class RedisStorage:
 
         return dataset_id
 
-    def get_dataset_name(self, wellname, datasetname):
-        dataset_id = self._get_dataset_id(wellname, datasetname)
+    def get_dataset_name(self, dataset_id):
         return json.loads(self.conn.hget('datasets', dataset_id))['name']
 
     def get_dataset_logs(self, wellname, datasetname):
         dataset_id = self._get_dataset_id(wellname, datasetname)
         return [l.decode() for l in self.conn.hkeys(f'{dataset_id}_meta')]
 
-    def get_dataset_info(self, wellname, datasetname):
-        dataset_id = self._get_dataset_id(wellname, datasetname)
+    def get_dataset_info(self, wellname=None, datasetname=None, dataset_id=None):
+        if dataset_id is None:
+            dataset_id = self._get_dataset_id(wellname, datasetname)
         if self.conn.hexists('datasets', dataset_id):
             return json.loads(self.conn.hget('datasets', dataset_id))
         else:
