@@ -66,7 +66,7 @@ class WellDataset:
     @info.setter
     def info(self, info):
         _s = RedisStorage()
-        return _s.set_dataset_info(self._well, self._name, info)
+        _s.set_dataset_info(self._well, self._name, info)
 
     @staticmethod
     def __get_las_headers(sections, keys=None, exclude=('data', 'json')):
