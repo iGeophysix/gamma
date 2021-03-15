@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from typing import Any
 
 from importexport import las
 from storage import RedisStorage
@@ -10,83 +11,130 @@ debug.setLevel(logging.INFO)
 
 
 class Well:
+    """
+    Class to process manipulations with wells
+    """
+
     def __init__(self, name: str, new=False):
+        """
+        Initialization of the object
+        :param name: well name
+        :param new: False by default. If True - it will create a new well in the data storage
+        """
         self._name = name
         if new:
             _s = RedisStorage()
             _s.create_well(wellname=self._name)
 
     def __str__(self):
+        """
+        To use Well object in print or strings
+        :return: string representation of the Well objet
+        """
         return self._name
 
     @property
     def name(self):
+        """
+        Returns well name as property
+        :return: Well name
+        """
         return self._name
 
     @property
-    def info(self):
+    def info(self) -> dict:
+        """
+        Returns well meta information
+        :return: dict
+        """
         _s = RedisStorage()
         return _s.get_well_info(self._name)
 
     @info.setter
     def info(self, info):
+        """
+        Sets new meta information.
+        :param info: Complete dictionary with the new information
+        """
         _storage = RedisStorage()
-        _storage.update_well_info(self._name, info)
+        _storage.set_well_info(self._name, info)
 
     @property
     def datasets(self):
+        """
+        Returns list of datasets with readable names
+        :return:
+        """
         _s = RedisStorage()
         return _s.get_datasets(self._name)
 
     def delete(self):
+        """
+        Deletes the well with its datasets and logs
+        """
         _s = RedisStorage()
         _s.delete_well(self._name)
 
 
 class WellDataset:
+    """
+    Class to process manipulations with datasets and its logs
+    """
+
     def __init__(self, well: Well, name: str, new=False) -> None:
+        """
+        Initialize Dataset object
+        :param well: Well - object itself, not wellname
+        :param name: Dataset name - string
+        :param new: bool value, default is False. If true, a new dataset will be created in the data storage
+        """
         self._well = well.name
         self._name = name
         self._dataset_table_name = None
         if new:
             self.register()
 
-    def delete(self):
+    def delete(self) -> None:
+        """
+        Delete dataset and it contents, also remove it from well
+        :return:
+        """
         _s = RedisStorage()
         _s.delete_dataset(self._well, self._name)
 
-    def register(self):
+    def register(self) -> None:
+        """
+        Register dataset in the storage
+        :return:
+        """
         _storage = RedisStorage()
         self._dataset_table_name = _storage.create_dataset(self._well, self._name)
 
     @property
-    def info(self):
+    def info(self) -> dict:
+        """
+        Get dataset meta information
+        :return: dict
+        """
         _s = RedisStorage()
         return _s.get_dataset_info(self._well, self._name)['meta']
 
     @info.setter
-    def info(self, info):
+    def info(self, info: dict) -> None:
+        """
+        Set meta info in the dataset. Completly rewrites previous contents.
+        You should always send whole contents, not only updated parts
+        :param info:
+        """
         _s = RedisStorage()
         _s.set_dataset_info(self._well, self._name, info)
 
-    @staticmethod
-    def __get_las_headers(sections, keys=None, exclude=('data', 'json')):
-        def section_to_dict(section, keys=None, exclude=('data', 'json')):
-            if type(section) == str:
-                return section
-
-            _out = {}
-            for field, item in section.items():
-                _out[field] = {}
-                if keys is None:
-                    keys = [key for key in item.__dict__.keys() if key not in exclude]
-                _out[field].update({key: item[key] for key in keys})
-
-            return _out
-
-        return {section: section_to_dict(sections[section], keys, exclude) for section in sections}
-
-    def read_las(self, filename: str):
+    def read_las(self, filename: str) -> dict:
+        """
+        Batch job to read data from a file.
+        :param filename: file path should be accessible via os.path
+        :return: well info from las file header
+        """
         debug.debug(f"Reading file: {filename}")
         _storage = RedisStorage()
         well_data = las.parse_las_file(filename)
@@ -99,15 +147,31 @@ class WellDataset:
         _storage.set_dataset_info(self._well, self._name, well_info)
         return well_info
 
-    def get_log_list(self):
+    def get_log_list(self) -> list:
+        """
+        Returns list of logs available in the dataset
+        :return: list
+        """
         _storage = RedisStorage()
         return _storage.get_dataset_logs(self._well, self._name)
 
-    def delete_log(self, name):
+    def delete_log(self, name: str) -> None:
+        """
+        Delete one log from the dataset
+        :param name: name of the log
+        """
         _s = RedisStorage()
         _s.delete_log(self._well, self._name, log_name=name)
 
-    def get_log_data(self, logs=None, start=None, end=None):
+    def get_log_data(self, logs: list = None, start: float = None, end: float = None) -> dict[dict]:
+        """
+        Reads data from the storage.
+        :param logs: list of logs to get, if None - return all logs
+        :param start: start depth (signed), if None - returns from the least value (> -inf)
+        :param end: end depth (signed), if None - returns till the largest value (< +inf)
+        :return: dict of dicts with each log and its data: depth reference-value
+            Example: {"GR": {10.0: 1, 20.0: 2}, "PS": {10.0: 3, 20.0: 4}}
+        """
         _storage = RedisStorage()
         if start != end:
             result = _storage.get_logs_data(self._well, self._name, logs, depth__gt=start, depth__lt=end)
@@ -117,18 +181,40 @@ class WellDataset:
             result = _storage.get_logs_data(self._well, self._name)
         return result
 
-    def get_log_meta(self, logs=None):
+    def get_log_meta(self, logs: list = None) -> dict[dict]:
+        """
+        Reads logs' meta data from the storage.
+        :param logs: list of logs (or any other iterable)
+        :return: dict with logs meta data
+            Example: {"GR": {"units": "gAPI", "code": "", "description": "GR"}, "PS": {"units": "uV", "code": "", "description": "PS"}}
+        """
         _storage = RedisStorage()
         return _storage.get_logs_meta(self._well, self._name, logs)
 
-    def get_log_history(self, log):
+    def get_log_history(self, log: str) -> list:
+        """
+        Reads history of one log
+        :param log: log name (str)
+        :return: list of events
+        """
         _s = RedisStorage()
-        return _s.get_logs_meta(self._well, self._name, [log,])[log].get('__history', [])
+        return _s.get_logs_meta(self._well, self._name, [log, ])[log].get('__history', [])
 
-    def append_log_history(self, log, event):
+    def append_log_history(self, log: str, event: Any) -> None:
+        """
+        Appends one more event to the tail of log history data
+        :param log: log name (str)
+        :param event: event - any serializable object
+
+        """
         _s = RedisStorage()
         _s.append_log_history(self._well, self._name, log, event)
 
-    def set_data(self, data, meta):
+    def set_data(self, data: dict[dict] = None, meta: dict[dict] = None) -> None:
+        """
+        Set log data and meta-information.
+        :param data: dict with {log: {depth:value,...},...}, if None then data won't be updated
+        :param meta: dict with {log: {key:value,...},...}, if None then meta won't be updated
+        """
         _storage = RedisStorage()
         _storage.update_logs(self._well, self._name, data, meta)
