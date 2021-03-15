@@ -10,14 +10,23 @@ debug.setLevel(logging.INFO)
 
 
 class Project:
+    """
+    Interface to storage to get project data in a convenient way
+    """
     def __init__(self, name):
         self._name = name
 
-    def list_wells(self):
+    def list_wells(self) -> dict:
+        """
+        Return dict of all well in the project with its info
+        """
         _s = RedisStorage()
         return _s.list_wells()
 
-    def tree(self):
+    def tree(self) -> dict:
+        """
+        Returns all available object in a form of tree
+        """
         _s = RedisStorage()
         tree = {}
         wells = _s.list_wells()
@@ -31,7 +40,11 @@ class Project:
                 tree[well].update({dataset_name: dataset_logs})
         return tree
 
-    def tree_df(self):
+    def tree_df(self) -> pd.DataFrame:
+        """
+        Returns list of all available object in form of a pandas.DataFrame
+        :return:
+        """
         _s = RedisStorage()
         out = []
         wells = _s.list_wells()
