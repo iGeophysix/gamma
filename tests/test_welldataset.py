@@ -220,7 +220,6 @@ class TestWellDatasetRedis(unittest.TestCase):
         # get depths
         arr = dataset.get_log_data(logs=["GR", ])["GR"]
         existing_depths = arr[:,0]
-        # print(existing_depths)
 
         # add data to the logs
         def dummy_data(dtype): # return scalar
@@ -247,7 +246,6 @@ class TestWellDatasetRedis(unittest.TestCase):
         start = time.time()
         d = dataset.get_log_data()
 
-        # print("DDD", d['LOG_1'])
         end = time.time()
         print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
 
@@ -291,8 +289,8 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
 
     def test_async_normalization(self):
 
-        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"}, "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
+        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"},
+                "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
 
         for i in range(self.number_of_datasets):
             async_normalize_log.delay(wellname=self.wellname, datasetname=str(i), logs=logs)
-        # self.assertIn('one', well.datasets)
