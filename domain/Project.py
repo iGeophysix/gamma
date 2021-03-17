@@ -14,6 +14,7 @@ class Project:
     Interface to storage to get project data in a convenient way
     """
     def __init__(self, name):
+        self._s = RedisStorage()
         self._name = name
 
     def list_wells(self) -> dict:
@@ -29,14 +30,14 @@ class Project:
         """
         _s = RedisStorage()
         tree = {}
-        wells = _s.list_wells()
+        wells = self._s.list_wells()
         for well, well_info in wells.items():
             tree.update({well: {}})
             dataset_ids = well_info['datasets']
             for dataset_id in dataset_ids:
-                dataset_info = _s.get_dataset_info(dataset_id=dataset_id)
+                dataset_info = self._s.get_dataset_info(dataset_id=dataset_id)
                 dataset_name = dataset_info['name']
-                dataset_logs = _s.get_logs_meta(well, dataset_name)
+                dataset_logs = self._s.get_logs_meta(well, dataset_name)
                 tree[well].update({dataset_name: dataset_logs})
         return tree
 
@@ -47,13 +48,13 @@ class Project:
         """
         _s = RedisStorage()
         out = []
-        wells = _s.list_wells()
+        wells = self._s.list_wells()
         for well, well_info in wells.items():
             dataset_ids = well_info['datasets']
             for dataset_id in dataset_ids:
-                dataset_info = _s.get_dataset_info(dataset_id=dataset_id)
+                dataset_info = self._s.get_dataset_info(dataset_id=dataset_id)
                 dataset_name = dataset_info['name']
-                dataset_logs = _s.get_logs_meta(well, dataset_name)
+                dataset_logs = self._s.get_logs_meta(well, dataset_name)
                 out.extend([[well, dataset_name, log, log_info] for log, log_info in dataset_logs.items()])
         return pd.DataFrame(out, columns=['well', 'dataset', 'log', 'meta'])
 

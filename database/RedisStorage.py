@@ -1,6 +1,8 @@
 import hashlib
+import io
 import json
 import logging
+import numpy as np
 import sys
 from typing import Any
 
@@ -24,7 +26,10 @@ class RedisStorage:
     """
 
     def __init__(self):
-        self.conn = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD)
+        self.conn = redis.Redis(host=REDIS_HOST,
+                                port=REDIS_PORT,
+                                db=REDIS_DB,
+                                password=REDIS_PASSWORD)
 
     # DATABASE
 
@@ -112,7 +117,7 @@ class RedisStorage:
         :return: list of datasat namesß
         """
         dataset_ids = self.get_well_datasets(wellname)
-        return [json.loads(self.conn.hget('datasets', d))['name'] for d in dataset_ids]
+        return [self.get_dataset_name(d) for d in dataset_ids]
 
     # DATASETS
     @staticmethod
@@ -248,14 +253,19 @@ class RedisStorage:
         self.conn.hset(f"{dataset_id}_meta", log_name, '{}')
         self.conn.hset(dataset_id, log_name, '{}')
 
-    def get_logs_data(self, wellname: str, datasetname: str, logs: list[str] = None, depth: float = None, depth__gt: float = None, depth__lt: float = None) -> dict[dict]:
+    def get_logs_data(self, wellname: str,
+                      datasetname: str,
+                      logs: list[str] = None,
+                      depth: float = None,
+                      depth__gt: float = None,
+                      depth__lt: float = None): #-> dict[np.array]:
         """
         Returns dict with logs data. Depth references are signed - pay attention to depth reference sign
         :param wellname: well name as string
         :param datasetname: dataset name as string
         :param logs: if None, then all logs will be returned. Log names in list of strings (use ["GR",] if you only need one log)
         :param depth: if specific depth reference is required specify this parameter
-        :param depth__gt: if specified then depth above is ignored and log will be sliced by depth > depth__gt
+        :param depth__gt: if specified then depth below is ignored and log will be sliced by depth > depth__gt
         :param depth__lt: if specified then depth above is ignored and log will be sliced by depth < depth__lt
         :return: dict with logs and values
         """
@@ -264,15 +274,15 @@ class RedisStorage:
         def slice(data, top=None, bottom=None):
             top = top if top is not None else sys.float_info.min
             bottom = bottom if bottom is not None else sys.float_info.max
-            return {float(k): v for k, v in data.items() if float(k) >= top and float(k) <= bottom}
 
-        def beautify_depths(data):
-            return {float(k): v for k, v in data.items()}
+            data = data[data[:,0] >= top]
+            data = data[data[:,0] <= bottom]
+            return data
 
-        if logs:
-            out = {log: beautify_depths(json.loads(self.conn.hget(dataset_id, log))) for log in logs}
-        else:
-            out = {k.decode('utf-8'): beautify_depths(json.loads(v)) for k, v in self.conn.hgetall(dataset_id).items()}
+        if logs == None:
+            logs = [l.decode() for  l in self.conn.hkeys(dataset_id)]
+
+        out = {log: np.load(io.BytesIO(self.conn.hget(dataset_id, log)), allow_pickle=True) for log in logs}
 
         # apply slicing
         if depth is None and depth__gt is None and depth__lt is None:
@@ -292,10 +302,10 @@ class RedisStorage:
         """
         dataset_id = self._get_dataset_id(wellname, datasetname)
 
-        if logs:
-            out = {log: json.loads(self.conn.hget(f"{dataset_id}_meta", log)) for log in logs}
-        else:
-            out = {k.decode('utf-8'): json.loads(v) for k, v in self.conn.hgetall(f"{dataset_id}_meta").items()}
+        if logs == None:
+            logs = [l.decode() for  l in self.conn.hkeys(f"{dataset_id}_meta")]
+
+        out = {log : json.loads(self.conn.hget(f"{dataset_id}_meta", log)) for log in logs}
 
         return out
 
@@ -305,7 +315,7 @@ class RedisStorage:
         It will add empty history key to log meta if __history key is not found in meta of the log
         :param wellname: well name as string
         :param datasetname: dataset name as string
-        :param data: data as dict (e.g. {"GR": {10.0:1, 20.0:2}, "PS":...}
+        :param data: data as dict (e.g. {"GR": np.array((10.0,1), (20.0:2),..), "PS":...}
         :param meta: meta info as dict (e.g. {"GR": {"units":"gAPI", "code":"tt"}, "PS":...}
         """
         dataset_id = self._get_dataset_id(wellname, datasetname)
@@ -313,9 +323,18 @@ class RedisStorage:
         if meta:
             for log in meta.keys():
                 meta[log]['__history'] = meta[log].get('__history', [])
-            self.conn.hset(f"{dataset_id}_meta", mapping={k: json.dumps(v) for k, v in meta.items()})
+            self.conn.hset(f"{dataset_id}_meta",
+                           mapping={k: json.dumps(v) for k, v in meta.items()})
         if data:
-            self.conn.hset(dataset_id, mapping={k: json.dumps(v) for k, v in data.items()})
+            # convert np.array to bytes
+            mapping = {}
+            for k, v in data.items():
+                stream = io.BytesIO()
+                # np.savez_compressed(stream, array=v)
+                np.save(stream, v, allow_pickle=True)
+                mapping[k] = stream.getvalue() # bytes
+
+            self.conn.hset(dataset_id, mapping=mapping)
 
     def delete_log(self, wellname: str, datasetname: str, log_name: str) -> None:
         """
