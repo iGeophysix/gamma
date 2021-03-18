@@ -7,9 +7,11 @@ from random import randint, random, choice
 
 import numpy as np
 
-from storage import RedisStorage
 from tasks import async_normalize_log
-from well import Well, WellDataset
+
+from database.RedisStorage import RedisStorage
+from domain.Well import Well
+from domain.WellDataset import WellDataset
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -23,10 +25,16 @@ class TestWellDatasetRedis(unittest.TestCase):
     def test_create_one_dataset(self):
         well = Well('well2', new=True)
         dataset = WellDataset(well, "one", new=True)
-        data = {"GR": {10: 1, 20: 2}, "PS": {10: 3, 20: 4}}
-        meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"}, "PS": {"units": "uV", "code": "", "description": "PS"}}
+        data = {"GR": np.array( ((10, 1), (20, 2)) ),
+                "PS": np.array( ((10, 3), (20, 4)) ) }
+        meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
+                "PS": {"units": "uV", "code": "", "description": "PS"}}
         dataset.set_data(data, meta)
-        self.assertEqual(dataset.get_log_data(), data)
+
+        received_data = dataset.get_log_data()
+        self.assertEqual(received_data["GR"].all(), data["GR"].all())
+        self.assertEqual(received_data["PS"].all(), data["PS"].all())
+
         self.assertEqual(dataset.get_log_meta(), meta)
 
     def test_change_dataset_info(self):
@@ -61,13 +69,31 @@ class TestWellDatasetRedis(unittest.TestCase):
         well_info = dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
         well.info = well_info
         data = dataset.get_log_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
-        true_answer = {'DRHO': np.nan, 'NPHI': np.nan, 'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan, 'PEF': np.nan, 'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan, 'CALI': np.nan,
+        true_answer = {'DRHO': np.nan,
+                       'NPHI': np.nan,
+                       'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan,
+                       'PEF': np.nan,
+                       'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan,
+                       'CALI': np.nan,
                        'y_loc': 6421723.0,
-                       'ROP': np.nan, 'RSHA': 1.4654846191, 'DTC': np.nan, 'RDEP': 1.0439596176, 'RHOB': np.nan, 'DEPTH_MD': 200.14439392, 'BS': 17.5, 'DTS': np.nan,
+                       'ROP': np.nan,
+                       'RSHA': 1.4654846191,
+                       'DTC': np.nan,
+                       'RDEP': 1.0439596176,
+                       'RHOB': np.nan,
+                       'DEPTH_MD': 200.14439392,
+                       'BS': 17.5,
+                       'DTS': np.nan,
                        'ROPA': np.nan,
-                       'GR': 9.0210666656, 'RMED': 1.7675967216, 'z_loc': -156.1439972, 'x_loc': 444904.03125}
+                       'GR': 9.0210666656,
+                       'RMED': 1.7675967216,
+                       'z_loc': -156.1439972,
+                       'x_loc': 444904.03125}
+
+
         for key in true_answer.keys():
-            self.assertTrue(data[key][ref_depth] == true_answer[key] or (np.isnan(data[key][ref_depth]) and np.isnan(true_answer[key])))
+            value = data[key][0, 1] # [row, column]
+            self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
 
     def test_check_las_header(self):
         wellname = '15_9-13'
@@ -192,10 +218,11 @@ class TestWellDatasetRedis(unittest.TestCase):
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
         new_logs_meta = {f"LOG_{i}": {"units": "some_units", "code": i, "description": f"Dummy log {i}"} for i in range(0, log_count)}
         # get depths
-        existing_depths = dataset.get_log_data(logs=["GR", ])["GR"].keys()
+        arr = dataset.get_log_data(logs=["GR", ])["GR"]
+        existing_depths = arr[:,0]
 
         # add data to the logs
-        def dummy_data(dtype):
+        def dummy_data(dtype): # return scalar
             generators = {
                 float: 400 * random() - 200,
                 str: ''.join(choice(string.ascii_letters) for _ in range(64)),
@@ -206,7 +233,7 @@ class TestWellDatasetRedis(unittest.TestCase):
             return generators[dtype]
 
         def dummy_row(depths, dtype):
-            return {depth: dummy_data(dtype) for depth in depths}
+            return [(depth, dummy_data(dtype)) for depth in depths]
 
         data = {log: dummy_row(existing_depths, log_type) for log, log_type in new_logs.items()}
 
@@ -218,8 +245,10 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         start = time.time()
         d = dataset.get_log_data()
+
         end = time.time()
         print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
+
         self.assertEqual(len(d), 20 + log_count)
         self.assertEqual(len(d['LOG_1']), 84)
 
@@ -260,8 +289,8 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
 
     def test_async_normalization(self):
 
-        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"}, "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
+        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"},
+                "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
 
         for i in range(self.number_of_datasets):
             async_normalize_log.delay(wellname=self.wellname, datasetname=str(i), logs=logs)
-        # self.assertIn('one', well.datasets)

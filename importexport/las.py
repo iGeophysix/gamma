@@ -56,12 +56,6 @@ class Las():
         self.logging_parameters = {}
         self.additional_well_entries = {}
 
-    def to_dict(self):
-        md_key = list(self.data.keys())[0]
-        md_list = self.data[md_key]
-        result = {log: {md: v for md, v in zip(md_list, values)} for log, values in self.data.items() if log != md_key}
-        return result
-
     def well_info(self):
         return self.required_well_entries | self.additional_well_entries
 

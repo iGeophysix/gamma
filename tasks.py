@@ -4,7 +4,8 @@ import os
 from celery import Celery
 
 from petrophysics import normalize
-from well import WellDataset, Well
+from domain.Well import Well
+from domain.WellDataset import WellDataset
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 app = Celery('tasks', broker=f'redis://{REDIS_HOST}')
@@ -41,7 +42,9 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
     dataset = WellDataset(well, datasetname)
     data = dataset.get_log_data(logs=logs.keys())
     normalized_data = {}
-    for curve, p in logs.items():
-        normalized_data.update({p["output"]: json.dumps(normalize(data[curve], p["min_value"], p["max_value"]))})
+    for curve, params in logs.items():
+        normalized_data[params["output"]] = normalize(data[curve],
+                                                      params["min_value"],
+                                                      params["max_value"])
 
     dataset.set_data(normalized_data)

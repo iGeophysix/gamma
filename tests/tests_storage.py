@@ -1,6 +1,6 @@
 import unittest
 
-from storage import RedisStorage
+from database.RedisStorage import RedisStorage
 
 
 class TestStorage(unittest.TestCase):
