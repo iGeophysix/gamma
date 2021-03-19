@@ -2,10 +2,10 @@ import hashlib
 import io
 import json
 import logging
-import numpy as np
 import sys
 from typing import Any
 
+import numpy as np
 import redis
 
 from database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
@@ -258,7 +258,7 @@ class RedisStorage:
                       logs: list[str] = None,
                       depth: float = None,
                       depth__gt: float = None,
-                      depth__lt: float = None): #-> dict[np.array]:
+                      depth__lt: float = None):  # -> dict[np.array]:
         """
         Returns dict with logs data. Depth references are signed - pay attention to depth reference sign
         :param wellname: well name as string
@@ -275,12 +275,12 @@ class RedisStorage:
             top = top if top is not None else sys.float_info.min
             bottom = bottom if bottom is not None else sys.float_info.max
 
-            data = data[data[:,0] >= top]
-            data = data[data[:,0] <= bottom]
+            data = data[data[:, 0] >= top]
+            data = data[data[:, 0] <= bottom]
             return data
 
         if logs == None:
-            logs = [l.decode() for  l in self.conn.hkeys(dataset_id)]
+            logs = [l.decode() for l in self.conn.hkeys(dataset_id)]
 
         out = {log: np.load(io.BytesIO(self.conn.hget(dataset_id, log)), allow_pickle=True) for log in logs}
 
@@ -303,11 +303,34 @@ class RedisStorage:
         dataset_id = self._get_dataset_id(wellname, datasetname)
 
         if logs == None:
-            logs = [l.decode() for  l in self.conn.hkeys(f"{dataset_id}_meta")]
+            logs = [l.decode() for l in self.conn.hkeys(f"{dataset_id}_meta")]
 
-        out = {log : json.loads(self.conn.hget(f"{dataset_id}_meta", log)) for log in logs}
+        out = {log: json.loads(self.conn.hget(f"{dataset_id}_meta", log)) for log in logs}
 
         return out
+
+    def append_log_meta(self, wellname: str, datasetname: str, logname: str, meta: dict) -> None:
+        """
+        Append meta information to a log
+        :param wellname: well name as string
+        :param datasetname: dataset name as string
+        :param logname: log name as string
+        :param meta: dict with new meta information (e.g. {"UWI":434232, "PWA":"GIGI",...})
+        """
+
+        dataset_id = self._get_dataset_id(wellname, datasetname)
+        with self.conn.pipeline() as pipe:
+            while True:
+                try:
+                    pipe.watch(f'{dataset_id}_meta:{logname}')
+                    current_info = json.loads(pipe.hget(f'{dataset_id}_meta', logname))
+                    pipe.multi()
+                    current_info.update(meta)
+                    pipe.hset(f'{dataset_id}_meta', logname, json.dumps(current_info))
+                    pipe.execute()
+                    break
+                except redis.exceptions.WatchError:
+                    continue
 
     def update_logs(self, wellname: str, datasetname: str, data=None, meta=None) -> None:
         """
@@ -332,7 +355,7 @@ class RedisStorage:
                 stream = io.BytesIO()
                 # np.savez_compressed(stream, array=v)
                 np.save(stream, v, allow_pickle=True)
-                mapping[k] = stream.getvalue() # bytes
+                mapping[k] = stream.getvalue()  # bytes
 
             self.conn.hset(dataset_id, mapping=mapping)
 

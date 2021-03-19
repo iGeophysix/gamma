@@ -90,9 +90,8 @@ class TestWellDatasetRedis(unittest.TestCase):
                        'z_loc': -156.1439972,
                        'x_loc': 444904.03125}
 
-
         for key in true_answer.keys():
-            value = data[key][0, 1] # [row, column]
+            value = data[key][0, 1]  # [row, column]
             self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
 
     def test_check_las_header(self):
@@ -219,10 +218,10 @@ class TestWellDatasetRedis(unittest.TestCase):
         new_logs_meta = {f"LOG_{i}": {"units": "some_units", "code": i, "description": f"Dummy log {i}"} for i in range(0, log_count)}
         # get depths
         arr = dataset.get_log_data(logs=["GR", ])["GR"]
-        existing_depths = arr[:,0]
+        existing_depths = arr[:, 0]
 
         # add data to the logs
-        def dummy_data(dtype): # return scalar
+        def dummy_data(dtype):  # return scalar
             generators = {
                 float: 400 * random() - 200,
                 str: ''.join(choice(string.ascii_letters) for _ in range(64)),
@@ -270,6 +269,19 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset.read_las(filename=f)
         history = dataset.get_log_history("GR")
         self.assertEqual(f'Loaded from {f}', history[0][1])
+
+    def test_append_log_meta(self):
+        well = Well('well2', new=True)
+        dataset = WellDataset(well, "one", new=True)
+        data = {"GR": np.array(((10, 1), (20, 2))),
+                "PS": np.array(((10, 3), (20, 4)))}
+        meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
+                "PS": {"units": "uV", "code": "", "description": "PS"}}
+        dataset.set_data(data, meta)
+
+        dataset.append_meta_data(meta={"GR": {"max_depth": 100}})
+
+        self.assertEqual(dataset.get_log_meta()['GR']['max_depth'], 100)
 
 
 class TestWellDatasetRedisAsyncTasks(unittest.TestCase):

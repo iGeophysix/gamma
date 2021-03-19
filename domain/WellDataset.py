@@ -1,7 +1,7 @@
 import logging
-
 from datetime import datetime
 from typing import Any
+
 import numpy as np
 
 from database.RedisStorage import RedisStorage
@@ -76,8 +76,8 @@ class WellDataset:
         md_key = list(raw_curves.keys())[0]
         md_values = raw_curves[md_key]
 
-        curves = { log : list(zip(md_values, values)) for log, values in raw_curves.items() if log != md_key}
-        curves = { log : np.array(arr) for log, arr in curves.items() }
+        curves = {log: list(zip(md_values, values)) for log, values in raw_curves.items() if log != md_key}
+        curves = {log: np.array(arr) for log, arr in curves.items()}
 
         # save log arrays and log info
 
@@ -88,11 +88,11 @@ class WellDataset:
 
         for log in curves.keys():
             self._s.append_log_history(
-                    wellname=self._well,
-                    datasetname=self._name,
-                    log=log,
-                    event=(datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), 
-                           f"Loaded from {filename}"))
+                wellname=self._well,
+                datasetname=self._name,
+                log=log,
+                event=(datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
+                       f"Loaded from {filename}"))
 
         well_info = las_structure.well_info()
 
@@ -176,3 +176,7 @@ class WellDataset:
         :param meta: dict with {log: {key:value,...},...}, if None then meta won't be updated
         """
         self._s.update_logs(self._well, self._name, data, meta)
+
+    def append_meta_data(self, meta: dict[Any]) -> None:
+        for log, data in meta.items():
+            self._s.append_log_meta(self._well, self._name, log, data)
