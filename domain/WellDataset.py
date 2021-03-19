@@ -177,6 +177,6 @@ class WellDataset:
         """
         self._s.update_logs(self._well, self._name, data, meta)
 
-    def append_meta_data(self, meta: dict[Any]) -> None:
+    def append_log_meta(self, meta: dict[Any]) -> None:
         for log, data in meta.items():
             self._s.append_log_meta(self._well, self._name, log, data)

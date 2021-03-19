@@ -279,7 +279,7 @@ class TestWellDatasetRedis(unittest.TestCase):
                 "PS": {"units": "uV", "code": "", "description": "PS"}}
         dataset.set_data(data, meta)
 
-        dataset.append_meta_data(meta={"GR": {"max_depth": 100}})
+        dataset.append_log_meta(meta={"GR": {"max_depth": 100}})
 
         self.assertEqual(dataset.get_log_meta()['GR']['max_depth'], 100)
 
