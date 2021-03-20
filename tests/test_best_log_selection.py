@@ -25,7 +25,7 @@ class TestBestLogSelection(unittest.TestCase):
 
     def test_split_by_runs(self):
         wellname = '622'
-        datasets = ['Well622_ULN_Combined.las', ]
+        datasets = ['Well622_ULN_Combined', ]
         async_split_by_runs(wellname, datasets)
 
         # export results to csv
