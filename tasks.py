@@ -49,6 +49,7 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
     dataset.set_data(normalized_data)
 
 
+@app.task
 def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tolerance: float = 50) -> None:
     """
     Assign RUN id_s to all logs in the well within specified datasets.
