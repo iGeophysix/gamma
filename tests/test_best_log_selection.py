@@ -30,6 +30,9 @@ class TestBestLogSelection(unittest.TestCase):
 
         # export results to csv
         w = Well(wellname)
+
+        # uncomment this to export data to csv
+        '''
         run_info = []
         for dataset in w.datasets:
             d = WellDataset(w, dataset)
@@ -44,8 +47,9 @@ class TestBestLogSelection(unittest.TestCase):
                               'gmean': v['mean'],
                               'stdev': v['stdev']} for l, v in log_meta.items()]
                             )
+        pd.DataFrame(run_info).to_csv('run_split.csv', index=False)
+        '''
 
-        # pd.DataFrame(run_info).to_csv('run_split.csv', index=False)
         d = WellDataset(w, 'Well622_ULN_Combined')
         t = d.get_log_meta(['GK$_D2711_D',])
         self.assertEqual(t['GK$_D2711_D']['RUN'], '3_(2656.8_2720.0)')
