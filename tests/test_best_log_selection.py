@@ -1,9 +1,10 @@
 import os
 import unittest
 
-from database.RedisStorage import RedisStorage
-from domain.Well import Well
-from domain.WellDataset import WellDataset
+from components.database.RedisStorage import RedisStorage
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.importexport.las import import_to_db
 from tasks import async_split_by_runs
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
@@ -21,7 +22,7 @@ class TestBestLogSelection(unittest.TestCase):
             f = os.path.join(self.path_to_test_data, file)
             dataset_name = file[:-4]
             dataset = WellDataset(well, dataset_name, True)
-            dataset.read_las(os.path.join(self.path_to_test_data, f))
+            import_to_db(f, well=well, well_dataset=dataset)
 
     def test_split_by_runs(self):
         wellname = '622'
@@ -52,4 +53,4 @@ class TestBestLogSelection(unittest.TestCase):
 
         d = WellDataset(w, 'Well622_ULN_Combined')
         t = d.get_log_meta(['GK$_D2711_D',])
-        self.assertEqual(t['GK$_D2711_D']['RUN'], '3_(2656.8_2720.0)')
+        self.assertEqual(t['GK$_D2711_D']['RUN'], '11_(2658.6_2721.8)')

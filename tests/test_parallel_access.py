@@ -96,7 +96,7 @@ class TestParallelAccessToData(unittest.TestCase):
 
     def test_parallel_append_history(self):
         pool = mp.Pool(4)
-        number_of_writes = 1000
+        number_of_writes = 20
 
         for i in range(number_of_writes):
             pool.apply_async(append_history, (self.wellname, "1", "GR", f"This is append {i}"))

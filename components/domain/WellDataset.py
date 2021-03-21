@@ -1,7 +1,5 @@
-from datetime import datetime
+import logging
 from typing import Any
-
-import numpy as np
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
