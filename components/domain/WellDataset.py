@@ -5,7 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
 
 logging.basicConfig()
-debug = logging.getLogger("petrotool")
+debug = logging.getLogger("welldataset")
 debug.setLevel(logging.INFO)
 
 
@@ -33,6 +33,7 @@ class WellDataset:
         Delete dataset and it contents, also remove it from well
         :return:
         """
+        logging.info(f"Deleted dataset {self._name} in well {self._well}")
         self._s.delete_dataset(self._well, self._name)
 
     def register(self) -> None:
@@ -40,6 +41,7 @@ class WellDataset:
         Register dataset in the storage
         :return:
         """
+        logging.info(f"Created dataset {self._name} in well {self._well}")
         self._dataset_table_name = self._s.create_dataset(self._well, self._name)
 
     @property
@@ -57,6 +59,7 @@ class WellDataset:
         You should always send whole contents, not only updated parts
         :param info:
         """
+        logging.debug(f"Changed dataset info {self._name} in well {self._well}")
         self._s.set_dataset_info(self._well, self._name, info)
 
     def get_log_list(self) -> list:
@@ -71,6 +74,7 @@ class WellDataset:
         Delete one log from the dataset
         :param name: name of the log
         """
+        logging.info(f"Deleted log {name} in dataset {self._name} in well {self._well}")
         self._s.delete_log(self._well, self._name, log_name=name)
 
     def get_log_data(self,
@@ -125,6 +129,7 @@ class WellDataset:
         :param event: event - any serializable object
 
         """
+        logging.debug(f"Added history event to dataset {self._name} in well {self._well}")
         self._s.append_log_history(self._well, self._name, log, event)
 
     def set_data(self, data=None, meta: dict[dict] = None) -> None:
@@ -133,8 +138,18 @@ class WellDataset:
         :param data: dict with {log: {depth:value,...},...}, if None then data won't be updated
         :param meta: dict with {log: {key:value,...},...}, if None then meta won't be updated
         """
+
+        logging.info(f"Set data and/or metadata in dataset {self._name} in well {self._well}")
         self._s.update_logs(self._well, self._name, data, meta)
 
-    def append_log_meta(self, meta: dict[Any]) -> None:
+    def append_log_meta(self, meta: dict[str, dict]) -> None:
+        """
+        Appends (or updates if key exists) meta information in the log
+        :param meta: dictionary with log names as keys and dicts with new meta information
+        Example:
+            d = WellDataset(wname,dname)
+            d.append_log_meta({"GR":{"field1":1, "field2":"two"}})
+        """
+        logging.info(f"Created dataset {self._name} in well {self._well}")
         for log, data in meta.items():
             self._s.append_log_meta(self._well, self._name, log, data)
