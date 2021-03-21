@@ -3,12 +3,12 @@ import io
 import json
 import logging
 import numpy as np
+import redis
 import sys
+
 from typing import Any
 
-import redis
-
-from database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from components.database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
 logger = logging.getLogger("storage")
 

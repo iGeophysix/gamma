@@ -29,7 +29,7 @@ LogInformationEntry = \
                            'units code description')
 
 
-class Las():
+class LasStructure():
     """
     The class instance that is returned by the function
     'parse_las_file'. The whole LAS structure is represented
@@ -44,11 +44,12 @@ class Las():
     log_information_entries : {name, [LogInformationEntry]}
     logging_parameters      : {name, [LoggingParameterEntry]}
     data                    : {name, [float]}
-    error_message           : Str or empty
+    error_message           : str or empty
+    filename                : str
     """
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, filename):
+        self.filename = filename
 
         self.error_message = ""
 
@@ -64,7 +65,7 @@ class Las():
         return {k: v._asdict() for k, v in self.log_information_entries.items() if k != md_key}
 
 
-def parse_las_file(filename, use_chardet=True) -> Las:
+def parse(filename, use_chardet=True) -> LasStructure:
     """
     Function uses the `chardet` module in order to
     guess the file codepage. This could be essential
@@ -93,7 +94,7 @@ def parse_las_file(filename, use_chardet=True) -> Las:
         lines = [l for l in lines if not l.startswith('#')]
 
         ####
-        las_file = Las(os.path.basename(filename))
+        las_file = LasStructure(os.path.basename(filename))
 
         try:
             i = 0

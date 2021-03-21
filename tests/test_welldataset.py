@@ -9,9 +9,10 @@ import numpy as np
 
 from tasks import async_normalize_log
 
-from database.RedisStorage import RedisStorage
-from domain.Well import Well
-from domain.WellDataset import WellDataset
+from components.database.RedisStorage import RedisStorage
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.importexport import las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -48,26 +49,42 @@ class TestWellDatasetRedis(unittest.TestCase):
     def test_create_and_delete_datasets(self):
         f = 'small_file.las'
         wellname = f.replace(".las", "")
-        well = Well(wellname, new=True)
 
+        well = Well(wellname, new=True)
         dataset = WellDataset(well, "one", new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
+
         self.assertIn('one', well.datasets)
+
         dataset = WellDataset(well, "two", new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
+
+
         dataset = WellDataset(well, "one")
         dataset.delete()
         self.assertNotIn('one', well.datasets)
         self.assertIn('two', well.datasets)
 
     def test_dataset_get_data(self):
+        f = 'small_file.las'
         ref_depth = 200.14440000
         wellname = '15_9-13'
         dataset_name = 'one'
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name, new=True)
-        well_info = dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'), )
-        well.info = well_info
+
+        well_info = las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                                     well=well,
+                                     well_dataset=dataset)
+
+        well.info = well_info #TODO: Should it be assigned to well or to dataset?
+
         data = dataset.get_log_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'DRHO': np.nan,
                        'NPHI': np.nan,
@@ -96,11 +113,11 @@ class TestWellDatasetRedis(unittest.TestCase):
             self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
 
     def test_check_las_header(self):
-        wellname = '15_9-13'
-        dataset_name = 'one'
-        well = Well(wellname, new=True)
-        dataset = WellDataset(well, dataset_name, new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'another_small_file.las'))
+
+        f = 'another_small_file.las'
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f))
+
         true_info = {
             "WELL": [
                 "15/9-13 Sleipner East Appr",
@@ -151,7 +168,11 @@ class TestWellDatasetRedis(unittest.TestCase):
                 "UNIQUE WELL ID"
             ]
         }
-        self.assertEqual(true_info, dataset.info)
+
+        wellname = "15/9-13 Sleipner East Appr"
+        well = Well(wellname)
+
+        self.assertEqual(true_info, well.info)
         well.delete()
 
     def test_set_las_header(self):
@@ -205,14 +226,19 @@ class TestWellDatasetRedis(unittest.TestCase):
         well.delete()
 
     def test_add_many_logs(self):
+        f = 'small_file.las'
         log_count = 5
         LOG_TYPES = (float, str, int, bool, datetime,)
+
         wellname = 'thousand_logs'
         datasetname = 'this_dataset'
-        wellname = Well(wellname, new=True)
-        dataset = WellDataset(wellname, datasetname, new=True)
+        well = Well(wellname, new=True)
+        dataset = WellDataset(well, datasetname, new=True)
+
         # load some real data
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f'small_file.las'))
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
 
         # create logs in the dataset
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
@@ -257,17 +283,26 @@ class TestWellDatasetRedis(unittest.TestCase):
         wellname = f[:-4]
         well = Well(wellname, new=True)
         dataset = WellDataset(well, "one", new=True)
-        dataset.read_las(filename=os.path.join(self.path_to_test_data, f))
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
+
+
         log_list = dataset.get_log_list()
         self.assertNotIn("DEPT", log_list)
         self.assertIn("GR", log_list)
 
     def test_log_history(self):
-        f = os.path.join(self.path_to_test_data, 'small_file.las')
+        f = 'small_file.las'
         wellname = "log_history_test"
         well = Well(wellname, new=True)
         dataset = WellDataset(well, "one", new=True)
-        dataset.read_las(filename=f)
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
+
         history = dataset.get_log_history("GR")
         self.assertEqual(f'Loaded from {f}', history[0][1])
 
@@ -285,7 +320,9 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
         well = Well(self.wellname, new=True)
         for i in range(self.number_of_datasets):
             dataset = WellDataset(well, str(i), new=True)
-            dataset.read_las(filename=os.path.join(self.path_to_test_data, self.f), )
+            las.import_to_db(filename=os.path.join(self.path_to_test_data, self.f),
+                             well=well,
+                             well_dataset=dataset)
 
     def test_async_normalization(self):
 

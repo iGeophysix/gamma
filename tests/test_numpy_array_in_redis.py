@@ -7,7 +7,7 @@ import redis
 import sys
 import unittest
 
-from database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from components.database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
 
 class TestArrayInRedis(unittest.TestCase):

@@ -1,16 +1,12 @@
-import logging
-
 from datetime import datetime
 from typing import Any
 import numpy as np
 
-from database.RedisStorage import RedisStorage
-from domain.Well import Well
-from importexport import las
+from components.database.RedisStorage import RedisStorage
+from components.domain.Well import Well
+# from components.importexport import las
 
-logging.basicConfig()
-debug = logging.getLogger("petrotool")
-debug.setLevel(logging.INFO)
+
 
 
 class WellDataset:
@@ -62,44 +58,6 @@ class WellDataset:
         :param info:
         """
         self._s.set_dataset_info(self._well, self._name, info)
-
-    def read_las(self, filename: str) -> dict:
-        """
-        Batch job to read data from a file.
-        :param filename: file path should be accessible via os.path
-        :return: well info from las file header
-        """
-        debug.debug(f"Reading file: {filename}")
-        las_structure = las.parse_las_file(filename)
-
-        raw_curves = las_structure.data
-        md_key = list(raw_curves.keys())[0]
-        md_values = raw_curves[md_key]
-
-        curves = { log : list(zip(md_values, values)) for log, values in raw_curves.items() if log != md_key}
-        curves = { log : np.array(arr) for log, arr in curves.items() }
-
-        # save log arrays and log info
-
-        self._s.update_logs(wellname=self._well,
-                            datasetname=self._name,
-                            data=curves,
-                            meta=las_structure.logs_info())
-
-        for log in curves.keys():
-            self._s.append_log_history(
-                    wellname=self._well,
-                    datasetname=self._name,
-                    log=log,
-                    event=(datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), 
-                           f"Loaded from {filename}"))
-
-        well_info = las_structure.well_info()
-
-        self._s.set_dataset_info(self._well,
-                                 self._name,
-                                 well_info)
-        return well_info
 
     def get_log_list(self) -> list:
         """

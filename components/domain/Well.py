@@ -1,4 +1,4 @@
-from database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage
 
 class Well:
     """

@@ -2,11 +2,7 @@ import logging
 
 import pandas as pd
 
-from database.RedisStorage import RedisStorage
-
-logging.basicConfig()
-debug = logging.getLogger("gamma")
-debug.setLevel(logging.INFO)
+from components.database.RedisStorage import RedisStorage
 
 
 class Project:
