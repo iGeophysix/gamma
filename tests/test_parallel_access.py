@@ -4,9 +4,11 @@ import unittest
 
 from datetime import datetime
 
-from database.RedisStorage import RedisStorage
-from domain.Well import Well
-from domain.WellDataset import WellDataset
+from components.database.RedisStorage import RedisStorage
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+
+from components.importexport import las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -43,7 +45,10 @@ class TestParallelAccessToData(unittest.TestCase):
         well = Well(self.wellname, new=True)
         for i in range(self.number_of_datasets):
             dataset = WellDataset(well, str(i), new=True)
-            dataset.read_las(filename=os.path.join(self.path_to_test_data, self.f), )
+
+            las.import_to_db(filename=os.path.join(self.path_to_test_data, self.f),
+                             well=well,
+                             well_dataset=dataset)
 
     def test_parallel_read(self):
         pool = mp.Pool(4)

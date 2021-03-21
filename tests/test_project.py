@@ -10,11 +10,12 @@ from tasks import async_normalize_log
 
 import numpy as np
 
-from database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage
 
-from domain.Well import Well
-from domain.WellDataset import WellDataset
-from domain.Project import Project
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.domain.Project import Project
+from components.importexport import las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -33,7 +34,10 @@ class TestProject(unittest.TestCase):
             dataset_name = 'one'
             well = Well(wellname, True)
             dataset = WellDataset(well, dataset_name, True)
-            dataset.read_las(os.path.join(self.path_to_test_data, f))
+
+            las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                             well=well,
+                             well_dataset=dataset)
 
     def test_tree(self):
         p = Project('test')

@@ -5,14 +5,14 @@ import unittest
 import os
 import math
 
-import importexport.las as las
+from components.importexport import las
 
 class TestLasImporter(unittest.TestCase):
 
     def test_las12(self):
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'data/sample_minimal.las')
-        las_file = las.parse_las_file(filename)
+        las_file = las.parse(filename)
 
         self.assertEqual(las_file.version, 12, "Version should be 12")
         self.assertEqual(las_file.wrap, False, "Wrap shoulp be False")
@@ -47,7 +47,7 @@ class TestLasImporter(unittest.TestCase):
     def test_las20(self):
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'data/sample_2.0_minimal.las')
-        las_file = las.parse_las_file(filename)
+        las_file = las.parse(filename)
 
         self.assertEqual(las_file.version, 20, "Version should be 20")
         self.assertEqual(las_file.wrap, False, "Wrap shoulp be False")
@@ -72,7 +72,7 @@ class TestLasImporter(unittest.TestCase):
     def test_las20_large(self):
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'data/sample_2.0_large.las')
-        las_file = las.parse_las_file(filename)
+        las_file = las.parse(filename)
 
         self.assertEqual(las_file.version, 20, "Version should be 20")
         self.assertEqual(las_file.wrap, False, "Wrap shoulp be False")

@@ -3,3 +3,4 @@ psycopg2-binary==2.8.6
 celery==5.0.5
 redis==3.5.3
 chardet==4.0.0
+PySide2==5.15.2
