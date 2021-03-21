@@ -1,24 +1,13 @@
 import sys
 
-from components import ComponentGuiConstructor
-from components.logger.widgets import QTextEditLogger
-from components.mainwindow import GeoMainWindow
-
 from PySide2.QtWidgets import QAction, QMenu, QTreeView, QHeaderView
 from PySide2.QtCore import Qt
 
-from components.projectree.ProjectTreeModel import ProjectTreeModel
-from components.projectree.ProjectTreeEntry import ProjectEntryEnum
+from components import ComponentGuiConstructor
+from components.mainwindow.gui import GeoMainWindow
 
-
-def initialize_component():
-    gui = ProjectTreeGui()
-
-    GeoMainWindow().addMenu(gui.toolBarActions())
-    GeoMainWindow().addDockindWidget(gui.dockingWidget(), Qt.LeftDockWidgetArea)
-
-    mod = sys.modules[__name__]
-    mod.gui = gui
+from components.projecttree.gui.ProjectTreeModel import ProjectTreeModel
+from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
 
 
 class ProjectTreeGui(ComponentGuiConstructor):
@@ -55,3 +44,15 @@ class ProjectTreeGui(ComponentGuiConstructor):
 
     def _connectSignals(self):
         pass
+
+
+def initialize_component():
+    gui = ProjectTreeGui()
+
+    GeoMainWindow().addMenu(gui.toolBarActions())
+    GeoMainWindow().addDockindWidget(gui.dockingWidget(), Qt.LeftDockWidgetArea)
+
+    mod = sys.modules[__name__]
+    mod.gui = gui
+
+initialize_component()

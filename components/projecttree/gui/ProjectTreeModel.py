@@ -4,9 +4,9 @@ from PySide2.QtCore import QAbstractItemModel, QModelIndex
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
-from components.projectree.ProjectTreeEntry import ProjectEntryEnum
-from components.projectree.WellEntries import WellManagerEntry
-# from components.projectree.TabletEntries import TabletTemplateManagerEntry
+from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
+from components.projecttree.gui.WellEntries import WellManagerEntry
+# from components.projecttree.TabletEntries import TabletTemplateManagerEntry
 
 from components.domain.Well import Well
 

@@ -63,3 +63,5 @@ def initialize_component():
     GeoMainWindow().setWindowTitle("Petrophysics")
     GeoMainWindow().show()
     # GeoMainWindow().showMaximized()
+
+initialize_component()

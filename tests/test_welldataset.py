@@ -342,4 +342,6 @@ class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
                 "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
 
         for i in range(self.number_of_datasets):
-            async_normalize_log.delay(wellname=self.wellname, datasetname=str(i), logs=logs)
+            async_normalize_log.delay(wellname=self.wellname,
+                                      datasetname=str(i),
+                                      logs=logs)

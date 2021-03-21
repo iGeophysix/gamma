@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def get_basic_stats(log_data: np.array) -> dict:
+def get_basic_curve_statistics(log_data: np.array) -> dict:
     '''
     Returns basic stats for a log (np.array)
     :param log_data: input data as np.array
@@ -25,3 +25,20 @@ def get_basic_stats(log_data: np.array) -> dict:
                 "gmean": gmean,
                 "stdev": stdev}
     return new_meta
+
+
+def normalize_curve(data, min_value: float = 0, max_value: float = 100):
+    '''
+    This function applies linear normalization to the whole curve. NaN values remain NaN
+    :param data:
+    :param min_value:
+    :param max_value:
+    :return:
+    '''
+
+    inv_range = 1.0 / (max_value - min_value)
+    offset = min_value * inv_range
+
+    data[:, 0] = data[:, 0] * inv_range - offset
+
+    return data

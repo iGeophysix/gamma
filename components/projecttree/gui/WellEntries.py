@@ -3,11 +3,10 @@ from PySide2.QtGui import QColor, QIcon, QFont
 
 from datetime import datetime
 
-from components.projectree.ProjectTreeEntry import TreeEntry, ProjectEntryEnum
-from components.database.DbEventDispatcherSingleton import DbEventDispatcherSingleton
+from components.projecttree.gui.ProjectTreeEntry import TreeEntry, ProjectEntryEnum
+from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
-
 from components.domain.Well import Well
 
 

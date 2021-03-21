@@ -1,3 +1,4 @@
+
 import os
 from datetime import datetime
 
@@ -6,10 +7,11 @@ from celery import Celery
 
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.database.settings import REDIS_HOST
+
 from petrophysics.basic_operations import get_basic_stats
 from petrophysics.petrophysics import normalize
 
-REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 app = Celery('tasks', broker=f'redis://{REDIS_HOST}')
 
 
