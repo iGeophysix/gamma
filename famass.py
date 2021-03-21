@@ -1,8 +1,6 @@
 import os
 import re
 import unittest
-# import importexport.las as las
-# import project
 import operator
 
 ENERGYSICS_CHANNEL_CLASS_PATH = os.path.join(os.path.dirname(__file__), 'PWLS v3.0 Logs.txt')
@@ -21,7 +19,7 @@ class NLPParser:
         '''
         Split mnemonic to clean up garbage.
         '''
-        return [p for p in s.split('_') if p and p not in GARBAGE_TOKENS]
+        return [p for p in re.split(r'[_\W]+', s) if p and p not in GARBAGE_TOKENS]
 
     def ngram(self, s):
         '''
@@ -54,13 +52,6 @@ class NLPParser:
             if r > best_rank:
                 best_rank = r
                 best_family = f
-        # if best_rank > 0:
-        #     token_rank.append((best_rank, best_family))
-        # if token_rank:
-        #     token_rank.sort(key=operator.itemgetter(0), reverse=True)   # assign family by the most recognized token (part_of_the_mnemonic)
-        #     return *token_rank[0][1], token_rank[0][0]     # family, rank
-        # else:
-        #     return None
         return best_family, best_rank
 
 
@@ -87,7 +78,7 @@ class FamilyAssigner:
             assert f.readline().rstrip('\n').split('\t') == ['Company Code', 'Curve Mnemonic', 'PWLS v3 Property', 'Curve Unit Quantity Class', 'LIS Curve Mnemonic', 'Curve Description'], 'Unexpected table header'
             for row in f.readlines():
                 entry = row.rstrip('\n').split('\t')
-                assert len(entry) == 6, 'Incorrect data line "{}"'.format(entry)
+                assert len(entry) == 6, f'Incorrect data line {entry}'
                 mnemonic = entry[1].lower()
                 mnemonic_alt = entry[4].lower()
                 for mnemonic in set((mnemonic, mnemonic_alt)):
@@ -210,7 +201,7 @@ class TestFamilyAssignment(unittest.TestCase):
         self.fa = FamilyAssigner()
 
     def test_main(self):
-        mnem_list = ['GR_NORM', 'PS', 'RB', 'BS', 'RAW_TNPH', 'FCAZ', 'HAZI', 'CALI_2']
+        mnem_list = ['GR.NORM', 'PS', 'RB', 'BS', 'RAW-TNPH', 'FCAZ', 'HAZI', 'CALI 2']
         result1 = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing', 'Outside Diameter', 'Thermal Neutron Porosity', 'Z Acceleration', 'Hole Azimuth', 'Borehole Diameter']
         result2 = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing', 'Nom Borehole Diameter', 'Thermal Neutron Porosity', 'Z Acceleration', 'Hole Azimuth', 'Borehole Diameter']
         for n in range(len(mnem_list)):
@@ -219,10 +210,4 @@ class TestFamilyAssignment(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # fa = FamilyAssigner()
-    # mnem_list = ['GR_NORM', 'PS', 'RB', 'BS', 'RAW_TNPH', 'FCAZ', 'HAZI', 'CALI_2']
-    # for m in mnem_list:
-    #     print(m, '->', fa.assign_family(m, one_best=True), 'All:', fa.assign_family(m, one_best=False))
-    # print('Batch assigning', fa.assign_families(mnem_list))
-
     unittest.main(TestFamilyAssignment())
