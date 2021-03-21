@@ -3,8 +3,8 @@ import os
 import numpy as np
 from celery import Celery
 
-from domain.Well import Well
-from domain.WellDataset import WellDataset
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 from petrophysics.basic_operations import get_basic_stats
 from petrophysics.petrophysics import normalize
 

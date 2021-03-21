@@ -258,7 +258,7 @@ class RedisStorage:
                       logs: list[str] = None,
                       depth: float = None,
                       depth__gt: float = None,
-                      depth__lt: float = None):  # -> dict[np.array]:
+                      depth__lt: float = None): #-> dict[np.array]:
         """
         Returns dict with logs data. Depth references are signed - pay attention to depth reference sign
         :param wellname: well name as string
