@@ -7,6 +7,14 @@ from components import ComponentGuiConstructor
 from components.mainwindow.gui import GeoMainWindow
 
 
+class DatabaseGui(ComponentGuiConstructor):
+
+    def toolBarActions(self):
+        pass
+
+    def dockingWidget(self):
+        pass
+
 def initialize_component():
 
     # loadDefaultPropertiesFromFile()
@@ -22,10 +30,5 @@ def initialize_component():
     mod.gui = gui
 
 
-class DatabaseGui(ComponentGuiConstructor):
-
-    def toolBarActions(self):
-        pass
-
-    def dockingWidget(self):
-        pass
+if not 'unittest' in sys.modules.keys():
+    initialize_component()

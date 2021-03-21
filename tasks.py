@@ -1,4 +1,3 @@
-
 import os
 from datetime import datetime
 
@@ -9,8 +8,8 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.database.settings import REDIS_HOST
 
-from petrophysics.basic_operations import get_basic_stats
-from petrophysics.petrophysics import normalize
+from components.petrophysics.curve_operations import get_basic_curve_statistics
+from components.petrophysics.curve_operations import normalize_curve
 
 app = Celery('tasks', broker=f'redis://{REDIS_HOST}')
 
@@ -47,9 +46,9 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
     normalized_data = {}
     normalized_meta = {}
     for curve, params in logs.items():
-        normalized_data[params["output"]] = normalize(data[curve],
-                                                      params["min_value"],
-                                                      params["max_value"])
+        normalized_data[params["output"]] = normalize_curve(data[curve],
+                                                            params["min_value"],
+                                                            params["max_value"])
         normalized_meta[params["output"]] = meta[curve]
         normalized_meta[params["output"]]["__history"].append(
             (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), f"Normalized curve derived from {wellname}->{datasetname}->{curve}"))
@@ -75,7 +74,7 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
         d = WellDataset(w, datasetname)
         log_data = d.get_log_data(logs)
         for log, values in log_data.items():
-            new_meta = get_basic_stats(values)
+            new_meta = get_basic_curve_statistics(values)
             d.append_log_meta({log: new_meta})
 
 

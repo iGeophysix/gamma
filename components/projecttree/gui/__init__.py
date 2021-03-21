@@ -55,4 +55,5 @@ def initialize_component():
     mod = sys.modules[__name__]
     mod.gui = gui
 
-initialize_component()
+if not 'unittest' in sys.modules.keys():
+    initialize_component()
