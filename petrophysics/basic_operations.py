@@ -13,9 +13,14 @@ def get_basic_stats(log_data: np.array) -> dict:
     mean = np.mean(non_null_values[:, 1])
     gmean = np.exp(np.mean(np.log(non_null_values[:, 1])))
     stdev = np.std(non_null_values[:, 1])
+    derivative = np.diff(log_data[:, 0])
+    const_step = bool(abs(derivative.min() - derivative.max()) < 0.00001)
+    avg_step = derivative.mean()
     new_meta = {"min_depth": min_depth,
                 "max_depth": max_depth,
-                "depth_span": max_depth-min_depth,
+                "depth_span": max_depth - min_depth,
+                "avg_step": avg_step,
+                "const_step": const_step,
                 "mean": mean,
                 "gmean": gmean,
                 "stdev": stdev}

@@ -1,8 +1,9 @@
 import os
+from datetime import datetime
 
 import numpy as np
 from celery import Celery
-from datetime import datetime
+
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from petrophysics.basic_operations import get_basic_stats
@@ -48,9 +49,33 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
                                                       params["min_value"],
                                                       params["max_value"])
         normalized_meta[params["output"]] = meta[curve]
-        normalized_meta[params["output"]]["__history"].append((datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), f"Normalized curve derived from {wellname}->{datasetname}->{curve}"))
+        normalized_meta[params["output"]]["__history"].append(
+            (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), f"Normalized curve derived from {wellname}->{datasetname}->{curve}"))
 
     dataset.set_data(normalized_data, normalized_meta)
+
+
+@app.task
+def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, logs: list[str] = None) -> None:
+    """
+    Info
+    Returns nothing. All results (RUN ids and basic_stats) are stored in each log meta info.
+    :param wellname: well name as string
+    :param datasetnames: list of dataset names to process. If None then use all datasets for the well
+    :param depth_tolerance: distance to consider as acceptable difference in depth in one run
+    """
+    w = Well(wellname)
+    if datasetnames is None:
+        datasetnames = w.datasets
+
+    # get all data from specified well and datasets
+    for datasetname in datasetnames:
+        d = WellDataset(w, datasetname)
+        log_data = d.get_log_data(logs)
+        for log, values in log_data.items():
+            new_meta = get_basic_stats(values)
+            d.append_log_meta({log: new_meta})
+
 
 
 @app.task
@@ -65,24 +90,15 @@ def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tol
     w = Well(wellname)
     if datasetnames is None:
         datasetnames = w.datasets
-    data = {}
-    metadata = {}
 
-    # get all data from specified well and datasets
+    # gather all metadata in one dictionary
+    metadata = {}
     for datasetname in datasetnames:
         d = WellDataset(w, datasetname)
-        data.update({(datasetname, mnemonic): values for mnemonic, values in d.get_log_data().items()})
-        metadata.update({(datasetname, mnemonic): values for mnemonic, values in d.get_log_meta().items()})
-
-    # define min and max depth for each log curve
-    for dataset, log in data.keys():
-        new_meta = get_basic_stats(data[(dataset, log)])
-        metadata[(dataset, log)].update(new_meta)
-        d = WellDataset(w, dataset)
-        d.append_log_meta({log: new_meta})
+        metadata.update({(datasetname, log): meta for log, meta in d.get_log_meta().items()})
 
     # for each log curve find those that are defined at similar depth (split by runs)
-    log_list = sorted(data.keys(), key=lambda x: metadata[x]['min_depth'], reverse=True)
+    log_list = sorted(metadata.keys(), key=lambda x: metadata[x]['min_depth'], reverse=True)
     groups = {}
     group_id = 0
     while len(log_list):
