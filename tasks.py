@@ -82,7 +82,7 @@ def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tol
         d.append_log_meta({log: new_meta})
 
     # for each log curve find those that are defined at similar depth (split by runs)
-    log_list = list(data.keys())
+    log_list = sorted(data.keys(), key=lambda x: metadata[x]['min_depth'], reverse=True)
     groups = {}
     group_id = 0
     while len(log_list):

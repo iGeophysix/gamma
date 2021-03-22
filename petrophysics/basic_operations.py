@@ -15,6 +15,7 @@ def get_basic_stats(log_data: np.array) -> dict:
     stdev = np.std(non_null_values[:, 1])
     new_meta = {"min_depth": min_depth,
                 "max_depth": max_depth,
+                "depth_span": max_depth-min_depth,
                 "mean": mean,
                 "gmean": gmean,
                 "stdev": stdev}
