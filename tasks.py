@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 from celery import Celery
-
+from datetime import datetime
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from petrophysics.basic_operations import get_basic_stats
@@ -39,14 +39,18 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
 
     well = Well(wellname)
     dataset = WellDataset(well, datasetname)
-    data = dataset.get_log_data(logs=logs.keys())
+    data = dataset.get_log_data(logs=list(logs.keys()))
+    meta = dataset.get_log_meta(logs=list(logs.keys()))
     normalized_data = {}
+    normalized_meta = {}
     for curve, params in logs.items():
         normalized_data[params["output"]] = normalize(data[curve],
                                                       params["min_value"],
                                                       params["max_value"])
+        normalized_meta[params["output"]] = meta[curve]
+        normalized_meta[params["output"]]["__history"].append((datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), f"Normalized curve derived from {wellname}->{datasetname}->{curve}"))
 
-    dataset.set_data(normalized_data)
+    dataset.set_data(normalized_data, normalized_meta)
 
 
 @app.task
