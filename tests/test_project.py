@@ -41,3 +41,7 @@ class TestProject(unittest.TestCase):
         p = Project('test')
         df = p.tree_df()
         df.to_csv('test_tree_df.csv', index=False)
+
+        # TODO: check file
+
+        os.remove('test_tree_df.csv')
