@@ -15,18 +15,10 @@ app = Celery('tasks', broker=f'redis://{REDIS_HOST}')
 
 
 @app.task
-def async_read_las(wellname: str, datasetname: str, filename: str):
-    well = Well(wellname)
-    dataset = WellDataset(well, datasetname)
-    dataset.read_las(filename)
-
-
-@app.task
 def async_set_data(wellname: str, datasetname: str, data: frozenset):
     well = Well(wellname)
     dataset = WellDataset(well, datasetname)
     dataset.set_data(data)
-
 
 @app.task
 def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
