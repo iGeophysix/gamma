@@ -1,6 +1,6 @@
 import sys
 
-from PySide2.QtWidgets import QAction, QMenu, QTreeView, QHeaderView
+from PySide2.QtWidgets import QAction, QMenu, QTreeView, QHeaderView, QAbstractItemView
 from PySide2.QtCore import Qt
 
 from components import ComponentGuiConstructor
@@ -30,12 +30,14 @@ class ProjectTreeGui(ComponentGuiConstructor):
         self.tree_view = QTreeView()
         self.tree_view.setWindowTitle("Project Tree")
         self.tree_view.setAlternatingRowColors(True)
+        self.tree_view.setDragEnabled(True)
+        self.tree_view.setDragDropMode(QAbstractItemView.DragOnly)
+        self.tree_view.setDropIndicatorShown(True)
+        self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
         model = ProjectTreeModel()
         self.tree_view.setModel(model)
         # self.tree_view.expandAll()
-
-
         # self.tree_view.setHeaderHidden(True)
 
         header_view = self.tree_view.header()

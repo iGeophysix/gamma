@@ -90,6 +90,10 @@ class WellEntry(TreeEntry):
 
         return None
 
+
+    def flags(self):
+        return TreeEntry.flags(self) | Qt.ItemIsDragEnabled
+
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:
             return self._well_name

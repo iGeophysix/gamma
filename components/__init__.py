@@ -3,6 +3,7 @@ import importlib
 import logging
 import pkgutil
 import sys
+from traceback import print_tb
 
 class ComponentGuiConstructor(ABC):
 
@@ -26,7 +27,13 @@ def initialize_components():
 
     mod = sys.modules[__name__]
 
-    for sub_module in pkgutil.walk_packages(mod.__path__, mod.__name__ + "."):
+    def onerror(name):
+        print("Error importing module %s" % name)
+        type, value, traceback = sys.exc_info()
+        print_tb(traceback)
+
+
+    for sub_module in pkgutil.walk_packages(mod.__path__, mod.__name__ + ".", onerror=onerror):
         # print(sub_module)
         loader, sub_module_name, ispkg = sub_module
         qname = __name__ + "." + sub_module_name

@@ -2,6 +2,8 @@ from enum import Enum
 
 from abc import ABC, abstractmethod
 
+from PySide2.QtCore import Qt
+
 
 class NoModelException(Exception):
     pass
@@ -27,6 +29,9 @@ class TreeEntry(ABC):
     @abstractmethod
     def data(self, role, column):
         return None
+
+    def flags(self):
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def _createEntries(self):
         self.entries = []

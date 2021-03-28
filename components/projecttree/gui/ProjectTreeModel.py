@@ -1,6 +1,7 @@
+import json
 import logging
 
-from PySide2.QtCore import QAbstractItemModel, QModelIndex
+from PySide2.QtCore import QAbstractItemModel, QModelIndex, QMimeData
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
@@ -75,15 +76,26 @@ class ProjectTreeModel(QAbstractItemModel):
 
         return index.internalPointer().data(role, index.column())
 
+    def mimeData(self, indexes):
+        indexes = set(indexes) # unique names
+        wellNames = {index.internalPointer().data(Qt.DisplayRole, ProjectEntryEnum.NAME.value) for index in indexes}
+
+        mime = QMimeData()
+        mime.setText(json.dumps(list(wellNames)))
+
+        return mime
+
+    # def mimeTypes(self):
+        # return ["application/well-name",]
+
+    def supportedDropActions(self):
+        return Qt.CopyAction | Qt.MoveAction
+
     def setData(self, index: QModelIndex, value, role=None):
         return False
 
     def flags(self, index: QModelIndex):
-        flags = super().flags(index)
-        # flags ^= Qt.ItemIsEditable
-        # flags ^= Qt.ItemIsSelectable
-
-        return flags
+        return index.internalPointer().flags()
 
     def _getEntryPosition(self, entry):
         return self.entries.index(entry)
