@@ -18,17 +18,17 @@ def get_best_log(dataset: WellDataset, log_family: str, run_name: str) -> tuple[
     logs = dataset.get_log_list(log_family=log_family, Run_AutoCalculated=run_name)
     logs_meta = dataset.get_log_meta(logs=logs)
 
-    averages = {"mean": None, "gmean": None, 'LogResolution_AutoCalculated': None}
+    averages = {"mean": None, "stdev": None, 'LogResolution_AutoCalculated': None}
     for avg in averages.keys():
-        averages[avg] = np.mean([logs_meta[log][avg] for log in logs])
-    average_depth_correction = np.mean([logs_meta[log]['max_depth'] - logs_meta[log]['min_depth'] for log in logs])
+        averages[avg] = np.median([logs_meta[log][avg] for log in logs])
+    average_depth_correction = np.max([logs_meta[log]['max_depth'] - logs_meta[log]['min_depth'] for log in logs])
 
     best_score = np.inf
     best_log = None
     new_logs_meta = {log: {} for log in logs}
     for log in logs:
-        sum_deltas = sum((logs_meta[log][param] - averages[param]) / averages[param] for param in averages.keys())
-        depth_correction = (logs_meta[log]['max_depth'] - logs_meta[log]['min_depth']) / average_depth_correction
+        sum_deltas = sum(abs((logs_meta[log][param] - averages[param]) / averages[param]) for param in averages.keys())
+        depth_correction = abs((logs_meta[log]['max_depth'] - logs_meta[log]['min_depth']) / average_depth_correction)
         result = sum_deltas / depth_correction
         if result < best_score:
             best_log = log

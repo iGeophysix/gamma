@@ -2,6 +2,7 @@ import os
 import unittest
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.best_log_detection import get_best_log
@@ -36,16 +37,7 @@ class TestBestLogDetection(unittest.TestCase):
         best_log, new_meta = get_best_log(dataset=self.wd, log_family='Gamma Ray', run_name='56_(2650_2800)')
         self.wd.append_log_meta(new_meta)
 
-        self.assertEqual('GK_D0403_D', best_log, msg='Best log in this dataset is GK_D8107_D')
+        self.assertEqual('GK_D4417_D', best_log, msg='Best log in this dataset is GK_D4417_D')
         log_meta = self.wd.get_log_meta()
-        self.assertEqual(True, log_meta['GK_D0403_D']['BestLog_AutoCalculated'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
-        self.assertEqual(False, log_meta['GK_D1800_D']['BestLog_AutoCalculated'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
-
-        # delete the GK_D0403_D and check  GK_D8107_D_2 becomes the best
-        self.wd.delete_log('GK_D0403_D')
-        best_log, new_meta = get_best_log(dataset=self.wd, log_family='Gamma Ray', run_name='56_(2650_2800)')
-        self.wd.append_log_meta(new_meta)
-        self.assertEqual('GK_D8107_D_2', best_log, msg='Best log in this dataset is GK_D8107_D')
-        log_meta = self.wd.get_log_meta()
-        self.assertEqual(True, log_meta['GK_D8107_D_2']['BestLog_AutoCalculated'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
+        self.assertEqual(True, log_meta['GK_D4417_D']['BestLog_AutoCalculated'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
         self.assertEqual(False, log_meta['GK_D1800_D']['BestLog_AutoCalculated'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
