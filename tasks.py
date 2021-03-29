@@ -3,15 +3,45 @@ from datetime import datetime
 
 import numpy as np
 from celery import Celery
+from celery.result import AsyncResult
 
+from components.database.settings import REDIS_HOST
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.database.settings import REDIS_HOST
+from components.importexport.FamilyAssigner import FamilyAssigner
+from components.importexport.las import import_to_db
+from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, normalize_curve
 
-from components.petrophysics.curve_operations import get_basic_curve_statistics
-from components.petrophysics.curve_operations import normalize_curve
+REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
+REDIS_DB = os.environ.get('REDIS_PORT', 0)
+app = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}')
+app.conf.result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+app.conf.result_expires = 60
 
-app = Celery('tasks', broker=f'redis://{REDIS_HOST}')
+
+def get_running_tasks():
+    i = app.control.inspect()
+    return i.active()
+
+
+def get_pending_tasks():
+    i = app.control.inspect()
+    return i.reserved()
+
+
+def check_task_completed(asyncresult: AsyncResult) -> bool:
+    return asyncresult.status in ['SUCCESS', 'FAILURE']
+
+
+def check_task_successful(asyncresult: AsyncResult) -> bool:
+    return asyncresult.successful()
+
+
+@app.task
+def async_read_las(wellname: str, datasetname: str, filename: str):
+    well = Well(wellname)
+    dataset = WellDataset(well, datasetname)
+    import_to_db(filename=filename, well=well, well_dataset=dataset)
 
 
 @app.task
@@ -20,13 +50,14 @@ def async_set_data(wellname: str, datasetname: str, data: frozenset):
     dataset = WellDataset(well, datasetname)
     dataset.set_data(data)
 
+
 @app.task
 def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
     '''
-    Apply asyncronous normalization of curves in a dataset
-    :param wellname:
-    :param datasetname:
-    :param logs:
+    Apply asynchronous normalization of curves in a dataset
+    :param wellname: well name as string
+    :param datasetname: list of dataset names to process. If None then use all datasets for the well
+    :param logs: list of logs names to process. If None then use all logs for the dataset
         {"GR": {"min_value":0,"max_value":150, "output":"GR_norm"}, "RHOB": {"min_value":1.5,"max_value":2.5, "output":"RHOB_norm"},}
     :return:
     '''
@@ -51,11 +82,11 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
 @app.task
 def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, logs: list[str] = None) -> None:
     """
-    Info
-    Returns nothing. All results (RUN ids and basic_stats) are stored in each log meta info.
+    This procedure calculates basic statistics (e.g. mean, gmean, stdev, etc).
+    Returns nothing. All results are stored in each log meta info.
     :param wellname: well name as string
     :param datasetnames: list of dataset names to process. If None then use all datasets for the well
-    :param depth_tolerance: distance to consider as acceptable difference in depth in one run
+    :param logs: list of logs names to process. If None then use all logs for the dataset
     """
     w = Well(wellname)
     if datasetnames is None:
@@ -69,6 +100,29 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
             new_meta = get_basic_curve_statistics(values)
             d.append_log_meta({log: new_meta})
 
+
+@app.task
+def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: list[str] = None) -> None:
+    """
+    This procedure calculates log resolution.
+    Algorithm: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/a/Log-Resolution-Evaluation-ZYfMr18R4U2
+    Returns nothing. All results are stored in each log meta info.
+    :param wellname: well name as string
+    :param datasetnames: list of dataset names to process. If None then use all datasets for the well
+    :param logs: list of logs names to process. If None then use all logs for the dataset
+    """
+    w = Well(wellname)
+    if datasetnames is None:
+        datasetnames = w.datasets
+
+    # get all data from specified well and datasets
+    for datasetname in datasetnames:
+        d = WellDataset(w, datasetname)
+        log_data = d.get_log_data(logs)
+        log_meta = d.get_log_meta(logs)
+        for log, values in log_data.items():
+            log_resolution = get_log_resolution(values, log_meta[log])
+            d.append_log_meta({log: {'LogResolution_AutoCalculated': log_resolution}})
 
 
 @app.task
@@ -118,4 +172,29 @@ def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tol
         max_depth = metadata[run[0]]['max_depth']
         for datasetname, log in run:
             d = WellDataset(well=w, name=datasetname)
-            d.append_log_meta({log: {"RUN": f"{run_len}_({min_depth}_{max_depth})"}})
+            d.append_log_meta({log: {"Run_AutoCalculated": f"{run_len}_({min_depth}_{max_depth})"}})
+            d.append_log_history(log, 'Added Run_AutoCalculated')
+
+
+@app.task
+def async_recognize_log_family(wellname: str, datasetnames: list[str] = None, logs: list[str] = None) -> None:
+    fa = FamilyAssigner()
+    w = Well(wellname)
+    if datasetnames is None:
+        datasetnames = w.datasets
+
+    for datasetname in datasetnames:
+        wd = WellDataset(w, datasetname)
+
+        metadata = wd.get_log_meta(logs)
+        new_metadata = {log: {} for log in metadata.keys()}
+        for log in new_metadata.keys():
+            '''(log family, unit class, detection reliability)'''
+            result = fa.assign_family(log)
+            log_family, unit_class, reliability = None, None, None if result is None else result
+            new_metadata[log] = {
+                "log_family": log_family,
+                "unit_class": unit_class,
+                "log_family_detection_reliability": reliability
+            }
+        wd.append_log_meta(new_metadata)

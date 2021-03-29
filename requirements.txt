@@ -4,3 +4,4 @@ celery==5.0.5
 redis==3.5.3
 chardet==4.0.0
 PySide2==5.15.2
+scipy==1.6.1

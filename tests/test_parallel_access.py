@@ -2,12 +2,9 @@ import multiprocessing as mp
 import os
 import unittest
 
-from datetime import datetime
-
 from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-
 from components.importexport import las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
@@ -29,7 +26,7 @@ def set_data(well, dataset, data, meta):
 def append_history(well, dataset, log, event_text):
     w = Well(well)
     d = WellDataset(w, dataset)
-    d.append_log_history(log, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), event_text))
+    d.append_log_history(log, event_text)
 
 
 class TestParallelAccessToData(unittest.TestCase):

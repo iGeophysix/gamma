@@ -1,5 +1,3 @@
-import logging
-
 import pandas as pd
 
 from components.database.RedisStorage import RedisStorage
@@ -9,6 +7,7 @@ class Project:
     """
     Interface to storage to get project data in a convenient way
     """
+
     def __init__(self, name):
         self._s = RedisStorage()
         self._name = name
@@ -51,7 +50,7 @@ class Project:
                 dataset_info = self._s.get_dataset_info(dataset_id=dataset_id)
                 dataset_name = dataset_info['name']
                 dataset_logs = self._s.get_logs_meta(well, dataset_name)
-                out.extend([[well, dataset_name, log, log_info] for log, log_info in dataset_logs.items()])
-        return pd.DataFrame(out, columns=['well', 'dataset', 'log', 'meta'])
 
+                out.extend([{'well': well, 'dataset': dataset_name, 'log': log, **log_info} for log, log_info in dataset_logs.items()])
+        return pd.DataFrame(out)
 

@@ -1,11 +1,8 @@
-import hashlib
 import io
-import json
-import logging
+import unittest
+
 import numpy as np
 import redis
-import sys
-import unittest
 
 from components.database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
@@ -19,9 +16,8 @@ class TestArrayInRedis(unittest.TestCase):
                                 password=REDIS_PASSWORD)
         self.conn.flushdb()
 
-
     def test_store_array(self):
-        a = np.array( ((10, 20), (30, 40)) )
+        a = np.array(((10, 20), (30, 40)))
         # print("INIT ARRAY", a)
 
         stream = io.BytesIO()
@@ -39,27 +35,26 @@ class TestArrayInRedis(unittest.TestCase):
 
         # print("RESULT ARRAY", b)
 
-        self.assertEqual(a.all() , b.all())
-
+        self.assertEqual(a.all(), b.all())
 
     def test_store_map_of_arrays(self):
-        a = np.array( ((10, 20), (30, 40)) )
-        b = np.array( ((50, 60), (70, 80)) )
+        a = np.array(((10, 20), (30, 40)))
+        b = np.array(((50, 60), (70, 80)))
 
-        m = { "a" : a, "b" : b }
+        m = {"a": a, "b": b}
         # print("INIT MAP", m)
 
         mb = {}
         for k, v in m.items():
             stream = io.BytesIO()
             np.save(stream, v, allow_pickle=True)
-            mb[k] = stream.getvalue() # bytes
+            mb[k] = stream.getvalue()  # bytes
 
         # print("BYTES MAP", mb)
 
         self.conn.hset("m", mapping=mb)
 
-        mb2 = { k : self.conn.hget("m", k) for k in ["a", "b"]}
+        mb2 = {k: self.conn.hget("m", k) for k in ["a", "b"]}
 
         # print("BYTES MAP", mb2)
 

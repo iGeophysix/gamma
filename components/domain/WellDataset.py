@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from datetime import datetime
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
@@ -62,12 +62,37 @@ class WellDataset:
         logging.debug(f"Changed dataset info {self._name} in well {self._well}")
         self._s.set_dataset_info(self._well, self._name, info)
 
-    def get_log_list(self) -> list:
+    def get_log_list(self, **kwargs) -> list:
         """
         Returns list of logs available in the dataset
+        :params kwargs: optional field to filter list of logs by meta attributes e.g. mean=0.5, log_family='Gamma Ray', min_depth__lt=1000
         :return: list
         """
-        return self._s.get_dataset_logs(self._well, self._name)
+        if kwargs is None:
+            return self._s.get_dataset_logs(self._well, self._name)
+
+        logs_meta = self._s.get_logs_meta(self._well, self._name)
+        to_delete = []
+        for log in logs_meta.keys():
+            for key, value in kwargs.items():
+                try:
+                    if key.endswith('__lt'):
+                        k = key[:-4]
+                        if logs_meta[log][k] >= value:
+                            to_delete.append(log)
+                    elif key.endswith('__gt'):
+                        k = key[:-4]
+                        if logs_meta[log][k] <= value:
+                            to_delete.append(log)
+
+                    else:
+                        if logs_meta[log][key] != value:
+                            to_delete.append(log)
+                except KeyError:
+                    to_delete.append(log)
+
+
+        return [log for log in logs_meta.keys() if log not in to_delete]
 
     def delete_log(self, name: str) -> None:
         """
@@ -122,15 +147,15 @@ class WellDataset:
         """
         return self._s.get_logs_meta(self._well, self._name, [log, ])[log].get('__history', [])
 
-    def append_log_history(self, log: str, event: Any) -> None:
+    def append_log_history(self, log: str, event: str) -> None:
         """
-        Appends one more event to the tail of log history data
+        Appends one more event to the tail of log history data. It will automatically add datetime stamp in the event
         :param log: log name (str)
-        :param event: event - any serializable object
+        :param event: event - text as string
 
         """
         logging.debug(f"Added history event to dataset {self._name} in well {self._well}")
-        self._s.append_log_history(self._well, self._name, log, event)
+        self._s.append_log_history(self._well, self._name, log, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), event))
 
     def set_data(self, data=None, meta: dict[dict] = None) -> None:
         """
@@ -150,6 +175,6 @@ class WellDataset:
             d = WellDataset(wname,dname)
             d.append_log_meta({"GR":{"field1":1, "field2":"two"}})
         """
-        logging.info(f"Created dataset {self._name} in well {self._well}")
+        logging.info(f"Append meta to logs {list(meta.keys())} dataset {self._name} in well {self._well}")
         for log, data in meta.items():
             self._s.append_log_meta(self._well, self._name, log, data)
