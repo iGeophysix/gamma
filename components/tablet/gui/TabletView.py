@@ -1,8 +1,9 @@
 from PySide2.QtCore import Qt, QRectF, QPoint, Signal, Slot
 
-from PySide2.QtWidgets import QWidget, QGraphicsView, QOpenGLWidget
+from PySide2.QtWidgets import QWidget, QGraphicsView, QOpenGLWidget, QScrollBar
 
 from PySide2.QtGui import QPainter, QWheelEvent, QSurfaceFormat, QTransform, QDragEnterEvent, QDragMoveEvent, QDropEvent
+
 
 
 # from PySide2.QtOpenGL import QGL, QGLFormat
@@ -34,7 +35,7 @@ class TabletView(QGraphicsView):
 
         # self.setOptimizationFlags(QGraphicsView.DontSavePainterState)
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
-        self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
+        # self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
         # self.setCacheMode(QGraphicsView.CacheBackground)
@@ -101,6 +102,7 @@ class TabletViewBody(TabletView):
                 self._scaleDown(event);
 
         else:
+            # sb = self.verticalScrollBar()
             QGraphicsView.wheelEvent(self, event)
 
 
@@ -132,6 +134,10 @@ class TabletViewBody(TabletView):
         self.scale(x_factor, self._scale_multiplier)
 
         t = self.transform()
+
+        # print("VIEWPORT", self.viewport().size())
+        # print("VIEWPORT", self.size())
+        # sb = self.verticalScrollBar()
 
         self.transformed.emit(t)
 
