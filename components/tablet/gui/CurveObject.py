@@ -130,7 +130,7 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
         self._constructPathAndPoints()
 
     def _constructPathAndPoints(self):
-        self.path = None
+        self._path = None
         self.points = []
 
         previous_nan = True
@@ -141,13 +141,13 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
             if not np.isnan(p).any():
                 p = np.flip(p)
                 p = QPointF(*p)
-                if not self.path:
-                    self.path = QPainterPath(p)
+                if not self._path:
+                    self._path = QPainterPath(p)
 
                 if previous_nan:
-                    self.path.moveTo(p)
+                    self._path.moveTo(p)
                 else:
-                    self.path.lineTo(p)
+                    self._path.lineTo(p)
 
                 self.points.append(p)
 
@@ -155,6 +155,8 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
 
             else:
                 previous_nan = True
+
+        self._subpathPolygones = self._path.toSubpathPolygons()
 
     def boundingRect(self) -> QRectF:
 
@@ -174,11 +176,14 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
         # p = QPen("orange")
         p = QPen(self._curve_object.color())
         p.setCosmetic(True)
-        p.setWidthF(2.0)
+        p.setWidthF(1.0)
 
         painter.setPen(p)
 
-        painter.drawPath(self.path)
+        painter.drawPath(self._path)
+        # for polygon in self._subpathPolygones:
+            # for i in range(len(polygon) - 1):
+                # painter.drawLine(polygon[i], polygon[i + 1]) 
 
         painter.restore()
 
