@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime
 
+import numpy as np
+
 from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
 
@@ -91,7 +93,6 @@ class WellDataset:
                 except KeyError:
                     to_delete.append(log)
 
-
         return [log for log in logs_meta.keys() if log not in to_delete]
 
     def delete_log(self, name: str) -> None:
@@ -157,7 +158,7 @@ class WellDataset:
         logging.debug(f"Added history event to dataset {self._name} in well {self._well}")
         self._s.append_log_history(self._well, self._name, log, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), event))
 
-    def set_data(self, data=None, meta: dict[dict] = None) -> None:
+    def set_data(self, data: dict[str, np.ndarray] = None, meta: dict[str, dict] = None) -> None:
         """
         Set log data and meta-information.
         :param data: dict with {log: {depth:value,...},...}, if None then data won't be updated

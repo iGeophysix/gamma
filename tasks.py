@@ -11,6 +11,7 @@ from components.domain.WellDataset import WellDataset
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, normalize_curve
+from components.petrophysics.log_splicing import splice_logs
 
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
 REDIS_DB = os.environ.get('REDIS_PORT', 0)
@@ -198,3 +199,18 @@ def async_recognize_log_family(wellname: str, datasetnames: list[str] = None, lo
                 "log_family_detection_reliability": reliability
             }
         wd.append_log_meta(new_metadata)
+
+
+@app.task
+def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, output_dataset_name: str = 'Spliced') -> None:
+    """
+    Async method to splice logs. Takes  logs in datasets and outputs it into a specified output dataset
+    :param wellname: Well name as string
+    :param datasetnames: Datasets' name as list of strings. If None then uses all datasets
+    :param logs: Logs' names as list of string. If None then uses all logs available in datasets
+    :param output_dataset_name: Name of output dataset
+    """
+    w = Well(wellname)
+    logs_data, logs_meta = splice_logs(w, datasetnames, logs)
+    wd = WellDataset(w, output_dataset_name, new=True)
+    wd.set_data(logs_data, logs_meta)
