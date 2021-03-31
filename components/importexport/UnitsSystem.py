@@ -1,6 +1,5 @@
 import json
 import numpy as np
-from numbers import Number
 
 UNIT_SYSTEM_PATH = 'components/importexport/rules/UnitsSystem.json'
 
@@ -79,15 +78,16 @@ class UnitsSystem:
         Perform unit conversion of the data array or single value.
         Array mode is preferable for batch conversion.
         '''
-        array_mode = not isinstance(data, Number)
-        if array_mode:
+        std_array = isinstance(data, (list, tuple))
+        np_array = isinstance(data, np.ndarray)
+        array_mode = std_array or np_array
+        if std_array:
             data = np.array(data)
         if not self.convertable_units(unit_from, unit_to):
             if array_mode:
-                data.fill(np.nan)
+                return np.full_like(data, np.nan)
             else:
-                data = np.nan
-            return data
+                return np.nan
         else:
             k1, b1 = self._unit_kb(unit_from)
             k2, b2 = self._unit_kb(unit_to)

@@ -32,14 +32,18 @@ class TestUnitSystem(unittest.TestCase):
         self.assertFalse(self.units.convertable_units('g/cm3', 'Pa'))
 
     def test_conversion(self):
-        temp_degC = np.array([-5, 45, 34.67, 58])
-        temp_degF = np.array([23.0, 113.0, 94.406, 136.4])
+        temp_degC_list = [-5, np.nan, 34.67, 58]
+        temp_degC_np = np.array(temp_degC_list)
+        temp_degF_np = np.array([23.0, np.nan, 94.406, 136.4])
         # array
-        answ = self.units.convert(temp_degC, 'degC', 'degF')
-        self.assertTrue(np.allclose(answ, temp_degF))
-        answ = self.units.convert(temp_degC, 'degC', 'mm')
+        answ = self.units.convert(temp_degC_list, 'degC', 'degF')
+        self.assertTrue(np.allclose(answ, temp_degF_np, equal_nan=True))
+        answ = self.units.convert(temp_degC_np, 'degC', 'degF')
+        self.assertTrue(np.allclose(answ, temp_degF_np, equal_nan=True))
+        answ = self.units.convert(temp_degC_np, 'degC', 'mm')
         self.assertTrue(np.isnan(answ).all())
         # single value
-        self.assertAlmostEqual(self.units.convert(float(temp_degC[0]), 'degC', 'degF'), temp_degF[0])
-        self.assertAlmostEqual(self.units.convert(int(temp_degC[0]), 'degC', 'degF'), temp_degF[0])
-        self.assertTrue(np.isnan(self.units.convert(temp_degC[0], 'degC', 'um')))
+        self.assertAlmostEqual(self.units.convert(float(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
+        self.assertAlmostEqual(self.units.convert(int(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
+        self.assertTrue(np.isnan(self.units.convert(temp_degC_np[0], 'degC', 'um')))
+        self.assertTrue(np.isnan(self.units.convert(np.nan, 'm', 'mm')))
