@@ -18,9 +18,9 @@ class TestUnitSystem(unittest.TestCase):
         self.assertTrue(self.units.identical_units('cc', 'cm3'))
         self.assertFalse(self.units.identical_units('mV', 'MV'))
 
-    def test_unit_dimention(self):
-        self.assertEqual(self.units.unit_dimention('c/m3'), 'AnglePerVolume')
-        self.assertEqual(self.units.unit_dimention('C/m3'), 'ElectricChargePerVolume')
+    def test_unit_dimension(self):
+        self.assertEqual(self.units.unit_dimension('c/m3'), 'AnglePerVolume')
+        self.assertEqual(self.units.unit_dimension('C/m3'), 'ElectricChargePerVolume')
 
     def test_unit_base_unit(self):
         self.assertEqual(self.units.unit_base_unit('um'), 'm')
