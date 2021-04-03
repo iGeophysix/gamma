@@ -1,8 +1,10 @@
 import os
 import re
 import operator
+import itertools
+import json
 
-ENERGYSICS_CHANNEL_CLASS_PATH = os.path.join(os.path.dirname(__file__), 'test/data/PWLS v3.0 Logs.txt')
+FAMASS_RULES = 'components/importexport/rules/FamilyAssignment.json'
 GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
 
@@ -36,22 +38,25 @@ class NLPParser:
         if ng:
             self.db.append((ng, family))
 
-    def family(self, mnemonic):
+    def family_variants(self, mnemonic):
         '''
-        Detect family by mnemonic.
+        Return [list of possible families by mnemonic], math rank.
         '''
-        # token_rank = []
+        # define search N-gram set
         ng = set()
         for token in self.mnemonic_tokenize(mnemonic.upper()):
             ng.update(self.ngram(token))
-        ranks = [(len(ng.intersection(ng_ref)) / max(len(ng), len(ng_ref)), family) for ng_ref, family in self.db]
+        # search
         best_rank = 0
-        best_family = None
-        for r, f in ranks:
-            if r > best_rank:
-                best_rank = r
-                best_family = f
-        return best_family, best_rank
+        best_families = []
+        for ng_ref, family in self.db:
+            match_rank = len(ng.intersection(ng_ref)) / max(len(ng), len(ng_ref))   # rank is (number of matched N-grams) / (all N-grams)
+            if match_rank > best_rank:
+                best_rank = match_rank
+                best_families = [family]
+            elif match_rank == best_rank:
+                best_families.append(family)
+        return best_families, best_rank
 
 
 class FamilyAssigner:
@@ -63,72 +68,56 @@ class FamilyAssigner:
         Storage for company-specific rules.
         '''
         def __init__(self):
-            self.precise_match = {}  # { mnemonic: (family, units_class), ... }
-            self.re_match = {}       # { re.Pattern: (family, units_class), ... }
+            self.precise_match = {}  # { mnemonic: (family, dimension), ... }
+            self.re_match = {}       # { re.Pattern: (family, dimension), ... }
             self.nlpp = NLPParser()
 
     def __init__(self):
         '''
         Loads Energystics family assigning rules.
         '''
-        self.db = {}    # {company_code: FamilyAssigner.DataBase}
+        self.db = {}    # {company: FamilyAssigner.DataBase}
 
-        with open(ENERGYSICS_CHANNEL_CLASS_PATH, 'r') as f:
-            assert f.readline().rstrip('\n').split('\t') == ['Company Code', 'Curve Mnemonic', 'PWLS v3 Property', 'Curve Unit Quantity Class', 'LIS Curve Mnemonic', 'Curve Description'], 'Unexpected table header'
-            for row in f.readlines():
-                entry = row.rstrip('\n').split('\t')
-                assert len(entry) == 6, f'Incorrect data line {entry}'
-                mnemonic = entry[1].lower()
-                mnemonic_alt = entry[4].lower()
-                for mnemonic in set((mnemonic, mnemonic_alt)):
-                    if mnemonic:
-                        company_code = int(entry[0])
-                        cdb = self.db.get(company_code)
-                        if cdb is None:
-                            cdb = self.db[company_code] = FamilyAssigner.DataBase()
-                        family = self._capitalize(entry[2])
-                        unit_class = entry[3]
-                        mnemonic_info = (family, unit_class)
-                        if '*' in mnemonic or '?' in mnemonic:
-                            re_mask = mnemonic.replace('*', '.*').replace('?', '.')
-                            re_pattern = re.compile(re_mask, re.IGNORECASE)
-                            cdb.re_match[re_pattern] = mnemonic_info
-                        else:
-                            cdb.precise_match[mnemonic] = mnemonic_info
-                        cdb.nlpp.learn(mnemonic, mnemonic_info)
+        with open(FAMASS_RULES, 'r') as f:
+            fa_rules = json.load(f)
+        for company, rules in fa_rules.items():
+            cdb = self.db[company] = FamilyAssigner.DataBase()   # initialize company FamilyAssigner db
+            for mnemonics, dimension, family in rules:
+                for mnemonic in mnemonics:
+                    mnemonic_info = (family, dimension)
+                    if '*' in mnemonic or '?' in mnemonic:
+                        re_mask = mnemonic.replace('*', '.*').replace('?', '.')
+                        re_pattern = re.compile(re_mask, re.IGNORECASE)
+                        cdb.re_match[re_pattern] = mnemonic_info
+                    else:
+                        cdb.precise_match[mnemonic] = mnemonic_info
+                    cdb.nlpp.learn(mnemonic, mnemonic_info)
 
-    def _capitalize(self, s):
-        '''
-        Makes the first letter of all separate words capital.
-        '''
-        return ' '.join(map(str.capitalize, s.split(' ')))
-
-    def _nlp_assign_family(self, mnemonic, company_code=None):
+    def _nlp_assign_family(self, mnemonic, company=None):
         '''
         Get family using NLP.
         '''
         company_result = {}
-        for cc in [company_code] if company_code is not None else self.db:
+        for cc in [company] if company is not None else self.db:
             db = self.db[cc]
-            family_info, rank = db.nlpp.family(mnemonic)
-            if family_info is not None:
-                company_result[cc] = (*family_info, rank)
+            family_infos, rank = db.nlpp.family_variants(mnemonic)
+            company_result[cc] = [(*fi, rank) for fi in family_infos]
         if company_result:
-            if company_code is not None:
-                return company_result[company_code]
+            if company is not None:
+                return company_result[company]
             else:
                 return company_result
         return None
 
-    def assign_family(self, mnemonic, one_best=True, company_code=None):
+    def assign_family(self, mnemonic, one_best=True, company=None):
         '''
-        Returns a (log family, unit class, detection reliability) for the mnemonic using Energystics rules.
+        Returns a (log family, dimension, detection reliability) for the mnemonic using Energystics rules.
         Gives all the variants if one_best=False.
-        company_code limits log dictionary to a particuler service company.
+        company limits log dictionary to a particuler service company.
         '''
-        mnemonic = mnemonic.lower()
+        mnemonic = mnemonic.upper()
         company_result = {}
-        for cc in [company_code] if company_code is not None else self.db:
+        for cc in [company] if company is not None else self.db:
             db = self.db[cc]
             res = None
 
@@ -145,31 +134,33 @@ class FamilyAssigner:
 
             # NLP
             if res is None:
-                res = self._nlp_assign_family(mnemonic, cc)
-                if res is not None:
-                    res = (res[0], res[1], res[2] * 0.7)  # decrease maximum NLP confidence
+                nlp_res = self._nlp_assign_family(mnemonic, cc)
+                if nlp_res is not None:
+                    # res = [(mnemonic_info[0], mnemonic_info[1], mnemonic_info[2] * 0.7) for mnemonic_info in nlp_res]   # decrease maximum NLP confidence  # TODO: use all the variants
+                    mnemonic_info = nlp_res[0]
+                    res = (mnemonic_info[0], mnemonic_info[1], mnemonic_info[2] * 0.7)  # decrease maximum NLP confidence
 
             if res is not None:
                 company_result[cc] = res
 
         if company_result:
-            if company_code is not None:
-                return company_result.get(company_code)
+            if company is not None:
+                return company_result.get(company)
             else:
                 # remove family duplicates
                 uniq_family_results = {}
-                for company_code, mnemonic_info in company_result.items():
+                for company, mnemonic_info in company_result.items():
                     found_same_family_at_cc = None
-                    for unic_company_code, unic_mnemonic_info in uniq_family_results.items():
+                    for unic_company, unic_mnemonic_info in uniq_family_results.items():
                         if mnemonic_info[0] == unic_mnemonic_info[0]:    # compare by family
-                            found_same_family_at_cc = unic_company_code
+                            found_same_family_at_cc = unic_company
                             break
                     if found_same_family_at_cc is not None:
                         unic_mnemonic_info = uniq_family_results[found_same_family_at_cc]
                         newRank = min(1, unic_mnemonic_info[2] + mnemonic_info[2] / len(company_result))    # increase rank by a part of the second source rank
                         uniq_family_results[found_same_family_at_cc] = (unic_mnemonic_info[0], unic_mnemonic_info[1], newRank)  # update rank, drop second source variant
                     else:
-                        uniq_family_results[company_code] = mnemonic_info   # just add the variant
+                        uniq_family_results[company] = mnemonic_info   # just add the variant
 
                 if one_best:
                     return sorted(uniq_family_results.values(), key=operator.itemgetter(2), reverse=True)[0]     # sorted by rank
@@ -179,7 +170,7 @@ class FamilyAssigner:
 
     def assign_families(self, mnemonics):
         '''
-        Returns {mnemonic: (log family, unit class, detection reliability), ...} for the mnemonic using Energystics rules.
+        Returns {mnemonic: (log family, dimension, detection reliability), ...} for the mnemonic using Energystics rules.
         Assumes that logs are mostly produced by a one service company.
         '''
         all_company_mnemonic_info = {m: self.assign_family(m, one_best=False) for m in mnemonics}

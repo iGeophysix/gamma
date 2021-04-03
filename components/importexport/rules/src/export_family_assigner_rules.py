@@ -15,7 +15,7 @@ def capitalize(s):
 
 def main():
     # read Excel table
-    cols = ['Company Name', 'Curve Mnemonic', 'Alt Mnemonics', 'Family', 'Dimention']
+    cols = ['Company Name', 'Curve Mnemonic', 'Alt Mnemonics', 'Family', 'Dimension']
     with open(SOURCE_FAMASS_BOOK, 'rb') as f:
         df = pandas.read_excel(f, 'Curves', header=0, usecols=cols)
 
@@ -25,7 +25,7 @@ def main():
     for r in range(len(df.index)):
         company = df['Company Name'][r].strip()
         family = capitalize(df['Family'][r].strip())
-        dimension = df['Dimention'][r].strip()
+        dimension = df['Dimension'][r].strip()
 
         # combine list of mnemonic variant from 'Curve Mnemonic' and 'Alt Mnemonics'
         mnemonics = set([str(df['Curve Mnemonic'][r]).strip().upper()])
