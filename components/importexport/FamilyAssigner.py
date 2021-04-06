@@ -1,7 +1,5 @@
-import os
 import re
 import operator
-import itertools
 import json
 
 FAMASS_RULES = 'components/importexport/rules/FamilyAssignment.json'
