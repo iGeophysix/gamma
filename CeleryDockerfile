@@ -4,7 +4,6 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUNBUFFERED=1 REDIS_HOST=redis
 
 WORKDIR .
 COPY requirements.txt requirements.txt
-RUN apt-get update && apt-get -y -qq install qt5-default
 RUN pip install --no-cache-dir -r requirements.txt
 RUN rm requirements.txt
 
