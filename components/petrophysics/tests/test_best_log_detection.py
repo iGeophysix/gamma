@@ -2,7 +2,6 @@ import os
 import unittest
 
 from components.database.RedisStorage import RedisStorage
-from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.best_log_detection import get_best_log

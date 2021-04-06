@@ -74,8 +74,8 @@ def get_log_resolution(log_data: np.array, log_meta: dict, window: float = 20) -
     :param window : float Window length in log depth reference. Must be smaller than log_data->depth_span
     :return log_resolution : float number describing resolution of the log
     """
-    step = log_meta['avg_step']
-    if not log_meta['const_step']:
+    step = log_meta['basic_statistics']['avg_step']
+    if not log_meta['basic_statistics']['const_step']:
         log_data = interpolate_log_by_depth(log_data, step)
 
     window_in_samples = np.round(window / step)
