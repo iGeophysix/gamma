@@ -1,1 +1,1 @@
-py -m unittest components.importexport.test.test_units_system
+py -m unittest components.importexport.test.test_family_assigner
