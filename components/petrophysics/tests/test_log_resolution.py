@@ -30,7 +30,7 @@ class TestLogResolution(unittest.TestCase):
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
         meta = wd.get_log_meta(['GK', ])['GK']
-        resolution = meta['LogResolution_AutoCalculated']
+        resolution = meta['log_resolution']['value']
 
         self.assertAlmostEqual(0.5135, resolution, delta=0.001)
 
@@ -46,6 +46,6 @@ class TestLogResolution(unittest.TestCase):
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
         meta = wd.get_log_meta(['AZIM', ])['AZIM']
-        resolution = meta['LogResolution_AutoCalculated']
+        resolution = meta['log_resolution']['value']
 
         self.assertTrue(np.isnan(resolution))

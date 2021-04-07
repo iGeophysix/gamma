@@ -99,7 +99,7 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
         log_data = d.get_log_data(logs)
         for log, values in log_data.items():
             new_meta = get_basic_curve_statistics(values)
-            d.append_log_meta({log: new_meta})
+            d.append_log_meta({log: {'basic_statistics': new_meta}})
 
 
 @app.task
@@ -123,7 +123,7 @@ def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: li
         log_meta = d.get_log_meta(logs)
         for log, values in log_data.items():
             log_resolution = get_log_resolution(values, log_meta[log])
-            d.append_log_meta({log: {'LogResolution_AutoCalculated': log_resolution}})
+            d.append_log_meta({log: {'log_resolution': {'value': log_resolution}}})
 
 
 @app.task
@@ -146,17 +146,17 @@ def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tol
         metadata.update({(datasetname, log): meta for log, meta in d.get_log_meta().items()})
 
     # for each log curve find those that are defined at similar depth (split by runs)
-    log_list = sorted(metadata.keys(), key=lambda x: metadata[x]['min_depth'], reverse=True)
+    log_list = sorted(metadata.keys(), key=lambda x: metadata[x]['basic_statistics']['min_depth'], reverse=True)
     groups = {}
     group_id = 0
     while len(log_list):
         log = log_list.pop(0)
         groups.update({group_id: [log]})
-        min_depth = metadata[log]['min_depth']
-        max_depth = metadata[log]['max_depth']
+        min_depth = metadata[log]['basic_statistics']['min_depth']
+        max_depth = metadata[log]['basic_statistics']['max_depth']
         for other_log in log_list:
-            other_log_min_depth = metadata[other_log]['min_depth']
-            other_log_max_depth = metadata[other_log]['max_depth']
+            other_log_min_depth = metadata[other_log]['basic_statistics']['min_depth']
+            other_log_max_depth = metadata[other_log]['basic_statistics']['max_depth']
             if np.abs(other_log_min_depth - min_depth) < depth_tolerance and np.abs(other_log_max_depth - max_depth) < depth_tolerance:
                 groups[group_id].append(other_log)
                 log_list.remove(other_log)
@@ -169,12 +169,12 @@ def async_split_by_runs(wellname: str, datasetnames: list[str] = None, depth_tol
     for run in runs:
         run_len = len(run)
         # get min and max depth of the run
-        min_depth = metadata[run[0]]['min_depth']
-        max_depth = metadata[run[0]]['max_depth']
+        min_depth = metadata[run[0]]['basic_statistics']['min_depth']
+        max_depth = metadata[run[0]]['basic_statistics']['max_depth']
         for datasetname, log in run:
             d = WellDataset(well=w, name=datasetname)
-            d.append_log_meta({log: {"Run_AutoCalculated": f"{run_len}_({min_depth}_{max_depth})"}})
-            d.append_log_history(log, 'Added Run_AutoCalculated')
+            d.append_log_meta({log: {"run": {'value': f"{run_len}_({min_depth}_{max_depth})", 'autocalculated': True}}})
+            d.append_log_history(log, 'Defined autocalculated Run')
 
 
 @app.task
