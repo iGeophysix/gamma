@@ -1,4 +1,3 @@
-import gzip
 import os
 import unittest
 
@@ -8,9 +7,10 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.importexport.las import import_to_db
 from components.petrophysics.curve_operations import get_basic_curve_statistics
 from components.petrophysics.normalization import log_normalization
-from components.tasks.tasks import async_get_basic_log_stats, async_read_las
+from tasks import async_get_basic_log_stats
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data', 'normalization')
 
@@ -21,9 +21,7 @@ class TestLogNormalization(unittest.TestCase):
         self._s.flush_db()
 
         for filename in os.listdir(PATH_TO_TEST_DATA):
-            with open(os.path.join(PATH_TO_TEST_DATA, filename), 'rb') as f:
-                las_data = gzip.compress(f.read())
-            async_read_las(filename=filename, las_data=las_data)
+            import_to_db(filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
         p = Project('test')
         for wellname in p.list_wells().keys():

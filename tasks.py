@@ -10,7 +10,7 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
-from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, normalize_curve
+from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve
 from components.petrophysics.log_splicing import splice_logs
 
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)

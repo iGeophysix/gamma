@@ -1,6 +1,13 @@
+import warnings
+
 import numpy as np
 from scipy import signal
-from scipy.stats.mstats import gmean
+
+
+def geo_mean(iterable):
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return np.array(iterable).prod() ** (1.0 / len(np.array(iterable)))
 
 
 def get_basic_curve_statistics(log_data: np.array) -> dict:
@@ -15,7 +22,7 @@ def get_basic_curve_statistics(log_data: np.array) -> dict:
     min_value = np.min(non_null_values[:, 1])
     max_value = np.max(non_null_values[:, 1])
     mean = np.mean(non_null_values[:, 1])
-    log_gmean = gmean(non_null_values[:, 1])
+    log_gmean = geo_mean(non_null_values[:, 1])
     stdev = np.std(non_null_values[:, 1])
     derivative = np.diff(log_data[:, 0])
     const_step = bool(abs(derivative.min() - derivative.max()) < 0.00001)
@@ -33,7 +40,7 @@ def get_basic_curve_statistics(log_data: np.array) -> dict:
     return new_meta
 
 
-def normalize_curve(data, min_value: float = 0, max_value: float = 100):
+def rescale_curve(data, min_value: float = 0, max_value: float = 100):
     '''
     This function applies linear normalization to the whole curve. NaN values remain NaN
     :param data:

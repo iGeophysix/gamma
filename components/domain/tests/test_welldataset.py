@@ -106,8 +106,11 @@ class TestWellDatasetRedis(unittest.TestCase):
                        'x_loc': 444904.03125}
 
         for key in true_answer.keys():
-            value = data[key][0, 1]  # [row, column]
-            self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
+            try:
+                value = data[key][0, 1]  # [row, column]
+                self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
+            except IndexError:
+                self.assertEqual(0, len(data[key]), msg='Missing value')
 
     def test_check_las_header(self):
         f = 'another_small_file.las'
@@ -255,7 +258,7 @@ class TestWellDatasetRedis(unittest.TestCase):
             return generators[dtype]
 
         def dummy_row(depths, dtype):
-            return [(depth, dummy_data(dtype)) for depth in depths]
+            return np.array([(depth, dummy_data(dtype)) for depth in depths])
 
         data = {log: dummy_row(existing_depths, log_type) for log, log_type in new_logs.items()}
 
@@ -263,16 +266,16 @@ class TestWellDatasetRedis(unittest.TestCase):
         # dataset.add_log(new_logs, log_types)
         dataset.set_data(data, new_logs_meta)
         end = time.time()
-        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+        # print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
 
         start = time.time()
         d = dataset.get_log_data()
 
         end = time.time()
-        print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
+        # print(f"Read of {len(d)} logs having {len(d['GR'])} rows took {int((end - start) * 1000)}ms.")
 
         self.assertEqual(len(d), 20 + log_count)
-        self.assertEqual(len(d['LOG_1']), 84)
+        self.assertEqual(75, len(d['LOG_1']), msg='Must be 75, because other 9 are MISSING VALUES')
 
     def test_logs_list(self):
         f = 'small_file.las'
@@ -347,31 +350,3 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         self.assertEqual(dataset.get_log_meta()['GR']['max_depth'], 100)
 
-
-class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
-    def setUp(self) -> None:
-        _s = RedisStorage()
-        _s.flush_db()
-
-        self.path_to_test_data = PATH_TO_TEST_DATA
-
-        self.f = 'another_small_file.las'
-        self.wellname = self.f.replace(".las", "")
-        self.number_of_datasets = 20
-        well = Well(self.wellname, new=True)
-        for i in range(self.number_of_datasets):
-            dataset = WellDataset(well, str(i), new=True)
-            las.import_to_db(filename=os.path.join(self.path_to_test_data, self.f),
-                             well=well,
-                             well_dataset=dataset)
-
-    @unittest.skip('Incomplete test')
-    def test_async_normalization(self):
-
-        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"},
-                "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
-
-        for i in range(self.number_of_datasets):
-            async_normalize_log.delay(wellname=self.wellname,
-                                      datasetname=str(i),
-                                      logs=logs)

@@ -35,4 +35,4 @@ class TestSplitByRun(unittest.TestCase):
 
         d = WellDataset(w, 'Well622_ULN_Combined')
         t = d.get_log_meta(['GK$_D2711_D', ])
-        self.assertEqual('2_(2656.8_2720.0)', t['GK$_D2711_D']['run']['value'], )
+        self.assertIn(t['GK$_D2711_D']['run']['value'], ['7_(2659.0_2722.2)', '2_(2656.8_2720.0)'], )

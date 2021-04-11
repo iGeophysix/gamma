@@ -30,15 +30,15 @@ def splice_logs_in_family(well: Well, logs_meta: dict) -> np.ndarray:
         return wd.get_log_data(logs=[log_name, ])[log_name]
 
     # define smallest depth sampling rate
-    step = np.min([meta['avg_step'] for meta in logs_meta.values()])
+    step = np.min([meta['basic_statistics']['avg_step'] for meta in logs_meta.values()])
 
     # order logs by runs
     logs_order = [log for log, _ in sorted(logs_meta.items(), key=lambda x: x[1]['Run_AutoCalculated'], reverse=True)]
     # get logs data
     logs_data = {log: get_data(log) for log in logs_meta.keys()}
     # define top and bottom of the spliced log
-    min_depth = np.min([meta['min_depth'] for meta in logs_meta.values()])
-    max_depth = np.max([meta['max_depth'] for meta in logs_meta.values()])
+    min_depth = np.min([meta['basic_statistics']['min_depth'] for meta in logs_meta.values()])
+    max_depth = np.max([meta['basic_statistics']['max_depth'] for meta in logs_meta.values()])
     new_md = np.arange(min_depth, max_depth, step)
 
     # interpolate logs

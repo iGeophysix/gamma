@@ -352,7 +352,10 @@ class RedisStorage:
             # convert np.array to bytes
             mapping = {}
             for k, v in data.items():
-                non_null_values = v[~np.isnan(v[:, 1])]
+                try:
+                    non_null_values = v[~np.isnan(v[:, 1])]
+                except TypeError: # string arrays cannot be compared with nan - so register everything
+                    non_null_values = v
                 stream = io.BytesIO()
                 # np.savez_compressed(stream, array=v)
                 np.save(stream, non_null_values, allow_pickle=True)
