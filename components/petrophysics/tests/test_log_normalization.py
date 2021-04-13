@@ -49,7 +49,7 @@ class TestLogNormalization(unittest.TestCase):
             log.save()
             log.history = f"Normalized from {w_wd_log}"
             log.save()
-            q5 = np.quantile(log[:, 1], 0.05)
-            q95 = np.quantile(log[:, 1], 0.95)
+            q5 = np.quantile(log.values[~np.isnan(log.values[:, 1])][:, 1], 0.05)
+            q95 = np.quantile(log.values[~np.isnan(log.values[:, 1])][:, 1], 0.95)
             self.assertAlmostEqual(true_q5, q5, places=4)
             self.assertAlmostEqual(true_q95, q95, places=4)

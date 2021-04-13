@@ -37,7 +37,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
     # define ranking and median quantiles
     rank = sorted(deviations, key=deviations.get)
 
-    def get_quantiles(_logs: dict[BasicLog], _ranked_logs: list, quantiles: tuple = (5, 95)) -> dict[float, float]:
+    def get_quantiles(_logs: dict[tuple, BasicLog], _ranked_logs: list, quantiles: tuple = (5, 95)) -> dict[float, float]:
         """
         This internal function averages histograms and returns quantile values
         """
@@ -59,6 +59,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
     etalon_q_min, etalon_q_max = etalon_quantiles.values()
 
     etalon_data = logs[rank[0]][:, 1]
+
     etalon_histogram = np.histogram(etalon_data, bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
     results = {}
     for key, log in logs.items():
@@ -67,7 +68,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
         k = (etalon_q_max - etalon_q_min) / (q_max - q_min)
         new_values = (log[:, 1] - q_min) * k + etalon_q_min
 
-        new_histogram = np.histogram(log.values[:, 1], bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
+        new_histogram = np.histogram(new_values, bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
         distribution_similarity = sum(abs(new_histogram[0] - etalon_histogram[0]))
         extra_meta = {"normalization": {'difference': distribution_similarity}}
 
