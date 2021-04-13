@@ -54,7 +54,7 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     return results_data, results_meta
 
 
-def splice_logs_in_family(well: Well, logs: list) -> np.ndarray:
+def splice_logs_in_family(logs: list) -> np.ndarray:
     '''
     This function takes all log_names defined in log_names meta and splices them into one
     Docs: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/f/Logs-Splicing-45J9iu3UhOtI
