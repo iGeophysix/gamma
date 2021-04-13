@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import numpy as np
+
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
@@ -43,7 +45,18 @@ class TestLogSplicing(unittest.TestCase):
         async_splice_logs(wellname='609')
         wd = WellDataset(self.w, 'Spliced')
         log = BasicLog(wd.id, 'Gamma Ray')
-        true_meta = {'min_depth': 8.6, 'max_depth': 2643.2999999999906, 'min_value': 0.9, 'max_value': 8.497804999995498, 'depth_span': 2634.6999999999907,
-                     'avg_step': 0.09999999999999964, 'const_step': True, 'mean': 4.031003762634724, 'gmean': 3.8136451008782117, 'stdev': 1.2796598690478778,
-                     'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5}, 'log_family': 'Gamma Ray', '__type': 'BasicLog', '__history': []}
+        true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
+                     '__history': [],
+                     '__type': 'BasicLog',
+                     'avg_step': 0.09999999999999964,
+                     'const_step': True,
+                     'depth_span': 2634.6999999999907,
+                     'gmean': np.inf,
+                     'log_family': 'Gamma Ray',
+                     'max_depth': 2643.2999999999906,
+                     'max_value': 8.497804999995498,
+                     'mean': 4.031003762634724,
+                     'min_depth': 8.6,
+                     'min_value': 0.9,
+                     'stdev': 1.2796598690478778}
         self.assertEqual(true_meta, log.meta)

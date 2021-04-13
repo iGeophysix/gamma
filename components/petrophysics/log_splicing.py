@@ -43,7 +43,7 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         if not logs_in_family:
             continue
         # splice log_names
-        spliced = splice_logs_in_family(well, logs_in_family)
+        spliced = splice_logs_in_family(logs_in_family)
         # define meta information
         meta = get_basic_curve_statistics(spliced)
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
