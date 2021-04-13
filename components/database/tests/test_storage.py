@@ -28,18 +28,19 @@ class TestStorage(unittest.TestCase):
         logname = "GR"
         self._s.create_well(wellname)
         self._s.create_dataset(wellname, datasetname)
-        self._s.add_log(wellname, datasetname, logname)
-        current_meta = self._s.get_logs_meta(wellname, datasetname, [logname, ])
+        dataset_id = self._s._get_dataset_id(wellname, datasetname)
+        self._s.add_log(dataset_id, logname)
+        current_meta = self._s.get_logs_meta(dataset_id, [logname, ])
         self.assertEqual({'GR': {}}, current_meta)
 
         extra_meta = {"UWI": 434232}
-        self._s.append_log_meta(wellname, datasetname, logname, extra_meta)
-        self.assertEqual({'GR': {"UWI": 434232}}, self._s.get_logs_meta(wellname, datasetname, [logname, ]))
+        self._s.append_log_meta(dataset_id, logname, extra_meta)
+        self.assertEqual({'GR': {"UWI": 434232}}, self._s.get_logs_meta(dataset_id, [logname, ]))
 
         extra_meta = {"PWA": "GOGI"}
-        self._s.append_log_meta(wellname, datasetname, logname, extra_meta)
-        self.assertEqual({'GR': {"UWI": 434232, "PWA": "GOGI"}}, self._s.get_logs_meta(wellname, datasetname, [logname, ]))
+        self._s.append_log_meta(dataset_id, logname, extra_meta)
+        self.assertEqual({'GR': {"UWI": 434232, "PWA": "GOGI"}}, self._s.get_logs_meta(dataset_id, [logname, ]))
 
         extra_meta = {"PWA": "GIGI"}
-        self._s.append_log_meta(wellname, datasetname, logname, extra_meta)
-        self.assertEqual({'GR': {"UWI": 434232, "PWA": "GIGI"}}, self._s.get_logs_meta(wellname, datasetname, [logname, ]))
+        self._s.append_log_meta(dataset_id, logname, extra_meta)
+        self.assertEqual({'GR': {"UWI": 434232, "PWA": "GIGI"}}, self._s.get_logs_meta(dataset_id, [logname, ]))

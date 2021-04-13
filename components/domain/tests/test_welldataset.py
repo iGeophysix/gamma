@@ -8,10 +8,10 @@ from random import randint, random, choice
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
-from tasks import async_normalize_log
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -32,8 +32,8 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset.set_data(data, meta)
 
         received_data = dataset.get_log_data()
-        self.assertEqual(received_data["GR"].all(), data["GR"].all())
-        self.assertEqual(received_data["PS"].all(), data["PS"].all())
+        self.assertTrue(np.isclose(received_data["GR"].values, data["GR"], equal_nan=True).all())
+        self.assertTrue(np.isclose(received_data["PS"].values, data["PS"], equal_nan=True).all())
 
         self.assertEqual(dataset.get_log_meta(), meta)
 
@@ -254,16 +254,14 @@ class TestWellDatasetRedis(unittest.TestCase):
             }
             return generators[dtype]
 
-        def dummy_row(depths, dtype):
-            return [(depth, dummy_data(dtype)) for depth in depths]
+        def dummy_log(depths, dtype):
+            return np.array([(depth, dummy_data(dtype)) for depth in depths])
 
-        data = {log: dummy_row(existing_depths, log_type) for log, log_type in new_logs.items()}
-
-        start = time.time()
-        # dataset.add_log(new_logs, log_types)
-        dataset.set_data(data, new_logs_meta)
-        end = time.time()
-        print(f"Insertion of {log_count} logs took {int((end - start) * 1000)}ms")
+        for new_log, log_type in new_logs.items():
+            log = BasicLog(dataset_id=dataset.id, name=new_log)
+            log.values = dummy_log(existing_depths, log_type)
+            log.meta = new_logs_meta[new_log]
+            log.save()
 
         start = time.time()
         d = dataset.get_log_data()
@@ -346,32 +344,3 @@ class TestWellDatasetRedis(unittest.TestCase):
         dataset.append_log_meta(meta={"GR": {"max_depth": 100}})
 
         self.assertEqual(dataset.get_log_meta()['GR']['max_depth'], 100)
-
-
-class TestWellDatasetRedisAsyncTasks(unittest.TestCase):
-    def setUp(self) -> None:
-        _s = RedisStorage()
-        _s.flush_db()
-
-        self.path_to_test_data = PATH_TO_TEST_DATA
-
-        self.f = 'another_small_file.las'
-        self.wellname = self.f.replace(".las", "")
-        self.number_of_datasets = 20
-        well = Well(self.wellname, new=True)
-        for i in range(self.number_of_datasets):
-            dataset = WellDataset(well, str(i), new=True)
-            las.import_to_db(filename=os.path.join(self.path_to_test_data, self.f),
-                             well=well,
-                             well_dataset=dataset)
-
-    @unittest.skip('Incomplete test')
-    def test_async_normalization(self):
-
-        logs = {"GR": {"min_value": 0, "max_value": 150, "output": "GR_norm"},
-                "RHOB": {"min_value": 1.5, "max_value": 2.5, "output": "RHOB_norm"}, }
-
-        for i in range(self.number_of_datasets):
-            async_normalize_log.delay(wellname=self.wellname,
-                                      datasetname=str(i),
-                                      logs=logs)

@@ -67,7 +67,7 @@ class WellDataset:
     @property
     def info(self):
         _s = ColumnStorage()
-        return _s.get_dataset_info(self._well, self._name)
+        return _s.get_dataset_info(self.id)
 
     @info.setter
     def info(self, info):

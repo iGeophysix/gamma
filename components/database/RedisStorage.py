@@ -168,46 +168,38 @@ class RedisStorage:
         """
         return json.loads(self.conn.hget('datasets', dataset_id))['name']
 
-    def get_dataset_logs(self, wellname: str, datasetname: str) -> list[str]:
+    def get_dataset_logs(self, dataset_id: str) -> list[str]:
         """
         Get list of logs in the dataset
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :return: list of logs available in the dataset
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
         return [l.decode() for l in self.conn.hkeys(f'{dataset_id}_meta')]
 
-    def get_dataset_info(self, wellname: str = None, datasetname: str = None, dataset_id: str = None) -> dict:
+    def get_dataset_info(self, dataset_id: str = None) -> dict:
         """
-        Get dataset info by wellname and datasetname or by dataset_id
-        :param wellname: if dataset_id is None, then specify well name to find the dataset
-        :param datasetname: if dataset_id is None, then specify dataset name to find the dataset
-        :param dataset_id: if not None, not necessary to specify wellname and datasetname
-        :return: dictinoary with all dataset meta information
+        Get dataset info by dataset_id
+        :param dataset_id: dataset id as string
+        :return: dictionary with all dataset meta information
         """
-        if dataset_id is None:
-            dataset_id = self._get_dataset_id(wellname, datasetname)
         if self.conn.hexists('datasets', dataset_id):
             return json.loads(self.conn.hget('datasets', dataset_id))
         else:
-            raise FileNotFoundError(f"Dataset {datasetname} was not found in well {wellname}")
+            raise FileNotFoundError(f"Dataset {dataset_id} was not found")
 
-    def set_dataset_info(self, wellname: str, datasetname: str, info: dict) -> None:
+    def set_dataset_info(self, dataset_id: str, info: dict) -> None:
         """
         Sets new dataset meta info
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param info: dict with new meta information
 
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
 
         with self.conn.pipeline() as pipe:
             while True:
                 try:
                     pipe.watch(f'datasets:{dataset_id}')
-                    current_info = self.get_dataset_info(wellname, datasetname)
+                    current_info = self.get_dataset_info(dataset_id=dataset_id)
                     pipe.multi()
                     current_info['meta'] = info
                     pipe.hset('datasets', dataset_id, json.dumps(current_info))
@@ -242,34 +234,32 @@ class RedisStorage:
                     continue
 
     # LOGS
-    def add_log(self, wellname: str, datasetname: str, log_name: str) -> None:
+    def add_log(self, dataset_id: str, log_name: str) -> None:
         """
         Creates an empty log in dataset. Inserts records in dataset and dataset meta tables
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param log_name: log name as string
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
         self.conn.hset(f"{dataset_id}_meta", log_name, '{}')
         self.conn.hset(dataset_id, log_name, '{}')
 
-    def get_logs_data(self, wellname: str,
-                      datasetname: str,
-                      logs: list[str] = None,
-                      depth: float = None,
-                      depth__gt: float = None,
-                      depth__lt: float = None): #-> dict[np.array]:
+    def check_log_exists(self, dataset_id: str, log_name: str) -> bool:
+        return self.conn.hexists(f'{dataset_id}_data', log_name) or self.conn.hexists(f'{dataset_id}_meta', log_name)
+
+    def get_log_data(self, dataset_id: str,
+                     logname: str,
+                     depth: float = None,
+                     depth__gt: float = None,
+                     depth__lt: float = None):  # -> dict[np.array]:
         """
-        Returns dict with logs data. Depth references are signed - pay attention to depth reference sign
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
-        :param logs: if None, then all logs will be returned. Log names in list of strings (use ["GR",] if you only need one log)
+        Returns dict with one log data. Depth references are signed - pay attention to depth reference sign
+        :param dataset_id: dataset id as string
+        :param logname: log name as string (e.g. "GR")
         :param depth: if specific depth reference is required specify this parameter
         :param depth__gt: if specified then depth below is ignored and log will be sliced by depth > depth__gt
         :param depth__lt: if specified then depth above is ignored and log will be sliced by depth < depth__lt
         :return: dict with logs and values
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
 
         def slice(data, top=None, bottom=None):
             top = top if top is not None else sys.float_info.min
@@ -279,46 +269,69 @@ class RedisStorage:
             data = data[data[:, 0] <= bottom]
             return data
 
-        if logs == None:
-            logs = [l.decode() for l in self.conn.hkeys(dataset_id)]
-
-        out = {log: np.load(io.BytesIO(self.conn.hget(dataset_id, log)), allow_pickle=True) for log in logs}
+        out = np.load(io.BytesIO(self.conn.hget(dataset_id, logname)), allow_pickle=True)
 
         # apply slicing
         if depth is None and depth__gt is None and depth__lt is None:
             return out
         elif depth__gt is not None or depth__lt is not None:
-            return {l: slice(v, depth__gt, depth__lt) for l, v in out.items()}
+            return slice(out, depth__gt, depth__lt)
         else:
-            return {l: slice(v, depth, depth) for l, v in out.items()}
+            return slice(out, depth, depth)
 
-    def get_logs_meta(self, wellname: str, datasetname: str, logs=None) -> dict:
+    def get_logs_data(self, dataset_id: str,
+                      logs: list[str] = None,
+                      depth: float = None,
+                      depth__gt: float = None,
+                      depth__lt: float = None):  # -> dict[np.array]:
+        """
+        Returns dict with logs data. Depth references are signed - pay attention to depth reference sign
+        :param dataset_id: dataset id as string
+        :param logs: if None, then all logs will be returned. Log names in list of strings (use ["GR",] if you only need one log)
+        :param depth: if specific depth reference is required specify this parameter
+        :param depth__gt: if specified then depth below is ignored and log will be sliced by depth > depth__gt
+        :param depth__lt: if specified then depth above is ignored and log will be sliced by depth < depth__lt
+        :return: dict with logs and values
+        """
+
+        if logs == None:
+            logs = [l.decode() for l in self.conn.hkeys(dataset_id)]
+
+        out = {logname: self.get_log_data(dataset_id, logname, depth, depth__gt, depth__lt) for logname in logs}
+
+        return out
+
+    def get_log_meta(self, dataset_id: str, logname: str = None) -> dict:
+        """
+        Returns dict with meta info of one log in the dataset.
+        :param dataset_id: dataset id as string
+        :param logname: log name as strings (eg "GR" )
+        :return: dict with log info as dict
+        """
+        return json.loads(self.conn.hget(f"{dataset_id}_meta", logname))
+
+    def get_logs_meta(self, dataset_id: str, logs=None) -> dict:
         """
         Returns dict with meta info of logs in the dataset.
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param logs: if None then returns all logs' meta. Log names in list of strings (use ["GR",] if you only need one log)
         :return: dict with each log info as dict
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
 
         if logs == None:
             logs = [l.decode() for l in self.conn.hkeys(f"{dataset_id}_meta")]
 
-        out = {log: json.loads(self.conn.hget(f"{dataset_id}_meta", log)) for log in logs}
+        out = {log: self.get_log_meta(dataset_id, log) for log in logs}
 
         return out
 
-    def append_log_meta(self, wellname: str, datasetname: str, logname: str, meta: dict) -> None:
+    def append_log_meta(self, dataset_id: str, logname: str, meta: dict) -> None:
         """
         Append meta information to a log
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param logname: log name as string
         :param meta: dict with new meta information (e.g. {"UWI":434232, "PWA":"GIGI",...})
         """
-
-        dataset_id = self._get_dataset_id(wellname, datasetname)
         with self.conn.pipeline() as pipe:
             while True:
                 try:
@@ -332,16 +345,14 @@ class RedisStorage:
                 except redis.exceptions.WatchError:
                     continue
 
-    def update_logs(self, wellname: str, datasetname: str, data=None, meta=None) -> None:
+    def update_logs(self, dataset_id: str, data=None, meta=None) -> None:
         """
         Sets log data and meta information.
         It will add empty history key to log meta if __history key is not found in meta of the log
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param data: data as dict (e.g. {"GR": np.array((10.0,1), (20.0:2),..), "PS":...}
         :param meta: meta info as dict (e.g. {"GR": {"units":"gAPI", "code":"tt"}, "PS":...}
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
 
         if meta:
             for log in meta.keys():
@@ -359,39 +370,33 @@ class RedisStorage:
 
             self.conn.hset(dataset_id, mapping=mapping)
 
-    def delete_log(self, wellname: str, datasetname: str, log_name: str) -> None:
+    def delete_log(self, dataset_id: str, log_name: str) -> None:
         """
         Deletes log from the storage
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param log_name: log name as string
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
         self.conn.hdel(dataset_id, log_name)
         self.conn.hdel(f"{dataset_id}_meta", log_name)
 
-    def log_history(self, wellname: str, datasetname: str, log: str) -> list[Any]:
+    def log_history(self, dataset_id: str, log: str) -> list[Any]:
         """
         Returns log history as list of events.
         If history key is not found returns empty list.
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param log: log name as string
         :return: list of events
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
         log_meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
         return log_meta.get('__history', [])
 
-    def append_log_history(self, wellname: str, datasetname: str, log: str, event: Any) -> None:
+    def append_log_history(self, dataset_id: str, log: str, event: Any) -> None:
         """
         Appends event to the end of the log history.
-        :param wellname: well name as string
-        :param datasetname: dataset name as string
+        :param dataset_id: dataset id as string
         :param log: log name as string
         :param event: event must be serializable
         """
-        dataset_id = self._get_dataset_id(wellname, datasetname)
 
         with self.conn.lock(f"{dataset_id}_meta:{log}", blocking_timeout=BLOCKING_TIMEOUT) as lock:
             try:

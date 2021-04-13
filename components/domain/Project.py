@@ -32,7 +32,7 @@ class Project:
             for dataset_id in dataset_ids:
                 dataset_info = self._s.get_dataset_info(dataset_id=dataset_id)
                 dataset_name = dataset_info['name']
-                dataset_logs = self._s.get_logs_meta(well, dataset_name)
+                dataset_logs = self._s.get_logs_meta(dataset_id)
                 tree[well].update({dataset_name: dataset_logs})
         return tree
 
@@ -49,7 +49,7 @@ class Project:
             for dataset_id in dataset_ids:
                 dataset_info = self._s.get_dataset_info(dataset_id=dataset_id)
                 dataset_name = dataset_info['name']
-                dataset_logs = self._s.get_logs_meta(well, dataset_name)
+                dataset_logs = self._s.get_logs_meta(dataset_id)
 
                 out.extend([{'well': well, 'dataset': dataset_name, 'log': log, **log_info} for log, log_info in dataset_logs.items()])
         return pd.DataFrame(out)

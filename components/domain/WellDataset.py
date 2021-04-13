@@ -4,6 +4,7 @@ from datetime import datetime
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 
 logging.basicConfig()
@@ -47,12 +48,32 @@ class WellDataset:
         self._dataset_table_name = self._s.create_dataset(self._well, self._name)
 
     @property
+    def well(self) -> str:
+        """
+        Return parent well name
+        :return:
+        """
+        return self._well
+
+    @property
+    def name(self) -> str:
+        """
+        Return self name
+        :return:
+        """
+        return self._name
+
+    @property
+    def id(self) -> str:
+        return RedisStorage()._get_dataset_id(self._well, self._name)
+
+    @property
     def info(self) -> dict:
         """
         Get dataset meta information
         :return: dict
         """
-        return self._s.get_dataset_info(self._well, self._name)['meta']
+        return self._s.get_dataset_info(dataset_id=self.id)['meta']
 
     @info.setter
     def info(self, info: dict) -> None:
@@ -62,7 +83,11 @@ class WellDataset:
         :param info:
         """
         logging.debug(f"Changed dataset info {self._name} in well {self._well}")
-        self._s.set_dataset_info(self._well, self._name, info)
+        self._s.set_dataset_info(self.id, info)
+
+    @property
+    def log_list(self):
+        return self._s.get_dataset_logs(self.id)
 
     def get_log_list(self, **kwargs) -> list:
         """
@@ -71,9 +96,9 @@ class WellDataset:
         :return: list
         """
         if kwargs is None:
-            return self._s.get_dataset_logs(self._well, self._name)
+            return self._s.get_dataset_logs(self.id)
 
-        logs_meta = self._s.get_logs_meta(self._well, self._name)
+        logs_meta = self._s.get_logs_meta(self.id)
         to_delete = []
         for log in logs_meta.keys():
             for key, value in kwargs.items():
@@ -101,7 +126,7 @@ class WellDataset:
         :param name: name of the log
         """
         logging.info(f"Deleted log {name} in dataset {self._name} in well {self._well}")
-        self._s.delete_log(self._well, self._name, log_name=name)
+        self._s.delete_log(self.id, log_name=name)
 
     def get_log_data(self,
                      logs: list = None,
@@ -115,20 +140,15 @@ class WellDataset:
         :return: dict of dicts with each log and its data: depth reference-value
             Example: {"GR": {10.0: 1, 20.0: 2}, "PS": {10.0: 3, 20.0: 4}}
         """
+        if logs is None:
+            logs = self.get_log_list()
         if start != end:
-            result = self._s.get_logs_data(self._well,
-                                           self._name,
-                                           logs,
-                                           depth__gt=start,
-                                           depth__lt=end)
-        elif start == end:
-            result = self._s.get_logs_data(self._well,
-                                           self._name,
-                                           logs,
-                                           depth=start)
+            result = {log: BasicLog(self.id, log).crop(depth__gt=start, depth__lt=end, inplace=True) for log in logs}
+        elif start == end and start and end:
+            result = {log: BasicLog(self.id, log).crop(depth=start, inplace=True) for log in logs}
         else:
-            result = self._s.get_logs_data(self._well,
-                                           self._name)
+            result = {log: BasicLog(self.id, log) for log in logs}
+
         return result
 
     def get_log_meta(self, logs: list = None) -> dict[dict]:
@@ -138,7 +158,7 @@ class WellDataset:
         :return: dict with logs meta data
             Example: {"GR": {"units": "gAPI", "code": "", "description": "GR"}, "PS": {"units": "uV", "code": "", "description": "PS"}}
         """
-        return self._s.get_logs_meta(self._well, self._name, logs)
+        return self._s.get_logs_meta(self.id, logs)
 
     def get_log_history(self, log: str) -> list:
         """
@@ -146,7 +166,7 @@ class WellDataset:
         :param log: log name (str)
         :return: list of events
         """
-        return self._s.get_logs_meta(self._well, self._name, [log, ])[log].get('__history', [])
+        return self._s.get_logs_meta(self.id, [log, ])[log].get('__history', [])
 
     def append_log_history(self, log: str, event: str) -> None:
         """
@@ -156,7 +176,7 @@ class WellDataset:
 
         """
         logging.debug(f"Added history event to dataset {self._name} in well {self._well}")
-        self._s.append_log_history(self._well, self._name, log, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), event))
+        self._s.append_log_history(self.id, log, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), event))
 
     def set_data(self, data: dict[str, np.ndarray] = None, meta: dict[str, dict] = None) -> None:
         """
@@ -166,7 +186,8 @@ class WellDataset:
         """
 
         logging.info(f"Set data and/or metadata in dataset {self._name} in well {self._well}")
-        self._s.update_logs(self._well, self._name, data, meta)
+
+        self._s.update_logs(self.id, data, meta)
 
     def append_log_meta(self, meta: dict[str, dict]) -> None:
         """
@@ -178,4 +199,4 @@ class WellDataset:
         """
         logging.info(f"Append meta to logs {list(meta.keys())} dataset {self._name} in well {self._well}")
         for log, data in meta.items():
-            self._s.append_log_meta(self._well, self._name, log, data)
+            self._s.append_log_meta(self.id, log, data)
