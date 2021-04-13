@@ -11,7 +11,7 @@ class BasicLog:
     General class for all types of logs
     """
 
-    def __init__(self, dataset_id: str, name, ):
+    def __init__(self, dataset_id: str = None, name: str = 'New Log'):
         """
         Init method
         :param dataset_id: Parent dataset_id
@@ -92,8 +92,9 @@ class BasicLog:
         Get log meta information
         :return: dictionary with log meta information
         """
-        _s = Storage()
-        self._meta = _s.get_log_meta(self._dataset_id, self._name)
+        if self._meta is None:
+            _s = Storage()
+            self._meta = _s.get_log_meta(self._dataset_id, self._name)
         return self._meta
 
     @meta.setter

@@ -43,9 +43,10 @@ class TestLogNormalization(unittest.TestCase):
             well_name, dataset_name, log_name = w_wd_log
             well = Well(well_name)
             wd = WellDataset(well, 'Normalized', new=True)
-            log.save()
+            log._dataset_id = wd.id
 
             log.meta = log.meta | {'basic_statistics': get_basic_curve_statistics(log.values)}
+            log.save()
             log.history = f"Normalized from {w_wd_log}"
             log.save()
             q5 = np.quantile(log[:, 1], 0.05)

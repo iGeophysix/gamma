@@ -25,15 +25,14 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
     for key, log in logs.items():
         non_null_values = log.values[~np.isnan(log.values[:, 1])]
         log.meta = log.meta | {'quantiles': {q: np.quantile(non_null_values[:, 1], q / 100) for q in QUANTILES}}
-        log.save()
 
     # get median quantiles' values
-    median_quantiles = {q: np.median([log.meta['quantiles'][str(q)] for log in logs.values()]) for q in QUANTILES}
+    median_quantiles = {q: np.median([log.meta['quantiles'][q] for log in logs.values()]) for q in QUANTILES}
 
     # get sum for each _log quantiles' deviation from median values
     deviations = {}
     for key, log in logs.items():
-        deviations[key] = sum([abs(log.meta['quantiles'][str(q)] - median_quantiles[q]) / median_quantiles[q] for q in QUANTILES])
+        deviations[key] = sum([abs(log.meta['quantiles'][q] - median_quantiles[q]) / median_quantiles[q] for q in QUANTILES])
 
     # define ranking and median quantiles
     rank = sorted(deviations, key=deviations.get)
@@ -63,8 +62,8 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
     etalon_histogram = np.histogram(etalon_data, bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
     results = {}
     for key, log in logs.items():
-        q_min = log.meta['quantiles'][str(QUANTILES_TO_TIE[0])]
-        q_max = log.meta['quantiles'][str(QUANTILES_TO_TIE[1])]
+        q_min = log.meta['quantiles'][QUANTILES_TO_TIE[0]]
+        q_max = log.meta['quantiles'][QUANTILES_TO_TIE[1]]
         k = (etalon_q_max - etalon_q_min) / (q_max - q_min)
         new_values = (log[:, 1] - q_min) * k + etalon_q_min
 
@@ -72,7 +71,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
         distribution_similarity = sum(abs(new_histogram[0] - etalon_histogram[0]))
         extra_meta = {"normalization": {'difference': distribution_similarity}}
 
-        normalized_log = BasicLog("Normalized", name=log.name) # TODO: un-hardcode dataset name
+        normalized_log = BasicLog(name=log.name)
         normalized_log.values = np.vstack((log.values[:, 0], new_values)).T
         new_meta = log.meta | extra_meta
         del new_meta['quantiles']
