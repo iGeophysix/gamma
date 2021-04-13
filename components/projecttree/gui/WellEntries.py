@@ -38,6 +38,7 @@ class WellManagerEntry(TreeEntry):
                                           parent = self,
                                           well_name=well_name,
                                           well_info=well_info))
+        print(self.entries)
 
     def onWellsAdded(self):
         self._model.beginResetModel()
@@ -185,7 +186,7 @@ class WellDatasetManagerEntry(TreeEntry):
         for ds_id in self._well_info["datasets"]:
             dataset_info = _s.get_dataset_info(dataset_id=ds_id)
             dataset_name = dataset_info['name']
-            dataset_logs = _s.get_logs_meta(self._well_name, dataset_name)
+            dataset_logs = _s.get_logs_meta(ds_id)
 
             self.entries.append(WellDatasetEntry(model = self._model,
                                                  parent = self,
