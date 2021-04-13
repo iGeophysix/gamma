@@ -31,6 +31,15 @@ class WellDataset:
         if new:
             self.register()
 
+    @property
+    def exists(self) -> bool:
+        """
+        Check if the log is exists in the dataset
+        :return: bool
+        """
+        _s = RedisStorage()
+        return _s.check_dataset_exists(self.id)
+
     def delete(self) -> None:
         """
         Delete dataset and it contents, also remove it from well

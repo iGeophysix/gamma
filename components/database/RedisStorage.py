@@ -160,6 +160,14 @@ class RedisStorage:
 
         return dataset_id
 
+    def check_dataset_exists(self, dataset_id: str) -> bool:
+        """
+        Simple function to check if the dataset exists in the db
+        :param dataset_id:
+        :return:
+        """
+        return self.conn.hexists('datasets', dataset_id)
+
     def get_dataset_name(self, dataset_id: str) -> str:
         """
         Get dataset name by dataset_id
@@ -365,7 +373,7 @@ class RedisStorage:
             for k, v in data.items():
                 try:
                     non_null_values = v[~np.isnan(v[:, 1])]
-                except TypeError: # string arrays cannot be compared with nan - so register everything
+                except TypeError:  # string arrays cannot be compared with nan - so register everything
                     non_null_values = v
                 stream = io.BytesIO()
                 # np.savez_compressed(stream, array=v)

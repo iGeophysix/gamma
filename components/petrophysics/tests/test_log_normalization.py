@@ -36,18 +36,19 @@ class TestLogNormalization(unittest.TestCase):
                 logname = 'GR'
                 logs_to_normalize.append((wellname, datasetname, logname))
 
-        normalized_data, normalized_meta = log_normalization(logs_to_normalize)
+        normalized_logs = log_normalization(logs_to_normalize)
         true_q5 = 5.59728
         true_q95 = 26.38376
-        for w_wd_log, values in normalized_data.items():
-            w, wd, log = w_wd_log
-            well = Well(w)
+        for w_wd_log, log in normalized_logs.items():
+            well_name, dataset_name, log_name = w_wd_log
+            well = Well(well_name)
             wd = WellDataset(well, 'Normalized', new=True)
+            log.save()
 
-            normalized_meta[w_wd_log].update({'basic_statistics': get_basic_curve_statistics(values)})
-            wd.set_data(data={log: values}, meta={log: normalized_meta[w_wd_log]})
-            wd.append_log_history(log, f"Normalized from {w_wd_log}")
-            q5 = np.quantile(values[:, 1], 0.05)
-            q95 = np.quantile(values[:, 1], 0.95)
+            log.meta = log.meta | {'basic_statistics': get_basic_curve_statistics(log.values)}
+            log.history = f"Normalized from {w_wd_log}"
+            log.save()
+            q5 = np.quantile(log[:, 1], 0.05)
+            q95 = np.quantile(log[:, 1], 0.95)
             self.assertAlmostEqual(true_q5, q5, places=4)
             self.assertAlmostEqual(true_q95, q95, places=4)
