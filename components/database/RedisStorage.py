@@ -258,7 +258,7 @@ class RedisStorage:
         :param depth: if specific depth reference is required specify this parameter
         :param depth__gt: if specified then depth below is ignored and log will be sliced by depth > depth__gt
         :param depth__lt: if specified then depth above is ignored and log will be sliced by depth < depth__lt
-        :return: dict with logs and values
+        :return: dict with log_names and values
         """
 
         def slice(data, top=None, bottom=None):

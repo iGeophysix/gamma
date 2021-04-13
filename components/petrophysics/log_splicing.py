@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.curve_operations import get_basic_curve_statistics
@@ -15,73 +16,68 @@ LOG_FAMILY_PRIORITY = [
 ]
 
 
-def splice_logs_in_family(well: Well, logs_meta: dict) -> np.ndarray:
-    '''
-    This function takes all logs defined in logs meta and splices them into one
-    Docs: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/f/Logs-Splicing-45J9iu3UhOtI
-    :param well: Well object to work on
-    :param logs_meta: dictionary with complex key {(datasetname, logname):{...meta...}, ...}
-    :return: spliced log as np.ndarray
-    '''
-
-    def get_data(dataset_log):
-        dataset_name, log_name = dataset_log
-        wd = WellDataset(well, dataset_name)
-        return wd.get_log_data(logs=[log_name, ])[log_name]
-
-    # define smallest depth sampling rate
-    step = np.min([meta['avg_step'] for meta in logs_meta.values()])
-
-    # order logs by runs
-    logs_order = [log for log, _ in sorted(logs_meta.items(), key=lambda x: x[1]['Run_AutoCalculated'], reverse=True)]
-    # get logs data
-    logs_data = {log: get_data(log) for log in logs_meta.keys()}
-    # define top and bottom of the spliced log
-    min_depth = np.min([meta['min_depth'] for meta in logs_meta.values()])
-    max_depth = np.max([meta['max_depth'] for meta in logs_meta.values()])
-    new_md = np.arange(min_depth, max_depth, step)
-
-    # interpolate logs
-    logs_data_interpolated = {log: np.interp(new_md, values[:, 0], values[:, 1]) for log, values in logs_data.items()}
-    # splice logs
-    df = pd.DataFrame(logs_data_interpolated)
-    result = df[logs_order].bfill(axis=1).iloc[:, 0]
-
-    return np.vstack((new_md, result)).T
-
-
-def splice_logs(well: Well, dataset_names: list[str] = None, logs: list[WellDataset] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
+def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
     """
     This function processes the well and generates a dataset with spliced logs and its meta information
     :param well: Well object to process
     :param dataset_names: Optional. List of str with dataset names. If None then uses all datasets
-    :param logs: Optional. List of str with logs names. Logs must present in all datasets. If None then uses all logs in all datasets
+    :param log_names: Optional. List of str with logs names. Logs must present in all datasets. If None then uses all logs in all datasets
     :return: dict with log data and log meta
     """
     if dataset_names is None:
         dataset_names = well.datasets
-    all_meta = {}
+    logs = {}
     for dataset_name in dataset_names:
         wd = WellDataset(well, dataset_name)
-        logs_in_dataset = wd.get_log_list() if logs is None else logs
-        all_meta.update({(dataset_name, log_name): meta for log_name, meta in wd.get_log_meta(logs=logs_in_dataset).items()})
+        logs_in_dataset = wd.log_list if log_names is None else log_names
+        logs.update({(dataset_name, log_name): BasicLog(wd.id, log_name) for log_name in logs_in_dataset})
 
     # here and after each log family must be spliced by families and then runs
     results_data = {}
     results_meta = {}
 
     for log_family in LOG_FAMILY_PRIORITY:
-        # select logs of defined family
-        logs_in_family = {log: meta for log, meta in all_meta.items() if meta['log_family'] == log_family}
-        # if no logs in of this family - skip
+        # select log_names of defined family
+        logs_in_family = [l for l in logs.values() if l.meta['log_family'] == log_family]
+        # if no log_names in of this family - skip
         if not logs_in_family:
             continue
-        # splice logs
+        # splice log_names
         spliced = splice_logs_in_family(well, logs_in_family)
         # define meta information
         meta = get_basic_curve_statistics(spliced)
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
-        results_data.update({log_family: spliced})
-        results_meta.update({log_family: meta})
+        meta['log_family'] = log_family
+        results_data.update({log_family: spliced}) # Log name will be defined here
+        results_meta.update({log_family: meta}) # log name will be defined here
 
     return results_data, results_meta
+
+
+def splice_logs_in_family(well: Well, logs: list) -> np.ndarray:
+    '''
+    This function takes all log_names defined in log_names meta and splices them into one
+    Docs: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/f/Logs-Splicing-45J9iu3UhOtI
+    :param well: Well object to work on
+    :param logs_meta: dictionary with complex key {(datasetname, logname):{...meta...}, ...}
+    :return: spliced log as np.ndarray
+    '''
+
+    # define smallest depth sampling rate
+    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
+
+    # order log_names by runs
+    logs_order = [log.name for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True)]
+
+    # define top and bottom of the spliced log
+    min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
+    max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs])
+    new_md = np.arange(min_depth, max_depth, step)
+
+    # interpolate logs
+    logs_data_interpolated = {log.name: np.interp(new_md, log.values[:, 0], log.values[:, 1]) for log in logs}
+    # splice log_names
+    df = pd.DataFrame(logs_data_interpolated)
+    result = df[logs_order].bfill(axis=1).iloc[:, 0]
+
+    return np.vstack((new_md, result)).T

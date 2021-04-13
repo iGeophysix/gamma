@@ -103,6 +103,7 @@ class BasicLog:
         :return: None
         """
         self._meta = meta
+        self._meta["__type"] = self._type
         self._changes['meta'] = True
 
     @property
@@ -173,3 +174,11 @@ class BasicLog:
 
 class MarkersLog(BasicLog):
     _type = 'MarkersLog'
+
+    def validate(self, data):
+        # check array has two columns (depth and value)
+        assert data.shape[1] == 2, "Data must contain two columns"
+        # check depths are unique
+        assert len(np.unique(data[:, 0])) == len(data[:, 0]), "All depth references must be unique"
+
+        return True

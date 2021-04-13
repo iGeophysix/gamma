@@ -1,11 +1,11 @@
 import os
-from datetime import datetime
 
 import numpy as np
 from celery import Celery
 from celery.result import AsyncResult
 
 from components.database.settings import REDIS_HOST
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport.FamilyAssigner import FamilyAssigner
@@ -46,13 +46,6 @@ def async_read_las(wellname: str, datasetname: str, filename: str):
 
 
 @app.task
-def async_set_data(wellname: str, datasetname: str, data: frozenset):
-    well = Well(wellname)
-    dataset = WellDataset(well, datasetname)
-    dataset.set_data(data)
-
-
-@app.task
 def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
     '''
     Apply asynchronous normalization of curves in a dataset
@@ -65,19 +58,15 @@ def async_normalize_log(wellname: str, datasetname: str, logs: dict) -> None:
 
     well = Well(wellname)
     dataset = WellDataset(well, datasetname)
-    data = dataset.get_log_data(logs=list(logs.keys()))
-    meta = dataset.get_log_meta(logs=list(logs.keys()))
-    normalized_data = {}
-    normalized_meta = {}
-    for curve, params in logs.items():
-        normalized_data[params["output"]] = normalize_curve(data[curve],
-                                                            params["min_value"],
-                                                            params["max_value"])
-        normalized_meta[params["output"]] = meta[curve]
-        normalized_meta[params["output"]]["__history"].append(
-            (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), f"Normalized curve derived from {wellname}->{datasetname}->{curve}"))
+    well_logs = {log: BasicLog(dataset.id, log) for log in logs.keys()}
 
-    dataset.set_data(normalized_data, normalized_meta)
+    for log in well_logs:
+        params = logs[log]
+        new_log = BasicLog(dataset.id, params['output'])
+        new_log.values = normalize_curve(well_logs[log].values, params["min_value"], params["max_value"])
+        new_log.meta = log.meta
+        new_log.history = f"Normalized curve derived from {wellname}->{datasetname}->{log}"
+        new_log.save()
 
 
 @app.task
@@ -96,10 +85,13 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
     # get all data from specified well and datasets
     for datasetname in datasetnames:
         d = WellDataset(w, datasetname)
-        log_data = d.get_log_data(logs)
-        for log, values in log_data.items():
-            new_meta = get_basic_curve_statistics(values)
-            d.append_log_meta({log: {'basic_statistics': new_meta}})
+
+        logs = d.log_list if logs is None else logs
+
+        for log_name in logs:
+            log = BasicLog(d.id, log_name)
+            log.meta = log.meta | {'basic_statistics': get_basic_curve_statistics(log.values)}
+            log.save()
 
 
 @app.task
@@ -113,17 +105,17 @@ def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: li
     :param logs: list of logs names to process. If None then use all logs for the dataset
     """
     w = Well(wellname)
-    if datasetnames is None:
-        datasetnames = w.datasets
+    datasetnames = w.datasets if datasetnames is None else datasetnames
 
     # get all data from specified well and datasets
-    for datasetname in datasetnames:
-        d = WellDataset(w, datasetname)
-        log_data = d.get_log_data(logs)
-        log_meta = d.get_log_meta(logs)
-        for log, values in log_data.items():
-            log_resolution = get_log_resolution(values, log_meta[log])
-            d.append_log_meta({log: {'log_resolution': {'value': log_resolution}}})
+    for dataset_name in datasetnames:
+        d = WellDataset(w, dataset_name)
+        logs = d.log_list if logs is None else logs
+        for log_name in logs:
+            log = BasicLog(d.id, log_name)
+            log_resolution = get_log_resolution(log.values, log.meta)
+            log.meta = log.meta | {'log_resolution': {'value': log_resolution}}
+            log.save()
 
 
 @app.task
@@ -213,4 +205,9 @@ def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[
     w = Well(wellname)
     logs_data, logs_meta = splice_logs(w, datasetnames, logs)
     wd = WellDataset(w, output_dataset_name, new=True)
-    wd.set_data(logs_data, logs_meta)
+    for log_name in logs_data.keys():
+        log = BasicLog(wd.id, log_name)
+        log.values = logs_data[log_name]
+        log.meta = logs_meta[log_name]
+        log.save()
+

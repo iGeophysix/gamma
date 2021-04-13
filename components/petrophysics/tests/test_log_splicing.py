@@ -2,6 +2,7 @@ import os
 import unittest
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution, async_splice_logs
@@ -26,12 +27,12 @@ class TestLogSplicing(unittest.TestCase):
 
         # adding more metadata
         meta = {
-            'GK_D2258_D': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '70_(2450_2600)'},
-            'GK_D1910_D': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '60_(2620_2700)'},
-            'GK_D1911_D_2': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '50_(2300_2700)'},
-            'GK_D2395_D': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '40_(600_800)'},
-            'GK_D2265_D': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '30_(400_2450)'},
-            'GK_D1911_D': {'log_family': 'Gamma Ray', 'Run_AutoCalculated': '20_(50_2700)'},
+            'GK_D2258_D': {'log_family': 'Gamma Ray', 'run': {'value': '70_(2450_2600)'}},
+            'GK_D1910_D': {'log_family': 'Gamma Ray', 'run': {'value': '60_(2450_2600)'}},
+            'GK_D1911_D_2': {'log_family': 'Gamma Ray', 'run': {'value': '50_(2450_2600)'}},
+            'GK_D2395_D': {'log_family': 'Gamma Ray', 'run': {'value': '40_(2450_2600)'}},
+            'GK_D2265_D': {'log_family': 'Gamma Ray', 'run': {'value': '30_(2450_2600)'}},
+            'GK_D1911_D': {'log_family': 'Gamma Ray', 'run': {'value': '20_(2450_2600)'}},
         }
         self.wd.append_log_meta(meta)
 
@@ -40,3 +41,9 @@ class TestLogSplicing(unittest.TestCase):
 
     def test_log_splicing_works_correctly(self):
         async_splice_logs(wellname='609')
+        wd = WellDataset(self.w, 'Spliced')
+        log = BasicLog(wd.id, 'Gamma Ray')
+        true_meta = {'min_depth': 8.6, 'max_depth': 2643.2999999999906, 'min_value': 0.9, 'max_value': 8.497804999995498, 'depth_span': 2634.6999999999907,
+                     'avg_step': 0.09999999999999964, 'const_step': True, 'mean': 4.031003762634724, 'gmean': 3.8136451008782117, 'stdev': 1.2796598690478778,
+                     'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5}, 'log_family': 'Gamma Ray', '__type': 'BasicLog', '__history': []}
+        self.assertEqual(true_meta, log.meta)

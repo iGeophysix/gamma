@@ -3,6 +3,7 @@ import os
 import unittest
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
@@ -71,8 +72,8 @@ class TestParallelAccessToData(unittest.TestCase):
         well = Well(self.wellname)
         for i in range(self.number_of_datasets):
             d = WellDataset(well, str(i))
-            dl = d.get_log_data(logs=['GR_1', ])
-            self.assertEqual(dl, data)
+            l = BasicLog(d.id, "GR_1")
+            self.assertEqual(l.values, data['GR_1'])
 
     def test_parallel_set_data_same_dataset(self):
         pool = mp.Pool(4)
@@ -88,8 +89,8 @@ class TestParallelAccessToData(unittest.TestCase):
         well = Well(self.wellname)
         for i in range(self.number_of_datasets):
             d = WellDataset(well, "1")
-            dl = d.get_log_data(logs=['GR_1', ])
-            self.assertEqual(dl, data)
+            l = BasicLog(d.id, "GR_1")
+            self.assertEqual(l.values, data['GR_1'])
 
     def test_parallel_append_history(self):
         pool = mp.Pool(4)

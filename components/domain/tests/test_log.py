@@ -40,11 +40,10 @@ class TestLog(unittest.TestCase):
         log2.meta = meta["PS"]
         log2.save()
 
-        received_data = self.dataset.get_log_data()
-        self.assertTrue(np.isclose(received_data["GR"].values, data["GR"], equal_nan=True).all())
-        self.assertTrue(np.isclose(received_data["PS"].values, data["PS"], equal_nan=True).all())
-
-        self.assertEqual(self.dataset.get_log_meta(), meta)
+        for log_name in data.keys():
+            log = BasicLog(self.dataset.id, log_name)
+            self.assertTrue(np.isclose(log.values, data[log_name], equal_nan=True).all())
+            self.assertEqual(log.meta, meta[log_name])
 
     def test_log_get_data(self):
         f = 'small_file.las'
@@ -58,7 +57,6 @@ class TestLog(unittest.TestCase):
                                         well=well,
                                         well_dataset=dataset)
 
-        data = dataset.get_log_data(start=ref_depth - 0.001, end=ref_depth + 0.001)
         true_answer = {'DRHO': np.nan,
                        'NPHI': np.nan,
                        'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan,
@@ -80,9 +78,11 @@ class TestLog(unittest.TestCase):
                        'z_loc': -156.1439972,
                        'x_loc': 444904.03125}
 
-        for key in true_answer.keys():
-            value = data[key][0, 1]  # [row, column]
-            self.assertTrue(np.isclose(value, true_answer[key], equal_nan=True))
+        for log_name in true_answer.keys():
+            log = BasicLog(dataset.id, log_name)
+            log.crop(depth=ref_depth, inplace=True)
+            value = log[0, 1]  # [row, column]
+            self.assertTrue(np.isclose(value, true_answer[log_name], equal_nan=True))
 
     def test_add_many_logs(self):
         f = 'small_file.las'
@@ -103,10 +103,9 @@ class TestLog(unittest.TestCase):
         new_logs = {f"LOG_{i}": LOG_TYPES[randint(0, len(LOG_TYPES) - 1)] for i in range(0, log_count)}
         new_logs_meta = {f"LOG_{i}": {"units": "some_units", "code": i, "description": f"Dummy log {i}"} for i in range(0, log_count)}
         # get depths
-        arr = dataset.get_log_data(logs=["GR", ])["GR"]
-        existing_depths = arr[:, 0]
+        existing_depths = BasicLog(dataset.id, "GR").values[:, 0]
 
-        # add data to the logs
+        # add data to the log_names
         def dummy_data(dtype):  # return scalar
             generators = {
                 float: 400 * random() - 200,
@@ -126,10 +125,9 @@ class TestLog(unittest.TestCase):
             log.meta = new_logs_meta[new_log]
             log.save()
 
-        d = dataset.get_log_data()
-
-        self.assertEqual(len(d), 20 + log_count)
-        self.assertEqual(len(d['LOG_1']), 84)
+        self.assertEqual(len(dataset.log_list), 20 + log_count)
+        d = BasicLog(dataset.id, 'LOG_1')
+        self.assertEqual(len(d), 84)
 
     def test_logs_list(self):
         f = 'small_file.las'
