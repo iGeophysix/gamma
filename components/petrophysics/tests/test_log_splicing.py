@@ -51,7 +51,7 @@ class TestLogSplicing(unittest.TestCase):
                      'avg_step': 0.09999999999999964,
                      'const_step': True,
                      'depth_span': 2634.6999999999907,
-                     'gmean': np.inf,
+                     'gmean': 3.8136451008782117,
                      'log_family': 'Gamma Ray',
                      'max_depth': 2643.2999999999906,
                      'max_value': 8.497804999995498,

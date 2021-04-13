@@ -2,12 +2,13 @@ import warnings
 
 import numpy as np
 from scipy import signal
-
+from scipy.stats.mstats import gmean
 
 def geo_mean(iterable):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        return np.array(iterable).prod() ** (1.0 / len(np.array(iterable)))
+        a = np.log(iterable)
+        return np.exp(a.mean())
 
 
 def get_basic_curve_statistics(log_data: np.array) -> dict:
