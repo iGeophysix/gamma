@@ -11,14 +11,14 @@ class BasicLog:
     General class for all types of logs
     """
 
-    def __init__(self, dataset_id: str = None, name: str = 'New Log'):
+    def __init__(self, dataset_id: str = None, id: str = 'New Log'):
         """
         Init method
         :param dataset_id: Parent dataset_id
         :param name: Log name
         """
         self._dataset_id = dataset_id
-        self._name = name
+        self._id = id
         self._type = 'BasicLog'
         self._values = None
         self._meta = None
@@ -54,15 +54,39 @@ class BasicLog:
         :return: bool
         """
         _s = Storage()
-        return _s.check_log_exists(self._dataset_id, self._name)
+        return _s.check_log_exists(self._dataset_id, self._id)
 
     @property
     def name(self) -> str:
         """
-        Returns log name
+        Returns log name from meta
         :return:
         """
-        return self._name
+        if not "name" in self.meta:
+            self.name = self._id
+        return self.meta['name']
+
+    @name.setter
+    def name(self, name: str) -> None:
+        """
+        Set log name in meta
+        :return:
+        """
+
+        self.meta = self.meta | {"name": name}
+
+    @property
+    def dataset_id(self) -> str:
+        """
+        Get current dataset id
+        :return: dataset id as string
+        """
+        return self._dataset_id
+
+    @dataset_id.setter
+    def dataset_id(self, dataset_id) -> None:
+        """Assign dataset id to the log"""
+        self._dataset_id = dataset_id
 
     @property
     def values(self) -> np.array:
@@ -85,6 +109,18 @@ class BasicLog:
             raise ValueError("Data is not passing validation")
         self._values = values
         self._changes['values'] = True
+        if self._values is None:
+            self._fetch()
+
+    @property
+    def non_null_values(self) -> np.array:
+        """
+        Get all non-empty log values
+        :return: np.array with log values
+        """
+        if self._values is None:
+            self._fetch()
+        return self._values[~np.isnan(self._values[:, 1])]
 
     @property
     def meta(self) -> dict:
@@ -92,9 +128,13 @@ class BasicLog:
         Get log meta information
         :return: dictionary with log meta information
         """
-        if self._meta is None:
+        if self.exists() and self._meta is None:
             _s = Storage()
-            self._meta = _s.get_log_meta(self._dataset_id, self._name)
+            self._meta = _s.get_log_meta(self._dataset_id, self._id)
+        elif self._meta is None:
+            self._meta = {
+                'name': self._id
+            }
         return self._meta
 
     @meta.setter
@@ -103,8 +143,7 @@ class BasicLog:
         Set log meta information
         :return: None
         """
-        self._meta = meta
-        self._meta["__type"] = self._type
+        self._meta = meta | {'__type':self._type}
         self._changes['meta'] = True
 
     @property
@@ -114,7 +153,7 @@ class BasicLog:
         :return:
         """
         _s = Storage()
-        return _s.log_history(self._dataset_id, self._name)
+        return _s.log_history(self._dataset_id, self._id)
 
     @history.setter
     def history(self, text) -> None:
@@ -124,12 +163,24 @@ class BasicLog:
         :return: None
         """
         _s = Storage()
-        _s.append_log_history(self._dataset_id, self._name, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), text))
+        _s.append_log_history(self._dataset_id, self._id, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), text))
+
+    @property
+    def log_family(self):
+        """
+        Get current log family
+        :return: log family as string
+        """
+        return self.meta['log_family']
+
+    @log_family.setter
+    def log_family(self, family):
+        self.meta['log_family'] = family
 
     def _fetch(self):
         _s = Storage()
-        self._values = _s.get_log_data(self._dataset_id, self._name, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
-        self._meta = _s.get_log_meta(self._dataset_id, self._name)
+        self._values = _s.get_log_data(self._dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
+        self._meta = _s.get_log_meta(self._dataset_id, self._id)
 
     def crop(self, depth=None, depth__gt=None, depth__lt=None, inplace=False):
         """
@@ -166,10 +217,10 @@ class BasicLog:
         """
         _s = Storage()
         if self._changes['values']:
-            _s.update_logs(self._dataset_id, data={self._name: self._values})
+            _s.update_logs(self._dataset_id, data={self._id: self._values})
             self._changes['values'] = False
         if self._changes['meta']:
-            _s.update_logs(self._dataset_id, meta={self._name: self._meta})
+            _s.update_logs(self._dataset_id, meta={self._id: self._meta})
             self._changes['meta'] = False
 
 

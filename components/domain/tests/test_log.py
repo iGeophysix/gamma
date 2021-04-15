@@ -30,12 +30,12 @@ class TestLog(unittest.TestCase):
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
                 "PS": {"units": "uV", "code": "", "description": "PS"}}
 
-        log1 = BasicLog(self.dataset.id, name="GR")
+        log1 = BasicLog(self.dataset.id, id="GR")
         log1.values = data["GR"]
         log1.meta = meta["GR"]
         log1.save()
 
-        log2 = BasicLog(self.dataset.id, name="PS")
+        log2 = BasicLog(self.dataset.id, id="PS")
         log2.values = data["PS"]
         log2.meta = meta["PS"]
         log2.save()
@@ -44,6 +44,21 @@ class TestLog(unittest.TestCase):
             log = BasicLog(self.dataset.id, log_name)
             self.assertTrue(np.isclose(log.values, data[log_name], equal_nan=True).all())
             self.assertEqual(log.meta, meta[log_name])
+
+    def test_name_works_correctly(self):
+        log_id = 'GRTRTT'
+        gr = BasicLog(id=log_id)
+        self.assertEqual(log_id, gr.name)
+        gr.name = 'GR'
+        self.assertEqual('GR', gr.name)
+        self.assertFalse(gr.exists())
+        gr.dataset_id = self.dataset.id
+        gr.save()
+        self.assertTrue(gr.exists())
+
+        gr1 = BasicLog(dataset_id=self.dataset.id, id=log_id)
+        self.assertTrue(gr1.exists())
+        self.assertEqual("GR", gr1.name)
 
     def test_log_get_data(self):
         f = 'small_file.las'
@@ -120,7 +135,7 @@ class TestLog(unittest.TestCase):
             return np.array([(depth, dummy_data(dtype)) for depth in depths])
 
         for new_log, log_type in new_logs.items():
-            log = BasicLog(dataset_id=dataset.id, name=new_log)
+            log = BasicLog(dataset_id=dataset.id, id=new_log)
             log.values = dummy_log(existing_depths, log_type)
             log.meta = new_logs_meta[new_log]
             log.save()

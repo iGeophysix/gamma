@@ -72,7 +72,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
         distribution_similarity = sum(abs(new_histogram[0] - etalon_histogram[0]))
         extra_meta = {"normalization": {'difference': distribution_similarity}}
 
-        normalized_log = BasicLog(name=log.name)
+        normalized_log = BasicLog(id=log.name)
         normalized_log.values = np.vstack((log.values[:, 0], new_values)).T
         new_meta = log.meta | extra_meta
         del new_meta['quantiles']
