@@ -29,7 +29,17 @@ class TestLog(unittest.TestCase):
                 "PS": np.array(((10, 3), (20, 4)))}
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
                 "PS": {"units": "uV", "code": "", "description": "PS"}}
-
+        true_meta = {"GR": {'__history': [],
+                            '__type': 'BasicLog',
+                            'code': '',
+                            'description': 'GR',
+                            'units': 'gAPI'},
+                     "PS": {'__history': [],
+                            '__type': 'BasicLog',
+                            'code': '',
+                            'description': 'PS',
+                            'units': 'uV'},
+                     }
         log1 = BasicLog(self.dataset.id, id="GR")
         log1.values = data["GR"]
         log1.meta = meta["GR"]
@@ -43,7 +53,7 @@ class TestLog(unittest.TestCase):
         for log_name in data.keys():
             log = BasicLog(self.dataset.id, log_name)
             self.assertTrue(np.isclose(log.values, data[log_name], equal_nan=True).all())
-            self.assertEqual(log.meta, meta[log_name])
+            self.assertEqual(true_meta[log_name], log.meta)
 
     def test_name_works_correctly(self):
         log_id = 'GRTRTT'
