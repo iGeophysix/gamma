@@ -34,7 +34,6 @@ class TestShaleVolume(unittest.TestCase):
         vsh_gr = linear_method(gk, q5, q95)
         vsh_gr.dataset_id = self.wd.id
         vsh_gr.name = "VSH_GR"
-        vsh_gr.save()
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_linear")
         diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
@@ -48,7 +47,6 @@ class TestShaleVolume(unittest.TestCase):
         vsh_gr = larionov_older_rock_method(gk, q5, q95)
         vsh_gr.dataset_id = self.wd.id
         vsh_gr.name = "VSH_GR"
-        vsh_gr.save()
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarOlder")
         diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
@@ -62,11 +60,9 @@ class TestShaleVolume(unittest.TestCase):
         vsh_gr = larionov_tertiary_rock_method(gk, q5, q95)
         vsh_gr.dataset_id = self.wd.id
         vsh_gr.name = "VSH_GR"
-        vsh_gr.save()
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarTert")
-        diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
-        self.assertAlmostEqual(0.0, np.nanmin(diff, ), 4)
+        diff = abs(vsh_gr.values[:, 1] - true_vsh[:, 1])
         self.assertAlmostEqual(0.0, np.nanmax(diff, ), 3)
 
 
