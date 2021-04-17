@@ -7,12 +7,12 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
-from utilities import my_timer
 
 gamma_logger = logging.getLogger('gamma_logger')
 
+class LoadingException(Exception):
+    pass
 
-# @my_timer
 def import_to_db(filename: str = None,
                  las_structure=None,
                  well: Well = None,
@@ -29,14 +29,14 @@ def import_to_db(filename: str = None,
         las_structure = las.parse(filename)
 
     if las_structure is None:
-        raise Exception(f'Empty las structure for file "{filename}"')
+        raise LoadingException(f'Empty las structure for file "{filename}"')
 
     if las_structure.error_message:
-        raise Exception(f'File "{las_structure.filename}" has an error "{las_structure.error_message}"')
+        raise LoadingException(f'File "{las_structure.filename}" has an error "{las_structure.error_message}"')
 
     # We can't have dataset without a valid well
     if well is None and well_dataset is not None:
-        raise Exception(f'Impossible to have a dataset without a well when importing "{filename}"')
+        raise LoadingException(f'Impossible to have a dataset without a well when importing "{filename}"')
 
     created_new_well = False
 
@@ -45,7 +45,7 @@ def import_to_db(filename: str = None,
 
         if not wellname:
             gamma_logger.error(f'File "{las.filename}" has no valid WELL field.')
-            return
+            raise LoadingException(f'File "{las.filename}" has no valid WELL field.')
 
         well = Well(wellname, new=True)
         created_new_well = True
