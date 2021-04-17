@@ -131,7 +131,7 @@ class TestLog(unittest.TestCase):
         existing_depths = BasicLog(dataset.id, "GR").values[:, 0]
 
         # add data to the log_names
-        def dummy_data(dtype):  # return scalar
+        def dummy_data(dtype):  # returns scalar
             generators = {
                 float: 400 * random() - 200,
                 str: ''.join(choice(string.ascii_letters) for _ in range(64)),

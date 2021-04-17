@@ -10,6 +10,9 @@ PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'te
 
 class TestBasicOperations(unittest.TestCase):
     def setUp(self) -> None:
+        """
+        Nothing to set up
+        """
         pass
 
     def test_interpolate_log_by_depth(self):
