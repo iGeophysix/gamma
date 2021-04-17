@@ -143,7 +143,7 @@ class BasicLog:
         Set log meta information
         :return: None
         """
-        self._meta = meta | {'__type':self._type}
+        self._meta = meta | {'__type': self._type}
         self._changes['meta'] = True
 
     @property

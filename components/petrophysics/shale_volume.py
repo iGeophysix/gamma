@@ -8,7 +8,7 @@ def _linear_scale(arr, lower_limit, upper_limit):
     inv_range = 1 / (upper_limit - lower_limit)
     offset = lower_limit * inv_range
 
-    result = np.clip(arr * inv_range - offset, 0, 1)
+    result = arr * inv_range - offset
     return result
 
 
@@ -27,7 +27,7 @@ def linear_method(log, gr_matrix: float, gr_shale: float) -> BasicLog:
     vsh.meta = vsh.meta | {"method": "Linear method based on Gamma Ray logs"}
 
     values = log.values
-    values[:, 1] = _linear_scale(values[:, 1], gr_matrix, gr_shale)
+    values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
     vsh.values = values
     basic_stats = get_basic_curve_statistics(vsh.values)
     vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
@@ -51,7 +51,7 @@ def larionov_older_rock_method(log, gr_matrix: float, gr_shale: float) -> BasicL
 
     values = log.values
     gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
-    values[:, 1] = 0.33 * (2 ** (2 * gr_index) - 1)
+    values[:, 1] = np.clip(0.33 * (2 ** (2 * gr_index) - 1), 0, 1)
     vsh.values = values
     basic_stats = get_basic_curve_statistics(vsh.values)
     vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
@@ -75,7 +75,7 @@ def larionov_tertiary_rock_method(log, gr_matrix: float, gr_shale: float) -> Bas
 
     values = log.values
     gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
-    values[:, 1] = 0.083 * (2 ** (3.7 * gr_index) - 1)
+    values[:, 1] = np.clip(0.083 * (2 ** (3.7 * gr_index) - 1), 0, 1)
     vsh.values = values
     basic_stats = get_basic_curve_statistics(vsh.values)
     vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
