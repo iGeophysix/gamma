@@ -6,9 +6,10 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
 from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
-from components.projecttree.gui.WellEntries import WellManagerEntry
+from components.projecttree.gui.WellEntries import WellEntry
 # from components.projecttree.TabletEntries import TabletTemplateManagerEntry
 
+from components.domain.Project import Project
 from components.domain.Well import Well
 
 
@@ -20,9 +21,15 @@ class ProjectTreeModel(QAbstractItemModel):
     def __init__(self):
         QAbstractItemModel.__init__(self)
 
-        self.entries = [WellManagerEntry(model = self),
+        self._loadWells()
+
+    def _loadWells(self):
+        self.project = Project("Default Project")
+        wells = self.project.list_wells()
+        self.entries = [WellEntry(model=self,parent=None,well_name=well_name, well_info=well_info) for (well_name, well_info) in wells.items()]
+                        # WellManagerEntry(model = self),
                         # TabletTemplateManagerEntry(model = self),
-                        ]
+                        # ]
 
     def columnCount(self, index: QModelIndex):
         return len(ProjectEntryEnum)

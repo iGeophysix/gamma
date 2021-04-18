@@ -15,54 +15,58 @@ import logging
 gamma_logger = logging.getLogger('gamma_logger')
 
 
-class WellManagerEntry(TreeEntry):
-    def __init__(self, model):
-        """
-        :param QAbstractItemModel model:
-            Used to trigger full model update when adding new wells
-        """
+# clas Groups all the wells in the database.
+# Currently not used
 
-        TreeEntry.__init__(self, model)
+# class WellManagerEntry(TreeEntry):
+    # def __init__(self, model):
+        # """
+        # :param QAbstractItemModel model:
+            # Used to trigger full model update when adding new wells
+        # """
 
-        self.project = Project("Default Project")
+        # TreeEntry.__init__(self, model)
 
-        self._loadWells()
+        # self.project = Project("Default Project")
 
-        DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
+        # self._loadWells()
 
-    def _loadWells(self):
-        self.entries = []
-        wells = self.project.list_wells()
-        for well_name, well_info in wells.items():
-            self.entries.append(WellEntry(model = self._model,
-                                          parent = self,
-                                          well_name=well_name,
-                                          well_info=well_info))
+        # DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
 
-    def onWellsAdded(self):
-        self._model.beginResetModel()
-        self._loadWells()
-        self._model.endResetModel()
+    # def _loadWells(self):
+        # self.entries = []
+        # wells = self.project.list_wells()
+        # for well_name, well_info in wells.items():
+            # self.entries.append(WellEntry(model = self._model,
+                                          # parent = self,
+                                          # well_name=well_name,
+                                          # well_info=well_info))
+        # print(self.entries)
 
-    def data(self, role, column):
-        if role == Qt.DisplayRole:
-            return self._getDisplayRole(column)
-        elif role == Qt.DecorationRole:
-            return self._getDecorationRole(column)
+    # def onWellsAdded(self):
+        # self._model.beginResetModel()
+        # self._loadWells()
+        # self._model.endResetModel()
 
-        return None
+    # def data(self, role, column):
+        # if role == Qt.DisplayRole:
+            # return self._getDisplayRole(column)
+        # elif role == Qt.DecorationRole:
+            # return self._getDecorationRole(column)
 
-    def _getDisplayRole(self, column):
-        if column == ProjectEntryEnum.NAME.value:
-            return 'Well Manager'
+        # return None
 
-        return None
+    # def _getDisplayRole(self, column):
+        # if column == ProjectEntryEnum.NAME.value:
+            # return 'Well Manager'
 
-    def _getDecorationRole(self, column):
-        if column == ProjectEntryEnum.NAME.value:
-            return QIcon.fromTheme('drive-harddisk')
+        # return None
 
-        return None
+    # def _getDecorationRole(self, column):
+        # if column == ProjectEntryEnum.NAME.value:
+            # return QIcon.fromTheme('drive-harddisk')
+
+        # return None
 
 
 
@@ -73,14 +77,18 @@ class WellEntry(TreeEntry):
         self._well_name = well_name
         self._well_info = well_info
 
-        # self.entries.append(WellPropertyManagerEntry(model = self._model,
-                                                     # parent = self,
-                                                     # well = self._well))
+        _s = RedisStorage()
+        for ds_id in self._well_info["datasets"]:
+            dataset_info = _s.get_dataset_info(dataset_id=ds_id)
+            dataset_name = dataset_info['name']
+            dataset_logs = _s.get_logs_meta(ds_id)
 
-        self.entries.append(WellDatasetManagerEntry(model = self._model,
-                                                   parent = self,
-                                                   well_name=well_name,
-                                                   well_info=well_info))
+            self.entries.append(WellDatasetEntry(model = self._model,
+                                                 parent = self,
+                                                 dataset_info=dataset_info,
+                                                 dataset_name=dataset_name,
+                                                 dataset_logs=dataset_logs))
+
 
     def data(self, role, column):
         if role == Qt.DisplayRole:
@@ -171,37 +179,40 @@ class WellEntry(TreeEntry):
 
         # return None
 
-class WellDatasetManagerEntry(TreeEntry):
-    def __init__(self, model, parent, well_name : str, well_info):
-        TreeEntry.__init__(self, model, parent)
+# Class groups all the datasets.
+# Not used at the time.
 
-        self._well_name = well_name
-        self._well_info = well_info
+# class WellDatasetManagerEntry(TreeEntry):
+    # def __init__(self, model, parent, well_name : str, well_info):
+        # TreeEntry.__init__(self, model, parent)
 
-        self._loadWellDatasets()
+        # self._well_name = well_name
+        # self._well_info = well_info
 
-    def _loadWellDatasets(self):
-        _s = RedisStorage()
-        for ds_id in self._well_info["datasets"]:
-            dataset_info = _s.get_dataset_info(dataset_id=ds_id)
-            dataset_name = dataset_info['name']
-            dataset_logs = _s.get_logs_meta(ds_id)
+        # self._loadWellDatasets()
 
-            self.entries.append(WellDatasetEntry(model = self._model,
-                                                 parent = self,
-                                                 dataset_info=dataset_info,
-                                                 dataset_name=dataset_name,
-                                                 dataset_logs=dataset_logs))
+    # def _loadWellDatasets(self):
+        # _s = RedisStorage()
+        # for ds_id in self._well_info["datasets"]:
+            # dataset_info = _s.get_dataset_info(dataset_id=ds_id)
+            # dataset_name = dataset_info['name']
+            # dataset_logs = _s.get_logs_meta(ds_id)
 
-    def data(self, role, column):
-        if role == Qt.DisplayRole:
-            if column == ProjectEntryEnum.NAME.value:
-                return 'WellDatasets'
-        elif role == Qt.DecorationRole:
-            if column == ProjectEntryEnum.NAME.value:
-                    return QIcon.fromTheme('media-record')
+            # self.entries.append(WellDatasetEntry(model = self._model,
+                                                 # parent = self,
+                                                 # dataset_info=dataset_info,
+                                                 # dataset_name=dataset_name,
+                                                 # dataset_logs=dataset_logs))
 
-        return None
+    # def data(self, role, column):
+        # if role == Qt.DisplayRole:
+            # if column == ProjectEntryEnum.NAME.value:
+                # return 'WellDatasets'
+        # elif role == Qt.DecorationRole:
+            # if column == ProjectEntryEnum.NAME.value:
+                    # return QIcon.fromTheme('media-record')
+
+        # return None
 
 
 class WellDatasetEntry(TreeEntry):
