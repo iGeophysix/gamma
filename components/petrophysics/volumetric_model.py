@@ -68,7 +68,7 @@ class VolumetricModel():
         # the last equation Vcomponent1 + ... + VcomponentN = 1
         equation_system_coefficients.append([1] * len(components))   # component coefficients in equation for summ of all component volumes
         if useless_logs:
-            logger.warning(f'VM: the following logs were useless: {useless_logs}')
+            logger.warning(f'the following logs were useless: {useless_logs}')
 
         log_len = len(next(iter(logs.values())))    # dataset length
         model = {component: np.full(log_len, np.nan) for component in components}
