@@ -4,6 +4,11 @@ import numpy as np
 import os
 import json
 
+import logging
+logging.basicConfig()
+logger = logging.getLogger('volumetric model')
+logger.setLevel(logging.DEBUG)
+
 FLUID_MINERAL_TABLE = os.path.join(os.path.dirname(__file__), 'data', 'FluidMineralConstants.json')
 
 
@@ -63,7 +68,7 @@ class VolumetricModel():
         # the last equation Vcomponent1 + ... + VcomponentN = 1
         equation_system_coefficients.append([1] * len(components))   # component coefficients in equation for summ of all component volumes
         if useless_logs:
-            print('VM: the following logs were useless:', useless_logs)
+            logger.warning(f'VM: the following logs were useless: {useless_logs}')
 
         log_len = len(next(iter(logs.values())))    # dataset length
         model = {component: np.full(log_len, np.nan) for component in components}
