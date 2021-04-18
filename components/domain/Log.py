@@ -72,8 +72,7 @@ class BasicLog:
         Set log name in meta
         :return:
         """
-
-        self.meta = self.meta | {"name": name}
+        self.update_meta({"name": name})
 
     @property
     def dataset_id(self) -> str:
@@ -145,6 +144,14 @@ class BasicLog:
         """
         self._meta = meta | {'__type': self._type}
         self._changes['meta'] = True
+
+    def update_meta(self, meta: dict) -> None:
+        """
+        Update log meta information
+        :return: dictionary with updated log meta information
+        """
+        self.meta = self.meta | meta
+        return self._meta
 
     @property
     def history(self) -> list[tuple]:
