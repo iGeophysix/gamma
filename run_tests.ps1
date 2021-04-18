@@ -1,1 +1,1 @@
-py -m unittest components.importexport.test.test_family_assigner
+py -m unittest components.petrophysics.tests.test_volumetric_model
