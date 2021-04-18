@@ -277,7 +277,8 @@ class RedisStorage:
             data = data[data[:, 0] <= bottom]
             return data
 
-        out = np.load(io.BytesIO(self.conn.hget(dataset_id, logname)), allow_pickle=True)
+        # out = np.load(io.BytesIO(self.conn.hget(dataset_id, logname)), allow_pickle=True)
+        out = np.loadtxt(io.BytesIO(self.conn.hget(dataset_id, logname)))
 
         # apply slicing
         if depth is None and depth__gt is None and depth__lt is None:
@@ -373,7 +374,8 @@ class RedisStorage:
             for k, v in data.items():
                 stream = io.BytesIO()
                 # np.savez_compressed(stream, array=v)
-                np.save(stream, v, allow_pickle=True)
+                # np.save(stream, v, allow_pickle=True)
+                np.savetxt(stream, v, fmt='%s')
                 mapping[k] = stream.getvalue()  # bytes
 
             self.conn.hset(dataset_id, mapping=mapping)

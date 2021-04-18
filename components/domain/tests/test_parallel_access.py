@@ -1,6 +1,7 @@
 import multiprocessing as mp
 import os
 import unittest
+import numpy as np
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
@@ -61,7 +62,7 @@ class TestParallelAccessToData(unittest.TestCase):
     def test_parallel_set_data_different_datasets(self):
         pool = mp.Pool(4)
 
-        data = {"GR_1": {100: 10, 200: 20}}
+        data = {"GR_1": np.array(((100, 10), (200, 20)))}
         meta = {"GR_1": {"units": 'gAPI', 'code': '--'}}
 
         for i in range(self.number_of_datasets):
@@ -73,12 +74,12 @@ class TestParallelAccessToData(unittest.TestCase):
         for i in range(self.number_of_datasets):
             d = WellDataset(well, str(i))
             l = BasicLog(d.id, "GR_1")
-            self.assertEqual(l.values, data['GR_1'])
+            self.assertEqual(l.values.all(), data['GR_1'].all())
 
     def test_parallel_set_data_same_dataset(self):
         pool = mp.Pool(4)
 
-        data = {"GR_1": {100: 10, 200: 20}}
+        data = {"GR_1": np.array(((100, 10), (200, 20)))}
         meta = {"GR_1": {"units": 'gAPI', 'code': '--'}}
 
         for i in range(self.number_of_datasets):
@@ -90,7 +91,7 @@ class TestParallelAccessToData(unittest.TestCase):
         for i in range(self.number_of_datasets):
             d = WellDataset(well, "1")
             l = BasicLog(d.id, "GR_1")
-            self.assertEqual(l.values, data['GR_1'])
+            self.assertEqual(l.values.all(), data['GR_1'].all())
 
     def test_parallel_append_history(self):
         pool = mp.Pool(4)

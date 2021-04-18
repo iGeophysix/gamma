@@ -16,7 +16,7 @@ class TestArrayInRedis(unittest.TestCase):
                                 password=REDIS_PASSWORD)
         self.conn.flushdb()
 
-    def test_store_array(self):
+    def test_store_compressed_array(self):
         a = np.array(((10, 20), (30, 40)))
         # print("INIT ARRAY", a)
 
@@ -34,6 +34,22 @@ class TestArrayInRedis(unittest.TestCase):
         b = np.load(io.BytesIO(b), allow_pickle=True)
 
         # print("RESULT ARRAY", b)
+
+        self.assertEqual(a.all(), b.all())
+
+    def test_store_txt_array(self):
+        a = np.array(((10, 20), (30, 40)))
+        # print("INIT ARRAY", a)
+
+        stream = io.BytesIO()
+        np.savetxt(stream, a, fmt='%s')
+
+        self.conn.set("t", stream.getvalue())
+
+        b = self.conn.get("t")
+
+        b = np.loadtxt(io.BytesIO(b))
+
 
         self.assertEqual(a.all(), b.all())
 
