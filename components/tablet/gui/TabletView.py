@@ -1,9 +1,17 @@
-from PySide2.QtCore import Qt, QRectF, QPoint, Signal, Slot
+from PySide2.QtCore import Qt, QRectF, QPoint, Signal, Slot, QEvent
 
 from PySide2.QtWidgets import QWidget, QGraphicsView, QOpenGLWidget, QScrollBar
 
-from PySide2.QtGui import QPainter, QWheelEvent, QSurfaceFormat, QTransform, QDragEnterEvent, QDragMoveEvent, QDropEvent
-
+from PySide2.QtGui import (
+        QDragEnterEvent,
+        QDragMoveEvent,
+        QDropEvent,
+        QMouseEvent,
+        QPainter,
+        QSurfaceFormat,
+        QTransform,
+        QWheelEvent,
+        )
 
 
 # from PySide2.QtOpenGL import QGL, QGLFormat
@@ -22,7 +30,7 @@ class TabletView(QGraphicsView):
         # glWidget.setFormat(f)
         # self.setViewport(glWidget)
 
-        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        # self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setRenderHint(QPainter.Antialiasing)
 
         self.setBackgroundBrush(Qt.lightGray)
@@ -36,6 +44,7 @@ class TabletView(QGraphicsView):
         # self.setOptimizationFlags(QGraphicsView.DontSavePainterState)
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         # self.setViewportUpdateMode(QGraphicsView.SmartViewportUpdate)
+
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
         # self.setCacheMode(QGraphicsView.CacheBackground)
@@ -83,18 +92,19 @@ class TabletViewBody(TabletView):
 
         self.viewport().setAcceptDrops(True)
 
+        self.viewport().installEventFilter(self)
+
 
     def wheelEvent(self, event : QWheelEvent):
 
+        delta = event.angleDelta();
+        if delta.y() == 0:
+            event.ignore()
+            return
+        d = delta.y() / math.fabs(delta.y())
+
         if event.modifiers() & Qt.ControlModifier or \
            event.modifiers() & Qt.ShiftModifier:
-            delta = event.angleDelta();
-
-            if delta.y() == 0:
-                event.ignore()
-                return
-
-            d = delta.y() / math.fabs(delta.y())
 
             if d > 0.0:
                 self._scaleUp(event);
@@ -102,30 +112,33 @@ class TabletViewBody(TabletView):
                 self._scaleDown(event);
 
         else:
-            # sb = self.verticalScrollBar()
             QGraphicsView.wheelEvent(self, event)
 
+    def eventFilter(self, obj, event : QEvent):
+        if event.type() == QEvent.MouseButtonPress:
+            # Enter here any button you like
+            if event.button() == Qt.MiddleButton:
+                # temporarly enable dragging mode
+                self.setDragMode(QGraphicsView.ScrollHandDrag)
+                # emit a left mouse click (the default button for the drag mode)
+                pressEvent = QMouseEvent(QEvent.GraphicsSceneMousePress,
+                                         event.pos(),
+                                         Qt.LeftButton,
+                                         Qt.LeftButton,
+                                         Qt.NoModifier)
 
-    # def dragEnterEvent(self, event : QDragEnterEvent):
-        # if event.mimeData().hasText():
-            # event.acceptProposedAction()
+                self.mousePressEvent(pressEvent)
+            elif event.type() == QEvent.MouseButtonRelease:
+                # # disable drag mode if dragging is finished
+                self.setDragMode(QGraphicsView.NoDrag)
 
-    # def dragMoveEvent(self, event : QDragMoveEvent):
-        # if event.mimeData().hasText():
-            # event.acceptProposedAction()
-
-    # def dropEvent(self, event : QDropEvent):
-        # s = event.mimeData().text()
-        # wellList = json.loads(s)
-        # print("DROPPED WELLLS", wellList)
+            return False
+        else:
+            return QGraphicsView.eventFilter(self, obj, event)
 
 
     def _scaleUp(self, event):
 
-        # print(t)
-
-        # if t.m11() > 2.0:
-            # return
         x_factor = self._scale_multiplier
 
         if event.modifiers() & Qt.ShiftModifier:
@@ -134,10 +147,6 @@ class TabletViewBody(TabletView):
         self.scale(x_factor, self._scale_multiplier)
 
         t = self.transform()
-
-        # print("VIEWPORT", self.viewport().size())
-        # print("VIEWPORT", self.size())
-        # sb = self.verticalScrollBar()
 
         self.transformed.emit(t)
 

@@ -38,7 +38,6 @@ class WellManagerEntry(TreeEntry):
                                           parent = self,
                                           well_name=well_name,
                                           well_info=well_info))
-        print(self.entries)
 
     def onWellsAdded(self):
         self._model.beginResetModel()
