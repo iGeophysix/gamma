@@ -222,7 +222,7 @@ class BasicLog:
         Get tags of the log
         :return:
         """
-        return list(self.meta.get('tags', []))
+        return self.meta.get('tags', set())
 
     def append_tags(self, *tags):
         """
@@ -230,8 +230,8 @@ class BasicLog:
         :param tags:
         """
         existing_tags = self.tags
-        existing_tags.extend(tags)
-        self.update_meta({"tags": list(set(existing_tags))})
+        existing_tags.update(tags)
+        self.update_meta({"tags": set(existing_tags)})
 
     def delete_tags(self, *tags):
         """
@@ -242,7 +242,7 @@ class BasicLog:
         existing_tags = self.tags
         for tag in tags:
             existing_tags.remove(tag)
-        self.update_meta({"tags": list(set(existing_tags))})
+        self.update_meta({"tags": set(existing_tags)})
 
     def _fetch(self):
         _s = Storage()
