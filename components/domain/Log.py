@@ -216,6 +216,34 @@ class BasicLog:
     def log_family(self, family):
         self.meta['log_family'] = family
 
+    @property
+    def tags(self):
+        """
+        Get tags of the log
+        :return:
+        """
+        return list(self.meta.get('tags', []))
+
+    def append_tags(self, *tags):
+        """
+        Append tags to
+        :param tags:
+        """
+        existing_tags = self.tags
+        existing_tags.extend(tags)
+        self.update_meta({"tags": list(set(existing_tags))})
+
+    def delete_tags(self, *tags):
+        """
+        Remove tags from the log
+        :param tags:
+        :return:
+        """
+        existing_tags = self.tags
+        for tag in tags:
+            existing_tags.remove(tag)
+        self.update_meta({"tags": list(set(existing_tags))})
+
     def _fetch(self):
         _s = Storage()
         self._values = _s.get_log_data(self._dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
