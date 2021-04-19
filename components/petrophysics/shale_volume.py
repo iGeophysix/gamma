@@ -47,9 +47,9 @@ class ShaleVolumeLinearMethod(EngineModule):
         # check types
         if not isinstance(log, BasicLog):
             raise TypeError("Log argument is not instance of class BasicLog")
-        if not isinstance(gr_matrix, float):
+        if not isinstance(gr_matrix, (float, int)):
             raise TypeError("gr_matrix is not of type float")
-        if not isinstance(gr_shale, float):
+        if not isinstance(gr_shale, (float, int)):
             raise TypeError("gr_shale is not of type float")
 
         # check gr_matrix is greater than or equals gr_shale
@@ -60,6 +60,10 @@ class ShaleVolumeLinearMethod(EngineModule):
         valid_meta_parameters = cls.Meta.input['meta']
         for parameter, value in valid_meta_parameters.items():
             assert log.meta[parameter] == value, f"Meta parameter {parameter} must be equal {value}."
+
+        # check name is valid
+        if name is not None:
+            assert type(name) == str, f"name must be of type string"
 
     @classmethod
     def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
@@ -120,9 +124,9 @@ class ShaleVolumeLarionovOlderRock(EngineModule):
         # check types
         if not isinstance(log, BasicLog):
             raise TypeError("Log argument is not instance of class BasicLog")
-        if not isinstance(gr_matrix,(float, int)):
+        if not isinstance(gr_matrix, (float, int)):
             raise TypeError("gr_matrix is not of type float")
-        if not isinstance(gr_shale, float):
+        if not isinstance(gr_shale, (float, int)):
             raise TypeError("gr_shale is not of type float")
 
         # check gr_matrix is greater than or equals gr_shale
@@ -132,7 +136,11 @@ class ShaleVolumeLarionovOlderRock(EngineModule):
         # check log input
         valid_meta_parameters = cls.Meta.input['meta']
         for parameter, value in valid_meta_parameters.items():
-            assert log.meta.get(parameter, None) == value, f"Meta parameter '{parameter}' must be equal '{value}'."
+            assert log.meta[parameter] == value, f"Meta parameter {parameter} must be equal {value}."
+
+        # check name is valid
+        if name is not None:
+            assert type(name) == str, f"name must be of type string"
 
     @classmethod
     def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
@@ -197,9 +205,9 @@ class ShaleVolumeLarionovTertiaryRock(EngineModule):
         # check types
         if not isinstance(log, BasicLog):
             raise TypeError("Log argument is not instance of class BasicLog")
-        if not isinstance(gr_matrix, (int, float)):
+        if not isinstance(gr_matrix, (float, int)):
             raise TypeError("gr_matrix is not of type float")
-        if not isinstance(gr_shale, (int, float)):
+        if not isinstance(gr_shale, (float, int)):
             raise TypeError("gr_shale is not of type float")
 
         # check gr_matrix is greater than or equals gr_shale
@@ -210,6 +218,10 @@ class ShaleVolumeLarionovTertiaryRock(EngineModule):
         valid_meta_parameters = cls.Meta.input['meta']
         for parameter, value in valid_meta_parameters.items():
             assert log.meta[parameter] == value, f"Meta parameter {parameter} must be equal {value}."
+
+        # check name is valid
+        if name is not None:
+            assert type(name) == str, f"name must be of type string"
 
     @classmethod
     def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
