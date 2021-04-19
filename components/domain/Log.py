@@ -127,7 +127,7 @@ class BasicLog:
         :param units: new units
         """
         units_system = UnitsSystem()
-        if units_system.known_unit(units):
+        if units is None or units_system.known_unit(units):
             self.meta = self.meta | {'units': units}
 
     def convert_units(self, units_to: str) -> np.array:

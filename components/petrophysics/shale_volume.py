@@ -79,14 +79,17 @@ class ShaleVolumeLinearMethod(EngineModule):
         cls_output = cls.Meta.output
 
         vsh = cls_output['type'](id=cls_output['id'])
-        vsh.name = cls_output['id'] if name is None else name
+        vsh.meta = log.meta
+        vsh.log_family = cls_output['meta']['log_family']
+        vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
 
         values = log.values
         values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
         vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
-
+        vsh.name = cls_output['id'] if name is None else name
+        vsh.units = None
         return vsh
 
 
@@ -156,7 +159,6 @@ class ShaleVolumeLarionovOlderRock(EngineModule):
         cls_output = cls.Meta.output
 
         vsh = cls_output['type'](id=cls_output['id'])
-        vsh.name = cls_output['id'] if name is None else name
         vsh.meta = log.meta
         vsh.log_family = cls_output['meta']['log_family']
         vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
@@ -167,7 +169,8 @@ class ShaleVolumeLarionovOlderRock(EngineModule):
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
         vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
-
+        vsh.name = cls_output['id'] if name is None else name
+        vsh.units = None
         return vsh
 
 
@@ -237,7 +240,6 @@ class ShaleVolumeLarionovTertiaryRock(EngineModule):
         cls_output = cls.Meta.output
 
         vsh = cls_output['type'](id=cls_output['id'])
-        vsh.name = cls_output['id'] if name is None else name
         vsh.meta = log.meta
         vsh.log_family = cls_output['meta']['log_family']
         vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
@@ -248,5 +250,6 @@ class ShaleVolumeLarionovTertiaryRock(EngineModule):
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
         vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
-
+        vsh.name = cls_output['id'] if name is None else name
+        vsh.units = None
         return vsh

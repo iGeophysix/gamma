@@ -35,9 +35,8 @@ class TestShaleVolume(unittest.TestCase):
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
         module = ShaleVolumeLinearMethod()
-        vsh_gr = module.run(gk, q5, q95)
+        vsh_gr = module.run(gk, q5, q95, "VSH_GR")
         vsh_gr.dataset_id = self.wd.id
-        vsh_gr.name = "VSH_GR"
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_linear")
         diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
@@ -49,9 +48,8 @@ class TestShaleVolume(unittest.TestCase):
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
         module = ShaleVolumeLarionovOlderRock()
-        vsh_gr = module.run(gk, q5, q95)
+        vsh_gr = module.run(gk, q5, q95, "VSH_GR")
         vsh_gr.dataset_id = self.wd.id
-        vsh_gr.name = "VSH_GR"
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarOlder")
         diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
@@ -62,10 +60,9 @@ class TestShaleVolume(unittest.TestCase):
         gk = BasicLog(self.wd.id, "GR")
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
-        module = ShaleVolumeLarionovTertiaryRock
-        vsh_gr = module.run(gk, q5, q95)
+        module = ShaleVolumeLarionovTertiaryRock()
+        vsh_gr = module.run(gk, q5, q95, "VSH_GR")
         vsh_gr.dataset_id = self.wd.id
-        vsh_gr.name = "VSH_GR"
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarTert")
         diff = abs(vsh_gr.values[:, 1] - true_vsh[:, 1])
