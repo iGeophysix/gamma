@@ -90,7 +90,7 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
 
         for log_name in logs:
             log = BasicLog(d.id, log_name)
-            log.meta = log.meta | {'basic_statistics': get_basic_curve_statistics(log.values)}
+            log.meta |=  {'basic_statistics': get_basic_curve_statistics(log.values)}
             log.save()
 
 
@@ -114,7 +114,7 @@ def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: li
         for log_name in logs:
             log = BasicLog(d.id, log_name)
             log_resolution = get_log_resolution(log.values, log.meta)
-            log.meta = log.meta | {'log_resolution': {'value': log_resolution}}
+            log.meta |=  {'log_resolution': {'value': log_resolution}}
             log.save()
 
 

@@ -2,7 +2,7 @@ import numpy as np
 
 from components.domain.Log import BasicLog
 from components.petrophysics.curve_operations import get_basic_curve_statistics
-from components.petrophysics.engine_module import EngineModule
+from components.petrophysics.engine_module import EngineNode
 
 
 def _linear_scale(arr, lower_limit, upper_limit):
@@ -13,7 +13,7 @@ def _linear_scale(arr, lower_limit, upper_limit):
     return result
 
 
-class ShaleVolumeLinearMethod(EngineModule):
+class ShaleVolumeLinearMethod(EngineNode):
     """
     Shale volume calculations
     """
@@ -81,19 +81,19 @@ class ShaleVolumeLinearMethod(EngineModule):
         vsh = cls_output['type'](id=cls_output['id'])
         vsh.meta = log.meta
         vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
+        vsh.meta |= {"method": cls_output['meta']['method']}
 
         values = log.values
         values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
+        vsh.meta |= {'basic_statistics': basic_stats}
         vsh.name = cls_output['id'] if name is None else name
         vsh.units = None
         return vsh
 
 
-class ShaleVolumeLarionovOlderRock(EngineModule):
+class ShaleVolumeLarionovOlderRock(EngineNode):
     """
     Shale volume calculations using Larionov Older Rock
     """
@@ -161,20 +161,20 @@ class ShaleVolumeLarionovOlderRock(EngineModule):
         vsh = cls_output['type'](id=cls_output['id'])
         vsh.meta = log.meta
         vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
+        vsh.meta |= {"method": cls_output['meta']['method']}
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.33 * (2 ** (2 * gr_index) - 1), 0, 1)
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
+        vsh.meta |= {'basic_statistics': basic_stats}
         vsh.name = cls_output['id'] if name is None else name
         vsh.units = None
         return vsh
 
 
-class ShaleVolumeLarionovTertiaryRock(EngineModule):
+class ShaleVolumeLarionovTertiaryRock(EngineNode):
     """
     Shale volume calculations using Larionov Tertiary Rock
     """
@@ -242,14 +242,14 @@ class ShaleVolumeLarionovTertiaryRock(EngineModule):
         vsh = cls_output['type'](id=cls_output['id'])
         vsh.meta = log.meta
         vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta = vsh.meta | {"method": cls_output['meta']['method']}
+        vsh.meta |= {"method": cls_output['meta']['method']}
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.083 * (2 ** (3.7 * gr_index) - 1), 0, 1)
         vsh.values = values
         basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta = vsh.meta | {'basic_statistics': basic_stats}
+        vsh.meta |= {'basic_statistics': basic_stats}
         vsh.name = cls_output['id'] if name is None else name
         vsh.units = None
         return vsh

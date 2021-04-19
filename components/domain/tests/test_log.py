@@ -186,7 +186,7 @@ class TestLog(unittest.TestCase):
 
         for log_name, new_meta in extra_meta.items():
             log = BasicLog(dataset.id, log_name)
-            log.meta = log.meta | new_meta
+            log.meta |=  new_meta
 
             log.save()
 
@@ -232,7 +232,7 @@ class TestLog(unittest.TestCase):
             log.save()
 
         log = BasicLog(dataset.id, "GR")
-        log.meta = log.meta | {"max_depth": 100}
+        log.meta |=  {"max_depth": 100}
         log.save()
 
         self.assertEqual(log.meta['max_depth'], 100)

@@ -2,9 +2,9 @@ from abc import ABC
 from typing import Any
 
 
-class EngineModule(ABC):
+class EngineNode(ABC):
     """
-    This class describes general object for all computational modules
+    This class describes general object for all computational nodes
     """
 
     class Meta:
