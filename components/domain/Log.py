@@ -62,7 +62,7 @@ class BasicLog:
         Returns log name from meta
         :return:
         """
-        if not "name" in self.meta:
+        if "name" not in self.meta:
             self.name = self._id
         return self.meta['name']
 
@@ -148,10 +148,10 @@ class BasicLog:
     def update_meta(self, meta: dict) -> None:
         """
         Update log meta information
-        :return: dictionary with updated log meta information
+        :param meta: update for log meta information
+        :return: None
         """
         self.meta = self.meta | meta
-        return self._meta
 
     @property
     def history(self) -> list[tuple]:
