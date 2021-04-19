@@ -4,6 +4,10 @@ import numpy as np
 UNIT_SYSTEM_PATH = 'components/importexport/rules/UnitsSystem.json'
 
 
+class UnitConversionError(Exception):
+    pass
+
+
 class UnitsSystem:
     '''
     Functionality for data units conversion.
@@ -78,16 +82,10 @@ class UnitsSystem:
         Perform unit conversion of the data array or single value.
         Array mode is preferable for batch conversion.
         '''
-        std_array = isinstance(data, (list, tuple))
-        np_array = isinstance(data, np.ndarray)
-        array_mode = std_array or np_array
-        if std_array:
+        if isinstance(data, (list, tuple)):
             data = np.array(data)
         if not self.convertable_units(unit_from, unit_to):
-            if array_mode:
-                return np.full_like(data, np.nan)
-            else:
-                return np.nan
+            raise UnitConversionError(f'Impossible to convert {unit_from} to {unit_to}')
         else:
             k1, b1 = self._unit_kb(unit_from)
             k2, b2 = self._unit_kb(unit_to)

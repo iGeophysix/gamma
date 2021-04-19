@@ -1,5 +1,5 @@
 import unittest
-from components.importexport.UnitsSystem import UnitsSystem
+from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
 import numpy as np
 
 
@@ -31,6 +31,10 @@ class TestUnitSystem(unittest.TestCase):
         self.assertTrue(self.units.convertable_units('m', 'in'))
         self.assertFalse(self.units.convertable_units('g/cm3', 'Pa'))
 
+    def test_impossible_conversion(self):
+        with self.assertRaises(UnitConversionError):
+            self.units.convert(1, 'kg', 'cm')
+
     def test_conversion(self):
         temp_degC_list = [-5, np.nan, 34.67, 58]
         temp_degC_np = np.array(temp_degC_list)
@@ -40,10 +44,7 @@ class TestUnitSystem(unittest.TestCase):
         self.assertTrue(np.allclose(answ, temp_degF_np, equal_nan=True))
         answ = self.units.convert(temp_degC_np, 'degC', 'degF')
         self.assertTrue(np.allclose(answ, temp_degF_np, equal_nan=True))
-        answ = self.units.convert(temp_degC_np, 'degC', 'mm')
-        self.assertTrue(np.isnan(answ).all())
         # single value
         self.assertAlmostEqual(self.units.convert(float(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
         self.assertAlmostEqual(self.units.convert(int(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
-        self.assertTrue(np.isnan(self.units.convert(temp_degC_np[0], 'degC', 'um')))
         self.assertTrue(np.isnan(self.units.convert(np.nan, 'm', 'mm')))
