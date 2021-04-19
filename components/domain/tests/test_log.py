@@ -236,3 +236,18 @@ class TestLog(unittest.TestCase):
         log.save()
 
         self.assertEqual(log.meta['max_depth'], 100)
+
+    def test_unit_conversion_works_correctly(self):
+        well = Well('unit_conversion')
+        dataset = WellDataset(well, "test")
+        welllog = BasicLog(dataset.id, "log")
+        welllog.name = "log"
+        welllog.units = "cm"
+        welllog.values = np.array([(10, 10), (20, 20)])
+
+        vals_in_m = welllog.convert_units('km')
+        self.assertListEqual([10 ** -4, 2 * 10 ** -4], list(vals_in_m[:, 1]))
+
+        welllog.units = "kg"
+        vals_in_m = welllog.convert_units('g')
+        self.assertListEqual([10000, 20000], list(vals_in_m[:, 1]))

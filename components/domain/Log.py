@@ -4,6 +4,7 @@ from datetime import datetime
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage as Storage
+from components.importexport.UnitsSystem import UnitsSystem
 
 
 class BasicLog:
@@ -62,7 +63,7 @@ class BasicLog:
         Returns log name from meta
         :return:
         """
-        if not "name" in self.meta:
+        if "name" not in self.meta:
             self.name = self._id
         return self.meta['name']
 
@@ -72,8 +73,7 @@ class BasicLog:
         Set log name in meta
         :return:
         """
-
-        self.meta = self.meta | {"name": name}
+        self.update_meta({"name": name})
 
     @property
     def dataset_id(self) -> str:
@@ -113,6 +113,36 @@ class BasicLog:
             self._fetch()
 
     @property
+    def units(self) -> str:
+        """
+        Get current log units
+        :return: units as string
+        """
+        return self.meta.get('units', None)
+
+    @units.setter
+    def units(self, units: str) -> None:
+        """
+        Set units in current log. This won't do any conversions
+        :param units: new units
+        """
+        units_system = UnitsSystem()
+        if units_system.known_unit(units):
+            self.meta = self.meta | {'units': units}
+
+    def convert_units(self, units_to: str) -> np.array:
+        """
+        Function that returns the log in another units
+        :param units_to: units to convert to. Must be known in the UnitsSystem dictionary
+        :return: converted values as np.array
+        """
+        converter = UnitsSystem()
+        data = self.values[:, 1]
+        units_from = self.units
+        converted_values = np.vstack([self.values[:, 0], converter.convert(data, units_from, units_to)]).T
+        return converted_values
+
+    @property
     def non_null_values(self) -> np.array:
         """
         Get all non-empty log values
@@ -141,10 +171,19 @@ class BasicLog:
     def meta(self, meta: dict) -> None:
         """
         Set log meta information
+        :param meta: new meta as dictionary
         :return: None
         """
         self._meta = meta | {'__type': self._type}
         self._changes['meta'] = True
+
+    def update_meta(self, meta: dict) -> None:
+        """
+        Update log meta information
+        :param meta: update for log meta information
+        :return: None
+        """
+        self.meta = self.meta | meta
 
     @property
     def history(self) -> list[tuple]:
