@@ -117,12 +117,16 @@ class BasicLog:
     def units(self) -> str:
         """
         Get current log units
-        :return:
+        :return: units as string
         """
         return self.meta.get('units', None)
 
     @units.setter
-    def units(self, units: str):
+    def units(self, units: str) -> None:
+        """
+        Set units in current log. This won't do any conversions
+        :param units: new units
+        """
         units_system = UnitsSystem()
         if units_system.known_unit(units):
             self.meta = self.meta | {'units': units}
@@ -168,6 +172,7 @@ class BasicLog:
     def meta(self, meta: dict) -> None:
         """
         Set log meta information
+        :param meta: new meta as dictionary
         :return: None
         """
         self._meta = meta | {'__type': self._type}
