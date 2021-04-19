@@ -4,6 +4,7 @@ from datetime import datetime
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage as Storage
+from components.importexport.UnitsSystem import UnitsSystem
 
 
 class BasicLog:
@@ -111,6 +112,32 @@ class BasicLog:
         self._changes['values'] = True
         if self._values is None:
             self._fetch()
+
+    @property
+    def units(self) -> str:
+        """
+        Get current log units
+        :return:
+        """
+        return self.meta.get('units', None)
+
+    @units.setter
+    def units(self, units: str):
+        units_system = UnitsSystem()
+        if units_system.known_unit(units):
+            self.meta = self.meta | {'units': units}
+
+    def convert_units(self, units_to: str) -> np.array:
+        """
+        Function that returns the log in another units
+        :param units_to: units to convert to. Must be known in the UnitsSystem dictionary
+        :return: converted values as np.array
+        """
+        converter = UnitsSystem()
+        data = self.values[:, 1]
+        units_from = self.units
+        converted_values = np.vstack([self.values[:, 0], converter.convert(data, units_from, units_to)]).T
+        return converted_values
 
     @property
     def non_null_values(self) -> np.array:

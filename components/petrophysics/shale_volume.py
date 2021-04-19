@@ -12,7 +12,7 @@ def _linear_scale(arr, lower_limit, upper_limit):
     return result
 
 
-def linear_method(log, gr_matrix: float, gr_shale: float) -> BasicLog:
+def linear_method(log: BasicLog, gr_matrix: float, gr_shale: float) -> BasicLog:
     """
     Function to calculate Shale Volume (VSH) via linear method
     :param log: BasicLog
