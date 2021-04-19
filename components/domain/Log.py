@@ -214,7 +214,7 @@ class BasicLog:
 
     @log_family.setter
     def log_family(self, family):
-        self.meta['log_family'] = family
+        self.update_meta({'log_family': family})
 
     def _fetch(self):
         _s = Storage()
