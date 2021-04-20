@@ -127,8 +127,8 @@ class BasicLog:
         :param units: new units
         """
         units_system = UnitsSystem()
-        if units_system.known_unit(units):
-            self.meta = self.meta | {'units': units}
+        if units is None or units_system.known_unit(units):
+            self.meta |= {'units': units}
 
     def convert_units(self, units_to: str) -> np.array:
         """
@@ -183,7 +183,7 @@ class BasicLog:
         :param meta: update for log meta information
         :return: None
         """
-        self.meta = self.meta | meta
+        self.meta |= meta
 
     @property
     def history(self) -> list[tuple]:
@@ -214,7 +214,7 @@ class BasicLog:
 
     @log_family.setter
     def log_family(self, family):
-        self.meta['log_family'] = family
+        self.update_meta({'log_family': family})
 
     @property
     def tags(self):

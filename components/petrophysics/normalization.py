@@ -24,7 +24,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
     # define quantiles in each log
     for key, log in logs.items():
         non_null_values = log.values[~np.isnan(log.values[:, 1])]
-        log.meta = log.meta | {'quantiles': {q: np.quantile(non_null_values[:, 1], q / 100) for q in QUANTILES}}
+        log.meta |= {'quantiles': {q: np.quantile(non_null_values[:, 1], q / 100) for q in QUANTILES}}
 
     # get median quantiles' values
     median_quantiles = {q: np.median([log.meta['quantiles'][q] for log in logs.values()]) for q in QUANTILES}

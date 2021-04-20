@@ -63,7 +63,7 @@ def import_to_db(filename: str = None,
             continue
         this_log = BasicLog(dataset_id=well_dataset.id, id=log)
         this_log.values = np.array(tuple(zip(md_values, values)))
-        this_log.meta = this_log.meta | las_structure.logs_info()[log]
+        this_log.meta |= las_structure.logs_info()[log]
         this_log.save()
         this_log.history = f"Loaded from {las_structure.filename}"
         this_log.save()
