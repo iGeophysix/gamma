@@ -74,7 +74,7 @@ def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
 
         normalized_log = BasicLog(id=log.name)
         normalized_log.values = np.vstack((log.values[:, 0], new_values)).T
-        new.meta |= extra_meta
+        new_meta = log.meta | extra_meta
         del new_meta['quantiles']
         normalized_log.meta = new_meta
         results.update({key: normalized_log})

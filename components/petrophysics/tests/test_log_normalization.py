@@ -45,7 +45,7 @@ class TestLogNormalization(unittest.TestCase):
             wd = WellDataset(well, 'Normalized', new=True)
             log._dataset_id = wd.id
 
-            log.meta |=  {'basic_statistics': get_basic_curve_statistics(log.values)}
+            log.meta['basic_statistics'] = get_basic_curve_statistics(log.values)
             log.save()
             log.history = f"Normalized from {w_wd_log}"
             log.save()
