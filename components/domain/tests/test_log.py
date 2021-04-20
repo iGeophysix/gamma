@@ -251,3 +251,30 @@ class TestLog(unittest.TestCase):
         welllog.units = "kg"
         vals_in_m = welllog.convert_units('g')
         self.assertListEqual([10000, 20000], list(vals_in_m[:, 1]))
+
+    def test_adding_removing_tags(self):
+        well = Well('tags')
+        dataset = WellDataset(well, "test")
+        welllog = BasicLog(dataset.id, "log")
+        # no tags in the log - empty list
+        self.assertEqual(set(), welllog.tags)
+        self.assertEqual(set, type(welllog.tags))
+        # add one tag - and check it is there
+        welllog.append_tags("tag1")
+        self.assertCountEqual({"tag1"}, welllog.tags)
+        self.assertEqual(set, type(welllog.tags))
+        # do not add duplicated tag
+        welllog.append_tags("tag1")
+        self.assertCountEqual({"tag1"}, welllog.tags)
+        # add multiple new logs
+        welllog.append_tags("tag1", "tag2", "tag3")
+        self.assertCountEqual({"tag1", "tag2", "tag3"}, welllog.tags)
+        # delete one tag
+        welllog.delete_tags("tag1")
+        self.assertCountEqual({"tag2", "tag3"}, welllog.tags)
+        # check cannot delete missing tag
+        with self.assertRaises(KeyError):
+            welllog.delete_tags("tag1")
+        # check delete multiple tags
+        welllog.delete_tags("tag2", "tag3")
+        self.assertEqual(set(), welllog.tags)
