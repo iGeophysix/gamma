@@ -2,7 +2,7 @@ import numpy as np
 
 from components.domain.Log import BasicLog
 from components.petrophysics.curve_operations import get_basic_curve_statistics
-from components.petrophysics.engine_module import EngineNode
+from components.petrophysics.engine_node import EngineNode
 
 
 def _linear_scale(arr, lower_limit, upper_limit):
