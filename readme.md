@@ -10,4 +10,4 @@
     source venv/bin/activate
     pip install -r requirements.txt
     ```
-5. run tests in PyCharm :-)
+5. run tests in PyCharm or use the script `./run_tests.py`
