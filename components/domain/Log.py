@@ -1,10 +1,15 @@
 import copy
+import hashlib
+import json
 from datetime import datetime
 
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
+
+
+
 
 
 class BasicLog:
@@ -243,6 +248,153 @@ class BasicLog:
         for tag in tags:
             existing_tags.remove(tag)
         self.update_meta({"tags": set(existing_tags)})
+
+    @staticmethod
+    def md5(text):
+        return str(hashlib.md5(text).hexdigest())
+
+    @property
+    def full_hash(self):
+        """
+        Get hash value of the log data and meta
+        :return: str
+        """
+        if self.meta.get("full_hash", False):
+            self.update_hashes()
+        return self.meta['full_hash']
+
+    @property
+    def data_hash(self):
+        """
+        Get hash value of the log data
+        :return: str
+        """
+        if self.meta.get("data_hash", False):
+            self.update_hashes()
+        return self.meta['data_hash']
+
+    @property
+    def meta_hash(self):
+        """
+        Get hash value of the log meta
+        :return: str
+        """
+        if self.meta.get("meta_hash", False):
+            self.update_hashes()
+        return self.meta['meta_hash']
+
+    def update_hashes(self):
+        """
+        Update hash values for data and meta info of the log
+        :return:
+        """
+        data_as_string = self.values.tobytes()
+        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
+        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
+        data_hash = self.md5(data_as_string)
+        meta_hash = self.md5(json.dumps(meta).encode())
+        self.update_meta({"data_hash": data_hash,
+                          "meta_hash": meta_hash,
+                          "full_hash": data_hash + meta_hash
+                          })
+
+    @staticmethod
+    def md5(text):
+        return str(hashlib.md5(text).hexdigest())
+
+    @property
+    def full_hash(self):
+        """
+        Get hash value of the log data and meta
+        :return: str
+        """
+        if self.meta.get("full_hash", False):
+            self.update_hashes()
+        return self.meta['full_hash']
+
+    @property
+    def data_hash(self):
+        """
+        Get hash value of the log data
+        :return: str
+        """
+        if self.meta.get("data_hash", False):
+            self.update_hashes()
+        return self.meta['data_hash']
+
+    @property
+    def meta_hash(self):
+        """
+        Get hash value of the log meta
+        :return: str
+        """
+        if self.meta.get("meta_hash", False):
+            self.update_hashes()
+        return self.meta['meta_hash']
+
+    def update_hashes(self):
+        """
+        Update hash values for data and meta info of the log
+        :return:
+        """
+        data_as_string = self.values.tobytes()
+        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
+        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
+        data_hash = self.md5(data_as_string)
+        meta_hash = self.md5(json.dumps(meta).encode())
+        self.update_meta({"data_hash": data_hash,
+                          "meta_hash": meta_hash,
+                          "full_hash": data_hash + meta_hash
+                          })
+
+    @staticmethod
+    def md5(text):
+        return str(hashlib.md5(text).hexdigest())
+
+    @property
+    def full_hash(self):
+        """
+        Get hash value of the log data and meta
+        :return: str
+        """
+        if self.meta.get("full_hash", False):
+            self.update_hashes()
+        return self.meta['full_hash']
+
+    @property
+    def data_hash(self):
+        """
+        Get hash value of the log data
+        :return: str
+        """
+        if self.meta.get("data_hash", False):
+            self.update_hashes()
+        return self.meta['data_hash']
+
+    @property
+    def meta_hash(self):
+        """
+        Get hash value of the log meta
+        :return: str
+        """
+        if self.meta.get("meta_hash", False):
+            self.update_hashes()
+        return self.meta['meta_hash']
+
+    def update_hashes(self):
+        """
+        Update hash values for data and meta info of the log
+        :return:
+        """
+        data_as_string = self.values.tobytes()
+        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
+        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
+        data_hash = self.md5(data_as_string)
+        meta_hash = self.md5(json.dumps(meta).encode())
+        self.update_meta({"data_hash": data_hash,
+                          "meta_hash": meta_hash,
+                          "full_hash": data_hash + meta_hash
+                          })
 
     def _fetch(self):
         _s = Storage()

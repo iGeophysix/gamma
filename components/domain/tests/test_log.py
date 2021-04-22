@@ -278,3 +278,27 @@ class TestLog(unittest.TestCase):
         # check delete multiple tags
         welllog.delete_tags("tag2", "tag3")
         self.assertEqual(set(), welllog.tags)
+
+    def test_hashing_works_correctly(self):
+        f = 'small_file.las'
+        wellname = f[:-4]
+        well = Well(wellname, new=True)
+        dataset = WellDataset(well, "one", new=True)
+
+        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+                         well=well,
+                         well_dataset=dataset)
+
+        log = BasicLog(dataset.id, "GR")
+        log.update_hashes()
+        log.save()
+
+        true_values = {
+            "data_hash": "43b6e247100f1688023b4e915ad852d0",
+            "meta_hash": "0c16899f5e0772549cadd18ee472368a",
+            "full_hash": "43b6e247100f1688023b4e915ad852d00c16899f5e0772549cadd18ee472368a"
+        }
+        test_log = BasicLog(dataset.id, "GR")
+        self.assertEqual(true_values['data_hash'], test_log.data_hash)
+        self.assertEqual(true_values['meta_hash'], test_log.meta_hash)
+        self.assertEqual(true_values['full_hash'], test_log.full_hash)
