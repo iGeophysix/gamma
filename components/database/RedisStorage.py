@@ -57,6 +57,14 @@ class RedisStorage:
         wellid = self._get_well_id(wellname)
         self.conn.hset('wells', wellid, json.dumps({'name': wellname, 'datasets': [], 'meta': {}}))
 
+    def check_well_exists(self, wellname: str) -> bool:
+        """
+        Simple function to check if the well exists in the db
+        :param wellname:
+        :return:
+        """
+        return self.conn.hexists('wells', self._get_well_id(wellname))
+
     def list_wells(self) -> dict:
         """
         Lists all well meta-information in the storage
@@ -114,10 +122,18 @@ class RedisStorage:
         """
         Returns list of dataset names in the well
         :param wellname: well name as string
-        :return: list of datasat namesß
+        :return: list of datasat names
         """
         dataset_ids = self.get_well_datasets(wellname)
         return [self.get_dataset_name(d) for d in dataset_ids]
+
+    def get_well_name_by_id(self, well_id: str) -> str:
+        """
+        Returns well meta info by well name
+        :param well_id: well id as string
+        :return: dict with all info in it
+        """
+        return json.loads(self.conn.hget('wells', well_id))['name']
 
     # DATASETS
     @staticmethod
@@ -139,7 +155,7 @@ class RedisStorage:
         """
         well_id = self._get_well_id(wellname)
         dataset_id = self._get_dataset_id(wellname, datasetname)
-        dataset_info = {'name': datasetname, 'meta': {}}
+        dataset_info = {'name': datasetname, 'well_name': wellname, 'meta': {}}
         # append dataset to well
         with self.conn.pipeline() as pipe:
             while True:
@@ -179,7 +195,7 @@ class RedisStorage:
     def get_dataset_logs(self, dataset_id: str) -> list[str]:
         """
         Get list of logs in the dataset
-        :param dataset_id: dataset id as string
+        :param dataset_id: dataset log_id as string
         :return: list of logs available in the dataset
         """
         return [l.decode() for l in self.conn.hkeys(f'{dataset_id}_meta')]
@@ -357,17 +373,14 @@ class RedisStorage:
     def update_logs(self, dataset_id: str, data=None, meta=None) -> None:
         """
         Sets log data and meta information.
-        It will add empty history key to log meta if __history key is not found in meta of the log
+        It will add empty history key to log meta if history key is not found in meta of the log
         :param dataset_id: dataset id as string
         :param data: data as dict (e.g. {"GR": np.array((10.0,1), (20.0:2),..), "PS":...}
         :param meta: meta info as dict (e.g. {"GR": {"units":"gAPI", "code":"tt"}, "PS":...}
         """
 
         if meta:
-            for log in meta.keys():
-                meta[log]['__history'] = meta[log].get('__history', [])
-            self.conn.hset(f"{dataset_id}_meta",
-                           mapping={k: json.dumps(v) for k, v in meta.items()})
+            self.conn.hset(f"{dataset_id}_meta", mapping={k: json.dumps(v) for k, v in meta.items()})
         if data:
             # convert np.array to bytes
             mapping = {}
@@ -398,7 +411,7 @@ class RedisStorage:
         :return: list of events
         """
         log_meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
-        return log_meta.get('__history', [])
+        return log_meta.get('history', [])
 
     def append_log_history(self, dataset_id: str, log: str, event: Any) -> None:
         """
@@ -411,9 +424,9 @@ class RedisStorage:
         with self.conn.lock(f"{dataset_id}_meta:{log}", blocking_timeout=BLOCKING_TIMEOUT) as lock:
             try:
                 meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
-                if '__history' not in meta.keys():
-                    meta['__history'] = []
-                meta['__history'].append(event)
+                if 'history' not in meta.keys():
+                    meta['history'] = []
+                meta['history'].append(event)
                 self.conn.hset(f"{dataset_id}_meta", log, json.dumps(meta))
 
             except redis.exceptions.LockError:

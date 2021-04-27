@@ -27,7 +27,7 @@ class TestShaleVolume(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
         gk = BasicLog(self.wd.id, "GR")
-        gk.log_family = 'Gamma Ray'
+        gk.meta.family = 'Gamma Ray'
         gk.save()
 
     def test_shale_volume_linear_works_correctly(self):
@@ -50,6 +50,7 @@ class TestShaleVolume(unittest.TestCase):
         module = ShaleVolumeLarionovOlderRock()
         vsh_gr = module.run(gk, q5, q95, "VSH_GR")
         vsh_gr.dataset_id = self.wd.id
+        vsh_gr.save()
 
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarOlder")
         diff = vsh_gr.values[:, 1] - true_vsh[:, 1]
@@ -86,6 +87,6 @@ class TestShaleVolume(unittest.TestCase):
             module.run(gk.values, q5, q95)
 
         # log family is incorrect
-        gk.log_family = 'Compressional Slowness'
+        gk.meta.family = 'Compressional Slowness'
         with self.assertRaises(AssertionError):
             module.run(gk, q5, q95)

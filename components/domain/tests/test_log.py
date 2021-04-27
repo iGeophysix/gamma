@@ -28,24 +28,13 @@ class TestLog(unittest.TestCase):
         data = {"GR": np.array(((10, 1), (20, 2))),
                 "PS": np.array(((10, 3), (20, 4)))}
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
-                "PS": {"units": "uV", "code": "", "description": "PS"}}
-        true_meta = {"GR": {'__history': [],
-                            '__type': 'BasicLog',
-                            'code': '',
-                            'description': 'GR',
-                            'units': 'gAPI'},
-                     "PS": {'__history': [],
-                            '__type': 'BasicLog',
-                            'code': '',
-                            'description': 'PS',
-                            'units': 'uV'},
-                     }
-        log1 = BasicLog(self.dataset.id, id="GR")
+                "PS": {"units": "mV", "code": "", "description": "PS"}}
+        log1 = BasicLog(self.dataset.id, log_id="GR")
         log1.values = data["GR"]
         log1.meta = meta["GR"]
         log1.save()
 
-        log2 = BasicLog(self.dataset.id, id="PS")
+        log2 = BasicLog(self.dataset.id, log_id="PS")
         log2.values = data["PS"]
         log2.meta = meta["PS"]
         log2.save()
@@ -53,20 +42,31 @@ class TestLog(unittest.TestCase):
         for log_name in data.keys():
             log = BasicLog(self.dataset.id, log_name)
             self.assertTrue(np.isclose(log.values, data[log_name], equal_nan=True).all())
-            self.assertEqual(true_meta[log_name], log.meta)
+
+    def test_log_meta_parsed_to_properties(self):
+        meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"}, }
+
+        log1 = BasicLog(self.dataset.id, log_id="GR")
+        log1.meta = meta["GR"]
+        log1.meta.one_more_field = "test_value"
+        log1.save()
+
+        self.assertEqual('GR', log1.meta.name)
+        self.assertEqual([], log1.meta.tags)
+        self.assertEqual('test_value', log1.meta.one_more_field)
 
     def test_name_works_correctly(self):
         log_id = 'GRTRTT'
-        gr = BasicLog(id=log_id)
+        gr = BasicLog(log_id=log_id)
         self.assertEqual(log_id, gr.name)
-        gr.name = 'GR'
+        gr.meta.name = 'GR'
         self.assertEqual('GR', gr.name)
         self.assertFalse(gr.exists())
-        gr.dataset_id = self.dataset.id
+        gr.meta.dataset_id = self.dataset.id
         gr.save()
         self.assertTrue(gr.exists())
 
-        gr1 = BasicLog(dataset_id=self.dataset.id, id=log_id)
+        gr1 = BasicLog(dataset_id=self.dataset.id, log_id=log_id)
         self.assertTrue(gr1.exists())
         self.assertEqual("GR", gr1.name)
 
@@ -145,7 +145,7 @@ class TestLog(unittest.TestCase):
             return np.array([(depth, dummy_data(dtype)) for depth in depths])
 
         for new_log, log_type in new_logs.items():
-            log = BasicLog(dataset_id=dataset.id, id=new_log)
+            log = BasicLog(dataset_id=dataset.id, log_id=new_log)
             log.values = dummy_log(existing_depths, log_type)
             log.meta = new_logs_meta[new_log]
             log.save()
@@ -168,43 +168,7 @@ class TestLog(unittest.TestCase):
         self.assertNotIn("DEPT", log_list)
         self.assertIn("GR", log_list)
 
-    def test_logs_list_specify_meta(self):
-        f = 'small_file.las'
-        wellname = f[:-4]
-        well = Well(wellname, new=True)
-        dataset = WellDataset(well, "one", new=True)
 
-        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
-                         well=well,
-                         well_dataset=dataset)
-
-        extra_meta = {"GR": {"mean": 5},
-                      "DTS": {"mean": 1},
-                      "RDEP": {"mean": 10},
-                      "NPHI": {"mean": 100},
-                      }
-
-        for log_name, new_meta in extra_meta.items():
-            log = BasicLog(dataset.id, log_name)
-            log.meta |=  new_meta
-
-            log.save()
-
-        log_list = dataset.get_log_list(description='RSHA')
-        self.assertNotIn("GR", log_list)
-        self.assertIn("RSHA", log_list)
-
-        log_list = dataset.get_log_list(mean__lt=10)
-        self.assertListEqual(['DTS', 'GR'], sorted(log_list))
-
-        log_list = dataset.get_log_list(mean__gt=10)
-        self.assertListEqual(['NPHI', ], log_list)
-
-        log_list = dataset.get_log_list(mean__gt=3, mean__lt=70)
-        self.assertListEqual(['GR', 'RDEP'], sorted(log_list))
-
-        log_list = dataset.get_log_list(mean__gt=3, mean__lt=70, description='GR')
-        self.assertListEqual(['GR', ], log_list)
 
     def test_log_history(self):
         f = 'small_file.las'
@@ -217,14 +181,14 @@ class TestLog(unittest.TestCase):
                          well_dataset=dataset)
 
         log = BasicLog(dataset.id, "GR")
-        self.assertEqual(f'Loaded from {f}', log.history[0][1])
+        self.assertEqual(f'Loaded from {f}', log.meta.history[0][1])
 
     def test_append_log_meta(self):
         well = Well('well2', new=True)
         dataset = WellDataset(well, "one", new=True)
 
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
-                "PS": {"units": "uV", "code": "", "description": "PS"}}
+                "PS": {"units": "mV", "code": "", "description": "PS"}}
 
         for log_name, new_meta in meta.items():
             log = BasicLog(dataset.id, log_name)
@@ -232,10 +196,10 @@ class TestLog(unittest.TestCase):
             log.save()
 
         log = BasicLog(dataset.id, "GR")
-        log.meta |=  {"max_depth": 100}
+        log.meta.max_depth = 100
         log.save()
 
-        self.assertEqual(log.meta['max_depth'], 100)
+        self.assertEqual(log.meta.max_depth, 100)
 
     def test_unit_conversion_works_correctly(self):
         well = Well('unit_conversion')
@@ -257,27 +221,30 @@ class TestLog(unittest.TestCase):
         dataset = WellDataset(well, "test")
         welllog = BasicLog(dataset.id, "log")
         # no tags in the log - empty list
-        self.assertEqual(set(), welllog.tags)
-        self.assertEqual(set, type(welllog.tags))
+        self.assertEqual(list(), welllog.meta.tags)
+        self.assertEqual(list, type(welllog.meta.tags))
         # add one tag - and check it is there
-        welllog.append_tags("tag1")
-        self.assertCountEqual({"tag1"}, welllog.tags)
-        self.assertEqual(set, type(welllog.tags))
+        welllog.meta.add_tags("tag1", )
+        welllog.save()
+        self.assertCountEqual({"tag1"}, welllog.meta.tags)
+        self.assertEqual(list, type(welllog.meta.tags))
         # do not add duplicated tag
-        welllog.append_tags("tag1")
-        self.assertCountEqual({"tag1"}, welllog.tags)
+        welllog.meta.add_tags("tag1")
+        self.assertCountEqual(["tag1"], welllog.meta.tags)
         # add multiple new logs
-        welllog.append_tags("tag1", "tag2", "tag3")
-        self.assertCountEqual({"tag1", "tag2", "tag3"}, welllog.tags)
+        welllog.meta.add_tags("tag1", "tag2", "tag3")
+        self.assertCountEqual(["tag1", "tag2", "tag3"], welllog.meta.tags)
         # delete one tag
-        welllog.delete_tags("tag1")
-        self.assertCountEqual({"tag2", "tag3"}, welllog.tags)
+        welllog.meta.delete_tags("tag1")
+        welllog.save()
+        self.assertCountEqual(["tag2", "tag3"], welllog.meta.tags)
         # check cannot delete missing tag
-        with self.assertRaises(KeyError):
-            welllog.delete_tags("tag1")
+        with self.assertRaises(ValueError):
+            welllog.meta.delete_tags("tag1")
         # check delete multiple tags
-        welllog.delete_tags("tag2", "tag3")
-        self.assertEqual(set(), welllog.tags)
+        welllog.meta.delete_tags("tag2", "tag3")
+        welllog.save()
+        self.assertEqual([], welllog.meta.tags)
 
     def test_hashing_works_correctly(self):
         f = 'small_file.las'
@@ -295,8 +262,8 @@ class TestLog(unittest.TestCase):
 
         true_values = {
             "data_hash": "43b6e247100f1688023b4e915ad852d0",
-            "meta_hash": "0c16899f5e0772549cadd18ee472368a",
-            "full_hash": "43b6e247100f1688023b4e915ad852d00c16899f5e0772549cadd18ee472368a"
+            "meta_hash": "b15d75d5ee8929db9e02d09325fdad41",
+            "full_hash": "43b6e247100f1688023b4e915ad852d0b15d75d5ee8929db9e02d09325fdad41"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

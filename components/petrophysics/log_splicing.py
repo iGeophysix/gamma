@@ -2,11 +2,13 @@ import numpy as np
 import pandas as pd
 
 from components.domain.Log import BasicLog
+from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine_node import EngineNode
 from components.petrophysics.curve_operations import get_basic_curve_statistics
 
-LOG_FAMILY_PRIORITY = [
+family_PRIORITY = [
     'Gamma Ray',
     'Bulk Density',
     'Neutron Porosity',
@@ -36,9 +38,9 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     results_data = {}
     results_meta = {}
 
-    for log_family in LOG_FAMILY_PRIORITY:
+    for family in family_PRIORITY:
         # select log_names of defined family
-        logs_in_family = [l for l in logs.values() if l.meta['log_family'] == log_family]
+        logs_in_family = [l for l in logs.values() if l.meta['family'] == family]
         # if no log_names in of this family - skip
         if not logs_in_family:
             continue
@@ -47,9 +49,9 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         # define meta information
         meta = get_basic_curve_statistics(spliced)
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
-        meta['log_family'] = log_family
-        results_data.update({log_family: spliced}) # Log name will be defined here
-        results_meta.update({log_family: meta}) # log name will be defined here
+        meta['family'] = family
+        results_data.update({family: spliced})  # Log name will be defined here
+        results_meta.update({family: meta})  # log name will be defined here
 
     return results_data, results_meta
 
@@ -81,3 +83,27 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     result = df[logs_order].bfill(axis=1).iloc[:, 0]
 
     return np.vstack((new_md, result)).T
+
+
+class SpliceLogsNode(EngineNode):
+    """
+    Runs log splicing in all wells in the project
+    """
+
+    def run(self, output_dataset_name: str = "LQC"):
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            results_data, results_meta = splice_logs(well)
+
+            wd = WellDataset(well, output_dataset_name)
+            if not wd.exists:
+                wd = WellDataset(well, output_dataset_name, new=True)
+
+            for values, meta in zip(results_data.items(), results_meta.items()):
+                log = BasicLog(wd.id, values[0])
+                log.values = values[1]
+                log.meta = meta[1]
+                log.meta.add_tags('spliced')
+                log.save()

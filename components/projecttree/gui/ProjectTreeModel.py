@@ -24,7 +24,7 @@ class ProjectTreeModel(QAbstractItemModel):
         self._loadWells()
 
     def _loadWells(self):
-        self.project = Project("Default Project")
+        self.project = Project()
         wells = self.project.list_wells()
         self.entries = [WellEntry(model=self,parent=None,well_name=well_name, well_info=well_info) for (well_name, well_info) in wells.items()]
                         # WellManagerEntry(model = self),

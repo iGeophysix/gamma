@@ -5,3 +5,4 @@ chardet==4.0.0
 PySide2==5.15.2
 scipy==1.6.1
 openpyxl==3.0.7
+scikit-learn

@@ -2,7 +2,13 @@ import warnings
 
 import numpy as np
 from scipy import signal
-from scipy.stats.mstats import gmean
+
+from components.domain.Log import BasicLog
+from components.domain.Project import Project
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.engine_node import EngineNode
+
 
 def geo_mean(iterable):
     with warnings.catch_warnings():
@@ -82,8 +88,8 @@ def get_log_resolution(log_data: np.array, log_meta: dict, window: float = 20) -
     :param window : float Window length in log depth reference. Must be smaller than log_data->depth_span
     :return log_resolution : float number describing resolution of the log
     """
-    step = log_meta['basic_statistics']['avg_step']
-    if not log_meta['basic_statistics']['const_step']:
+    step = log_meta.basic_statistics['avg_step']
+    if not log_meta.basic_statistics['const_step']:
         log_data = interpolate_log_by_depth(log_data, step)
 
     window_in_samples = np.round(window / step)
@@ -97,3 +103,38 @@ def get_log_resolution(log_data: np.array, log_meta: dict, window: float = 20) -
     crop = int(window_in_samples / 2)
     log_resolution = np.nanmean(np.abs(log_data[crop:-crop, 1] - smoothed[crop:-crop]))
     return log_resolution
+
+
+class LogResolutionNode(EngineNode):
+    """
+    Engine node that calculates log resolution
+    """
+
+    def run(self):
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                for log_id in dataset.log_list:
+                    log = BasicLog(dataset.id, log_id)
+                    log.meta.log_resolution = {'value': get_log_resolution(log.values, log.meta)}
+                    log.save()
+
+class BasicStatisticsNode(EngineNode):
+    """
+    Engine node that calculates log resolution
+    """
+
+    def run(self):
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                for log_id in dataset.log_list:
+                    log = BasicLog(dataset.id, log_id)
+                    log.meta.basic_statistics = get_basic_curve_statistics(log.values)
+                    log.save()

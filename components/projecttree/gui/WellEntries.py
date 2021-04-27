@@ -27,7 +27,7 @@ gamma_logger = logging.getLogger('gamma_logger')
 
         # TreeEntry.__init__(self, model)
 
-        # self.project = Project("Default Project")
+        # self.project = Project()
 
         # self._loadWells()
 

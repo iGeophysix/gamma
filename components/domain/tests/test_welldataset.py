@@ -176,6 +176,7 @@ class TestWellDatasetRedis(unittest.TestCase):
         self.assertNotIn("BOBOB", log_list)
         self.assertIn("GR", log_list)
 
+
     def test_logs_list_specify_meta(self):
         f = 'small_file.las'
         wellname = f[:-4]
@@ -191,7 +192,11 @@ class TestWellDatasetRedis(unittest.TestCase):
                       "RDEP": {"mean": 10},
                       "NPHI": {"mean": 100},
                       }
-        dataset.append_log_meta(extra_meta)
+
+        for log_name, new_meta in extra_meta.items():
+            log = BasicLog(dataset.id, log_name)
+            log.meta.update(new_meta)
+            log.save()
 
         log_list = dataset.get_log_list(description='RSHA')
         self.assertNotIn("GR", log_list)
@@ -208,16 +213,3 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         log_list = dataset.get_log_list(mean__gt=3, mean__lt=70, description='GR')
         self.assertListEqual(['GR', ], log_list)
-
-    def test_log_history(self):
-        f = 'small_file.las'
-        wellname = "log_history_test"
-        well = Well(wellname, new=True)
-        dataset = WellDataset(well, "one", new=True)
-
-        las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
-                         well=well,
-                         well_dataset=dataset)
-
-        log = BasicLog(dataset.id, "GR")
-        self.assertEqual(f'Loaded from {f}', log.history[0][1])

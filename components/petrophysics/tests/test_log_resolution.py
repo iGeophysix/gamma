@@ -4,8 +4,10 @@ import unittest
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.petrophysics.curve_operations import LogResolutionNode
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
@@ -29,8 +31,8 @@ class TestLogResolution(unittest.TestCase):
         # define log resolution
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
-        meta = wd.get_log_meta(['GK', ])['GK']
-        resolution = meta['log_resolution']['value']
+        l = BasicLog(wd.id, "GK")
+        resolution = l.meta['log_resolution']['value']
 
         self.assertAlmostEqual(0.5135, resolution, delta=0.001)
 
@@ -45,7 +47,30 @@ class TestLogResolution(unittest.TestCase):
         # define log resolution
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
-        meta = wd.get_log_meta(['AZIM', ])['AZIM']
-        resolution = meta['log_resolution']['value']
+        l = BasicLog(wd.id, 'AZIM')
+        resolution = l.meta.log_resolution['value']
 
         self.assertTrue(np.isnan(resolution))
+
+
+class TestLogResolutionNode(unittest.TestCase):
+    def setUp(self) -> None:
+        self._s = RedisStorage()
+        self._s.flush_db()
+        self.wellname = '616'
+        self.w = Well(self.wellname, new=True)
+
+        # loading data
+        filename = '616_ULN_ResolutionTest.las'
+        self.wd = WellDataset(self.w, filename, new=True)
+        async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
+        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
+
+    def test_run(self):
+        node = LogResolutionNode()
+        node.run()
+
+        l = BasicLog(self.wd.id, "GK_D0400_D")
+        resolution = l.meta['log_resolution']['value']
+
+        self.assertAlmostEqual(0.5095, resolution, delta=0.001)

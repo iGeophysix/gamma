@@ -1,31 +1,27 @@
-from PySide2.QtWidgets import (
-        QGraphicsItem,
-        QStyleOptionGraphicsItem,
-        QWidget,
-        )
-from PySide2.QtGui import (
-        QBrush,
-        QColor,
-        QFont,
-        QFontMetrics,
-        QPainter,
-        QPainterPath,
-        QPen,
-        QTransform,
-        )
-from PySide2.QtCore import QPointF, QRectF, Qt, QLineF
-
-import numpy as np
 import random
 
-# from components.domain.Curve import Curve
+import numpy as np
+from PySide2.QtCore import QPointF, QRectF, QLineF
+from PySide2.QtGui import (
+    QColor,
+    QFont,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QTransform,
+)
+from PySide2.QtWidgets import (
+    QStyleOptionGraphicsItem,
+    QWidget,
+)
 
-from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
+# from components.domain.Curve import Curve
+from components.domain.Log import BasicLog
 from components.tablet.gui.LogGridObject import LogGridObject
+from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 
 
 class CurveObject(TabletObject):
-
     """
     Class member _arrayTransform maps curve rect (values X depths)
     onto grid coordinate system (for example, 0 - 5 cm in width)
@@ -46,7 +42,7 @@ class CurveObject(TabletObject):
         self.computeArrayTransform()
 
     def depthRange(self):
-        return  (self.arrayRect().top(), self.arrayRect().bottom())
+        return (self.arrayRect().top(), self.arrayRect().bottom())
 
     def minMax(self):
         return (self.arrayRect().left(), self.arrayRect().right())
@@ -61,18 +57,17 @@ class CurveObject(TabletObject):
 
         t = QTransform.fromScale(scale, 1.0)
 
-        self._arrayTransform = t.translate( -mi, 0.0)
+        self._arrayTransform = t.translate(-mi, 0.0)
 
         h = 0
         for it in self.parent().childObjects()[:-1]:
             h += it.headGraphicsObject().boundingRect().height()
         self._head.moveBy(0, h)
 
-
     def color(self):
         if not hasattr(self, "_color"):
-            r = lambda: random.randint(0,255)
-            self._color = QColor.fromRgb(r(),r(),r())
+            r = lambda: random.randint(0, 255)
+            self._color = QColor.fromRgb(r(), r(), r())
 
         return self._color
 
@@ -82,16 +77,13 @@ class CurveObject(TabletObject):
     def bodyGraphicsObject(self):
         return self._body
 
-
     def isLogScale(self) -> bool:
         return isinstance(self.parent(), LogGridObject)
 
-
     def array(self):
         """ log10-Facade for curve representation """
-
-        array = self._dbDataset.get_log_data([self._logName,])
-        array = array[self._logName]
+        log = BasicLog(self._dbDataset.id, self._logName)
+        array = log.values
 
         if self.isLogScale():
             a = array[..., 1]
@@ -100,18 +92,16 @@ class CurveObject(TabletObject):
 
         return array
 
-
     def arrayRect(self) -> QRectF:
 
         if not self._arrayRect:
             array = self.array()
-            min_ = np.flip(np.nanmin(array, axis = 0))
-            max_ = np.flip(np.nanmax(array, axis = 0))
+            min_ = np.flip(np.nanmin(array, axis=0))
+            max_ = np.flip(np.nanmax(array, axis=0))
 
             self._arrayRect = QRectF(QPointF(*min_), QPointF(*max_))
 
         return self._arrayRect
-
 
     def boundingRect(self) -> QRectF:
         """ width_in_curve_units X depth_in_meters """
@@ -163,9 +153,9 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
         return self._curve_object.boundingRect()
 
     def paint(self,
-              painter : QPainter,
-              option : QStyleOptionGraphicsItem,
-              widget : QWidget):
+              painter: QPainter,
+              option: QStyleOptionGraphicsItem,
+              widget: QWidget):
 
         arrayTransform = self._curve_object._arrayTransform
 
@@ -182,15 +172,15 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
 
         painter.drawPath(self._path)
         # for polygon in self._subpathPolygones:
-            # for i in range(len(polygon) - 1):
-                # painter.drawLine(polygon[i], polygon[i + 1]) 
+        # for i in range(len(polygon) - 1):
+        # painter.drawLine(polygon[i], polygon[i + 1])
 
         painter.restore()
 
         # painter.setPen(Qt.NoPen)
         # painter.setBrush(Qt.red)
         # for point in self.points:
-            # painter.drawEllipse(point, 4. / painter.worldTransform().m11(), 4. / painter.worldTransform().m22())
+        # painter.drawEllipse(point, 4. / painter.worldTransform().m11(), 4. / painter.worldTransform().m22())
 
 
 class CurveGraphicsObjectHead(TabletGraphicsObject):
@@ -201,7 +191,6 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         self._curve_object = curve_object
 
     def boundingRect(self) -> QRectF:
-
         br = self._curve_object.boundingRect()
 
         br.setTop(0.0)
@@ -210,11 +199,9 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         return br
 
     def paint(self,
-              painter : QPainter,
-              option : QStyleOptionGraphicsItem,
-              widget : QWidget):
-
-
+              painter: QPainter,
+              option: QStyleOptionGraphicsItem,
+              widget: QWidget):
         p = QPen(self._curve_object.color())
         p.setCosmetic(True)
         p.setWidthF(2.0)
@@ -233,7 +220,6 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
 
         painter.save()
         painter.resetTransform()
-
 
         lp = t.map(leftPoint)
         lp.setX(lp.x() + 2)
@@ -271,7 +257,7 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         name = f"{self._curve_object._logName} [unit]"
         painter.resetTransform()
         painter.translate(t.map(center))
-        painter.drawText(br.width() - fontMetrics.width(name)/2, 0, name)
+        painter.drawText(br.width() - fontMetrics.width(name) / 2, 0, name)
 
         painter.restore()
 

@@ -1,5 +1,6 @@
 from components.database.RedisStorage import RedisStorage
 
+
 class Well:
     """
     Class to process manipulations with wells
@@ -22,6 +23,13 @@ class Well:
         :return: string representation of the Well objet
         """
         return self._name
+
+    def exists(self) -> bool:
+        """
+        Check if well exists in db
+        :return: True or False
+        """
+        return RedisStorage().check_well_exists(self._name)
 
     @property
     def name(self):
@@ -64,3 +72,14 @@ class Well:
         """
         _s = RedisStorage()
         _s.delete_well(self._name)
+
+
+def get_well_by_id(well_id: str) -> Well:
+    """
+    Get Well by well_id
+    :param well_id: str
+    :return: Well object
+    """
+    _s = RedisStorage()
+    wellname = _s.get_well_name_by_id(well_id)
+    return Well(wellname)

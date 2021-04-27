@@ -2,7 +2,7 @@ import numpy as np
 
 from components.domain.Log import BasicLog
 from components.petrophysics.curve_operations import get_basic_curve_statistics
-from components.petrophysics.engine_node import EngineNode
+from components.engine_node import EngineNode
 
 
 def _linear_scale(arr, lower_limit, upper_limit):
@@ -23,14 +23,14 @@ class ShaleVolumeLinearMethod(EngineNode):
         input = {
             "type": BasicLog,
             "meta": {
-                "log_family": "Gamma Ray",
+                "family": "Gamma Ray",
             },
         }
         output = {
             "type": BasicLog,
-            "id": "VSH_GR_LM",
+            "log_id": "VSH_GR_LM",
             "meta": {
-                "log_family": "Shale Volume",
+                "family": "Shale Volume",
                 "method": "Linear method based on Gamma Ray logs",
             }
         }
@@ -78,17 +78,16 @@ class ShaleVolumeLinearMethod(EngineNode):
         cls.validate_input(log, gr_matrix, gr_shale, name)
         cls_output = cls.Meta.output
 
-        vsh = cls_output['type'](id=cls_output['id'])
+        vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta |= {"method": cls_output['meta']['method']}
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
         vsh.values = values
-        basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta |= {'basic_statistics': basic_stats}
-        vsh.name = cls_output['id'] if name is None else name
+        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        vsh.name = cls_output['log_id'] if name is None else name
         vsh.units = None
         return vsh
 
@@ -103,14 +102,14 @@ class ShaleVolumeLarionovOlderRock(EngineNode):
         input = {
             "type": BasicLog,
             "meta": {
-                "log_family": "Gamma Ray",
+                "family": "Gamma Ray",
             },
         }
         output = {
             "type": BasicLog,
-            "id": "VSH_GR_LOR",
+            "log_id": "VSH_GR_LOR",
             "meta": {
-                "log_family": "Shale Volume",
+                "family": "Shale Volume",
                 "method": "Larionov older rock method based on Gamma Ray logs",
             }
         }
@@ -158,18 +157,17 @@ class ShaleVolumeLarionovOlderRock(EngineNode):
         cls.validate_input(log, gr_matrix, gr_shale, name)
         cls_output = cls.Meta.output
 
-        vsh = cls_output['type'](id=cls_output['id'])
+        vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta |= {"method": cls_output['meta']['method']}
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.33 * (2 ** (2 * gr_index) - 1), 0, 1)
         vsh.values = values
-        basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta |= {'basic_statistics': basic_stats}
-        vsh.name = cls_output['id'] if name is None else name
+        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        vsh.name = cls_output['log_id'] if name is None else name
         vsh.units = None
         return vsh
 
@@ -184,14 +182,14 @@ class ShaleVolumeLarionovTertiaryRock(EngineNode):
         input = {
             "type": BasicLog,
             "meta": {
-                "log_family": "Gamma Ray",
+                "family": "Gamma Ray",
             },
         }
         output = {
             "type": BasicLog,
-            "id": "VSH_GR_LTR",
+            "log_id": "VSH_GR_LTR",
             "meta": {
-                "log_family": "Shale Volume",
+                "family": "Shale Volume",
                 "method": "Linear method based on Gamma Ray logs",
             }
         }
@@ -239,17 +237,16 @@ class ShaleVolumeLarionovTertiaryRock(EngineNode):
         cls.validate_input(log, gr_matrix, gr_shale, name)
         cls_output = cls.Meta.output
 
-        vsh = cls_output['type'](id=cls_output['id'])
+        vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.log_family = cls_output['meta']['log_family']
-        vsh.meta |= {"method": cls_output['meta']['method']}
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.083 * (2 ** (3.7 * gr_index) - 1), 0, 1)
         vsh.values = values
-        basic_stats = get_basic_curve_statistics(vsh.values)
-        vsh.meta |= {'basic_statistics': basic_stats}
-        vsh.name = cls_output['id'] if name is None else name
+        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        vsh.name = cls_output['log_id'] if name is None else name
         vsh.units = None
         return vsh

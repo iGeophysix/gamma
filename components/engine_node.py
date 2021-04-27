@@ -19,7 +19,7 @@ class EngineNode(ABC):
         :param args: positional arguments to validate
         :param kwargs: keyword arguments to validate
         """
-        return True
+        pass
 
     @classmethod
     def run(cls, *args, **kwargs) -> Any:

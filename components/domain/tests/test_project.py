@@ -28,7 +28,7 @@ class TestProject(unittest.TestCase):
                              well_dataset=dataset)
 
     def test_tree(self):
-        p = Project('test')
+        p = Project()
         tree = p.tree()
         for f in self.files_to_test:
             wellname = f[:-4]
@@ -38,7 +38,7 @@ class TestProject(unittest.TestCase):
             self.assertIn("GR", tree[wellname][dataset_name])
 
     def test_export_to_csv(self):
-        p = Project('test')
+        p = Project()
         df = p.tree_df()
         df.to_csv('test_tree_df.csv', index=False)
 

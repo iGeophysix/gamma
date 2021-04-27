@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+from dataclasses import dataclass
 from datetime import datetime
 
 import numpy as np
@@ -9,25 +10,22 @@ from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
 
 
-
-
-
 class BasicLog:
     """
     General class for all types of logs
     """
 
-    def __init__(self, dataset_id: str = None, id: str = 'New Log'):
+    def __init__(self, dataset_id: str = None, log_id: str = 'New Log'):
         """
         Init method
         :param dataset_id: Parent dataset_id
         :param name: Log name
         """
-        self._dataset_id = dataset_id
-        self._id = id
+        self._meta = BasicLogMeta(dataset_id, log_id)
+        self.dataset_id = dataset_id
+        self._id = log_id
         self._type = 'BasicLog'
         self._values = None
-        self._meta = None
         self.depth = None
         self.depth__gt = None
         self.depth__lt = None
@@ -46,7 +44,7 @@ class BasicLog:
         """
         return self.values.__len__()
 
-    def __getitem__(self, key, ):
+    def __getitem__(self, key, ) -> np.array:
         """
         Proxy to data when using with square brackets
         :param key: use as with slicing np.array
@@ -60,7 +58,7 @@ class BasicLog:
         :return: bool
         """
         _s = Storage()
-        return _s.check_log_exists(self._dataset_id, self._id)
+        return _s.check_log_exists(self.dataset_id, self._id)
 
     @property
     def name(self) -> str:
@@ -68,9 +66,7 @@ class BasicLog:
         Returns log name from meta
         :return:
         """
-        if "name" not in self.meta:
-            self.name = self._id
-        return self.meta['name']
+        return self.meta.name
 
     @name.setter
     def name(self, name: str) -> None:
@@ -78,7 +74,7 @@ class BasicLog:
         Set log name in meta
         :return:
         """
-        self.update_meta({"name": name})
+        self.meta.name = name
 
     @property
     def dataset_id(self) -> str:
@@ -86,12 +82,12 @@ class BasicLog:
         Get current dataset id
         :return: dataset id as string
         """
-        return self._dataset_id
+        return self._meta.dataset_id
 
     @dataset_id.setter
     def dataset_id(self, dataset_id) -> None:
         """Assign dataset id to the log"""
-        self._dataset_id = dataset_id
+        self._meta.dataset_id = dataset_id
 
     @property
     def values(self) -> np.array:
@@ -117,24 +113,6 @@ class BasicLog:
         if self._values is None:
             self._fetch()
 
-    @property
-    def units(self) -> str:
-        """
-        Get current log units
-        :return: units as string
-        """
-        return self.meta.get('units', None)
-
-    @units.setter
-    def units(self, units: str) -> None:
-        """
-        Set units in current log. This won't do any conversions
-        :param units: new units
-        """
-        units_system = UnitsSystem()
-        if units is None or units_system.known_unit(units):
-            self.meta |= {'units': units}
-
     def convert_units(self, units_to: str) -> np.array:
         """
         Function that returns the log in another units
@@ -158,97 +136,27 @@ class BasicLog:
         return self._values[~np.isnan(self._values[:, 1])]
 
     @property
-    def meta(self) -> dict:
+    def meta(self):
         """
         Get log meta information
         :return: dictionary with log meta information
         """
-        if self.exists() and self._meta is None:
-            _s = Storage()
-            self._meta = _s.get_log_meta(self._dataset_id, self._id)
-        elif self._meta is None:
-            self._meta = {
-                'name': self._id
-            }
         return self._meta
 
     @meta.setter
-    def meta(self, meta: dict) -> None:
+    def meta(self, meta_info: dict) -> None:
         """
         Set log meta information
         :param meta: new meta as dictionary
         :return: None
         """
-        self._meta = meta | {'__type': self._type}
+        if type(meta_info) == BasicLogMeta:
+            self._meta = meta_info
+        else:
+            self._meta = BasicLogMeta(self.dataset_id, self._id)
+            self._meta.__ior__(meta_info)
         self._changes['meta'] = True
 
-    def update_meta(self, meta: dict) -> None:
-        """
-        Update log meta information
-        :param meta: update for log meta information
-        :return: None
-        """
-        self.meta |= meta
-
-    @property
-    def history(self) -> list[tuple]:
-        """
-        Get whole history of the log curve
-        :return:
-        """
-        _s = Storage()
-        return _s.log_history(self._dataset_id, self._id)
-
-    @history.setter
-    def history(self, text) -> None:
-        """
-        Appends an event to history
-        :param text: event description
-        :return: None
-        """
-        _s = Storage()
-        _s.append_log_history(self._dataset_id, self._id, (datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), text))
-
-    @property
-    def log_family(self):
-        """
-        Get current log family
-        :return: log family as string
-        """
-        return self.meta['log_family']
-
-    @log_family.setter
-    def log_family(self, family):
-        self.update_meta({'log_family': family})
-
-    @property
-    def tags(self):
-        """
-        Get tags of the log
-        :return:
-        """
-        return self.meta.get('tags', set())
-
-    def append_tags(self, *tags):
-        """
-        Append tags to
-        :param tags:
-        """
-        existing_tags = self.tags
-        existing_tags.update(tags)
-        self.update_meta({"tags": set(existing_tags)})
-
-    def delete_tags(self, *tags):
-        """
-        Remove tags from the log
-        :param tags:
-        :return:
-        """
-        existing_tags = self.tags
-        for tag in tags:
-            existing_tags.remove(tag)
-        self.update_meta({"tags": set(existing_tags)})
-
     @staticmethod
     def md5(text):
         return str(hashlib.md5(text).hexdigest())
@@ -259,9 +167,9 @@ class BasicLog:
         Get hash value of the log data and meta
         :return: str
         """
-        if self.meta.get("full_hash", False):
+        if not hasattr(self.meta, "full_hash"):
             self.update_hashes()
-        return self.meta['full_hash']
+        return self.meta.full_hash
 
     @property
     def data_hash(self):
@@ -269,9 +177,9 @@ class BasicLog:
         Get hash value of the log data
         :return: str
         """
-        if self.meta.get("data_hash", False):
+        if not hasattr(self.meta, "data_hash"):
             self.update_hashes()
-        return self.meta['data_hash']
+        return self.meta.data_hash
 
     @property
     def meta_hash(self):
@@ -279,9 +187,9 @@ class BasicLog:
         Get hash value of the log meta
         :return: str
         """
-        if self.meta.get("meta_hash", False):
+        if not hasattr(self.meta, "meta_hash"):
             self.update_hashes()
-        return self.meta['meta_hash']
+        return self.meta.meta_hash
 
     def update_hashes(self):
         """
@@ -289,117 +197,18 @@ class BasicLog:
         :return:
         """
         data_as_string = self.values.tobytes()
-        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
-        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
+        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "history"]
+        meta = {key: value for key, value in self.meta.asdict().items() if key not in excluded_meta_fields}
         data_hash = self.md5(data_as_string)
         meta_hash = self.md5(json.dumps(meta).encode())
-        self.update_meta({"data_hash": data_hash,
-                          "meta_hash": meta_hash,
-                          "full_hash": data_hash + meta_hash
-                          })
-
-    @staticmethod
-    def md5(text):
-        return str(hashlib.md5(text).hexdigest())
-
-    @property
-    def full_hash(self):
-        """
-        Get hash value of the log data and meta
-        :return: str
-        """
-        if self.meta.get("full_hash", False):
-            self.update_hashes()
-        return self.meta['full_hash']
-
-    @property
-    def data_hash(self):
-        """
-        Get hash value of the log data
-        :return: str
-        """
-        if self.meta.get("data_hash", False):
-            self.update_hashes()
-        return self.meta['data_hash']
-
-    @property
-    def meta_hash(self):
-        """
-        Get hash value of the log meta
-        :return: str
-        """
-        if self.meta.get("meta_hash", False):
-            self.update_hashes()
-        return self.meta['meta_hash']
-
-    def update_hashes(self):
-        """
-        Update hash values for data and meta info of the log
-        :return:
-        """
-        data_as_string = self.values.tobytes()
-        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
-        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
-        data_hash = self.md5(data_as_string)
-        meta_hash = self.md5(json.dumps(meta).encode())
-        self.update_meta({"data_hash": data_hash,
-                          "meta_hash": meta_hash,
-                          "full_hash": data_hash + meta_hash
-                          })
-
-    @staticmethod
-    def md5(text):
-        return str(hashlib.md5(text).hexdigest())
-
-    @property
-    def full_hash(self):
-        """
-        Get hash value of the log data and meta
-        :return: str
-        """
-        if self.meta.get("full_hash", False):
-            self.update_hashes()
-        return self.meta['full_hash']
-
-    @property
-    def data_hash(self):
-        """
-        Get hash value of the log data
-        :return: str
-        """
-        if self.meta.get("data_hash", False):
-            self.update_hashes()
-        return self.meta['data_hash']
-
-    @property
-    def meta_hash(self):
-        """
-        Get hash value of the log meta
-        :return: str
-        """
-        if self.meta.get("meta_hash", False):
-            self.update_hashes()
-        return self.meta['meta_hash']
-
-    def update_hashes(self):
-        """
-        Update hash values for data and meta info of the log
-        :return:
-        """
-        data_as_string = self.values.tobytes()
-        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "__history"]
-        meta = {key: value for key, value in self.meta.items() if key not in excluded_meta_fields}
-        data_hash = self.md5(data_as_string)
-        meta_hash = self.md5(json.dumps(meta).encode())
-        self.update_meta({"data_hash": data_hash,
-                          "meta_hash": meta_hash,
-                          "full_hash": data_hash + meta_hash
-                          })
+        self.meta.data_hash = data_hash
+        self.meta.meta_hash = meta_hash
+        self.meta.full_hash = data_hash + meta_hash
 
     def _fetch(self):
         _s = Storage()
-        self._values = _s.get_log_data(self._dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
-        self._meta = _s.get_log_meta(self._dataset_id, self._id)
+        self._values = _s.get_log_data(self.dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
+        self._meta.__ior__(_s.get_log_meta(self.dataset_id, self._id))
 
     def crop(self, depth=None, depth__gt=None, depth__lt=None, inplace=False):
         """
@@ -415,7 +224,8 @@ class BasicLog:
         result._fetch()
         return result
 
-    def validate(self, data):
+    @staticmethod
+    def validate(data):
         """
         Checks if data is a valid value set for BasicLog
         :param data: np.array with value list
@@ -436,11 +246,69 @@ class BasicLog:
         """
         _s = Storage()
         if self._changes['values']:
-            _s.update_logs(self._dataset_id, data={self._id: self._values})
+            _s.update_logs(self.dataset_id, data={self._id: self._values})
             self._changes['values'] = False
-        if self._changes['meta']:
-            _s.update_logs(self._dataset_id, meta={self._id: self._meta})
-            self._changes['meta'] = False
+
+        self._meta.save()
+
+
+@dataclass
+class BasicLogMeta:
+    """
+    Class to manage log meta
+    """
+    dataset_id: str
+    log_id: str
+    name: str
+    tags: list
+    history: list
+    type: str = 'BasicLog'
+
+    def __init__(self, dataset_id, log_id):
+        self.dataset_id = dataset_id
+        self.log_id = log_id
+
+        self.name = self.log_id
+        self.tags = list()
+        self.history = []
+
+        _s = Storage()
+        if _s.check_log_exists(self.dataset_id, self.log_id):
+            self.load()
+
+    def __ior__(self, other):
+        for name, value in other.items():
+            self.__setattr__(name, value)
+
+    def __getitem__(self, item):
+        return self.__getattribute__(item)
+
+    def update(self, other):
+        self.__ior__(other)
+
+    def add_tags(self, *args):
+        self.tags = list(set(self.tags + list(args)))
+
+    def delete_tags(self, *args):
+        for tag in args:
+            self.tags.remove(tag)
+
+    def append_history(self, text):
+        self.history.append((datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), text))
+
+    def load(self):
+        _s = Storage()
+        meta_items = _s.get_log_meta(self.dataset_id, self.log_id)
+        for name, value in meta_items.items():
+            name = name.replace(f"_{self.__class__.__name__}", "")
+            self.__setattr__(name, value)
+
+    def save(self):
+        _s = Storage()
+        _s.update_logs(self.dataset_id, meta={self.log_id: self.asdict()})
+
+    def asdict(self):
+        return {key: self.__getattribute__(key) for key in dir(self) if not key.startswith('_') and not callable(self.__getattribute__(key))}
 
 
 class MarkersLog(BasicLog):
@@ -453,3 +321,14 @@ class MarkersLog(BasicLog):
         assert len(np.unique(data[:, 0])) == len(data[:, 0]), "All depth references must be unique"
 
         return True
+
+
+class MarkersLogMeta:
+    """
+    Class to manage log meta
+    """
+
+    @staticmethod
+    def validate(meta):
+        """Add validation later"""
+        pass

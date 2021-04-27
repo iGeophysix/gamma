@@ -1,6 +1,12 @@
+import os.path
 import unittest
 
-from components.importexport.FamilyAssigner import FamilyAssigner
+from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.importexport.FamilyAssigner import FamilyAssigner, FamilyAssignerNode
+from components.importexport.las import import_to_db
 
 
 class TestFamilyAssignment(unittest.TestCase):
@@ -28,3 +34,23 @@ class TestFamilyAssignment(unittest.TestCase):
             self.assertIsNotNone(mnem_res)
             family, dimension, rank = mnem_res
             self.assertEqual(family, right_family)
+
+
+class TestFamilyAssignerNode(unittest.TestCase):
+    def setUp(self) -> None:
+        self._s = RedisStorage()
+        self._s.flush_db()
+        test_data = os.path.join(os.path.dirname(__file__), 'data', 'sample_2.0_minimal.las')
+        self.well = Well("test", new=True)
+        self.dataset = WellDataset(self.well, "testds", new=True)
+        import_to_db(filename=test_data, well=self.well, well_dataset=self.dataset)
+
+    def test_family_assignment_node(self):
+        l = BasicLog(self.dataset.id, log_id="SP")
+        l.meta.family = None  # deleting data
+        l.save()
+
+        fa = FamilyAssignerNode()
+        fa.run(l)
+        log_in_db = BasicLog(self.dataset.id, log_id='SP')
+        self.assertEqual('Spontaneous Potential', log_in_db.meta.family, 'Log family in storage is empty')

@@ -1,8 +1,12 @@
-import re
-import operator
 import json
+import operator
+import os
+import re
 
-FAMASS_RULES = 'components/importexport/rules/FamilyAssignment.json'
+from components.domain.Log import BasicLog
+from components.engine_node import EngineNode
+
+FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignment.json')
 GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
 
@@ -12,7 +16,7 @@ class NLPParser:
     '''
 
     def __init__(self):
-        self.db = []    # ({N-grams}, family), ...
+        self.db = []  # ({N-grams}, family), ...
 
     def mnemonic_tokenize(self, s):
         '''
@@ -48,7 +52,7 @@ class NLPParser:
         best_rank = 0
         best_families = []
         for ng_ref, family in self.db:
-            match_rank = len(ng.intersection(ng_ref)) / max(len(ng), len(ng_ref))   # rank is (number of matched N-grams) / (all N-grams)
+            match_rank = len(ng.intersection(ng_ref)) / max(len(ng), len(ng_ref))  # rank is (number of matched N-grams) / (all N-grams)
             if match_rank > best_rank:
                 best_rank = match_rank
                 best_families = [family]
@@ -61,25 +65,27 @@ class FamilyAssigner:
     '''
     Main family assigner class.
     '''
+
     class DataBase:
         '''
         Storage for company-specific rules.
         '''
+
         def __init__(self):
             self.precise_match = {}  # { mnemonic: (family, dimension), ... }
-            self.re_match = {}       # { re.Pattern: (family, dimension), ... }
+            self.re_match = {}  # { re.Pattern: (family, dimension), ... }
             self.nlpp = NLPParser()
 
     def __init__(self):
         '''
         Loads Energystics family assigning rules.
         '''
-        self.db = {}    # {company: FamilyAssigner.DataBase}
+        self.db = {}  # {company: FamilyAssigner.DataBase}
 
         with open(FAMASS_RULES, 'r') as f:
             fa_rules = json.load(f)
         for company, rules in fa_rules.items():
-            cdb = self.db[company] = FamilyAssigner.DataBase()   # initialize company FamilyAssigner db
+            cdb = self.db[company] = FamilyAssigner.DataBase()  # initialize company FamilyAssigner db
             for mnemonics, dimension, family in rules:
                 for mnemonic in mnemonics:
                     mnemonic_info = (family, dimension)
@@ -150,18 +156,18 @@ class FamilyAssigner:
                 for company, mnemonic_info in company_result.items():
                     found_same_family_at_cc = None
                     for unic_company, unic_mnemonic_info in uniq_family_results.items():
-                        if mnemonic_info[0] == unic_mnemonic_info[0]:    # compare by family
+                        if mnemonic_info[0] == unic_mnemonic_info[0]:  # compare by family
                             found_same_family_at_cc = unic_company
                             break
                     if found_same_family_at_cc is not None:
                         unic_mnemonic_info = uniq_family_results[found_same_family_at_cc]
-                        newRank = min(1, unic_mnemonic_info[2] + mnemonic_info[2] / len(company_result))    # increase rank by a part of the second source rank
+                        newRank = min(1, unic_mnemonic_info[2] + mnemonic_info[2] / len(company_result))  # increase rank by a part of the second source rank
                         uniq_family_results[found_same_family_at_cc] = (unic_mnemonic_info[0], unic_mnemonic_info[1], newRank)  # update rank, drop second source variant
                     else:
-                        uniq_family_results[company] = mnemonic_info   # just add the variant
+                        uniq_family_results[company] = mnemonic_info  # just add the variant
 
                 if one_best:
-                    return sorted(uniq_family_results.values(), key=operator.itemgetter(2), reverse=True)[0]     # sorted by rank
+                    return sorted(uniq_family_results.values(), key=operator.itemgetter(2), reverse=True)[0]  # sorted by rank
                 else:
                     return uniq_family_results
         return None
@@ -179,6 +185,44 @@ class FamilyAssigner:
         company_count = {cc: companies.count(cc) for cc in set(companies)}
         for mnemonic, mis in all_company_mnemonic_info.items():
             if mis is not None:
-                smis = sorted(mis.items(), key=lambda cc_info: (cc_info[1][2], company_count[cc_info[0]]), reverse=True)    # sort starting from the highest rank, then by company share
-                all_company_mnemonic_info[mnemonic] = smis[0][1]   # update with the best variant
+                smis = sorted(mis.items(), key=lambda cc_info: (cc_info[1][2], company_count[cc_info[0]]),
+                              reverse=True)  # sort starting from the highest rank, then by company share
+                all_company_mnemonic_info[mnemonic] = smis[0][1]  # update with the best variant
         return all_company_mnemonic_info
+
+
+class FamilyAssignerNode(EngineNode):
+    """
+    This engine node wraps FamilyAssigner algorithm
+    """
+
+    class Meta:
+        name = 'Family Assigner'
+        input = {
+            "type": BasicLog,
+        }
+        output = {
+            "type": BasicLog,
+        }
+
+    @classmethod
+    def validate_input(cls, log: BasicLog):
+        """
+        Check if input is valid for this. If all is OK - return None, else raise an exception
+        :param log:
+        """
+        assert isinstance(log, BasicLog), "log must be instance of BasicLog class"
+
+    @classmethod
+    def run(cls, log: BasicLog):
+        """
+        Run calculations
+        :param log: BasicLog, log to process
+        :return: BasicLog, log with assigned family
+        """
+        cls.validate_input(log)
+        fa = FamilyAssigner()
+        mnemonic = log.name
+        log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
+        log.save()
+
