@@ -6,8 +6,9 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
 from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
-from components.projecttree.gui.WellEntries import WellEntry
+from components.projecttree.gui.WellEntries import WellEntry, WellDatasetEntry, CurveEntry
 # from components.projecttree.TabletEntries import TabletTemplateManagerEntry
+from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -22,6 +23,8 @@ class ProjectTreeModel(QAbstractItemModel):
         QAbstractItemModel.__init__(self)
 
         self._loadWells()
+
+        DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
 
     def _loadWells(self):
         self.project = Project()
@@ -84,11 +87,37 @@ class ProjectTreeModel(QAbstractItemModel):
         return index.internalPointer().data(role, index.column())
 
     def mimeData(self, indexes):
-        indexes = set(indexes) # unique names
-        wellNames = {index.internalPointer().data(Qt.DisplayRole, ProjectEntryEnum.NAME.value) for index in indexes}
+        # Just indexes from the 0-th column
+        indexes = [index for index in indexes if index.column() == 0]
+
+        data = []
+
+        for index in indexes:
+            if isinstance(index.internalPointer(), WellEntry):
+                wellEntry = index.internalPointer()
+                for datasetEntry in wellEntry.entries:
+                    for curveEntry in datasetEntry.entries:
+                        data.append((wellEntry.data(), datasetEntry.data(), curveEntry.data()))
+            if isinstance(index.internalPointer(), CurveEntry):
+                curveEntry = index.internalPointer()
+                datasetEntry = curveEntry.parent()
+                wellEntry = datasetEntry.parent()
+                data.append((wellEntry.data(), datasetEntry.data(), curveEntry.data()))
+
+        data_rebuilt = {}
+
+        for (w, d, c) in data:
+            if w not in data_rebuilt:
+                data_rebuilt[w] = {}
+
+            if not d in data_rebuilt[w]:
+                data_rebuilt[w][d] = []
+
+            data_rebuilt[w][d].append(c)
+
 
         mime = QMimeData()
-        mime.setText(json.dumps(list(wellNames)))
+        mime.setText(json.dumps(data_rebuilt))
 
         return mime
 
@@ -109,3 +138,8 @@ class ProjectTreeModel(QAbstractItemModel):
 
     def onClicked(self, index: QModelIndex):
         pass
+
+    def onWellsAdded(self):
+        self.beginResetModel()
+        self._loadWells()
+        self.endResetModel()

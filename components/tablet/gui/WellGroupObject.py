@@ -11,6 +11,8 @@ from PySide2.QtCore import QPointF, QRectF, Qt
 from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 from components.tablet.gui.WellObject import WellObject
 
+from components.domain.Well import Well# , WellProperty
+
 gamma_logger = logging.getLogger("gamma_logger")
 
 # from components.tablet.RegularGridObject import RegularGridObject
@@ -21,19 +23,43 @@ gamma_logger = logging.getLogger("gamma_logger")
 
 class WellGroupObject(TabletObject):
 
-    def __init__(self, wells = []):
+    def __init__(self):
         TabletObject.__init__(self)
 
         self._head = WellGroupGraphicsObjectHead(self)
         self._body = WellGroupGraphicsObjectBody(self)
 
-        self.loadWells(wells)
+        # self.loadWells(wells)
 
 
-    def loadWells(self, wells):
-        for well in wells:
-            gamma_logger.info('Loading well "{}"'.format(well.name))
-            well_object = WellObject(well, self)
+    def setPosition(self):
+        TabletObject.setPosition(self)
+
+        br = self._head.scene().itemsBoundingRect()
+        self._head.scene().setSceneRect(br)
+
+        br = self._body.scene().itemsBoundingRect()
+        self._body.scene().setSceneRect(br)
+
+
+    def loadWells(self, data):
+        """
+        :param data: is a netsted dict {well: {dataset: [curve]}}
+        """
+
+        existingWells = \
+            {wellObject._dbWell.name : wellObject for wellObject in self.children}
+
+        for w, datasetsWithCurves in data.items():
+
+            if not w in existingWells:
+                wellObject = WellObject(w, self)
+                existingWells[w] = wellObject
+
+
+            existingWells[w].loadDatasetAndCurves(datasetsWithCurves)
+
+            gamma_logger.info('Loading well "{}"'.format(w))
 
         self._head.update()
         self._body.update()
@@ -54,7 +80,7 @@ class WellGroupObject(TabletObject):
             w += r.width()
 
         # TODO spacing object beween wells
-        w += len(self.childObjects()[:-1]) * 0.01
+        w += max(0, len(self.children) - 1) * 0.01
 
         answ = QRectF(0, top, w, bottom - top)
 

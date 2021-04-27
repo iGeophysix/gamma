@@ -9,8 +9,7 @@ from PySide2.QtWidgets import (
 from PySide2.QtCore import QRectF
 
 
-from components.domain.Well import Well# , WellProperty
-# from components.database.dbsession import session
+from components.domain.Well import Well
 
 
 class BodyGraphicsScene(QGraphicsScene):
@@ -30,20 +29,14 @@ class BodyGraphicsScene(QGraphicsScene):
 
     def dropEvent(self, event : QGraphicsSceneDragDropEvent):
         s = event.mimeData().text()
-        wellList = json.loads(s)
 
-        dbWells = [Well(name) for name in wellList]
+        data = json.loads(s)
 
-        # dbWells = session.query(Well).\
-                # join(WellProperty).\
-                # filter(and_(WellProperty.name == "WELL",
-                            # WellProperty.value.in_(wellList)))
-
-        self._well_group.loadWells(dbWells)
+        self._well_group.loadWells(data)
 
         br = self.itemsBoundingRect()
 
         # newRect = QRectF(br.left() - br.width(), br.top(),
                          # br.width() * 3, br.height())
 
-        self.setSceneRect(br)
+        # self.setSceneRect(br)

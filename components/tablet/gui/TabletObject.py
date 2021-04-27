@@ -22,6 +22,27 @@ class TabletObject(ABC):
         return self._parent
 
 
+    def setPosition(self):
+        for c in self.children:
+            c.setPosition()
+
+    def indexByParent(self):
+        i = 0
+        try:
+            i = self.parent().children.index(self)
+        except ValueError as e:
+            pass
+
+        return i
+
+
+    def getRoot(self):
+        r = self
+        while r.parent() is not None:
+            r = r.parent()
+
+        return r
+
     @abstractmethod
     def headGraphicsObject(self):
         pass

@@ -21,12 +21,20 @@ class RegularGridObject(GridObject):
         self._head = RegularGridGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = RegularGridGraphicsObjectBody(parent.bodyGraphicsObject(), self)
 
+
+        # self._setPosition()
+        self.getRoot().setPosition()
+
+    def setPosition(self):
+
+        GridObject.setPosition(self)
+
         w = 0
-        for it in parent.childObjects()[:-1]:
+        for it in self.parent().childObjects()[:self.indexByParent()]:
             w += it.boundingRect().width()
 
-        self._head.moveBy(w, 0)
-        self._body.moveBy(w, 0)
+        self._head.setPos(w, 0)
+        self._body.setPos(w, 0)
 
 
     def headGraphicsObject(self):

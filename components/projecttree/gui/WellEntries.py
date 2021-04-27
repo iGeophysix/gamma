@@ -4,7 +4,6 @@ from PySide2.QtGui import QColor, QIcon, QFont
 from datetime import datetime
 
 from components.projecttree.gui.ProjectTreeEntry import TreeEntry, ProjectEntryEnum
-from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -31,7 +30,6 @@ gamma_logger = logging.getLogger('gamma_logger')
 
         # self._loadWells()
 
-        # DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
 
     # def _loadWells(self):
         # self.entries = []
@@ -90,7 +88,7 @@ class WellEntry(TreeEntry):
                                                  dataset_logs=dataset_logs))
 
 
-    def data(self, role, column):
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
             return self._getDisplayRole(column)
         elif role == Qt.DecorationRole:
@@ -232,7 +230,7 @@ class WellDatasetEntry(TreeEntry):
                                            parent = self,
                                            curve = curve))
 
-    def data(self, role, column):
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
             return self._getDisplayRole(column)
         elif role == Qt.DecorationRole:
@@ -259,7 +257,7 @@ class CurveEntry(TreeEntry):
 
         self._curve = curve
 
-    def data(self, role, column):
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
             return self._getDisplayRole(column)
         elif role == Qt.DecorationRole:
@@ -268,6 +266,9 @@ class CurveEntry(TreeEntry):
             return self._getToolTipRole(column)
 
         return None
+
+    def flags(self):
+        return TreeEntry.flags(self) | Qt.ItemIsDragEnabled
 
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:

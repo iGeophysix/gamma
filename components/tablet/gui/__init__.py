@@ -38,7 +38,5 @@ def initialize_component():
     mod.gui = gui
 
 
-print("IMPORT AND INIT")
-
 if not 'unittest' in sys.modules.keys():
     initialize_component()

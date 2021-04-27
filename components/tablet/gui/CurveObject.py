@@ -1,10 +1,12 @@
 import random
 
+import math
 import numpy as np
 from PySide2.QtCore import QPointF, QRectF, QLineF
 from PySide2.QtGui import (
     QColor,
     QFont,
+        QFont,
     QPainter,
     QPainterPath,
     QPen,
@@ -14,12 +16,18 @@ from PySide2.QtWidgets import (
     QStyleOptionGraphicsItem,
     QWidget,
 )
+from PySide2.QtCore import QPointF, QRectF, Qt, QLineF
+
+import math
+import numpy as np
+import random
 
 # from components.domain.Curve import Curve
 from components.domain.Log import BasicLog
 from components.tablet.gui.LogGridObject import LogGridObject
 from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 
+from components.domain.WellDataset import WellDataset
 
 class CurveObject(TabletObject):
     """
@@ -27,12 +35,12 @@ class CurveObject(TabletObject):
     onto grid coordinate system (for example, 0 - 5 cm in width)
     """
 
-    def __init__(self, parent, dbWell, dbDataset, logName):
+    def __init__(self, parent, dbWell, datasetName, curveName):
         TabletObject.__init__(self, parent)
 
         self._dbWell = dbWell
-        self._dbDataset = dbDataset
-        self._logName = logName
+        self._dbDataset = WellDataset(dbWell, datasetName)
+        self._curveName = curveName
 
         self._head = CurveGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = CurveGraphicsObjectBody(parent.bodyGraphicsObject(), self)
@@ -40,6 +48,15 @@ class CurveObject(TabletObject):
         self._arrayRect = None
 
         self.computeArrayTransform()
+
+
+    @property
+    def datasetName(self):
+        return self._dbDataset.name
+
+    @property
+    def curveName(self):
+        return self._curveName
 
     def depthRange(self):
         return (self.arrayRect().top(), self.arrayRect().bottom())
@@ -82,7 +99,7 @@ class CurveObject(TabletObject):
 
     def array(self):
         """ log10-Facade for curve representation """
-        log = BasicLog(self._dbDataset.id, self._logName)
+        log = BasicLog(self._dbDataset.id, self._curveName)
         array = log.values
 
         if self.isLogScale():
@@ -98,6 +115,12 @@ class CurveObject(TabletObject):
             array = self.array()
             min_ = np.flip(np.nanmin(array, axis=0))
             max_ = np.flip(np.nanmax(array, axis=0))
+
+            if math.isclose(min_[0], max_[0]):
+                magnitude = round(math.log(max(1, abs(max_[0])), 10))
+                dx = 10.**magnitude * 0.5
+                min_[0] = min_[0] - dx
+                max_[0] = max_[0] + dx
 
             self._arrayRect = QRectF(QPointF(*min_), QPointF(*max_))
 
@@ -172,15 +195,15 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
 
         painter.drawPath(self._path)
         # for polygon in self._subpathPolygones:
-        # for i in range(len(polygon) - 1):
-        # painter.drawLine(polygon[i], polygon[i + 1])
+            # for i in range(len(polygon) - 1):
+                # painter.drawLine(polygon[i], polygon[i + 1]) 
 
         painter.restore()
 
         # painter.setPen(Qt.NoPen)
         # painter.setBrush(Qt.red)
         # for point in self.points:
-        # painter.drawEllipse(point, 4. / painter.worldTransform().m11(), 4. / painter.worldTransform().m22())
+        #     painter.drawEllipse(point, 4. / painter.worldTransform().m11(), 4. / painter.worldTransform().m22())
 
 
 class CurveGraphicsObjectHead(TabletGraphicsObject):
@@ -202,6 +225,8 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
               painter: QPainter,
               option: QStyleOptionGraphicsItem,
               widget: QWidget):
+
+
         p = QPen(self._curve_object.color())
         p.setCosmetic(True)
         p.setWidthF(2.0)
@@ -254,10 +279,10 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         # ct = self._curve_object._dbCurve.curve_type
 
         # name = "{} [{}]".format(ct.name, ct.unit.symbol)
-        name = f"{self._curve_object._logName} [unit]"
+        name = f"{self._curve_object._curveName} [unit]"
         painter.resetTransform()
         painter.translate(t.map(center))
-        painter.drawText(br.width() - fontMetrics.width(name) / 2, 0, name)
+        painter.drawText(br.width() - fontMetrics.width(name)/2, 0, name)
 
         painter.restore()
 

@@ -14,37 +14,46 @@ from components.tablet.gui.RegularGridObject import RegularGridObject
 from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 
 from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset
 
 from typing import Tuple
 
 
 class WellObject(TabletObject):
 
-    def __init__(self, dbWell, parent):
+    def __init__(self, wellName, parent):
         TabletObject.__init__(self, parent)
 
-        self._dbWell = dbWell
+        self._dbWell = Well(wellName)
 
         self._head = WellGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = WellGraphicsObjectBody(parent.bodyGraphicsObject(), self)
 
         dc = DepthColumnObject(self)
 
+        self.getRoot().setPosition()
 
-        # for dbCurve in (dbWell.curves[0], dbWell.curves[1]):
-        datasets = dbWell.datasets
 
-        for ds in datasets:
-        # dbCurve = dbWell.curves[0]
+    def loadDatasetAndCurves(self, datasetsWithCurves):
 
-            dataset = WellDataset(self._dbWell, ds)
+        curvesWithDatasets = {}
+        for d, cs in datasetsWithCurves.items():
+            for c in cs:
+                curvesWithDatasets[c] = d
 
-            log_list = dataset.get_log_list()
 
-            for log in log_list:
+        existingCurvesWithDatasets = {}
+        for c in self.children:
+            if isinstance(c, GridObject):
+                for cc in c.children:
+                    if isinstance(cc, CurveObject):
+                        existingCurvesWithDatasets[cc.curveName] = cc.datasetName
+
+        for c, d in curvesWithDatasets.items():
+            if not c in existingCurvesWithDatasets or \
+                    existingCurvesWithDatasets[c] != d:
+
                 grid = RegularGridObject(self)
-                curve = CurveObject(grid, self._dbWell, dataset, log)
+                curve = CurveObject(grid, self._dbWell, d, c)
 
         # if len(datasets) > 1:
             # dbCurve = dbWell.curves[1]
@@ -58,12 +67,21 @@ class WellObject(TabletObject):
         # for dbCurve in (dbWell.curves[0], dbWell.curves[3],):
             # curve = CurveObject(grid, dbCurve)
 
-        w = 0
-        for it in parent.childObjects()[:-1]:
-            w += it.boundingRect().width() + 0.01 ## TODO Better add some spacing object instead of 0.01
 
-        self._head.moveBy(w, 0)
-        self._body.moveBy(w, 0)
+        self.getRoot().setPosition()
+
+
+    def setPosition(self):
+
+        TabletObject.setPosition(self)
+
+        w = 0
+        for it in self.parent().childObjects()[:self.indexByParent()]:
+            ## TODO Better add some spacing object instead of 0.01
+            w += it.boundingRect().width() + 0.01
+
+        self._head.setPos(w, 0)
+        self._body.setPos(w, 0)
 
     def headGraphicsObject(self):
         return self._head

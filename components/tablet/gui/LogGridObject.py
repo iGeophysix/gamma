@@ -23,11 +23,23 @@ class LogGridObject(GridObject):
         self._head = LogGridGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = LogGridGraphicsObjectBody(parent.bodyGraphicsObject(), self)
 
+        # self._setPosition()
+
+        self.getRoot().setPosition()
+
+    def setPosition(self):
+
+        GridObject.setPosition(self)
+
+        self._head.setPos(0, 0)
+        self._body.setPos(0, 0)
+
         w = 0
-        for it in parent.childObjects()[:-1]:
+        for it in self.parent().childObjects()[:self.indexByParent()]:
             w += it.boundingRect().width()
-        self._head.moveBy(w, 0)
-        self._body.moveBy(w, 0)
+
+        self._head.setPos(w, 0)
+        self._body.setPos(w, 0)
 
 
     def headGraphicsObject(self):
