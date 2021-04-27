@@ -19,7 +19,7 @@ class BasicLog:
         """
         Init method
         :param dataset_id: Parent dataset_id
-        :param name: Log name
+        :param log_id: Log name
         """
         self._meta = BasicLogMeta(dataset_id, log_id)
         self.dataset_id = dataset_id
@@ -121,7 +121,7 @@ class BasicLog:
         """
         converter = UnitsSystem()
         data = self.values[:, 1]
-        units_from = self.units
+        units_from = self.meta.units
         converted_values = np.vstack([self.values[:, 0], converter.convert(data, units_from, units_to)]).T
         return converted_values
 
@@ -262,6 +262,7 @@ class BasicLogMeta:
     name: str
     tags: list
     history: list
+    units: str
     type: str = 'BasicLog'
 
     def __init__(self, dataset_id, log_id):
