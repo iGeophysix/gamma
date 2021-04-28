@@ -3,7 +3,12 @@ import operator
 import os
 import re
 
+import logging
+
 from components.domain.Log import BasicLog
+from components.domain.Project import Project
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 
 FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignment.json')
@@ -195,7 +200,8 @@ class FamilyAssignerNode(EngineNode):
     """
     This engine node wraps FamilyAssigner algorithm
     """
-
+    logger = logging.getLogger("ShaleVolumeLinearMethodNode")
+    logger.setLevel(logging.INFO)
     class Meta:
         name = 'Family Assigner'
         input = {
@@ -214,15 +220,28 @@ class FamilyAssignerNode(EngineNode):
         assert isinstance(log, BasicLog), "log must be instance of BasicLog class"
 
     @classmethod
-    def run(cls, log: BasicLog):
+    def run(cls):
         """
         Run calculations
         :param log: BasicLog, log to process
         :return: BasicLog, log with assigned family
         """
-        cls.validate_input(log)
-        fa = FamilyAssigner()
-        mnemonic = log.name
-        log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
-        log.save()
+        p = Project()
+        for well_name in p.list_wells():
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                for log_id in dataset.log_list:
+                    log = BasicLog(dataset.id, log_id)
+                    try:
+                        cls.validate_input(log)
+                    except Exception as exc:
+                        cls.logger.error(f"Validation error in FamilyAssignerNode on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
+                        continue
+
+                    fa = FamilyAssigner()
+                    mnemonic = log.name
+                    log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
+                    log.save()
+
 
