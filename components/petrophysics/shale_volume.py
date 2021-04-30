@@ -1,8 +1,15 @@
+import logging
+
 import numpy as np
 
 from components.domain.Log import BasicLog
-from components.petrophysics.curve_operations import get_basic_curve_statistics
+from components.domain.Project import Project
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
+from components.petrophysics.curve_operations import get_basic_curve_statistics
+
+logging.basicConfig()
 
 
 def _linear_scale(arr, lower_limit, upper_limit):
@@ -13,10 +20,20 @@ def _linear_scale(arr, lower_limit, upper_limit):
     return result
 
 
-class ShaleVolumeLinearMethod(EngineNode):
+def get_output_dataset(well, name):
+    ds = WellDataset(well, name)
+    if not ds.exists:
+        ds = WellDataset(well, name, new=True)
+    return ds
+
+
+class ShaleVolumeLinearMethodNode(EngineNode):
     """
     Shale volume calculations
     """
+
+    logger = logging.getLogger("ShaleVolumeLinearMethodNode")
+    logger.setLevel(logging.INFO)
 
     class Meta:
         name = 'Shale Volume Linear Method'
@@ -66,36 +83,63 @@ class ShaleVolumeLinearMethod(EngineNode):
             assert type(name) == str, f"name must be of type string"
 
     @classmethod
-    def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
-        """
-        Function to calculate Shale Volume (VSH) via Larionov tertiary rock methods
-        :param log: BasicLog
-        :param gr_matrix: float, Gamma Ray value at matrix
-        :param gr_shale: float, Gamma Ray value at shale
-        :param name: str, name of output log
-        :return: BasicLog (virtual)
-        """
-        cls.validate_input(log, gr_matrix, gr_shale, name)
+    def _calculate(cls, log: BasicLog, gr_matrix: float, gr_shale: float, name: str) -> BasicLog:
         cls_output = cls.Meta.output
 
         vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.meta.family = cls_output['meta']['family']
-        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
         vsh.values = values
+
         vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
-        vsh.name = cls_output['log_id'] if name is None else name
-        vsh.units = None
+        vsh.meta.name = cls_output['log_id'] if name is None else name
+        vsh.meta.log_id = cls_output['log_id']
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
+        vsh.meta.units = None
+
         return vsh
 
+    @classmethod
+    def run(cls, gr_matrix: float, gr_shale: float) -> None:
+        """
+        Function to calculate Shale Volume (VSH) via Linear method
+        :param gr_matrix: float, Gamma Ray value at matrix
+        :param gr_shale: float, Gamma Ray value at shale
+        """
 
-class ShaleVolumeLarionovOlderRock(EngineNode):
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                output_dataset = get_output_dataset(well, "LQC")
+                for log_name in dataset.log_list:
+                    log = BasicLog(dataset.id, log_name)
+
+                    if not hasattr(log.meta, 'family') or log.meta.family != 'Gamma Ray':
+                        continue
+
+                    try:
+                        cls.validate_input(log, gr_matrix, gr_shale, "VSH_GR")
+                        output = cls._calculate(log, gr_matrix, gr_shale, 'VSH_GR')
+                        output.dataset_id = output_dataset.id
+                        output.save()
+                    except Exception as exc:
+                        cls.logger.error(f"Cannot complete calculations of Shale Volume Linear method on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
+                        continue
+
+
+class ShaleVolumeLarionovOlderRockNode(EngineNode):
     """
     Shale volume calculations using Larionov Older Rock
     """
+
+    logger = logging.getLogger("ShaleVolumeLarionovOlderRockNode")
+    logger.setLevel(logging.INFO)
 
     class Meta:
         name = 'Shale Volume Larionov Older Rock'
@@ -145,7 +189,7 @@ class ShaleVolumeLarionovOlderRock(EngineNode):
             assert type(name) == str, f"name must be of type string"
 
     @classmethod
-    def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
+    def _calculate(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
         """
         Function to calculate Shale Volume (VSH) via Larionov older rock methods
         :param log: BasicLog
@@ -159,23 +203,58 @@ class ShaleVolumeLarionovOlderRock(EngineNode):
 
         vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.meta.family = cls_output['meta']['family']
-        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.33 * (2 ** (2 * gr_index) - 1), 0, 1)
         vsh.values = values
+
         vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
-        vsh.name = cls_output['log_id'] if name is None else name
-        vsh.units = None
+        vsh.meta.name = cls_output['log_id'] if name is None else name
+        vsh.meta.log_id = cls_output['log_id']
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
+        vsh.meta.units = None
         return vsh
 
+    @classmethod
+    def run(cls, gr_matrix: float, gr_shale: float) -> None:
+        """
+        Function to calculate Shale Volume (VSH) via Larionov older rock methods
+        :param gr_matrix: float, Gamma Ray value at matrix
+        :param gr_shale: float, Gamma Ray value at shale
+        """
 
-class ShaleVolumeLarionovTertiaryRock(EngineNode):
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                output_dataset = get_output_dataset(well, "LQC")
+                for log_name in dataset.log_list:
+                    log = BasicLog(dataset.id, log_name)
+
+                    if not hasattr(log.meta, 'family') or log.meta.family != 'Gamma Ray':
+                        continue
+
+                    try:
+                        cls.validate_input(log, gr_matrix, gr_shale, "VSH_GR")
+                        output = cls._calculate(log, gr_matrix, gr_shale, 'VSH_GR')
+                        output.dataset_id = output_dataset.id
+                        output.save()
+                    except Exception as exc:
+                        cls.logger.error(f"Cannot complete calculations of Shale Volume Linear method on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
+                        continue
+
+
+class ShaleVolumeLarionovTertiaryRockNode(EngineNode):
     """
     Shale volume calculations using Larionov Tertiary Rock
     """
+
+    logger = logging.getLogger("ShaleVolumeLarionovTertiaryRockNode")
+    logger.setLevel(logging.INFO)
 
     class Meta:
         name = 'Shale Volume Larionov Tertiary Rock'
@@ -225,7 +304,7 @@ class ShaleVolumeLarionovTertiaryRock(EngineNode):
             assert type(name) == str, f"name must be of type string"
 
     @classmethod
-    def run(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
+    def _calculate(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
         """
         Function to calculate Shale Volume (VSH) via Larionov tertiary rock methods
         :param log: BasicLog
@@ -239,14 +318,46 @@ class ShaleVolumeLarionovTertiaryRock(EngineNode):
 
         vsh = cls_output['type'](log_id=cls_output['log_id'])
         vsh.meta = log.meta
-        vsh.meta.family = cls_output['meta']['family']
-        vsh.meta.method = cls_output['meta']['method']
 
         values = log.values
         gr_index = _linear_scale(values[:, 1], gr_matrix, gr_shale)
         values[:, 1] = np.clip(0.083 * (2 ** (3.7 * gr_index) - 1), 0, 1)
         vsh.values = values
+
         vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
-        vsh.name = cls_output['log_id'] if name is None else name
-        vsh.units = None
+        vsh.meta.name = cls_output['log_id'] if name is None else name
+        vsh.meta.log_id = cls_output['log_id']
+        vsh.meta.family = cls_output['meta']['family']
+        vsh.meta.method = cls_output['meta']['method']
+        vsh.meta.units = None
         return vsh
+
+    @classmethod
+    def run(cls, gr_matrix: float, gr_shale: float) -> None:
+        """
+        Function to calculate Shale Volume (VSH) via Larionov older rock methods
+        :param gr_matrix: float, Gamma Ray value at matrix
+        :param gr_shale: float, Gamma Ray value at shale
+        """
+
+        p = Project()
+        well_names = p.list_wells()
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                output_dataset = get_output_dataset(well, "LQC")
+                for log_name in dataset.log_list:
+                    log = BasicLog(dataset.id, log_name)
+
+                    if not hasattr(log.meta, 'family') or log.meta.family != 'Gamma Ray':
+                        continue
+
+                    try:
+                        cls.validate_input(log, gr_matrix, gr_shale, "VSH_GR")
+                        output = cls._calculate(log, gr_matrix, gr_shale, 'VSH_GR')
+                        output.dataset_id = output_dataset.id
+                        output.save()
+                    except Exception as exc:
+                        cls.logger.error(f"Cannot complete calculations of Shale Volume Larionov Tertiary rock method on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
+                        continue
