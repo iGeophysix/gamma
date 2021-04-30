@@ -18,6 +18,7 @@ PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'te
 
 class TestLogNormalization(unittest.TestCase):
     def setUp(self) -> None:
+        # pass
         self._s = RedisStorage()
         self._s.flush_db()
 
@@ -27,31 +28,30 @@ class TestLogNormalization(unittest.TestCase):
         p = Project()
         for wellname in p.list_wells().keys():
             async_get_basic_log_stats(wellname)
-
-    def test_log_normalization_works_correctly(self):
-        logs_to_normalize = []
-        p = Project()
-        for wellname in p.list_wells().keys():
             w = Well(wellname)
             for datasetname in w.datasets:
                 log_id = 'GR'
                 ds = WellDataset(w, datasetname)
-                logs_to_normalize.append(BasicLog(ds.id, log_id))
+                log = BasicLog(ds.id, log_id)
+                log.meta.family = 'Gamma Ray'
+                log.save()
 
+    def test_log_normalization_works_correctly(self):
         log_norm = LogNormalizationNode()
-        normalized_logs = log_norm.run(logs_to_normalize)
+        log_norm.run(lower_quantile=0.05, upper_quantile=0.95)
+
         true_q5 = 5.59728
         true_q95 = 26.38376
-        for log in normalized_logs:
-            dataset = get_dataset_by_id(log.dataset_id)
-            well = Well(dataset.well)
-            target_wd = WellDataset(well, 'Normalized', new=True)
-            log._dataset_id = target_wd.id
 
+        p = Project()
+        for wellname in p.list_wells().keys():
+            async_get_basic_log_stats(wellname)
+            w = Well(wellname)
+            ds = WellDataset(w, 'LQC')
+            log_id = 'GR'
+            log = BasicLog(ds.id, log_id)
             log.meta.basic_statistics = get_basic_curve_statistics(log.values)
-            log.save()
-            log.meta.append_history(f"Normalized from {well.name}-{dataset.name}-{log.name}")
-            log.save()
+
             q5 = np.quantile(log.values[~np.isnan(log.values[:, 1])][:, 1], 0.05)
             q95 = np.quantile(log.values[~np.isnan(log.values[:, 1])][:, 1], 0.95)
             self.assertAlmostEqual(true_q5, q5, places=4)

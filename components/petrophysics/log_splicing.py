@@ -8,7 +8,7 @@ from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 from components.petrophysics.curve_operations import get_basic_curve_statistics
 
-family_PRIORITY = [
+LOG_FAMILY_PRIORITY = [
     'Gamma Ray',
     'Bulk Density',
     'Neutron Porosity',
@@ -38,7 +38,7 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     results_data = {}
     results_meta = {}
 
-    for family in family_PRIORITY:
+    for family in LOG_FAMILY_PRIORITY:
         # select log_names of defined family
         logs_in_family = [l for l in logs.values() if l.meta['family'] == family]
         # if no log_names in of this family - skip

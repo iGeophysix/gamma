@@ -1,10 +1,12 @@
 import warnings
+from collections import defaultdict
 from typing import Iterable
 
 import numpy as np
 
 from components.domain.Log import BasicLog
-from components.domain.Well import Well, get_well_by_id
+from components.domain.Project import Project
+from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset, get_dataset_by_id
 from components.engine_node import EngineNode
 
@@ -67,7 +69,7 @@ def _normalize_logs(logs: dict[tuple, BasicLog]) -> dict[tuple, BasicLog]:
     etalon_quantiles = get_quantiles(logs, ranked_logs, quantiles=QUANTILES_TO_TIE)
     etalon_q_min, etalon_q_max = etalon_quantiles.values()
     etalon_data = logs[rank[0]][:, 1]
-    etalon_histogram = np.histogram(etalon_data, bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
+    etalon_histogram = np.histogram(etalon_data, bins=20, range=(np.nanmin(etalon_data), np.nanmax(etalon_data)), density=True)
     results = {}
     for key, log in logs.items():
         q_min = log.meta['quantiles'][QUANTILES_TO_TIE[0]]
@@ -75,7 +77,7 @@ def _normalize_logs(logs: dict[tuple, BasicLog]) -> dict[tuple, BasicLog]:
         k = (etalon_q_max - etalon_q_min) / (q_max - q_min)
         new_values = (log[:, 1] - q_min) * k + etalon_q_min
 
-        new_histogram = np.histogram(new_values, bins=20, range=(etalon_data.min(), etalon_data.max()), density=True)
+        new_histogram = np.histogram(new_values, bins=20, range=(np.nanmin(etalon_data), np.nanmax(etalon_data)), density=True)
         distribution_similarity = sum(abs(new_histogram[0] - etalon_histogram[0]))
         extra_meta = {"normalization": {'difference': distribution_similarity}}
 
@@ -96,34 +98,51 @@ class LogNormalizationNode(EngineNode):
 
     class Meta:
         name = 'Log Normalization'
-        input = {
-            "type": Iterable[BasicLog],
-        }
-        output = {
-            "type": tuple[BasicLog],
-        }
+        input = None
+        output = None
 
     @classmethod
     def validate_input(cls, logs: Iterable[BasicLog]) -> None:
         """
         Check if input is valid for this. If all is OK - return None, else raise an exception
         """
-        for log in logs:
-            assert isinstance(log, BasicLog), f"{log} is not instance of BasicLog class"
+        pass
 
     @classmethod
-    def run(cls, logs: Iterable[BasicLog]) -> tuple[BasicLog]:
+    def run(cls, lower_quantile: float = 0.05, upper_quantile: float = 0.95) -> None:
         """
         Run calculations
-        :param logs: iterable of BasicLog, logs to normalize
-        :return: tuple of logs
+        :param lower_quantile: lower quantile value to tie to. Default: 0.05
+        :param upper_quantile: upper quantile value to tie to. Default: 0.95
         """
-        cls.validate_input(logs)
-        input_for_normalization = {}
-        for log in logs:
-            dataset = get_dataset_by_id(log.dataset_id)
-            well = Well(dataset.well)
-            input_for_normalization.update({(well.name, dataset.name, log.name): log})
+        p = Project()
+        well_names = p.list_wells()
+        logs_by_families = defaultdict(list)
+        for well_name in well_names:
+            well = Well(well_name)
+            dataset_names = well.datasets
+            for dataset_name in dataset_names:
+                dataset = WellDataset(well, dataset_name)
 
-        results = _normalize_logs(input_for_normalization)
-        return tuple(results.values())
+                # gather runs in dataset
+                for log_id in dataset.log_list:
+                    log = BasicLog(dataset.id, log_id)
+                    logs_by_families[log.meta.family].append(log)
+
+        for family, logs in logs_by_families.items():
+            input_for_normalization = {}
+            for log in logs:
+                dataset = get_dataset_by_id(log.dataset_id)
+                well = Well(dataset.well)
+                input_for_normalization.update({(well.name, dataset.name, log.name): log})
+
+            results = _normalize_logs(input_for_normalization)
+            for w_ds_l, log in results.items():
+                well_name, dataset_name, log_name = w_ds_l
+                well = Well(well_name)
+                dataset = WellDataset(well, 'LQC')
+                if not dataset.exists:
+                    dataset = WellDataset(well, 'LQC', new=True)
+                log.dataset_id = dataset.id
+                log.meta.add_tags('Normalized')
+                log.save()

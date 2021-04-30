@@ -47,7 +47,7 @@ def detect_runs_in_well(well: Well, depth_tolerance: float):
 
 def _define_clusters(depth_tolerance, features):
     kmns, run_ids = None, None
-    for clusters_number in range(1, len(features)):
+    for clusters_number in range(1, len(features)+1):
         kmns = KMeans(clusters_number, n_init=20)
         run_ids = kmns.fit_predict(features)
         if kmns.inertia_ < depth_tolerance ** 2:
