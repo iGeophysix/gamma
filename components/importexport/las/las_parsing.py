@@ -64,6 +64,15 @@ class LasStructure():
         md_key = list(self.data.keys())[0]
         return {k: v._asdict() for k, v in self.log_information_entries.items() if k != md_key}
 
+    def valid(self):
+        """
+        States that the file has been parsed correctly
+        """
+        return hasattr(self, "required_well_entries") and \
+               hasattr(self, "log_information_entries") and \
+               hasattr(self, "data")
+
+
 
 def parse(filename, use_chardet=True) -> LasStructure:
     """
@@ -256,6 +265,10 @@ def _parse_well_information_section(i, lines, las_file):
     las_file.log_metrics_entries = log_metrics_entries
     las_file.required_well_entries = required_well_entries
     las_file.additional_well_entries = additional_well_entries
+
+
+    if not "WELL" in las_file.required_well_entries:
+        raise Exception('No WELL field in the file')
 
     return i
 

@@ -28,7 +28,7 @@ def import_to_db(filename: str = None,
     if filename:
         las_structure = las.parse(filename)
 
-    if las_structure is None:
+    if las_structure is None or not las_structure.valid():
         raise LoadingException(f'Empty las structure for file "{filename}"')
 
     if las_structure.error_message:
@@ -36,7 +36,7 @@ def import_to_db(filename: str = None,
 
     # We can't have dataset without a valid well
     if well is None and well_dataset is not None:
-        raise LoadingException(f'Impossible to have a dataset without a well when importing "{filename}"')
+        raise LoadingException(f'Impossible to have a dataset without a well when importing "{las_structure.filename}"')
 
     created_new_well = False
 
@@ -44,8 +44,8 @@ def import_to_db(filename: str = None,
         wellname = las_structure.required_well_entries["WELL"].value
 
         if not wellname:
-            gamma_logger.error(f'File "{las.filename}" has no valid WELL field.')
-            raise LoadingException(f'File "{las.filename}" has no valid WELL field.')
+            gamma_logger.error(f'File "{las_structure.filename}" has no valid WELL field.')
+            raise LoadingException(f'File "{las_structure.filename}" has no valid WELL field.')
 
         well = Well(wellname, new=True)
         created_new_well = True

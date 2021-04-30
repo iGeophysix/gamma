@@ -93,7 +93,11 @@ class ImportExportGui(ComponentGuiConstructor):
                 if las_struct.error_message:
                     gamma_logger.error(f'File "{las_struct.filename}" has an error "{las_struct.error_message}"')
 
-                las.import_to_db(las_structure=las_struct)
+                try:
+                    las.import_to_db(las_structure=las_struct)
+                except las.LoadingException as e:
+                    gamma_logger.error(f'Error while reading file: {str(e)}')
+
         else:
             gamma_logger.debug('No LAS files were chosen.')
 
