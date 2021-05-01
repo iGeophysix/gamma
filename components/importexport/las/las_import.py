@@ -47,12 +47,17 @@ def import_to_db(filename: str = None,
             gamma_logger.error(f'File "{las_structure.filename}" has no valid WELL field.')
             raise LoadingException(f'File "{las_structure.filename}" has no valid WELL field.')
 
-        well = Well(wellname, new=True)
-        created_new_well = True
+        well = Well(wellname)
+        created_new_well = False
+        if not well.exists():
+            well = Well(wellname, new=True)
+            created_new_well = True
 
     if well_dataset is None:
         datasetname = os.path.basename(las_structure.filename)
-        well_dataset = WellDataset(well, datasetname, new=True)
+        well_dataset = WellDataset(well, datasetname)
+        if not well_dataset.exists:
+            well_dataset = WellDataset(well, datasetname, new=True)
 
     raw_curves = las_structure.data
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
