@@ -22,7 +22,8 @@ class TestBestLogDetection(unittest.TestCase):
         filename = '616_ULN_ResolutionTest.las'
         self.wd = WellDataset(self.w, filename, new=True)
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
-
+        # deleting duplicated log
+        self.wd.delete_log('GR_D4417_D')
         # calculating basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
 

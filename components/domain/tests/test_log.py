@@ -206,13 +206,13 @@ class TestLog(unittest.TestCase):
         dataset = WellDataset(well, "test")
         welllog = BasicLog(dataset.id, "log")
         welllog.name = "log"
-        welllog.units = "cm"
+        welllog.meta.units = "cm"
         welllog.values = np.array([(10, 10), (20, 20)])
 
         vals_in_m = welllog.convert_units('km')
         self.assertListEqual([10 ** -4, 2 * 10 ** -4], list(vals_in_m[:, 1]))
 
-        welllog.units = "kg"
+        welllog.meta.units = "kg"
         vals_in_m = welllog.convert_units('g')
         self.assertListEqual([10000, 20000], list(vals_in_m[:, 1]))
 
