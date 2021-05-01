@@ -65,20 +65,27 @@ def rescale_curve(data, min_value: float = 0, max_value: float = 100):
     return data
 
 
-def interpolate_log_by_depth(log_data: np.array, depth_step: float) -> np.array:
+def interpolate_log_by_depth(log_data: np.array, depth_step: float = None, depth_start: float = None, depth_stop: float = None, depth_to: np.array = None) -> np.array:
     """
-    This method interpolates log to bring it to a regular depth_step
+    This method interpolates log to bring it to a new depth. Specify either depth_to only or depth_step plus optional depth_start and depth_stop
     It will keep missing values inside data interval and cut out all nan values before the first not nan and after the last not nan values
-    :param log_data: np.array - log data in shape ((md, val), (md,val),...)
-    :param depth_step: float - new depth step
-    :return np.array with resampled data
+    :param log_data: np.array - log data in shape ((md, val), (md, val),...)
+    :param depth_step: float - new reference depth step
+    :param depth_start: float - first depth of the new reference
+    :param depth_stop: float - last depth of the new reference
+    :param depth_to: np.array - new reference
+    :return np.array with resampled data in shape ((md, val), (md, val),...)
     """
     non_null_values = log_data[~np.isnan(log_data[:, 1])]
-    min_depth = np.min(non_null_values[:, 0])
-    max_depth = np.max(non_null_values[:, 0])
-    new_depths = np.linspace(start=min_depth, stop=max_depth, num=int((max_depth - min_depth) / depth_step) + 1)
-    new_values = np.interp(new_depths, log_data[:, 0], log_data[:, 1], left=np.nan, right=np.nan)
-    return np.vstack((new_depths, new_values)).T
+    if depth_to is None:
+        assert depth_step is not None, ValueError('Either depth_to or depth_step is mandatory')
+        if depth_start is None:
+            depth_start = np.min(non_null_values[:, 0])
+        if depth_stop is None:
+            depth_stop = np.max(non_null_values[:, 0])
+        depth_to = np.linspace(start=depth_start, stop=depth_stop, num=int((depth_stop - depth_start) / depth_step) + 1)
+    new_values = np.interp(depth_to, log_data[:, 0], log_data[:, 1], left=np.nan, right=np.nan)
+    return np.vstack((depth_to, new_values)).T
 
 
 def get_log_resolution(log_data: np.array, log_meta: dict, window: float = 20) -> float:

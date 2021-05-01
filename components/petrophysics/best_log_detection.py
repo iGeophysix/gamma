@@ -1,4 +1,5 @@
 import itertools
+from typing import Union, Iterable, Optional
 
 import numpy as np
 
@@ -75,3 +76,27 @@ class BestLogDetectionNode(EngineNode):
                         l = BasicLog(dataset.id, log_id)
                         l.meta.update(values)
                         l.save()
+
+
+def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
+    '''
+    Finds the best log version of the specific family(ies)
+    :param well_name: well to search into
+    :param log_family: name of a log family or list of acceptable family variants
+    :return: best log or None
+    '''
+    wanted_families = (log_family, ) if isinstance(log_family, str) else set(log_family)
+    best_log = None
+    well = Well(well_name)
+    for dataset_name in well.datasets:
+        dataset = WellDataset(well, dataset_name)
+        for log_id in dataset.log_list:
+            log = BasicLog(dataset.id, log_id)
+            if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
+                # best variant
+                if hasattr(log.meta, 'best_log_detection') and log.meta.best_log_detection['is_best']:
+                    return log
+                # just an acceptable family
+                elif best_log is None:
+                    best_log = log
+    return best_log
