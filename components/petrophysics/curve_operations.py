@@ -1,7 +1,9 @@
+import logging
 import warnings
 
-import logging
+import celery
 import numpy as np
+from celery.result import AsyncResult
 from scipy import signal
 
 from components.domain.Log import BasicLog
@@ -151,14 +153,19 @@ class BasicStatisticsNode(EngineNode):
     Engine node that calculates log resolution
     """
 
+    @staticmethod
+    def check_task_completed(asyncresult: AsyncResult) -> bool:
+        return asyncresult.status in ['SUCCESS', 'FAILURE']
+
     def run(self):
         p = Project()
         well_names = p.list_wells()
+        tasks = []
         for well_name in well_names:
             well = Well(well_name)
             for dataset_name in well.datasets:
                 dataset = WellDataset(well, dataset_name)
-                for log_id in dataset.log_list:
-                    log = BasicLog(dataset.id, log_id)
-                    log.meta.basic_statistics = get_basic_curve_statistics(log.values)
-                    log.save()
+                result = celery.current_app.send_task('tasks.async_get_basic_log_stats', (well_name, [dataset_name, ], dataset.log_list))
+                tasks.append(result)
+        while not all(map(self.check_task_completed, tasks)):
+            continue

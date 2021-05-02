@@ -8,9 +8,9 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine import Engine
 from components.importexport.las import import_to_db
-from tasks import async_get_basic_log_stats
+from tasks import async_get_basic_log_stats, async_run_workflow
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'petrophysics', 'tests', 'test_data', 'normalization')
+PATH_TO_TEST_DATA = os.path.join('test_data')
 
 
 class TestEngine(unittest.TestCase):
@@ -36,3 +36,15 @@ class TestEngine(unittest.TestCase):
     def test_engine_runs_with_no_exceptions(self):
         engine = Engine()
         engine.start()
+
+class TestEngineInCelery(unittest.TestCase):
+    def setUp(self) -> None:
+        self._s = RedisStorage()
+        self._s.flush_db()
+
+        for filename in os.listdir(PATH_TO_TEST_DATA):
+            import_to_db(filename=os.path.join(PATH_TO_TEST_DATA, filename))
+
+
+    def test_engine_running_in_celery(self):
+        async_run_workflow.delay()

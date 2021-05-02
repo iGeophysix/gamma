@@ -7,6 +7,7 @@ from components.database.settings import REDIS_HOST
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import Engine
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve
@@ -36,6 +37,12 @@ def check_task_completed(asyncresult: AsyncResult) -> bool:
 
 def check_task_successful(asyncresult: AsyncResult) -> bool:
     return asyncresult.successful()
+
+
+@app.task
+def async_run_workflow(workflow_id: str = None):
+    workflow = Engine()
+    workflow.start()
 
 
 @app.task

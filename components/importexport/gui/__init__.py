@@ -8,6 +8,7 @@ import time
 
 import multiprocessing as mp
 
+import celery
 from PySide2.QtWidgets import QAction, QMenu, QFileDialog, QProgressDialog
 from PySide2.QtCore import Qt
 
@@ -100,6 +101,10 @@ class ImportExportGui(ComponentGuiConstructor):
 
         else:
             gamma_logger.debug('No LAS files were chosen.')
+
+        # run engine after import completes
+        gamma_logger.info("Sending task to engine")
+        celery.current_app.send_task('tasks.async_run_workflow', ())
 
         DbEventDispatcherSingleton().wellsAdded.emit()
 

@@ -1,4 +1,5 @@
 import itertools
+import logging
 from typing import Union, Iterable, Optional
 
 import numpy as np
@@ -29,13 +30,13 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
 
     averages = {('basic_statistics', "mean"): None, ('basic_statistics', "stdev"): None, ('log_resolution', 'value'): None}
     for category, metric in averages.keys():
-        averages[(category, metric)] = np.median([logs_meta[log_id][category][metric] for log_id in log_ids])
-    average_depth_correction = np.max([logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth'] for log_id in log_ids])
+        averages[(category, metric)] = np.median([logs_meta[log_id][category][metric] for log_id in logs_meta.keys()])
+    average_depth_correction = np.max([logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth'] for log_id in logs_meta.keys()])
 
     best_score = np.inf
     best_log = None
     new_logs_meta = {log_id: {} for log_id in log_ids}
-    for log_id in log_ids:
+    for log_id in logs_meta.keys():
         sum_deltas = sum(abs((logs_meta[log_id][category][metric] - averages[(category, metric)]) / averages[(category, metric)]) for category, metric in averages.keys())
         depth_correction = abs((logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth']) / average_depth_correction)
         result = sum_deltas / depth_correction
@@ -52,6 +53,9 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
 
 
 class BestLogDetectionNode(EngineNode):
+    logger = logging.getLogger("BestLogDetectionNode")
+    logger.setLevel(logging.INFO)
+
     def run(self):
         p = Project()
         well_names = p.list_wells()
@@ -70,12 +74,16 @@ class BestLogDetectionNode(EngineNode):
                     log_families.update((log.meta.family,))
 
                 for run, family in itertools.product(runs, log_families):
-                    best_log, new_meta = get_best_log(dataset=dataset, family=family, run_name=run)
+                    try:
+                        best_log, new_meta = get_best_log(dataset=dataset, family=family, run_name=run)
 
-                    for log_id, values in new_meta.items():
-                        l = BasicLog(dataset.id, log_id)
-                        l.meta.update(values)
-                        l.save()
+                        for log_id, values in new_meta.items():
+                            l = BasicLog(dataset.id, log_id)
+                            l.meta.update(values)
+                            l.save()
+                    except AlgorithmFailure as exc:
+                        logging.info(f"Well {well.name} dataset {dataset.name} family {family} run {run}. {repr(exc)}")
+                        continue
 
 
 def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
@@ -85,7 +93,7 @@ def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Op
     :param log_family: name of a log family or list of acceptable family variants
     :return: best log or None
     '''
-    wanted_families = (log_family, ) if isinstance(log_family, str) else set(log_family)
+    wanted_families = (log_family,) if isinstance(log_family, str) else set(log_family)
     best_log = None
     well = Well(well_name)
     for dataset_name in well.datasets:
