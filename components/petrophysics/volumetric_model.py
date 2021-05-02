@@ -169,7 +169,7 @@ class VolumetricModelSolverNode(EngineNode):
         '''
         # check logs amount
         if not log_families:
-            raise ValueError('presence at least one input log is mandatory')
+            raise ValueError('presence of at least one input log is mandatory')
         # check types
         for family in log_families:
             if not isinstance(family, str):
@@ -189,7 +189,7 @@ class VolumetricModelSolverNode(EngineNode):
         Volumetric model solver
         Creates set of VM_[COMPONENT] logs - volume of a component and VM_MISFIT log - Model Fit Error
         :param log_families: list of input log families (see FluidMineralConstants.json)
-        :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json) 
+        :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
         cls.validate_input(log_families, model_components)
         vm = VolumetricModel()
