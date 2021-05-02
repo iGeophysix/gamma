@@ -5,8 +5,9 @@ from datetime import datetime
 
 from components.projecttree.gui.ProjectTreeEntry import TreeEntry, ProjectEntryEnum
 from components.database.RedisStorage import RedisStorage
-from components.domain.Project import Project
 from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.domain.Log import BasicLog
 
 
 import logging
@@ -69,23 +70,20 @@ gamma_logger = logging.getLogger('gamma_logger')
 
 
 class WellEntry(TreeEntry):
-    def __init__(self, model, parent, well_name : str, well_info):
+    def __init__(self, model, parent, well_name : str):
         TreeEntry.__init__(self, model, parent)
 
         self._well_name = well_name
-        self._well_info = well_info
+        self._well = Well(well_name)
 
-        _s = RedisStorage()
-        for ds_id in self._well_info["datasets"]:
-            dataset_info = _s.get_dataset_info(dataset_id=ds_id)
-            dataset_name = dataset_info['name']
-            dataset_logs = _s.get_logs_meta(ds_id)
+        self._loadDatasets()
 
-            self.entries.append(WellDatasetEntry(model = self._model,
-                                                 parent = self,
-                                                 dataset_info=dataset_info,
-                                                 dataset_name=dataset_name,
-                                                 dataset_logs=dataset_logs))
+    def _loadDatasets(self):
+        for dataset_name in self._well.datasets:
+            self.entries.append(WellDatasetEntry(model=self._model,
+                                                 parent=self,
+                                                 well=self._well,
+                                                 dataset_name=dataset_name))
 
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
@@ -214,21 +212,21 @@ class WellEntry(TreeEntry):
 
 
 class WellDatasetEntry(TreeEntry):
-    def __init__(self, model, parent, dataset_info, dataset_name, dataset_logs):
+    def __init__(self, model, parent, well, dataset_name):
         TreeEntry.__init__(self, model, parent)
 
-        self._dataset_info = dataset_info
-        self._dataset_name = dataset_name
-        self._dataset_logs = dataset_logs
+        self._well = well
+        self._dataset = WellDataset(self._well, dataset_name)
 
         self._loadCurves()
 
 
     def _loadCurves(self):
-        for curve in self._dataset_logs.keys():
-            self.entries.append(CurveEntry(model = self._model,
-                                           parent = self,
-                                           curve = curve))
+        for curve_name in self._dataset.log_list:
+            self.entries.append(CurveEntry(model=self._model,
+                                           parent=self,
+                                           dataset=self._dataset,
+                                           curve_name=curve_name))
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
@@ -240,7 +238,7 @@ class WellDatasetEntry(TreeEntry):
 
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:
-            return self._dataset_name
+            return self._dataset.name
 
         return None
 
@@ -252,10 +250,23 @@ class WellDatasetEntry(TreeEntry):
 
 
 class CurveEntry(TreeEntry):
-    def __init__(self, model, parent, curve : str):
+    def __init__(self, model, parent, dataset, curve_name: str):
         TreeEntry.__init__(self, model, parent)
 
-        self._curve = curve
+        self._dataset = dataset
+        self._curve_name = curve_name
+        self._basic_log = BasicLog(dataset.id, curve_name)
+
+        self._loadMeta()
+
+    def _loadMeta(self):
+        meta = self._basic_log.meta
+
+        for m in meta.asdict().keys():
+            self.entries.append(MetaEntry(model=self._model,
+                                          parent=self,
+                                          meta=meta,
+                                          meta_key=m))
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
@@ -272,7 +283,7 @@ class CurveEntry(TreeEntry):
 
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:
-            return self._curve
+            return self._basic_log.name
 
         return None
 
@@ -291,3 +302,37 @@ class CurveEntry(TreeEntry):
         return None
 
 
+class MetaEntry(TreeEntry):
+    def __init__(self, model, parent, meta, meta_key):
+        TreeEntry.__init__(self, model, parent)
+
+        self._meta = meta
+        self._meta_key = meta_key
+
+
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
+        if role == Qt.DisplayRole:
+            return self._getDisplayRole(column)
+        elif role == Qt.DecorationRole:
+            return self._getDecorationRole(column)
+        elif role == Qt.ToolTipRole:
+            return self._getToolTipRole(column)
+
+        return None
+
+    def _getDisplayRole(self, column):
+        if column == ProjectEntryEnum.NAME.value:
+            return self._meta_key
+        elif column == ProjectEntryEnum.VALUE.value:
+            return str(self._meta[self._meta_key])
+
+        return None
+
+    def _getDecorationRole(self, column):
+        # if column == ProjectEntryEnum.NAME.value:
+            # return QIcon.fromTheme('appointment-new')
+
+        return None
+
+    def _getToolTipRole(self, column):
+        return None

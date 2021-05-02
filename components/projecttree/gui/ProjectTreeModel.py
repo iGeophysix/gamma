@@ -10,7 +10,7 @@ from components.projecttree.gui.WellEntries import WellEntry, WellDatasetEntry, 
 # from components.projecttree.TabletEntries import TabletTemplateManagerEntry
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 
-from components.domain.Project import Project
+from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
 
 
@@ -22,17 +22,18 @@ class ProjectTreeModel(QAbstractItemModel):
     def __init__(self):
         QAbstractItemModel.__init__(self)
 
+        self._s = RedisStorage()
         self._loadWells()
 
         DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
 
     def _loadWells(self):
-        self.project = Project()
-        wells = self.project.list_wells()
-        self.entries = [WellEntry(model=self,parent=None,well_name=well_name, well_info=well_info) for (well_name, well_info) in wells.items()]
-                        # WellManagerEntry(model = self),
-                        # TabletTemplateManagerEntry(model = self),
-                        # ]
+        well_names = self._s.list_wells()
+        self.entries = [WellEntry(model=self,
+                                  parent=None,
+                                  well_name=well_name) \
+                        for well_name in well_names]
+
 
     def columnCount(self, index: QModelIndex):
         return len(ProjectEntryEnum)
