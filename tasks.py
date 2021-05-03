@@ -1,5 +1,6 @@
-import os
+import gzip
 
+from celery_conf import app
 from celery import Celery
 from celery.result import AsyncResult
 
@@ -8,35 +9,12 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine import Engine
+from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve
 from components.petrophysics.log_splicing import splice_logs
 from components.petrophysics.run_detection import detect_runs_in_well
-
-REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
-REDIS_DB = os.environ.get('REDIS_PORT', 0)
-app = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}')
-app.conf.result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
-app.conf.result_expires = 60
-
-
-def get_running_tasks():
-    i = app.control.inspect()
-    return i.active()
-
-
-def get_pending_tasks():
-    i = app.control.inspect()
-    return i.reserved()
-
-
-def check_task_completed(asyncresult: AsyncResult) -> bool:
-    return asyncresult.status in ['SUCCESS', 'FAILURE']
-
-
-def check_task_successful(asyncresult: AsyncResult) -> bool:
-    return asyncresult.successful()
 
 
 @app.task
@@ -46,10 +24,18 @@ def async_run_workflow(workflow_id: str = None):
 
 
 @app.task
-def async_read_las(wellname: str, datasetname: str, filename: str):
-    well = Well(wellname)
-    dataset = WellDataset(well, datasetname)
-    import_to_db(filename=filename, well=well, well_dataset=dataset)
+def async_read_las(wellname: str = None, datasetname: str = None, filename: str = None, las_data: str = None):
+    if filename is not None and las_data is None:
+        well = Well(wellname)
+        dataset = WellDataset(well, datasetname)
+        import_to_db(filename=filename, well=well, well_dataset=dataset)
+    elif las_data is not None:
+        las_structure = las.parse(filename=filename, data=gzip.decompress(las_data))
+        well = Well(wellname) if wellname is not None else None
+        dataset = WellDataset(well, datasetname) if datasetname is not None else None
+        import_to_db(las_structure=las_structure, well=well, well_dataset=dataset)
+    else:
+        raise Exception('Incorrect function call')
 
 
 @app.task

@@ -2,6 +2,7 @@
 # All rights reserved.
 
 import collections
+import io
 import math
 import os
 import re
@@ -73,12 +74,11 @@ class LasStructure():
                hasattr(self, "data")
 
 
-
-def parse(filename, use_chardet=True) -> LasStructure:
+def parse(filename, data: bytearray = None, use_chardet=True) -> LasStructure:
     """
     Function uses the `chardet` module in order to
     guess the file codepage. This could be essential
-    for "russial" files that are randomly stored in
+    for "russian" files that are randomly stored in
     CP-1251, CP-866, and sometimes in UTF-8
     """
 
@@ -87,16 +87,19 @@ def parse(filename, use_chardet=True) -> LasStructure:
         enc = "latin-1"
         if use_chardet:
             detector = UniversalDetector()
+            ff = io.BytesIO(data) if data else open(filename, 'rb')
 
-            with open(filename, 'rb') as ff:
-                for l in ff:
-                    detector.feed(l)
-                    if detector.done: break
-                detector.close()
+            for l in ff:
+                detector.feed(l)
+                if detector.done:
+                    break
+            detector.close()
+            if data is None:
+                ff.close()
 
-            enc = detector.result['encoding']
+            enc = detector.result['encoding'] if detector.result['encoding'] else enc
 
-        f = open(filename, 'r', encoding=enc)
+        f = io.StringIO(data.decode(enc)) if data else open(filename, 'r', encoding=enc)
 
         lines = f.readlines()
         lines = [l.strip() for l in lines]
@@ -265,7 +268,6 @@ def _parse_well_information_section(i, lines, las_file):
     las_file.log_metrics_entries = log_metrics_entries
     las_file.required_well_entries = required_well_entries
     las_file.additional_well_entries = additional_well_entries
-
 
     if not "WELL" in las_file.required_well_entries:
         raise Exception('No WELL field in the file')

@@ -9,3 +9,7 @@ RUN rm requirements.txt
 
 COPY . /app
 WORKDIR /app
+
+RUN groupadd -g 999 celery && \
+    useradd -r -u 999 -g celery celery
+USER celery

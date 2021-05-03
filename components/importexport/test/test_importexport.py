@@ -1,11 +1,17 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
-
-import unittest
-import os
+import gzip
 import math
+import os
+import unittest
 
+from celery_conf import app as celery_app, check_task_completed
+from components.database.RedisStorage import RedisStorage
+from components.domain.Project import Project
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 from components.importexport import las
+
 
 class TestLasImporter(unittest.TestCase):
 
@@ -43,7 +49,6 @@ class TestLasImporter(unittest.TestCase):
         data = las_file.data
         self.assertEqual(data['DEPT'][1], float('634.8750'))
 
-
     def test_las20(self):
         dirname = os.path.dirname(__file__)
         filename = os.path.join(dirname, 'data/sample_2.0_minimal.las')
@@ -67,7 +72,6 @@ class TestLasImporter(unittest.TestCase):
         self.assertEqual(req['SRVC'].value, 'ANY LOGGING COMPANY INC.')
         self.assertEqual(req['DATE'].value, '13-DEC-86')
         self.assertEqual(req['UWI'].value, '100123401234W500')
-
 
     def test_las20_large(self):
         dirname = os.path.dirname(__file__)
@@ -124,6 +128,41 @@ class TestLasImporter(unittest.TestCase):
         self.assertEqual(data['POTASIUM'][4], float('2.77'))
         self.assertEqual(math.isnan(data['GAMMA'][5549]), False)
         self.assertEqual(math.isnan(data['GAMMA'][5550]), True)
+
+
+class TestAsyncLasLoading(unittest.TestCase):
+    def setUp(self) -> None:
+        _s = RedisStorage()
+        _s.flush_db()
+
+    def test_celery_las_loading(self):
+        folder = os.path.join(os.path.dirname(__file__), 'data')
+        paths = list(map(lambda x: os.path.join(folder, x), os.listdir(folder)))
+
+        async_results = []
+        for path in paths:
+            if not path.endswith('las'):
+                continue
+            with open(path, 'rb') as f:
+                data = gzip.compress(f.read())
+            async_results.append(celery_app.send_task('tasks.async_read_las', kwargs={'filename': path, 'las_data': data}))
+
+        while not all(map(check_task_completed, async_results)):
+            continue
+
+        p = Project()
+        wells = p.list_wells()
+        self.assertEqual(3, len(wells), "3 wells must be loaded")
+        datasets = []
+        for well in wells:
+            datasets.extend(Well(well).datasets)
+        self.assertEqual(3, len(datasets), "3 datasets must be loaded")
+
+        w = Well('ANY ET AL A9-16-49-20')
+        ds = WellDataset(w, 'sample_minimal.las')
+        logs = ds.log_list
+        self.assertEqual(7, len(logs), '7 logs in dataset must be loaded')
+
 
 if __name__ == '__main__':
     unittest.main()
