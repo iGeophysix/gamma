@@ -17,7 +17,7 @@ class TestLasImporter(unittest.TestCase):
         folder = os.path.join(os.path.dirname(__file__), 'data')
         paths = list(map(lambda x: os.path.join(folder, x), os.listdir(folder)))
         node = LasImportNode()
-        node.run(paths)
+        node.run([p for p in paths if p.endswith('.las')])
 
         p = Project()
         wells = p.list_wells()
