@@ -1,6 +1,6 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
-
+import gzip
 import logging
 import multiprocessing as mp
 import os
@@ -11,12 +11,20 @@ import celery
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMenu, QFileDialog, QProgressDialog
 
+from celery_conf import app as celery_app, check_task_completed
 from components import ComponentGuiConstructor
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
-from components.importexport import las
 from components.mainwindow.gui import GeoMainWindow
 
 gamma_logger = logging.getLogger('gamma_logger')
+
+
+def compress_and_send_for_parsing(filename):
+    gamma_logger.info(f"PID {os.getpid()}: Reading {filename}")
+    with open(filename, 'rb') as f:
+        las_data = gzip.compress(f.read())
+    result = celery_app.send_task('tasks.async_read_las', kwargs={'filename': filename, 'las_data': las_data})
+    return result
 
 
 class ImportExportGui(ComponentGuiConstructor):
@@ -43,57 +51,31 @@ class ImportExportGui(ComponentGuiConstructor):
 
         pool = mp.Pool(mp.cpu_count())
 
-        gamma_logger.info('CPU Count: {}'.format(mp.cpu_count()))
+        # gamma_logger.info('CPU Count: {}'.format(mp.cpu_count()))
         gamma_logger.info('Files: {}'.format(len(files)))
-
-        las_file_structures = []
 
         progress = QProgressDialog("Parsing LAS files...", "Abort", 0, len(files), GeoMainWindow())
         progress.setWindowModality(Qt.WindowModal)
 
         # Parallel Process-based parsing
-        for (i, las_file) in enumerate(pool.imap_unordered(las.parse, files)):
-            progress.setValue(i)
+        async_results = []
+        for file in files:
+            async_results.append(compress_and_send_for_parsing(file)) # TODO: make it parallel
 
-            if las_file.error_message:
-                gamma_logger.error(las_file.error_message)
-            else:
-                las_file_structures.append(las_file)
-
-            if progress.wasCanceled():
-                print('Canceled')
-                return;
-
-        progress.setValue(len(files))
-
+        # for (i, result) in enumerate(pool.imap_unordered(compress_and_send_for_parsing, files)):
+        #     progress.setValue(i)
+        #     async_results.append(result)
         pool.close()
         pool.join()
 
-        # Serial Parsing
-        # for (i, f) in enumerate(files):
-        # progress.setValue(i)
-        # las_file_structures.append(las.parse_las_file(f))
+        progress.setValue(len(files))
 
-        # progress.setValue(len(files))
+        while not all(map(check_task_completed, async_results)):
+            continue
 
         end = time.time()
         gamma_logger.info('Elapsed: {}'.format(end - start))
         gamma_logger.info('Seconds per file: {}'.format((end - start) / (len(files) or 1)))
-
-        if las_file_structures:
-            # import to db here
-            for las_struct in las_file_structures:
-                gamma_logger.info(f'Importing file "{las_struct.filename}".')
-                if las_struct.error_message:
-                    gamma_logger.error(f'File "{las_struct.filename}" has an error "{las_struct.error_message}"')
-
-                try:
-                    las.import_to_db(las_structure=las_struct)
-                except las.LoadingException as e:
-                    gamma_logger.error(f'Error while reading file: {str(e)}')
-
-        else:
-            gamma_logger.debug('No LAS files were chosen.')
 
         # run engine after import completes
         gamma_logger.info("Sending task to engine")
