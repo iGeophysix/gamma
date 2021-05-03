@@ -15,11 +15,13 @@ class ProjectTreeGui(ComponentGuiConstructor):
     def __init__(self):
 
         self._setupGui()
-        self._connectSignals()
 
     def toolBarActions(self):
         menu = QMenu("ProjectTree")
-        menu.addAction("Show project tree")
+        self._show_project_tree_action = menu.addAction("Show project tree")
+        self._clear_database = menu.addAction("Clear Database")
+
+        self._connectSignals()
 
         return menu
 
@@ -35,8 +37,8 @@ class ProjectTreeGui(ComponentGuiConstructor):
         self.tree_view.setDropIndicatorShown(True)
         self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
-        model = ProjectTreeModel()
-        self.tree_view.setModel(model)
+        self.model = ProjectTreeModel()
+        self.tree_view.setModel(self.model)
         # self.tree_view.expandAll()
         # self.tree_view.setHeaderHidden(True)
 
@@ -45,7 +47,7 @@ class ProjectTreeGui(ComponentGuiConstructor):
                                          QHeaderView.ResizeToContents)
 
     def _connectSignals(self):
-        pass
+        self._clear_database.triggered.connect(self.model.on_clear_database)
 
 
 def initialize_component():

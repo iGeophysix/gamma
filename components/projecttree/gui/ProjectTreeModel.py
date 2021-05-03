@@ -27,7 +27,14 @@ class ProjectTreeModel(QAbstractItemModel):
 
         DbEventDispatcherSingleton().wellsAdded.connect(self.onWellsAdded)
 
+    def on_clear_database(self):
+        self.beginResetModel()
+        self._s.flush_db()
+        self._loadWells()
+        self.endResetModel()
+
     def _loadWells(self):
+        self.entries = []
         well_names = self._s.list_wells()
         self.entries = [WellEntry(model=self,
                                   parent=None,
