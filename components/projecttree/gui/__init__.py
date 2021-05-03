@@ -20,6 +20,7 @@ class ProjectTreeGui(ComponentGuiConstructor):
         menu = QMenu("ProjectTree")
         self._show_project_tree_action = menu.addAction("Show project tree")
         self._clear_database = menu.addAction("Clear Database")
+        self._refresh_database = menu.addAction("Refresh Database")
 
         self._connectSignals()
 
@@ -48,6 +49,7 @@ class ProjectTreeGui(ComponentGuiConstructor):
 
     def _connectSignals(self):
         self._clear_database.triggered.connect(self.model.on_clear_database)
+        self._refresh_database.triggered.connect(self.model.on_refresh_database)
 
 
 def initialize_component():
