@@ -2,24 +2,19 @@
 # All rights reserved.
 
 import logging
+import multiprocessing as mp
 import os
 import sys
 import time
 
-import multiprocessing as mp
-
 import celery
-from PySide2.QtWidgets import QAction, QMenu, QFileDialog, QProgressDialog
 from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QMenu, QFileDialog, QProgressDialog
 
 from components import ComponentGuiConstructor
-from components.mainwindow.gui import GeoMainWindow
-
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
-from components.database.RedisStorage import RedisStorage
-from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset
 from components.importexport import las
+from components.mainwindow.gui import GeoMainWindow
 
 gamma_logger = logging.getLogger('gamma_logger')
 
@@ -27,7 +22,7 @@ gamma_logger = logging.getLogger('gamma_logger')
 class ImportExportGui(ComponentGuiConstructor):
 
     def toolBarActions(self):
-        menu= QMenu("Import Export")
+        menu = QMenu("Import Export")
         import_action = menu.addAction("Import")
 
         import_action.triggered.connect(self._showImportWidget)
@@ -39,15 +34,14 @@ class ImportExportGui(ComponentGuiConstructor):
 
     def _showImportWidget(self):
         root_directory = os.path.dirname(sys.modules['__main__'].__file__)
-        files, _= QFileDialog.getOpenFileNames(GeoMainWindow(),
-                                               'Select one or mor files to import',
-                                               root_directory,
-                                               'LAS Files (*.las)')
+        files, _ = QFileDialog.getOpenFileNames(GeoMainWindow(),
+                                                'Select one or mor files to import',
+                                                root_directory,
+                                                'LAS Files (*.las)')
 
         start = time.time()
 
         pool = mp.Pool(mp.cpu_count())
-
 
         gamma_logger.info('CPU Count: {}'.format(mp.cpu_count()))
         gamma_logger.info('Files: {}'.format(len(files)))
@@ -77,15 +71,14 @@ class ImportExportGui(ComponentGuiConstructor):
 
         # Serial Parsing
         # for (i, f) in enumerate(files):
-            # progress.setValue(i)
-            # las_file_structures.append(las.parse_las_file(f))
+        # progress.setValue(i)
+        # las_file_structures.append(las.parse_las_file(f))
 
         # progress.setValue(len(files))
 
-
         end = time.time()
         gamma_logger.info('Elapsed: {}'.format(end - start))
-        gamma_logger.info('Seconds per file: {}'.format((end - start)/(len(files) or 1)))
+        gamma_logger.info('Seconds per file: {}'.format((end - start) / (len(files) or 1)))
 
         if las_file_structures:
             # import to db here
@@ -116,6 +109,7 @@ def initialize_component():
 
     mod = sys.modules[__name__]
     mod.gui = gui
+
 
 if not 'unittest' in sys.modules.keys():
     initialize_component()
