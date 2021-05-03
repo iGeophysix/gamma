@@ -11,7 +11,8 @@ NODES = {
     'RunDetectionNode': RunDetectionNode,
     'FamilyAssignerNode': FamilyAssignerNode,
     'BestLogDetectionNode': BestLogDetectionNode,
-    'LogNormalizationNode': LogNormalizationNode
+    'LogNormalizationNode': LogNormalizationNode,
+    'VolumetricModelSolverNode': VolumetricModelSolverNode
 }
 
 
