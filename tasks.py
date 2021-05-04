@@ -3,7 +3,7 @@ import os
 from celery import Celery
 from celery.result import AsyncResult
 
-from components.database.settings import REDIS_HOST
+from settings import REDIS_HOST
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
@@ -93,9 +93,9 @@ def async_get_basic_log_stats(wellname: str, datasetnames: list[str] = None, log
     for datasetname in datasetnames:
         d = WellDataset(w, datasetname)
 
-        logs = d.log_list if logs is None else logs
+        log_names = d.log_list if logs is None else logs
 
-        for log_name in logs:
+        for log_name in log_names:
             log = BasicLog(d.id, log_name)
             log.meta.update({'basic_statistics': get_basic_curve_statistics(log.values)})
             log.save()
@@ -117,8 +117,8 @@ def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: li
     # get all data from specified well and datasets
     for dataset_name in datasetnames:
         d = WellDataset(w, dataset_name)
-        logs = d.log_list if logs is None else logs
-        for log_name in logs:
+        log_names = d.log_list if logs is None else logs
+        for log_name in log_names:
             log = BasicLog(d.id, log_name)
             log_resolution = get_log_resolution(log.values, log.meta)
             log.meta.log_resolution = {'value': log_resolution}

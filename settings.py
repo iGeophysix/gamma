@@ -1,5 +1,7 @@
 import os
 
+BASE_DIR = os.path.dirname(__file__)
+
 STORAGE_USER = os.environ.get('STORAGE_USER', 'postgres')
 STORAGE_PASSWORD = os.environ.get('STORAGE_PASSWORD', 'postgres')
 STORAGE_HOST = os.environ.get('STORAGE_HOST', 'localhost')
