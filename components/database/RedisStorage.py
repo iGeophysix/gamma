@@ -8,7 +8,7 @@ from typing import Any
 import numpy as np
 import redis
 
-from components.database.settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
 logger = logging.getLogger("storage")
 

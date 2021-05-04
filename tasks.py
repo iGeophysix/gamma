@@ -3,7 +3,7 @@ import os
 from celery import Celery
 from celery.result import AsyncResult
 
-from components.database.settings import REDIS_HOST
+from settings import REDIS_HOST
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset

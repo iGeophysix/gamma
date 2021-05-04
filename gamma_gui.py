@@ -5,10 +5,9 @@ import logging
 
 import os
 from PySide2.QtCore import QCoreApplication, Qt
-from PySide2.QtGui import QFont
 from PySide2.QtWidgets import QApplication
 from celery import Celery
-from components.database.settings import REDIS_HOST
+from settings import REDIS_HOST
 
 import components
 
