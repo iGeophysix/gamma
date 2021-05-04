@@ -47,6 +47,12 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
 
     if best_log is None:
         raise AlgorithmFailure('No logs were defined as best')
+
+    # define ranking
+    ranking = sorted(new_logs_meta.items(), key=lambda v: v[1]['best_log_detection']['value'])
+    for i, meta in enumerate(ranking):
+        new_logs_meta[meta[0]]['best_log_detection']['rank'] = i + 1
+
     new_logs_meta[best_log]['best_log_detection']['is_best'] = True
 
     return best_log, new_logs_meta
