@@ -38,6 +38,26 @@ class RedisStorage:
         Use with caution!"""
         self.conn.flushdb()
 
+    # PROJECT
+    def get_project_meta(self) -> dict:
+        '''
+        Get current project meta
+        :return:
+        '''
+        project_meta = self.conn.get('project')
+        if project_meta is not None:
+            return json.loads(project_meta)
+        else:
+            return {}
+
+    def set_project_meta(self, meta: dict):
+        '''
+        Set new project meta
+        :param meta:
+        :return:
+        '''
+        self.conn.set('project', json.dumps(meta))
+
     # WELLS
 
     @staticmethod
