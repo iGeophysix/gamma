@@ -27,6 +27,8 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
     logs = [BasicLog(dataset.id, log_id) for log_id in log_ids]
 
     logs_meta = {log_id: log.meta for log_id, log in zip(log_ids, logs) if log.meta.family == family and log.meta.run['value'] == run_name}
+    if not logs_meta:
+        raise AlgorithmFailure('No logs of this family in this run')
 
     averages = {('basic_statistics', "mean"): None, ('basic_statistics', "stdev"): None, ('log_resolution', 'value'): None}
     for category, metric in averages.keys():
@@ -35,7 +37,7 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
 
     best_score = np.inf
     best_log = None
-    new_logs_meta = {log_id: {} for log_id in log_ids}
+    new_logs_meta = {log_id: {} for log_id in logs_meta.keys()}
     for log_id in logs_meta.keys():
         sum_deltas = sum(abs((logs_meta[log_id][category][metric] - averages[(category, metric)]) / averages[(category, metric)]) for category, metric in averages.keys())
         depth_correction = abs((logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth']) / average_depth_correction)

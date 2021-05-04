@@ -24,10 +24,10 @@ class Engine:
     """
 
     steps = [
-        # {'node': 'BasicStatisticsNode', 'parameters': {}},
-        # {'node': 'LogResolutionNode', 'parameters': {}},
-        # {'node': 'RunDetectionNode', 'parameters': {}},
-        # {'node': 'FamilyAssignerNode', 'parameters': {}},
+        {'node': 'BasicStatisticsNode', 'parameters': {}},
+        {'node': 'LogResolutionNode', 'parameters': {}},
+        {'node': 'RunDetectionNode', 'parameters': {}},
+        {'node': 'FamilyAssignerNode', 'parameters': {}},
         {'node': 'BestLogDetectionNode', 'parameters': {}},
         {'node': 'ProjectStatisticsNode', 'parameters': {}},
         {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
@@ -43,5 +43,6 @@ class Engine:
 
 
 if __name__ == '__main__':
+    import celery_conf
     engine = Engine()
     engine.start()
