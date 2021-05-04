@@ -21,10 +21,10 @@ class Engine:
     Class that launches EngineNodes
     """
     steps = [
-        {'node': 'BasicStatisticsNode', 'parameters': {}},
-        {'node': 'LogResolutionNode', 'parameters': {}},
-        {'node': 'RunDetectionNode', 'parameters': {}},
-        {'node': 'FamilyAssignerNode', 'parameters': {}},
+        # {'node': 'BasicStatisticsNode', 'parameters': {}},
+        # {'node': 'LogResolutionNode', 'parameters': {}},
+        # {'node': 'RunDetectionNode', 'parameters': {}},
+        # {'node': 'FamilyAssignerNode', 'parameters': {}},
         {'node': 'BestLogDetectionNode', 'parameters': {}},
         {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
         {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'], 'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
