@@ -1,6 +1,9 @@
 import pandas as pd
 
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 
 
 class Project:
@@ -35,6 +38,23 @@ class Project:
                 dataset_name = dataset_info['name']
                 dataset_logs = _s.get_logs_meta(dataset_id)
                 tree[well].update({dataset_name: dataset_logs})
+        return tree
+
+    @staticmethod
+    def tree_oop() -> dict:
+        """
+        Returns all available object in a form of tree with logs as objects
+        """
+        _s = RedisStorage()
+        tree = {}
+        wells = _s.list_wells()
+        for well, well_info in wells.items():
+            w = Well(well)
+            tree.update({w: {}})
+            for dataset_name in w.datasets:
+                ds = WellDataset(w, dataset_name)
+                logs = [BasicLog(ds.id, log_name) for log_name in ds.log_list]
+                tree[w].update({ds: logs})
         return tree
 
     @staticmethod
