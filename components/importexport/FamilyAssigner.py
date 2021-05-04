@@ -227,6 +227,7 @@ class FamilyAssignerNode(EngineNode):
         :return: BasicLog, log with assigned family
         """
         p = Project()
+        fa = FamilyAssigner()
         for well_name in p.list_wells():
             well = Well(well_name)
             for dataset_name in well.datasets:
@@ -239,7 +240,7 @@ class FamilyAssignerNode(EngineNode):
                         cls.logger.error(f"Validation error in FamilyAssignerNode on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
                         continue
 
-                    fa = FamilyAssigner()
+
                     mnemonic = log.name
                     log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
                     log.save()
