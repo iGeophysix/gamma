@@ -1,10 +1,6 @@
 import gzip
 
 from celery_conf import app
-from celery import Celery
-from celery.result import AsyncResult
-
-from settings import REDIS_HOST
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
