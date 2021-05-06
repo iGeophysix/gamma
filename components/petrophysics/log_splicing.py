@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -11,14 +12,16 @@ from components.petrophysics.curve_operations import get_basic_curve_statistics
 LOG_FAMILY_PRIORITY = [
     'Gamma Ray',
     'Bulk Density',
+    'Density',
     'Neutron Porosity',
     'Resistivity',
     'Formation Resistivity',
     'Compressional Slowness',
+    'Thermal Neutron Porosity',
 ]
 
 
-def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
+def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str] = None, tags: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
     """
     This function processes the well and generates a dataset with spliced logs and its meta information
     :param well: Well object to process
@@ -34,6 +37,9 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         logs_in_dataset = wd.log_list if log_names is None else log_names
         logs.update({(dataset_name, log_name): BasicLog(wd.id, log_name) for log_name in logs_in_dataset})
 
+    if tags is not None:
+        logs = {log_id: log for log_id, log in logs.items() if any(tag in log.meta.tags for tag in tags)}
+
     # here and after each log family must be spliced by families and then runs
     results_data = {}
     results_meta = {}
@@ -47,9 +53,10 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         # splice log_names
         spliced = splice_logs_in_family(logs_in_family)
         # define meta information
-        meta = get_basic_curve_statistics(spliced)
+        meta = {'basic_statistics': get_basic_curve_statistics(spliced)}
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
         meta['family'] = family
+        meta['units'] = logs_in_family[0].meta.units # TODO: check spliced log units are defined correctly
         results_data.update({family: spliced})  # Log name will be defined here
         results_meta.update({family: meta})  # log name will be defined here
 
@@ -93,17 +100,8 @@ class SpliceLogsNode(EngineNode):
     def run(self, output_dataset_name: str = "LQC"):
         p = Project()
         well_names = p.list_wells()
+        tasks = []
         for well_name in well_names:
-            well = Well(well_name)
-            results_data, results_meta = splice_logs(well)
+            tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs={'wellname': well_name, 'tags': ['processing', ], 'output_dataset_name': output_dataset_name}))
 
-            wd = WellDataset(well, output_dataset_name)
-            if not wd.exists:
-                wd = WellDataset(well, output_dataset_name, new=True)
-
-            for values, meta in zip(results_data.items(), results_meta.items()):
-                log = BasicLog(wd.id, values[0])
-                log.values = values[1]
-                log.meta = meta[1]
-                log.meta.add_tags('spliced')
-                log.save()
+        wait_till_completes(tasks)

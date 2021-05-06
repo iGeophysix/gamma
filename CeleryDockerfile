@@ -7,9 +7,12 @@ COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 RUN rm requirements.txt
 
+RUN groupadd -g 999 celery && \
+    useradd -r -u 999 -g celery celery
+
 COPY . /app
 WORKDIR /app
 
-RUN groupadd -g 999 celery && \
-    useradd -r -u 999 -g celery celery
+RUN chown celery:celery -R /app
+
 USER celery

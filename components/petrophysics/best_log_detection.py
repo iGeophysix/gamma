@@ -1,12 +1,12 @@
-import itertools
 import logging
-from typing import Union, Iterable, Optional
+from collections import defaultdict
+from typing import Iterable
 
 import numpy as np
 
+from celery_conf import app as celery_app, check_task_completed
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
-from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 
@@ -15,26 +15,36 @@ class AlgorithmFailure(Exception):
     pass
 
 
-def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str, dict]:
+def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) -> tuple[str, dict]:
     """
     This method defines best in family log in a dataset withing one run
-    :param dataset: WellDataset object to process
+    :param datasets: list of WellDataset objects to process
     :param family: log family to process e.g. 'Gamma Ray'
     :param run_name: run_id to process e.g. '75_(2600_2800)'
     :return: tuple with name of the best log and dict of new log meta
     """
-    log_ids = dataset.log_list
-    logs = [BasicLog(dataset.id, log_id) for log_id in log_ids]
 
-    logs_meta = {log_id: log.meta for log_id, log in zip(log_ids, logs) if log.meta.family == family and log.meta.run['value'] == run_name}
+    # gather all raw logs to process
+    logs_meta = {}
+    for ds in datasets:
+        for log_id in ds.log_list:
+            log = BasicLog(ds.id, log_id)
+            if log.meta.family == family and log.meta.run['value'] == run_name and 'raw' in log.meta.tags:
+                logs_meta.update({log_id: log.meta})
+
     if not logs_meta:
         raise AlgorithmFailure('No logs of this family in this run')
 
+    best_log, new_logs_meta = rank_logs(logs_meta)
+
+    return best_log, new_logs_meta
+
+
+def rank_logs(logs_meta):
     averages = {('basic_statistics', "mean"): None, ('basic_statistics', "stdev"): None, ('log_resolution', 'value'): None}
     for category, metric in averages.keys():
         averages[(category, metric)] = np.median([logs_meta[log_id][category][metric] for log_id in logs_meta.keys()])
     average_depth_correction = np.max([logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth'] for log_id in logs_meta.keys()])
-
     best_score = np.inf
     best_log = None
     new_logs_meta = {log_id: {} for log_id in logs_meta.keys()}
@@ -46,17 +56,13 @@ def get_best_log(dataset: WellDataset, family: str, run_name: str) -> tuple[str,
             best_log = log_id
             best_score = result
         new_logs_meta[log_id].update({'best_log_detection': {"value": result, 'is_best': False}})
-
     if best_log is None:
         raise AlgorithmFailure('No logs were defined as best')
-
     # define ranking
     ranking = sorted(new_logs_meta.items(), key=lambda v: v[1]['best_log_detection']['value'])
     for i, meta in enumerate(ranking):
         new_logs_meta[meta[0]]['best_log_detection']['rank'] = i + 1
-
     new_logs_meta[best_log]['best_log_detection']['is_best'] = True
-
     return best_log, new_logs_meta
 
 
@@ -66,53 +72,23 @@ class BestLogDetectionNode(EngineNode):
 
     def run(self):
         p = Project()
-        well_names = p.list_wells()
-        for well_name in well_names:
-            well = Well(well_name)
-            dataset_names = well.datasets
-            for dataset_name in dataset_names:
-                dataset = WellDataset(well, dataset_name)
-
+        tree = p.tree_oop()
+        tasks = []
+        for well, datasets in tree.items():
+            runs = defaultdict(lambda: defaultdict(list))
+            for dataset, logs in datasets.items():
                 # gather runs in dataset
-                runs = set()
-                log_families = set()
-                for log_id in dataset.log_list:
-                    log = BasicLog(dataset.id, log_id)
-                    runs.update((log.meta.run['value'],))
-                    log_families.update((log.meta.family,))
-
-                for run, family in itertools.product(runs, log_families):
-                    try:
-                        best_log, new_meta = get_best_log(dataset=dataset, family=family, run_name=run)
-
-                        for log_id, values in new_meta.items():
-                            l = BasicLog(dataset.id, log_id)
-                            l.meta.update(values)
-                            l.save()
-                    except AlgorithmFailure as exc:
-                        logging.info(f"Well {well.name} dataset {dataset.name} family {family} run {run}. {repr(exc)}")
+                for log in logs:
+                    if not 'raw' in log.meta.tags:
                         continue
+                    runs[log.meta.run['value']][log.meta.family].append(log)
+
+            for run, families in runs.items():
+                for family, logs in families.items():
+                    logs_paths = [(log.dataset_id, log._id) for log in logs]
+                    tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths,)))
+
+        while not all(map(check_task_completed, tasks)):
+            continue
 
 
-def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
-    '''
-    Finds the best log version of the specific family(ies)
-    :param well_name: well to search into
-    :param log_family: name of a log family or list of acceptable family variants
-    :return: best log or None
-    '''
-    wanted_families = (log_family,) if isinstance(log_family, str) else set(log_family)
-    best_log = None
-    well = Well(well_name)
-    for dataset_name in well.datasets:
-        dataset = WellDataset(well, dataset_name)
-        for log_id in dataset.log_list:
-            log = BasicLog(dataset.id, log_id)
-            if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
-                # best variant
-                if hasattr(log.meta, 'best_log_detection') and log.meta.best_log_detection['is_best']:
-                    return log
-                # just an acceptable family
-                elif best_log is None:
-                    best_log = log
-    return best_log

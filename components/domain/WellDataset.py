@@ -24,7 +24,7 @@ class WellDataset:
         self._well = well.name
         self._name = name
         self._dataset_table_name = None
-        if new:
+        if new and not self.exists:
             self.register()
 
     @property

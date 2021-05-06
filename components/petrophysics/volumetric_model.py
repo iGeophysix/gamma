@@ -1,3 +1,5 @@
+from typing import Union, Iterable, Optional
+
 from scipy.optimize import lsq_linear
 import statistics
 import numpy as np
@@ -6,14 +8,14 @@ import json
 from collections.abc import Iterable
 import copy
 
+from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 from components.petrophysics.curve_operations import interpolate_log_by_depth
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.Log import BasicLog
 from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
-from components.petrophysics.best_log_detection import family_best_log
-
+from celery_conf import app as celery_app, wait_till_completes
 import logging
 logging.basicConfig()
 logger = logging.getLogger('volumetric model')
@@ -192,47 +194,81 @@ class VolumetricModelSolverNode(EngineNode):
         :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
         cls.validate_input(log_families, model_components)
+
+        tasks = []
+        for well_name in Project().list_wells():
+            # cls.calculate_for_well(well_name, log_families, model_components)
+            tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, log_families, model_components)))
+
+        wait_till_completes(tasks)
+
+    @staticmethod
+    def calculate_for_well(well_name, log_families, model_components):
         vm = VolumetricModel()
         us = UnitsSystem()
-        for well_name in Project().list_wells():
-            # pick input logs
-            logs = []
-            for family in log_families:
-                log = family_best_log(well_name, family)
-                if log is not None:
-                    logs.append(log)
-            if not logs:
-                logger.info(f'well {well_name} has no logs sutable for calculation')
-                continue
-            # check logs' units
-            bad_units = False
-            for log in logs:
-                if not us.convertable_units(log.meta.units, vm.FAMILY_UNITS[log.meta.family]):
-                    logger.error(f'log {log.name} has inappropriate units {log.meta.units}')
-                    bad_units = True
-            if bad_units:
-                continue
-            # bring all logs' values to a common reference
-            logs = interpolate_to_common_reference(logs)
-            # convert logs' units
-            log_data = {log.meta.family: log.convert_units(vm.FAMILY_UNITS[log.meta.family])[:, 1] for log in logs}
+        # pick input logs
+        logs = []
+        for family in log_families:
+            log = family_best_log(well_name, family)
+            if log is not None:
+                logs.append(log)
+        if not logs:
+            logger.info(f'well {well_name} has no logs suitable for calculation')
+            return
+        # check logs' units
+        bad_units = False
+        for log in logs:
+            if not us.convertable_units(log.meta.units, vm.FAMILY_UNITS[log.meta.family]):
+                logger.error(f'log {log.name} has inappropriate units {log.meta.units}')
+                bad_units = True
+        if bad_units:
+            return
+        # bring all logs' values to a common reference
+        logs = interpolate_to_common_reference(logs)
+        # convert logs' units
+        log_data = {log.meta.family: log.convert_units(vm.FAMILY_UNITS[log.meta.family])[:, 1] for log in logs}
 
-            # run solver
-            model_logs_data = vm.inverse(log_data, model_components)
+        # run solver
+        model_logs_data = vm.inverse(log_data, model_components)
 
-            for log_name, data in model_logs_data.items():
-                # define core meta information
-                if log_name == 'MISFIT':
-                    family = 'Model Fit Error'
-                    unit = 'unitless'
-                    data = data['TOTAL']
-                else:
-                    family = log_name.lower().capitalize() + ' Volume Fraction'
-                    unit = 'v/v'
-                # create output BasicLog
-                log = BasicLog(dataset_id=logs[0].dataset_id, log_id='VM_' + log_name)
-                log.meta.family = family
-                log.values = np.vstack((logs[0].values[:, 0], data)).T
-                log.meta.units = unit
-                log.meta.update({'method': 'Volumetric model solver'})
-                log.save()
+        for log_name, data in model_logs_data.items():
+            # define core meta information
+            if log_name == 'MISFIT':
+                family = 'Model Fit Error'
+                unit = 'unitless'
+                data = data['TOTAL']
+            else:
+                family = log_name.lower().capitalize() + ' Volume Fraction'
+                unit = 'v/v'
+            # create output BasicLog
+            log = BasicLog(dataset_id=logs[0].dataset_id, log_id='VM_' + log_name)
+            log.meta.family = family
+            log.values = np.vstack((logs[0].values[:, 0], data)).T
+            log.meta.units = unit
+            log.meta.update({'method': 'Volumetric model solver'})
+            log.save()
+
+
+def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
+    '''
+    Finds the best log version of the specific family(ies)
+    :param well_name: well to search into
+    :param log_family: name of a log family or list of acceptable family variants
+    :return: best log or None
+    '''
+    wanted_families = (log_family,) if isinstance(log_family, str) else set(log_family)
+    best_log = None
+    well = Well(well_name)
+    dataset = WellDataset(well, 'LQC')
+    if not dataset.exists:
+        return None
+    for log_id in dataset.log_list:
+        log = BasicLog(dataset.id, log_id)
+        if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
+            # best variant
+            if hasattr(log.meta, 'best_log_detection') and log.meta.best_log_detection['is_best']:
+                return log
+            # just an acceptable family
+            elif best_log is None:
+                best_log = log
+    return best_log

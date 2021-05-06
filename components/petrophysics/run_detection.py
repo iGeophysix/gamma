@@ -8,7 +8,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-
+from celery_conf import app as celery_app, check_task_completed
 
 def detect_runs_in_well(well: Well, depth_tolerance: float):
     # gather all logs
@@ -69,6 +69,10 @@ class RunDetectionNode(EngineNode):
         :return:
         """
         p = Project()
+        tasks = []
         for well_name in p.list_wells():
-            well = Well(well_name)
-            detect_runs_in_well(well, depth_tolerance)
+            result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
+            tasks.append(result)
+
+        while not all(map(check_task_completed, tasks)):
+            continue

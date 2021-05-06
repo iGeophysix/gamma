@@ -1,6 +1,6 @@
 import os
 import unittest
-
+import celery_conf
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well

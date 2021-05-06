@@ -1,17 +1,18 @@
 import json
+import logging
 import operator
 import os
+import pickle
 import re
 
-import logging
-
+from celery_conf import app as celery_app, check_task_completed
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 
 FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignment.json')
+FAMASS_RULES_CACHE = os.path.join(os.path.dirname(FAMASS_RULES), 'FamilyAssignerDB.pickle')
 GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
 
@@ -86,7 +87,13 @@ class FamilyAssigner:
         Loads Energystics family assigning rules.
         '''
         self.db = {}  # {company: FamilyAssigner.DataBase}
+        if os.path.exists(FAMASS_RULES_CACHE) and os.path.getmtime(FAMASS_RULES_CACHE) >= os.path.getmtime(FAMASS_RULES):
+            with open(FAMASS_RULES_CACHE, 'rb') as f:
+                self.db = pickle.load(f)
+        else:
+            self.recreate_family_database()
 
+    def recreate_family_database(self):
         with open(FAMASS_RULES, 'r') as f:
             fa_rules = json.load(f)
         for company, rules in fa_rules.items():
@@ -101,6 +108,8 @@ class FamilyAssigner:
                     else:
                         cdb.precise_match[mnemonic] = mnemonic_info
                     cdb.nlpp.learn(mnemonic, mnemonic_info)
+        with open(FAMASS_RULES_CACHE, 'wb') as f:
+            pickle.dump(self.db, f)
 
     def _nlp_assign_family(self, mnemonic, company=None):
         '''
@@ -202,6 +211,7 @@ class FamilyAssignerNode(EngineNode):
     """
     logger = logging.getLogger("ShaleVolumeLinearMethodNode")
     logger.setLevel(logging.INFO)
+
     class Meta:
         name = 'Family Assigner'
         input = {
@@ -227,22 +237,25 @@ class FamilyAssignerNode(EngineNode):
         :return: BasicLog, log with assigned family
         """
         p = Project()
-        fa = FamilyAssigner()
+        # fa = FamilyAssigner()
+        tasks = []
         for well_name in p.list_wells():
             well = Well(well_name)
             for dataset_name in well.datasets:
-                dataset = WellDataset(well, dataset_name)
-                for log_id in dataset.log_list:
-                    log = BasicLog(dataset.id, log_id)
-                    try:
-                        cls.validate_input(log)
-                    except Exception as exc:
-                        cls.logger.error(f"Validation error in FamilyAssignerNode on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
-                        continue
+                # dataset = WellDataset(well, dataset_name)
+                # for log_id in dataset.log_list:
+                #     log = BasicLog(dataset.id, log_id)
+                #     try:
+                #         cls.validate_input(log)
+                #     except Exception as exc:
+                #         cls.logger.error(f"Validation error in FamilyAssignerNode on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
+                #         continue
+                #
+                #     mnemonic = log.name
+                #     # log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
+                #     # log.save()
+                result = celery_app.send_task('tasks.async_recognize_family', (well_name, [dataset_name, ],))
+                tasks.append(result)
 
-
-                    mnemonic = log.name
-                    log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
-                    log.save()
-
-
+        while not all(map(check_task_completed, tasks)):
+            continue

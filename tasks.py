@@ -8,9 +8,11 @@ from components.engine.engine import Engine
 from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
+from components.petrophysics.best_log_detection import rank_logs
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve
 from components.petrophysics.log_splicing import splice_logs
 from components.petrophysics.run_detection import detect_runs_in_well
+from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 
 
 @app.task
@@ -120,7 +122,7 @@ def async_split_by_runs(wellname: str, depth_tolerance: float = 50) -> None:
 
 
 @app.task
-def async_recognize_family(wellname: str, datasetnames: list[str] = None) -> None:
+def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognames: list[str] = None) -> None:
     """
     Recognize log family in well datasets
     :param wellname:
@@ -135,22 +137,23 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None) -> Non
     for datasetname in datasetnames:
         wd = WellDataset(w, datasetname)
 
-        new_metadata = {log: {} for log in wd.log_list}
-        for log in new_metadata.keys():
+        log_list = wd.log_list if lognames is None else lognames
+
+        for log in log_list:
             '''(log family, unit class, detection reliability)'''
-            result = fa.assign_family(log)
-            family, unit_class, reliability = None, None, None if result is None else result
             l = BasicLog(wd.id, log)
-            l.meta |= {
-                "family": family,
-                "unit_class": unit_class,
-                "family_detection_reliability": reliability
-            }
+            result = fa.assign_family(l.name)
+            family, unit_class, reliability = (None, None, None) if result is None else result
+
+            l.meta.family = family
+            l.meta.unit_class = unit_class
+            l.meta.family_detection_reliability = reliability
+
             l.save()
 
 
 @app.task
-def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, output_dataset_name: str = 'Spliced') -> None:
+def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = 'Spliced') -> None:
     """
     Async method to splice logs. Takes  logs in datasets and outputs it into a specified output dataset
     :param wellname: Well name as string
@@ -159,10 +162,32 @@ def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[
     :param output_dataset_name: Name of output dataset
     """
     w = Well(wellname)
-    logs_data, logs_meta = splice_logs(w, datasetnames, logs)
+    logs_data, logs_meta = splice_logs(w, datasetnames, logs, tags)
     wd = WellDataset(w, output_dataset_name, new=True)
     for log_name in logs_data.keys():
         log = BasicLog(wd.id, log_name)
         log.values = logs_data[log_name]
         log.meta = logs_meta[log_name]
+        log.meta.add_tags('spliced')
         log.save()
+
+
+@app.task
+def async_detect_best_log(log_paths: tuple[tuple[str, str]]) -> None:
+    '''
+    Celery task to run best log detection from BestLogDetectionNode
+    :param log_paths:
+    :return:
+    '''
+    logs = {log: BasicLog(log[0], log[1]) for log in log_paths}
+    logs_meta = {log: log.meta for log in logs.values()}
+    best_log, new_meta = rank_logs(logs_meta)
+    for log, values in new_meta.items():
+        log.meta.update(values)
+        log.meta.add_tags('processing')
+        log.save()
+
+@app.task
+def async_calculate_volumetric_model(well_name, log_families, model_components):
+    vm = VolumetricModelSolverNode()
+    vm.calculate_for_well(well_name, log_families, model_components)

@@ -37,7 +37,7 @@ class TestBestLogDetection(unittest.TestCase):
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
     def test_best_log_detection_works_correct(self):
-        best_log, new_meta = get_best_log(dataset=self.wd, family='Gamma Ray', run_name='56_(2650_2800)')
+        best_log, new_meta = get_best_log(datasets=[self.wd,], family='Gamma Ray', run_name='56_(2650_2800)')
 
         for log_id, values in new_meta.items():
             l = BasicLog(self.wd.id, log_id)

@@ -13,7 +13,7 @@ class Well:
         :param new: False by default. If True - it will create a new well in the data storage
         """
         self._name = name
-        if new:
+        if new and not self.exists():
             _s = RedisStorage()
             _s.create_well(wellname=self._name)
 

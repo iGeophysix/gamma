@@ -1,10 +1,12 @@
 from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
 from components.petrophysics.curve_operations import BasicStatisticsNode, LogResolutionNode
+from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.normalization import LogNormalizationNode
 from components.petrophysics.project_statistics import ProjectStatisticsNode
 from components.petrophysics.run_detection import RunDetectionNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
+from utilities import my_timer
 
 NODES = {
     'BasicStatisticsNode': BasicStatisticsNode,
@@ -13,8 +15,9 @@ NODES = {
     'FamilyAssignerNode': FamilyAssignerNode,
     'BestLogDetectionNode': BestLogDetectionNode,
     'LogNormalizationNode': LogNormalizationNode,
-    'VolumetricModelSolverNode': VolumetricModelSolverNode,
     'ProjectStatisticsNode': ProjectStatisticsNode,
+    'SpliceLogsNode': SpliceLogsNode,
+    'VolumetricModelSolverNode': VolumetricModelSolverNode,
 }
 
 
@@ -30,19 +33,21 @@ class Engine:
         {'node': 'FamilyAssignerNode', 'parameters': {}},
         {'node': 'BestLogDetectionNode', 'parameters': {}},
         {'node': 'ProjectStatisticsNode', 'parameters': {}},
-        {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
-        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'], 'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
+        # {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
+        {'node': 'SpliceLogsNode', 'parameters': {}},
+        {'node': 'VolumetricModelSolverNode',
+         'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'], 'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
     ]
+
     def start(self):
         for step in self.steps:
             print(f'Starting {step}')
             node = NODES[step['node']]()
-            node.run(**step['parameters'])
+            my_timer(node.run)(**step['parameters'])
 
             print(f'Finished {step}')
 
 
 if __name__ == '__main__':
-    import celery_conf
     engine = Engine()
-    engine.start()
+    my_timer(engine.start)()

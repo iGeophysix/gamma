@@ -55,9 +55,7 @@ def import_to_db(filename: str = None,
 
     if well_dataset is None:
         datasetname = os.path.basename(las_structure.filename)
-        well_dataset = WellDataset(well, datasetname)
-        if not well_dataset.exists:
-            well_dataset = WellDataset(well, datasetname, new=True)
+        well_dataset = WellDataset(well, datasetname, new=True)
 
     raw_curves = las_structure.data
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
@@ -71,10 +69,12 @@ def import_to_db(filename: str = None,
         this_log.meta = las_structure.logs_info()[log]
         this_log.save()
         this_log.meta.append_history(f"Loaded from {las_structure.filename}")
+        this_log.meta.add_tags('raw')
         this_log.save()
 
     # write meta-information about this well
     well_info = las_structure.well_info()
+    well_dataset.info = well_info
     if created_new_well:
         well.info = well_info
 

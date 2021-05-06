@@ -21,9 +21,9 @@ class TestVolumetricModel(unittest.TestCase):
         self.w = Well(wellname, new=True)
         # loading data
         filename = 'LQC_ELAN_crop.las'
-        self.wd = WellDataset(self.w, filename, new=True)
+        self.wd = WellDataset(self.w, 'LQC', new=True)
         test_data = os.path.join(PATH_TO_TEST_DATA, filename)
-        async_read_las(wellname=self.w.name, datasetname=filename, filename=test_data)
+        async_read_las(wellname=self.w.name, datasetname='LQC', filename=test_data)
         # assing families
         fam_db = {'GR': 'Gamma Ray', 'RHOB': 'Bulk Density', 'TNPH': 'Thermal Neutron Porosity'}
         for log_name, family in fam_db.items():
@@ -31,7 +31,7 @@ class TestVolumetricModel(unittest.TestCase):
             log.meta.family = family
             log.save()
         # getting basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
+        async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
 
         self.res = {'Shale': [0.93, 0.86, 0.75, 0.74, 0.72, 0.25], 'Quartz': [0.07, 0.14, 0.24, 0.14, 0.17, 0.25], 'Calcite': [0.0, 0.0, 0.0, 0.04, 0.08, 0.25], 'Water': [0.0, 0.0, 0.01, 0.08, 0.03, 0.25]}
 
@@ -55,7 +55,7 @@ class TestVolumetricModel(unittest.TestCase):
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
         log_families = ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity']
-        model_components = self.res.keys()
+        model_components = list(self.res.keys())
 
         module.run(log_families, model_components)
 
