@@ -12,12 +12,13 @@ from components.importexport.las import import_to_db
 class TestFamilyAssignment(unittest.TestCase):
     def setUp(self):
         self.fa = FamilyAssigner()
-        self.mnem_list = ['GR.NORM', 'PS', 'RB', 'BS', 'RAW-TNPH', 'FCAZ', 'HAZI', 'CALI 2']
+        self.mnem_list = ['GR.NORM', 'PS', 'RB', 'BS', 'RAW-TNPH', 'FCAZ', 'HAZI', 'CALI 2', 'ГЗ1', 'СП', 'ПС']
 
     def test_one_by_one(self):
         result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
                   'Outside Diameter', 'Thermal Neutron Porosity', 'Z Acceleration',
-                  'Hole Azimuth', 'Borehole Diameter']
+                  'Hole Azimuth', 'Borehole Diameter', 'Gradient 045',
+                  'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
         for n, mnemonic in enumerate(self.mnem_list):
             res = self.fa.assign_family(mnemonic, one_best=True)
             self.assertIsNotNone(res)
@@ -27,7 +28,8 @@ class TestFamilyAssignment(unittest.TestCase):
     def test_batch(self):
         result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
                   'Nom Borehole Diameter', 'Thermal Neutron Porosity', 'Z Acceleration',
-                  'Hole Azimuth', 'Borehole Diameter']
+                  'Hole Azimuth', 'Borehole Diameter', 'Gradient 045',
+                  'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
         res = self.fa.assign_families(self.mnem_list)
         for mnemonic, right_family in zip(self.mnem_list, result):
             mnem_res = res[mnemonic]
