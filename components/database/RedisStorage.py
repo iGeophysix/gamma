@@ -5,7 +5,7 @@ import logging
 import sys
 from typing import Any
 
-import numpy as np
+import h5py
 import redis
 
 from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
@@ -313,8 +313,11 @@ class RedisStorage:
             data = data[data[:, 0] <= bottom]
             return data
 
-        # out = np.load(io.BytesIO(self.conn.hget(dataset_id, logname)), allow_pickle=True)
-        out = np.loadtxt(io.BytesIO(self.conn.hget(dataset_id, logname)))
+        f = io.BytesIO(self.conn.hget(dataset_id, logname))
+        with h5py.File(f, 'r') as hf:
+            out = hf['values'][:]
+            if out.dtype.char == 'S':
+                out = out.astype('U')
 
         # apply slicing
         if depth is None and depth__gt is None and depth__lt is None:
@@ -406,9 +409,10 @@ class RedisStorage:
             mapping = {}
             for k, v in data.items():
                 stream = io.BytesIO()
-                # np.savez_compressed(stream, array=v)
-                # np.save(stream, v, allow_pickle=True)
-                np.savetxt(stream, v, fmt='%s')
+                with h5py.File(stream, 'w') as hf:
+                    if v.dtype.char == 'U':
+                        v = v.astype('S')
+                    hf.create_dataset('values', data=v, )
                 mapping[k] = stream.getvalue()  # bytes
 
             self.conn.hset(dataset_id, mapping=mapping)

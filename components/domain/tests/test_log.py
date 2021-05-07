@@ -262,8 +262,8 @@ class TestLog(unittest.TestCase):
 
         true_values = {
             "data_hash": "43b6e247100f1688023b4e915ad852d0",
-            "meta_hash": "b15d75d5ee8929db9e02d09325fdad41",
-            "full_hash": "43b6e247100f1688023b4e915ad852d0b15d75d5ee8929db9e02d09325fdad41"
+            "meta_hash": "ebadc9c01515a7e00c84e3ded0f8e591",
+            "full_hash": "43b6e247100f1688023b4e915ad852d0ebadc9c01515a7e00c84e3ded0f8e591"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)
