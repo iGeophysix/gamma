@@ -9,7 +9,7 @@ from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.best_log_detection import rank_logs
-from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve
+from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve, LogResolutionNode
 from components.petrophysics.log_splicing import splice_logs
 from components.petrophysics.run_detection import detect_runs_in_well
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
@@ -95,18 +95,8 @@ def async_log_resolution(wellname: str, datasetnames: list[str] = None, logs: li
     :param datasetnames: list of dataset names to process. If None then use all datasets for the well
     :param logs: list of logs names to process. If None then use all logs for the dataset
     """
-    w = Well(wellname)
-    datasetnames = w.datasets if datasetnames is None else datasetnames
-
-    # get all data from specified well and datasets
-    for dataset_name in datasetnames:
-        d = WellDataset(w, dataset_name)
-        log_names = d.log_list if logs is None else logs
-        for log_name in log_names:
-            log = BasicLog(d.id, log_name)
-            log_resolution = get_log_resolution(log.values, log.meta)
-            log.meta.log_resolution = {'value': log_resolution}
-            log.save()
+    node = LogResolutionNode()
+    node.calculate_for_log(wellname, datasetnames, logs)
 
 
 @app.task

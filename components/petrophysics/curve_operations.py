@@ -2,7 +2,6 @@ import logging
 import warnings
 
 import numpy as np
-from celery.result import AsyncResult
 from scipy import signal
 
 from celery_conf import app as celery_app, wait_till_completes
@@ -122,7 +121,8 @@ class LogResolutionNode(EngineNode):
     logger = logging.getLogger("LogResolutionNode")
     logger.setLevel(logging.INFO)
 
-    def _validate(self, log: BasicLog):
+    @staticmethod
+    def validate(log: BasicLog):
         '''
         Validate input data
         :param log:
@@ -132,7 +132,23 @@ class LogResolutionNode(EngineNode):
             raise TypeError('Not raw data')
         assert abs(log.meta.basic_statistics['min_depth'] - log.meta.basic_statistics['max_depth']) > 50, 'Log is too short'
 
-    def run(self):
+    @classmethod
+    def calculate_for_log(cls, wellname, datasetnames, logs):
+        w = Well(wellname)
+        datasetnames = w.datasets if datasetnames is None else datasetnames
+
+        # get all data from specified well and datasets
+        for dataset_name in datasetnames:
+            d = WellDataset(w, dataset_name)
+            log_names = d.log_list if logs is None else logs
+            for log_name in log_names:
+                log = BasicLog(d.id, log_name)
+                log_resolution = get_log_resolution(log.values, log.meta)
+                log.meta.log_resolution = {'value': log_resolution}
+                log.save()
+
+    @classmethod
+    def run(cls):
         p = Project()
         well_names = p.list_wells()
         tasks = []
@@ -143,12 +159,17 @@ class LogResolutionNode(EngineNode):
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
                     try:
-                        self._validate(log)
+                        cls.validate(log)
                     except TypeError as exc:
-                        self.logger.debug(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
-                    except Exception as exc:
-                        self.logger.info(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        cls.logger.debug(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
                         continue
+                    except Exception as exc:
+                        cls.logger.info(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        log.meta.add_tags('no_resolution', 'bad_quality')
+                        log.save()
+                        continue
+
+                    # cls.calculate_for_log(well_name, [dataset_name, ], [log.name, ])
                     result = celery_app.send_task('tasks.async_log_resolution', (well_name, [dataset_name, ], [log.name, ]))
                     tasks.append(result)
 
@@ -159,10 +180,6 @@ class BasicStatisticsNode(EngineNode):
     """
     Engine node that calculates log resolution
     """
-
-    @staticmethod
-    def check_task_completed(asyncresult: AsyncResult) -> bool:
-        return asyncresult.status in ['SUCCESS', 'FAILURE']
 
     @classmethod
     def run(cls):

@@ -26,10 +26,10 @@ class ProjectStatisticsNode(EngineNode):
         stats_by_family = defaultdict(dict)
         for family, logs in logs_by_families.items():
             stats_by_family[family] = {
-                'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in logs]),
-                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in logs]),
-                'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in logs]),
-                'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in logs]),
+                'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in logs if 'bad_quality' not in log.meta.tags]),
+                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in logs if 'bad_quality' not in log.meta.tags]),
+                'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in logs if 'bad_quality' not in log.meta.tags]),
+                'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in logs if 'bad_quality' not in log.meta.tags]),
             }
 
         p.update_meta({'basic_statistics': stats_by_family})
