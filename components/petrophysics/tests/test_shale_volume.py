@@ -21,12 +21,12 @@ class TestShaleVolume(unittest.TestCase):
         self.w = Well(wellname, new=True)
         # loading data
         filename = 'Volve_15-9-19_VSH.las'
-        self.wd = WellDataset(self.w, filename, new=True)
+        self.wd = WellDataset(self.w, 'LQC', new=True)
         self.output_wd = WellDataset(self.w, 'LQC', new=True)
         test_data = os.path.join(PATH_TO_TEST_DATA, filename)
-        async_read_las(wellname=self.w.name, datasetname=filename, filename=test_data)
+        async_read_las(wellname=self.w.name, datasetname='LQC', filename=test_data)
         # getting basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
+        async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
         gk = BasicLog(self.wd.id, "GR")
         gk.meta.family = 'Gamma Ray'
         gk.save()

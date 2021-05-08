@@ -7,7 +7,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.petrophysics.porosity import linear_method
+from components.petrophysics.porosity import PorosityFromDensityNode
 from tasks import async_get_basic_log_stats, async_read_las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
@@ -20,18 +20,17 @@ class TestShaleVolume(unittest.TestCase):
         wellname = '15-9-19'
         self.w = Well(wellname, new=True)
         # loading data
-        filename = 'Volve_15-9-19_PHIT_D.las'
-        self.wd = WellDataset(self.w, filename, new=True)
-        test_data = os.path.join(PATH_TO_TEST_DATA, filename)
-        async_read_las(wellname=self.w.name, datasetname=filename, filename=test_data)
+        self.wd = WellDataset(self.w, 'LQC', new=True)
+        test_data = os.path.join(PATH_TO_TEST_DATA, 'Volve_15-9-19_PHIT_D.las')
+        async_read_las(wellname=self.w.name, datasetname='LQC', filename=test_data)
         # getting basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
+        async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
 
     def test_porosity_linear_works_correctly(self):
         gk = BasicLog(self.wd.id, "RHOB")
         rhob_fluid = 1.05  # g/cm3
         rhob_matrix = 2.65  # g/cm3
-        phit_d = linear_method(gk, rhob_fluid=rhob_fluid, rhob_matrix=rhob_matrix)
+        phit_d = PorosityFromDensityNode.linear_method(gk, rhob_fluid=rhob_fluid, rhob_matrix=rhob_matrix, output_log_name='PHIT_D')
         phit_d.dataset_id = self.wd.id
         phit_d.name = "PHIT_D"
         phit_d.save()
