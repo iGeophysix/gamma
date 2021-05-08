@@ -10,7 +10,7 @@ from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.best_log_detection import rank_logs
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve, LogResolutionNode
-from components.petrophysics.log_splicing import splice_logs
+from components.petrophysics.log_splicing import splice_logs, SpliceLogsNode
 from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.run_detection import detect_runs_in_well
 from components.petrophysics.shale_volume import ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode, ShaleVolumeLinearMethodNode
@@ -153,15 +153,8 @@ def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[
     :param logs: Logs' names as list of string. If None then uses all logs available in datasets
     :param output_dataset_name: Name of output dataset
     """
-    w = Well(wellname)
-    logs_data, logs_meta = splice_logs(w, datasetnames, logs, tags)
-    wd = WellDataset(w, output_dataset_name, new=True)
-    for log_name in logs_data.keys():
-        log = BasicLog(wd.id, log_name)
-        log.values = logs_data[log_name]
-        log.meta = logs_meta[log_name]
-        log.meta.add_tags('spliced')
-        log.save()
+    node = SpliceLogsNode()
+    node.calculate_for_well(wellname, datasetnames, logs, tags, output_dataset_name)
 
 
 @app.task

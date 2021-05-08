@@ -76,7 +76,7 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
 
     # order log_names by runs
-    logs_order = [log.name for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True)]
+    logs_order = [(log.dataset_id, log._id) for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True)]
 
     # define top and bottom of the spliced log
     min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
@@ -84,7 +84,7 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     new_md = np.arange(min_depth, max_depth, step)
 
     # interpolate logs
-    logs_data_interpolated = {log.name: np.interp(new_md, log.values[:, 0], log.values[:, 1]) for log in logs}
+    logs_data_interpolated = {(log.dataset_id, log._id): np.interp(new_md, log.values[:, 0], log.values[:, 1], left=np.nan, right=np.nan) for log in logs}
     # splice log_names
     df = pd.DataFrame(logs_data_interpolated)
     result = df[logs_order].bfill(axis=1).iloc[:, 0]
@@ -97,7 +97,28 @@ class SpliceLogsNode(EngineNode):
     Runs log splicing in all wells in the project
     """
 
-    def run(self, output_dataset_name: str = "LQC"):
+    @staticmethod
+    def calculate_for_well(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = 'Spliced'):
+        """
+            Method to splice logs in a well. Takes logs in datasets and outputs it into a specified output dataset
+            :param wellname: Well name as string
+            :param datasetnames: Datasets' name as list of strings. If None then uses all datasets
+            :param logs: Logs' names as list of string. If None then uses all logs available in datasets
+            :param tags: tags that must be in logs to process the logs (one of)
+            :param output_dataset_name: Name of output dataset
+            """
+        w = Well(wellname)
+        logs_data, logs_meta = splice_logs(w, datasetnames, logs, tags)
+        wd = WellDataset(w, output_dataset_name, new=True)
+        for log_name in logs_data.keys():
+            log = BasicLog(wd.id, log_name)
+            log.values = logs_data[log_name]
+            log.meta = logs_meta[log_name]
+            log.meta.add_tags('spliced')
+            log.save()
+
+    @classmethod
+    def run(cls, output_dataset_name: str = "LQC"):
         p = Project()
         well_names = p.list_wells()
         tasks = []
