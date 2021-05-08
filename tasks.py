@@ -11,7 +11,9 @@ from components.importexport.las import import_to_db
 from components.petrophysics.best_log_detection import rank_logs
 from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve, LogResolutionNode
 from components.petrophysics.log_splicing import splice_logs
+from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.run_detection import detect_runs_in_well
+from components.petrophysics.shale_volume import ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode, ShaleVolumeLinearMethodNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 
 
@@ -177,7 +179,28 @@ def async_detect_best_log(log_paths: tuple[tuple[str, str]]) -> None:
         log.meta.add_tags('processing')
         log.save()
 
+
 @app.task
 def async_calculate_volumetric_model(well_name, log_families, model_components):
     vm = VolumetricModelSolverNode()
     vm.calculate_for_well(well_name, log_families, model_components)
+
+
+@app.task
+def async_calculate_porosity_from_density(well_name, rhob_matrix: float = None, rhob_fluid: float = None, output_log_name: str = 'VSH_GR'):
+    vm = PorosityFromDensityNode()
+    vm.calculate_for_well(well_name, rhob_matrix, rhob_fluid, output_log_name)
+
+
+@app.task
+def async_calculate_shale_volume(well_name: str, algorithm: str = 'Linear', gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR'):
+    if algorithm == 'ShaleVolumeLarionovOlderRockNode':
+        node = ShaleVolumeLarionovOlderRockNode()
+    elif algorithm == 'ShaleVolumeLarionovTertiaryRockNode':
+        node = ShaleVolumeLarionovTertiaryRockNode()
+    elif algorithm == 'ShaleVolumeLinearMethodNode':
+        node = ShaleVolumeLinearMethodNode()
+    else:
+        raise ValueError(f"Unknown kind of algorithm: {algorithm}."
+                         f"Acceptable values: 'ShaleVolumeLinearMethodNode', 'ShaleVolumeLarionovTertiaryRockNode', 'ShaleVolumeLarionovOlderRockNode'.")
+    node.calculate_for_well(well_name, gr_matrix, gr_shale, output_log_name)

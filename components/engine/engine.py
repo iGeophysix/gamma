@@ -3,8 +3,10 @@ from components.petrophysics.best_log_detection import BestLogDetectionNode
 from components.petrophysics.curve_operations import BasicStatisticsNode, LogResolutionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.normalization import LogNormalizationNode
+from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.project_statistics import ProjectStatisticsNode
 from components.petrophysics.run_detection import RunDetectionNode
+from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 from utilities import my_timer
 
@@ -18,6 +20,10 @@ NODES = {
     'ProjectStatisticsNode': ProjectStatisticsNode,
     'SpliceLogsNode': SpliceLogsNode,
     'VolumetricModelSolverNode': VolumetricModelSolverNode,
+    'ShaleVolumeLinearMethodNode': ShaleVolumeLinearMethodNode,
+    'ShaleVolumeLarionovOlderRockNode': ShaleVolumeLarionovOlderRockNode,
+    'ShaleVolumeLarionovTertiaryRockNode': ShaleVolumeLarionovTertiaryRockNode,
+    'PorosityFromDensityNode': PorosityFromDensityNode,
 }
 
 
@@ -35,8 +41,12 @@ class Engine:
         {'node': 'ProjectStatisticsNode', 'parameters': {}},
         # {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
         {'node': 'SpliceLogsNode', 'parameters': {}},
-        {'node': 'VolumetricModelSolverNode',
-         'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'], 'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
+        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'],
+                                                             'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
+        {'node': 'ShaleVolumeLinearMethodNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LM'}},
+        {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},
+        {'node': 'ShaleVolumeLarionovTertiaryRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LTR'}},
+        {'node': 'PorosityFromDensityNode', 'parameters': {'rhob_matrix': None, 'rhob_fluid': None, 'output_log_name': 'PHIT_D'}},
     ]
 
     def start(self):

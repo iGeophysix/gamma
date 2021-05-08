@@ -5,7 +5,7 @@ import os
 import pickle
 import re
 
-from celery_conf import app as celery_app, check_task_completed
+from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -209,7 +209,7 @@ class FamilyAssignerNode(EngineNode):
     """
     This engine node wraps FamilyAssigner algorithm
     """
-    logger = logging.getLogger("ShaleVolumeLinearMethodNode")
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
     class Meta:
@@ -233,29 +233,12 @@ class FamilyAssignerNode(EngineNode):
     def run(cls):
         """
         Run calculations
-        :param log: BasicLog, log to process
-        :return: BasicLog, log with assigned family
         """
         p = Project()
-        # fa = FamilyAssigner()
         tasks = []
         for well_name in p.list_wells():
             well = Well(well_name)
             for dataset_name in well.datasets:
-                # dataset = WellDataset(well, dataset_name)
-                # for log_id in dataset.log_list:
-                #     log = BasicLog(dataset.id, log_id)
-                #     try:
-                #         cls.validate_input(log)
-                #     except Exception as exc:
-                #         cls.logger.error(f"Validation error in FamilyAssignerNode on {well_name}-{dataset_name}-{log.name}. {repr(exc)}")
-                #         continue
-                #
-                #     mnemonic = log.name
-                #     # log.meta.family = fa.assign_family(mnemonic, one_best=True)[0]
-                #     # log.save()
-                result = celery_app.send_task('tasks.async_recognize_family', (well_name, [dataset_name, ],))
-                tasks.append(result)
+                tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name, [dataset_name, ],)))
 
-        while not all(map(check_task_completed, tasks)):
-            continue
+        wait_till_completes(tasks)
