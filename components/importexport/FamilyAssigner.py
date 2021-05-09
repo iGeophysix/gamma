@@ -15,6 +15,10 @@ FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignmen
 FAMASS_RULES_CACHE = os.path.join(os.path.dirname(FAMASS_RULES), 'FamilyAssignerDB.pickle')
 GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
+MAX_RANK_EXACT_MATCHING = 1
+MAX_RANK_PATTERN_MATCHING = 0.8
+MAX_RANK_NLP_MATCHING = 0.7
+
 
 class NLPParser:
     '''
@@ -34,7 +38,13 @@ class NLPParser:
         '''
         Create 2-letters N-grams with sorted letters (order insensitivity)
         '''
-        return {''.join(sorted(s[n: n + 2])) for n in range(len(s) - 1)}
+        ngs = set()
+        for n in range(len(s) - 1):
+            ng = s[n: n + 2]
+            if ng.isalpha():    # symbols permutation is allowed for letters only
+                ng = ''.join(sorted(ng))
+            ngs.add(ng)
+        return ngs
 
     def learn(self, mnemonic, family):
         '''
@@ -50,20 +60,19 @@ class NLPParser:
         '''
         Return [list of possible families by mnemonic], math rank.
         '''
-        # define search N-gram set
-        ng = set()
-        for token in self.mnemonic_tokenize(mnemonic.upper()):
-            ng.update(self.ngram(token))
-        # search
         best_rank = 0
         best_families = []
-        for ng_ref, family in self.db:
-            match_rank = len(ng.intersection(ng_ref)) / max(len(ng), len(ng_ref))  # rank is (number of matched N-grams) / (all N-grams)
-            if match_rank > best_rank:
-                best_rank = match_rank
-                best_families = [family]
-            elif match_rank == best_rank:
-                best_families.append(family)
+        for token in self.mnemonic_tokenize(mnemonic.upper()):
+            ng = self.ngram(token)
+            # search
+            for ng_ref, family in self.db:
+                match_rank = len(ng.intersection(ng_ref)) / len(ng.union(ng_ref))  # rank is (number of matched N-grams) / (all N-grams)
+                if match_rank > 0:
+                    if match_rank > best_rank:
+                        best_rank = match_rank
+                        best_families = [family]
+                    elif match_rank == best_rank:
+                        best_families.append(family)
         return best_families, best_rank
 
 
@@ -119,7 +128,7 @@ class FamilyAssigner:
         for cc in [company] if company is not None else self.db:
             db = self.db[cc]
             family_infos, rank = db.nlpp.family_variants(mnemonic)
-            company_result[cc] = [(*fi, rank) for fi in family_infos]
+            company_result[cc] = [(*fi, rank) for fi in family_infos] if family_infos else None
         if company_result:
             if company is not None:
                 return company_result[company]
@@ -133,57 +142,59 @@ class FamilyAssigner:
         Gives all the variants if one_best=False.
         company limits log dictionary to a particuler service company.
         '''
-        mnemonic = mnemonic.upper()
-        company_result = {}
-        for cc in [company] if company is not None else self.db:
-            db = self.db[cc]
-            res = None
+        if mnemonic:
+            mnemonic = mnemonic.upper()
+            company_result = {}
+            for cc in [company] if company is not None else self.db:
+                db = self.db[cc]
+                res = None
 
-            # exact matching
-            mnemonic_info = db.precise_match.get(mnemonic)
-            if mnemonic_info is not None:
-                res = *mnemonic_info, 0.9
+                # exact matching
+                mnemonic_info = db.precise_match.get(mnemonic)
+                if mnemonic_info is not None:
+                    res = *mnemonic_info, MAX_RANK_EXACT_MATCHING * (1 - 0.9 / len(mnemonic)**2)   # rank for a shortest 1-letter mnemonic is MAX_RANK_EXACT_MATCHING * 0.1, rank for +INF-letter mnemonic is MAX_RANK_EXACT_MATCHING
 
-            # pattern matching
-            if res is None:
-                for re_pattern, mnemonic_info in db.re_match.items():
-                    if re_pattern.fullmatch(mnemonic):
-                        res = *mnemonic_info, 0.8
+                # pattern matching
+                if res is None:
+                    for re_pattern, mnemonic_info in db.re_match.items():
+                        if re_pattern.fullmatch(mnemonic):
+                            res = *mnemonic_info, MAX_RANK_PATTERN_MATCHING
 
-            # NLP
-            if res is None:
-                nlp_res = self._nlp_assign_family(mnemonic, cc)
-                if nlp_res is not None:
-                    # res = [(mnemonic_info[0], mnemonic_info[1], mnemonic_info[2] * 0.7) for mnemonic_info in nlp_res]   # decrease maximum NLP confidence  # TODO: use all the variants
-                    mnemonic_info = nlp_res[0]
-                    res = (mnemonic_info[0], mnemonic_info[1], mnemonic_info[2] * 0.7)  # decrease maximum NLP confidence
+                # NLP
+                if res is None:
+                    nlp_res = self._nlp_assign_family(mnemonic, cc)
+                    if nlp_res is not None:
+                        # res = [(mnemonic_info[0], mnemonic_info[1], mnemonic_info[2] * 0.7) for mnemonic_info in nlp_res]   # decrease maximum NLP confidence  # TODO: use all the variants
+                        family, dimension, rank = nlp_res[0]
+                        res = (family, dimension, rank * MAX_RANK_NLP_MATCHING)  # decrease maximum NLP confidence
 
-            if res is not None:
-                company_result[cc] = res
+                if res is not None:
+                    company_result[cc] = res
 
-        if company_result:
-            if company is not None:
-                return company_result.get(company)
-            else:
-                # remove family duplicates
-                uniq_family_results = {}
-                for company, mnemonic_info in company_result.items():
-                    found_same_family_at_cc = None
-                    for unic_company, unic_mnemonic_info in uniq_family_results.items():
-                        if mnemonic_info[0] == unic_mnemonic_info[0]:  # compare by family
-                            found_same_family_at_cc = unic_company
-                            break
-                    if found_same_family_at_cc is not None:
-                        unic_mnemonic_info = uniq_family_results[found_same_family_at_cc]
-                        newRank = min(1, unic_mnemonic_info[2] + mnemonic_info[2] / len(company_result))  # increase rank by a part of the second source rank
-                        uniq_family_results[found_same_family_at_cc] = (unic_mnemonic_info[0], unic_mnemonic_info[1], newRank)  # update rank, drop second source variant
-                    else:
-                        uniq_family_results[company] = mnemonic_info  # just add the variant
-
-                if one_best:
-                    return sorted(uniq_family_results.values(), key=operator.itemgetter(2), reverse=True)[0]  # sorted by rank
+            if company_result:
+                if company is not None:
+                    return company_result.get(company)
                 else:
-                    return uniq_family_results
+                    # remove family duplicates
+                    uniq_family_results = {}
+                    for company, mnemonic_info in company_result.items():
+                        found_same_family_at_cc = None
+                        for unic_company, unic_mnemonic_info in uniq_family_results.items():
+                            if mnemonic_info[0] == unic_mnemonic_info[0]:  # compare by family
+                                found_same_family_at_cc = unic_company
+                                break
+                        if found_same_family_at_cc is not None:
+                            unic_mnemonic_info = uniq_family_results[found_same_family_at_cc]
+                            newRank = min(1, unic_mnemonic_info[2] + mnemonic_info[2] / len(company_result))  # increase rank by a part of the second source rank
+                            uniq_family_results[found_same_family_at_cc] = (unic_mnemonic_info[0], unic_mnemonic_info[1], newRank)  # update rank, drop second source variant
+                        else:
+                            uniq_family_results[company] = mnemonic_info  # just add the variant
+
+                    uniq_family_results = dict(sorted(uniq_family_results.items(), key=lambda pair: pair[1][2], reverse=True))     # sort dictionary results by rank
+                    if one_best:
+                        return next(iter(uniq_family_results.values()))
+                    else:
+                        return uniq_family_results
         return None
 
     def assign_families(self, mnemonics):

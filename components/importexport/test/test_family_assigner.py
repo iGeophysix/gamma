@@ -22,7 +22,7 @@ class TestFamilyAssignment(unittest.TestCase):
         for n, mnemonic in enumerate(self.mnem_list):
             res = self.fa.assign_family(mnemonic, one_best=True)
             self.assertIsNotNone(res)
-            family, dimension, rank = res
+            family = res[0]   # res = (family, dimension, rank) or None
             self.assertEqual(family, result[n])
 
     def test_batch(self):
@@ -32,9 +32,9 @@ class TestFamilyAssignment(unittest.TestCase):
                   'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
         res = self.fa.assign_families(self.mnem_list)
         for mnemonic, right_family in zip(self.mnem_list, result):
-            mnem_res = res[mnemonic]
+            mnem_res = res[mnemonic]    # mnem_res = (family, dimension, rank) or None
             self.assertIsNotNone(mnem_res)
-            family, dimension, rank = mnem_res
+            family = mnem_res[0]
             self.assertEqual(family, right_family)
 
 
@@ -48,9 +48,9 @@ class TestFamilyAssignerNode(unittest.TestCase):
         import_to_db(filename=test_data, well=self.well, well_dataset=self.dataset)
 
     def test_family_assignment_node(self):
-        l = BasicLog(self.dataset.id, log_id="SP")
-        l.meta.family = None  # deleting data
-        l.save()
+        log = BasicLog(self.dataset.id, log_id="SP")
+        log.meta.family = None  # deleting data
+        log.save()
 
         fa = FamilyAssignerNode()
         fa.run()
