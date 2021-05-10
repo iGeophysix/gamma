@@ -4,17 +4,19 @@ from typing import Iterable
 from celery import Celery
 from celery.result import AsyncResult
 
-from settings import REDIS_HOST
+# CELERY CONFIG
+QUEUE_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+QUEUE_PORT = os.environ.get('REDIS_PORT', 6379)
+QUEUE_DB = os.environ.get('REDS_DB', 0)
+CELERY_RESULTS_DB = os.environ.get('REDS_DB', 2)
 
-REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
-REDIS_DB = os.environ.get('REDIS_PORT', 0)
-app = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}')
-app.conf.result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
-app.conf.result_expires = 60*60*24
-app.conf.ack_late = True
-app.conf.worker_prefetch_multiplier = 1
+app = Celery('tasks', broker=f'redis://{QUEUE_HOST}:{QUEUE_PORT}/{QUEUE_DB}')
+app.conf.result_backend = f'redis://{QUEUE_HOST}:{QUEUE_PORT}/{CELERY_RESULTS_DB}'
+app.conf.result_expires = 60 * 60  # in seconds
+# app.conf.ack_late = True
+# app.conf.worker_prefetch_multiplier = 2
 app.conf.task_serializer = 'pickle'
-app.conf.task_compression = 'gzip'
+# app.conf.task_compression = 'gzip'
 app.conf.accept_content = ['pickle', 'json']
 
 

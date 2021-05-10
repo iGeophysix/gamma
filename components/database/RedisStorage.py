@@ -36,6 +36,9 @@ class RedisStorage:
     def connection(self):
         return RedisStorage._conn
 
+    def __del__(self):
+        self._conn.close()
+
     # DATABASE
 
     def flush_db(self):

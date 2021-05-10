@@ -1,4 +1,5 @@
 import gzip
+import time
 
 from celery_conf import app
 from components.domain.Log import BasicLog
@@ -9,8 +10,8 @@ from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.petrophysics.best_log_detection import rank_logs
-from components.petrophysics.curve_operations import get_basic_curve_statistics, get_log_resolution, rescale_curve, LogResolutionNode
-from components.petrophysics.log_splicing import splice_logs, SpliceLogsNode
+from components.petrophysics.curve_operations import get_basic_curve_statistics, rescale_curve, LogResolutionNode
+from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.run_detection import detect_runs_in_well
 from components.petrophysics.shale_volume import ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode, ShaleVolumeLinearMethodNode
@@ -25,17 +26,20 @@ def async_run_workflow(workflow_id: str = None):
 
 @app.task
 def async_read_las(wellname: str = None, datasetname: str = None, filename: str = None, las_data: str = None):
+    start = time.time()
     if filename is not None and las_data is None:
         well = Well(wellname)
         dataset = WellDataset(well, datasetname)
         import_to_db(filename=filename, well=well, well_dataset=dataset)
     elif las_data is not None:
-        las_structure = las.parse(filename=filename, data=gzip.decompress(las_data))
+        las_structure = las.parse(filename=filename, data=las_data)
         well = Well(wellname) if wellname is not None else None
         dataset = WellDataset(well, datasetname) if datasetname is not None else None
         import_to_db(las_structure=las_structure, well=well, well_dataset=dataset)
     else:
         raise Exception('Incorrect function call')
+    end = time.time()
+    return {'filename': filename, 'task_time': end - start}
 
 
 @app.task

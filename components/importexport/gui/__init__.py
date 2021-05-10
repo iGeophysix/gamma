@@ -22,7 +22,7 @@ gamma_logger = logging.getLogger('gamma_logger')
 def compress_and_send_for_parsing(filename):
     gamma_logger.info(f"PID {os.getpid()}: Reading {filename}")
     with open(filename, 'rb') as f:
-        las_data = gzip.compress(f.read())
+        las_data = f.read()
     result = celery_app.send_task('tasks.async_read_las', kwargs={'filename': filename, 'las_data': las_data})
     return result
 
@@ -69,6 +69,8 @@ class ImportExportGui(ComponentGuiConstructor):
         pool.join()
 
         progress.setValue(len(files))
+
+        gamma_logger.info(f'Sent all files to queue: {time.time() - start}')
 
         while not all(map(check_task_completed, async_results)):
             continue
