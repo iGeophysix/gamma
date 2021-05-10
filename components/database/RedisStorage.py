@@ -25,18 +25,23 @@ class RedisStorage:
     REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD to be set via environmental variables
     """
 
+    _conn = redis.Redis(host=REDIS_HOST,
+                        port=REDIS_PORT,
+                        db=REDIS_DB,
+                        password=REDIS_PASSWORD)
+
     def __init__(self):
-        self.conn = redis.Redis(host=REDIS_HOST,
-                                port=REDIS_PORT,
-                                db=REDIS_DB,
-                                password=REDIS_PASSWORD)
+        pass
+
+    def connection(self):
+        return RedisStorage._conn
 
     # DATABASE
 
     def flush_db(self):
         """Erase the whole database.
         Use with caution!"""
-        self.conn.flushdb()
+        self.connection().flushdb()
 
     # PROJECT
     def get_project_meta(self) -> dict:
@@ -44,7 +49,7 @@ class RedisStorage:
         Get current project meta
         :return:
         '''
-        project_meta = self.conn.get('project')
+        project_meta = self.connection().get('project')
         if project_meta is not None:
             return json.loads(project_meta)
         else:
@@ -56,7 +61,7 @@ class RedisStorage:
         :param meta:
         :return:
         '''
-        self.conn.set('project', json.dumps(meta))
+        self.connection().set('project', json.dumps(meta))
 
     # WELLS
 
@@ -75,7 +80,7 @@ class RedisStorage:
         :param wellname: well name as string
         """
         wellid = self._get_well_id(wellname)
-        self.conn.hset('wells', wellid, json.dumps({'name': wellname, 'datasets': [], 'meta': {}}))
+        self.connection().hset('wells', wellid, json.dumps({'name': wellname, 'datasets': [], 'meta': {}}))
 
     def check_well_exists(self, wellname: str) -> bool:
         """
@@ -83,7 +88,7 @@ class RedisStorage:
         :param wellname:
         :return:
         """
-        return self.conn.hexists('wells', self._get_well_id(wellname))
+        return self.connection().hexists('wells', self._get_well_id(wellname))
 
     def list_wells(self) -> dict:
         """
@@ -91,7 +96,7 @@ class RedisStorage:
         :return: dict
             Example: {'well1': {'name': 'well1', 'datasets': [], 'meta': {}}, 'well2': {'name': 'well2', 'datasets': [], 'meta': {}}}
         """
-        data = [json.loads(d) for d in self.conn.hgetall("wells").values()]
+        data = [json.loads(d) for d in self.connection().hgetall("wells").values()]
         return {d['name']: d for d in data}
 
     def get_well_datasets(self, wellname: str) -> list:
@@ -100,7 +105,7 @@ class RedisStorage:
         :param wellname: well name as string
         :return: list of dataset ids
         """
-        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['datasets']
+        return json.loads(self.connection().hget('wells', self._get_well_id(wellname)))['datasets']
 
     def get_well_info(self, wellname: str) -> dict:
         """
@@ -108,7 +113,7 @@ class RedisStorage:
         :param wellname: well name as string
         :return: dict with all info in it
         """
-        return json.loads(self.conn.hget('wells', self._get_well_id(wellname)))['meta']
+        return json.loads(self.connection().hget('wells', self._get_well_id(wellname)))['meta']
 
     def set_well_info(self, wellname: str, info: dict) -> None:
         """
@@ -119,10 +124,10 @@ class RedisStorage:
         """
         try:
             wellid = self._get_well_id(wellname)
-            with self.conn.lock(f'wells:{wellid}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
-                current_info = json.loads(self.conn.hget('wells', wellid))
+            with self.connection().lock(f'wells:{wellid}', blocking_timeout=BLOCKING_TIMEOUT) as lock:
+                current_info = json.loads(self.connection().hget('wells', wellid))
                 current_info['meta'] = info
-                self.conn.hset("wells", wellid, json.dumps(current_info))
+                self.connection().hset("wells", wellid, json.dumps(current_info))
         except redis.exceptions.LockError:
             logger.error("Couldn't acquire lock in wells. Please try again later...")
             raise
@@ -136,7 +141,7 @@ class RedisStorage:
         datasets = self.get_datasets(wellname)
         for dataset in datasets:
             self.delete_dataset(wellname, dataset)
-        self.conn.hdel('wells', self._get_well_id(wellname))
+        self.connection().hdel('wells', self._get_well_id(wellname))
 
     def get_datasets(self, wellname: str) -> list[str]:
         """
@@ -153,7 +158,7 @@ class RedisStorage:
         :param well_id: well id as string
         :return: dict with all info in it
         """
-        return json.loads(self.conn.hget('wells', well_id))['name']
+        return json.loads(self.connection().hget('wells', well_id))['name']
 
     # DATASETS
     @staticmethod
@@ -177,7 +182,7 @@ class RedisStorage:
         dataset_id = self._get_dataset_id(wellname, datasetname)
         dataset_info = {'name': datasetname, 'well_name': wellname, 'meta': {}}
         # append dataset to well
-        with self.conn.pipeline() as pipe:
+        with self.connection().pipeline() as pipe:
             while True:
                 try:
                     pipe.watch(f'wells:{well_id}')
@@ -202,7 +207,7 @@ class RedisStorage:
         :param dataset_id:
         :return:
         """
-        return self.conn.hexists('datasets', dataset_id)
+        return self.connection().hexists('datasets', dataset_id)
 
     def get_dataset_name(self, dataset_id: str) -> str:
         """
@@ -210,7 +215,7 @@ class RedisStorage:
         :param dataset_id: dataset_id as string
         :return: dataset name as string
         """
-        return json.loads(self.conn.hget('datasets', dataset_id))['name']
+        return json.loads(self.connection().hget('datasets', dataset_id))['name']
 
     def get_dataset_logs(self, dataset_id: str) -> list[str]:
         """
@@ -218,7 +223,7 @@ class RedisStorage:
         :param dataset_id: dataset log_id as string
         :return: list of logs available in the dataset
         """
-        return [l.decode() for l in self.conn.hkeys(f'{dataset_id}_meta')]
+        return [l.decode() for l in self.connection().hkeys(f'{dataset_id}_meta')]
 
     def get_dataset_info(self, dataset_id: str = None) -> dict:
         """
@@ -226,8 +231,8 @@ class RedisStorage:
         :param dataset_id: dataset id as string
         :return: dictionary with all dataset meta information
         """
-        if self.conn.hexists('datasets', dataset_id):
-            return json.loads(self.conn.hget('datasets', dataset_id))
+        if self.connection().hexists('datasets', dataset_id):
+            return json.loads(self.connection().hget('datasets', dataset_id))
         else:
             raise FileNotFoundError(f"Dataset {dataset_id} was not found")
 
@@ -239,7 +244,7 @@ class RedisStorage:
 
         """
 
-        with self.conn.pipeline() as pipe:
+        with self.connection().pipeline() as pipe:
             while True:
                 try:
                     pipe.watch(f'datasets:{dataset_id}')
@@ -260,7 +265,7 @@ class RedisStorage:
         """
         dataset_id = self._get_dataset_id(wellname, datasetname)
         well_id = self._get_well_id(wellname)
-        with self.conn.pipeline() as pipe:
+        with self.connection().pipeline() as pipe:
             while True:
                 try:
                     pipe.watch(f'datasets:{dataset_id}')
@@ -269,7 +274,7 @@ class RedisStorage:
                     pipe.delete(dataset_id)
                     pipe.delete(f"{dataset_id}_meta")
                     pipe.hdel('datasets', dataset_id)
-                    wellinfo = json.loads(self.conn.hget('wells', well_id))
+                    wellinfo = json.loads(self.connection().hget('wells', well_id))
                     wellinfo['datasets'].remove(dataset_id)
                     pipe.hset('wells', well_id, json.dumps(wellinfo))
                     pipe.execute()
@@ -284,11 +289,11 @@ class RedisStorage:
         :param dataset_id: dataset id as string
         :param log_name: log name as string
         """
-        self.conn.hset(f"{dataset_id}_meta", log_name, '{}')
-        self.conn.hset(dataset_id, log_name, '{}')
+        self.connection().hset(f"{dataset_id}_meta", log_name, '{}')
+        self.connection().hset(dataset_id, log_name, '{}')
 
     def check_log_exists(self, dataset_id: str, log_name: str) -> bool:
-        return self.conn.hexists(f'{dataset_id}_data', log_name) or self.conn.hexists(f'{dataset_id}_meta', log_name)
+        return self.connection().hexists(f'{dataset_id}_data', log_name) or self.connection().hexists(f'{dataset_id}_meta', log_name)
 
     def get_log_data(self, dataset_id: str,
                      logname: str,
@@ -313,7 +318,7 @@ class RedisStorage:
             data = data[data[:, 0] <= bottom]
             return data
 
-        f = io.BytesIO(self.conn.hget(dataset_id, logname))
+        f = io.BytesIO(self.connection().hget(dataset_id, logname))
         with h5py.File(f, 'r') as hf:
             out = hf['values'][:]
             if out.dtype.char == 'S':
@@ -343,7 +348,7 @@ class RedisStorage:
         """
 
         if logs == None:
-            logs = [l.decode() for l in self.conn.hkeys(dataset_id)]
+            logs = [l.decode() for l in self.connection().hkeys(dataset_id)]
 
         out = {logname: self.get_log_data(dataset_id, logname, depth, depth__gt, depth__lt) for logname in logs}
 
@@ -356,7 +361,7 @@ class RedisStorage:
         :param logname: log name as strings (eg "GR" )
         :return: dict with log info as dict
         """
-        return json.loads(self.conn.hget(f"{dataset_id}_meta", logname))
+        return json.loads(self.connection().hget(f"{dataset_id}_meta", logname))
 
     def get_logs_meta(self, dataset_id: str, logs=None) -> dict:
         """
@@ -367,7 +372,7 @@ class RedisStorage:
         """
 
         if logs == None:
-            logs = [l.decode() for l in self.conn.hkeys(f"{dataset_id}_meta")]
+            logs = [l.decode() for l in self.connection().hkeys(f"{dataset_id}_meta")]
 
         out = {log: self.get_log_meta(dataset_id, log) for log in logs}
 
@@ -380,7 +385,7 @@ class RedisStorage:
         :param logname: log name as string
         :param meta: dict with new meta information (e.g. {"UWI":434232, "PWA":"GIGI",...})
         """
-        with self.conn.pipeline() as pipe:
+        with self.connection().pipeline() as pipe:
             while True:
                 try:
                     pipe.watch(f'{dataset_id}_meta:{logname}')
@@ -403,7 +408,7 @@ class RedisStorage:
         """
 
         if meta:
-            self.conn.hset(f"{dataset_id}_meta", mapping={k: json.dumps(v) for k, v in meta.items()})
+            self.connection().hset(f"{dataset_id}_meta", mapping={k: json.dumps(v) for k, v in meta.items()})
         if data:
             # convert np.array to bytes
             mapping = {}
@@ -415,7 +420,7 @@ class RedisStorage:
                     hf.create_dataset('values', data=v, )
                 mapping[k] = stream.getvalue()  # bytes
 
-            self.conn.hset(dataset_id, mapping=mapping)
+            self.connection().hset(dataset_id, mapping=mapping)
 
     def delete_log(self, dataset_id: str, log_name: str) -> None:
         """
@@ -423,8 +428,8 @@ class RedisStorage:
         :param dataset_id: dataset id as string
         :param log_name: log name as string
         """
-        self.conn.hdel(dataset_id, log_name)
-        self.conn.hdel(f"{dataset_id}_meta", log_name)
+        self.connection().hdel(dataset_id, log_name)
+        self.connection().hdel(f"{dataset_id}_meta", log_name)
 
     def log_history(self, dataset_id: str, log: str) -> list[Any]:
         """
@@ -434,7 +439,7 @@ class RedisStorage:
         :param log: log name as string
         :return: list of events
         """
-        log_meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
+        log_meta = json.loads(self.connection().hget(f"{dataset_id}_meta", log))
         return log_meta.get('history', [])
 
     def append_log_history(self, dataset_id: str, log: str, event: Any) -> None:
@@ -445,13 +450,13 @@ class RedisStorage:
         :param event: event must be serializable
         """
 
-        with self.conn.lock(f"{dataset_id}_meta:{log}", blocking_timeout=BLOCKING_TIMEOUT) as lock:
+        with self.connection().lock(f"{dataset_id}_meta:{log}", blocking_timeout=BLOCKING_TIMEOUT) as lock:
             try:
-                meta = json.loads(self.conn.hget(f"{dataset_id}_meta", log))
+                meta = json.loads(self.connection().hget(f"{dataset_id}_meta", log))
                 if 'history' not in meta.keys():
                     meta['history'] = []
                 meta['history'].append(event)
-                self.conn.hset(f"{dataset_id}_meta", log, json.dumps(meta))
+                self.connection().hset(f"{dataset_id}_meta", log, json.dumps(meta))
 
             except redis.exceptions.LockError:
                 logger.error("Couldn't acquire lock in wells. Please try again later...")
