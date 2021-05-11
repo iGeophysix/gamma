@@ -12,7 +12,6 @@ services:
     container_name: gamma_celery
     environment:
       - REDIS_HOST=redis
-      - STORAGE_HOST=postgres
     depends_on:
       - redis
     command: [celery, -A, tasks, worker, --loglevel=INFO, --concurrency=4]
