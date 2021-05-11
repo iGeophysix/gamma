@@ -11,6 +11,14 @@ class ProjectStatisticsNode(EngineNode):
     Node to calculate project's data statistics.
     """
 
+    @staticmethod
+    def validate(log):
+        if 'bad_quality' in log.meta.tags:
+            return False
+        if not hasattr(log.meta, 'log_resolution'):
+            return False
+        return True
+
     @classmethod
     def run(cls):
         p = Project()
@@ -25,11 +33,13 @@ class ProjectStatisticsNode(EngineNode):
 
         stats_by_family = defaultdict(dict)
         for family, logs in logs_by_families.items():
+
+            good_logs = [log for log in logs if cls.validate(log)]
             stats_by_family[family] = {
-                'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in logs if 'bad_quality' not in log.meta.tags]),
-                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in logs if 'bad_quality' not in log.meta.tags]),
-                'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in logs if 'bad_quality' not in log.meta.tags]),
-                'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in logs if 'bad_quality' not in log.meta.tags]),
+                'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
+                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in good_logs]),
+                'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
+                'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
             }
 
         p.update_meta({'basic_statistics': stats_by_family})

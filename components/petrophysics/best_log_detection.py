@@ -4,7 +4,7 @@ from typing import Iterable
 
 import numpy as np
 
-from celery_conf import app as celery_app, check_task_completed
+from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.WellDataset import WellDataset
@@ -43,8 +43,14 @@ def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) ->
 def rank_logs(logs_meta):
     averages = {('basic_statistics', "mean"): None, ('basic_statistics', "stdev"): None, ('log_resolution', 'value'): None}
     for category, metric in averages.keys():
-        averages[(category, metric)] = np.median([logs_meta[log_id][category][metric] for log_id in logs_meta.keys()])
+        val = np.median([logs_meta[log_id][category][metric] for log_id in logs_meta.keys()])
+        # little trick to avoid division by zero : https://gammalog.jetbrains.space/im/review/2vqWfb3Gfp0m?message=1Jv0001Jv&channel=2pl5Dd4IH2oq
+        averages[(category, metric)] = val if val != 0 else val + 1e-16
+
     average_depth_correction = np.max([logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth'] for log_id in logs_meta.keys()])
+    # little trick to avoid division by zero : https://gammalog.jetbrains.space/im/review/2vqWfb3Gfp0m?message=1Jv0001Jv&channel=2pl5Dd4IH2oq
+    average_depth_correction = average_depth_correction if average_depth_correction != 0 else average_depth_correction + 1e-16
+
     best_score = np.inf
     best_log = None
     new_logs_meta = {log_id: {} for log_id in logs_meta.keys()}
@@ -70,7 +76,16 @@ class BestLogDetectionNode(EngineNode):
     logger = logging.getLogger("BestLogDetectionNode")
     logger.setLevel(logging.INFO)
 
-    def run(self):
+    @staticmethod
+    def validate(log: BasicLog) -> bool:
+        return 'raw' in log.meta.tags \
+               and not 'bad_quality' in log.meta.tags \
+               and hasattr(log.meta, 'family') \
+               and hasattr(log.meta, 'basic_statistics') \
+               and hasattr(log.meta, 'log_resolution')
+
+    @classmethod
+    def run(cls):
         p = Project()
         tree = p.tree_oop()
         tasks = []
@@ -79,16 +94,12 @@ class BestLogDetectionNode(EngineNode):
             for dataset, logs in datasets.items():
                 # gather runs in dataset
                 for log in logs:
-                    if not 'raw' in log.meta.tags:
-                        continue
-                    runs[log.meta.run['value']][log.meta.family].append(log)
+                    if cls.validate(log):
+                        runs[log.meta.run['value']][log.meta.family].append(log)
 
             for run, families in runs.items():
                 for family, logs in families.items():
                     logs_paths = [(log.dataset_id, log._id) for log in logs]
                     tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths,)))
 
-        while not all(map(check_task_completed, tasks)):
-            continue
-
-
+        wait_till_completes(tasks)

@@ -1,9 +1,9 @@
 import json
 import logging
-import operator
 import os
 import pickle
 import re
+import time
 
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
@@ -41,7 +41,7 @@ class NLPParser:
         ngs = set()
         for n in range(len(s) - 1):
             ng = s[n: n + 2]
-            if ng.isalpha():    # symbols permutation is allowed for letters only
+            if ng.isalpha():  # symbols permutation is allowed for letters only
                 ng = ''.join(sorted(ng))
             ngs.add(ng)
         return ngs
@@ -96,9 +96,18 @@ class FamilyAssigner:
         Loads Energystics family assigning rules.
         '''
         self.db = {}  # {company: FamilyAssigner.DataBase}
+        retries = 5
         if os.path.exists(FAMASS_RULES_CACHE) and os.path.getmtime(FAMASS_RULES_CACHE) >= os.path.getmtime(FAMASS_RULES):
-            with open(FAMASS_RULES_CACHE, 'rb') as f:
-                self.db = pickle.load(f)
+            while retries:
+                try:
+                    with open(FAMASS_RULES_CACHE, 'rb') as f:
+                        self.db = pickle.load(f)
+                except pickle.UnpicklingError:
+                    retries -= 1
+                    time.sleep(1)
+                    continue
+                else:
+                    break
         else:
             self.recreate_family_database()
 
@@ -117,8 +126,9 @@ class FamilyAssigner:
                     else:
                         cdb.precise_match[mnemonic] = mnemonic_info
                     cdb.nlpp.learn(mnemonic, mnemonic_info)
-        with open(FAMASS_RULES_CACHE, 'wb') as f:
-            pickle.dump(self.db, f)
+        if not (os.path.exists(FAMASS_RULES_CACHE) and os.path.getmtime(FAMASS_RULES_CACHE) >= os.path.getmtime(FAMASS_RULES)):
+            with open(FAMASS_RULES_CACHE, 'wb') as f:
+                pickle.dump(self.db, f)
 
     def _nlp_assign_family(self, mnemonic, company=None):
         '''
@@ -152,7 +162,8 @@ class FamilyAssigner:
                 # exact matching
                 mnemonic_info = db.precise_match.get(mnemonic)
                 if mnemonic_info is not None:
-                    res = *mnemonic_info, MAX_RANK_EXACT_MATCHING * (1 - 0.9 / len(mnemonic)**2)   # rank for a shortest 1-letter mnemonic is MAX_RANK_EXACT_MATCHING * 0.1, rank for +INF-letter mnemonic is MAX_RANK_EXACT_MATCHING
+                    res = *mnemonic_info, MAX_RANK_EXACT_MATCHING * (1 - 0.9 / len(
+                        mnemonic) ** 2)  # rank for a shortest 1-letter mnemonic is MAX_RANK_EXACT_MATCHING * 0.1, rank for +INF-letter mnemonic is MAX_RANK_EXACT_MATCHING
 
                 # pattern matching
                 if res is None:
@@ -190,7 +201,7 @@ class FamilyAssigner:
                         else:
                             uniq_family_results[company] = mnemonic_info  # just add the variant
 
-                    uniq_family_results = dict(sorted(uniq_family_results.items(), key=lambda pair: pair[1][2], reverse=True))     # sort dictionary results by rank
+                    uniq_family_results = dict(sorted(uniq_family_results.items(), key=lambda pair: pair[1][2], reverse=True))  # sort dictionary results by rank
                     if one_best:
                         return next(iter(uniq_family_results.values()))
                     else:

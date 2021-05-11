@@ -1,4 +1,3 @@
-import gzip
 import time
 
 from celery_conf import app

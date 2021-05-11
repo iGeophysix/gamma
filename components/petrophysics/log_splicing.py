@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import scipy.interpolate
 
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
@@ -56,7 +57,7 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         meta = {'basic_statistics': get_basic_curve_statistics(spliced)}
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
         meta['family'] = family
-        meta['units'] = logs_in_family[0].meta.units # TODO: check spliced log units are defined correctly
+        meta['units'] = logs_in_family[0].meta.units  # TODO: check spliced log units are defined correctly
         results_data.update({family: spliced})  # Log name will be defined here
         results_meta.update({family: meta})  # log name will be defined here
 
@@ -73,7 +74,7 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     '''
 
     # define smallest depth sampling rate
-    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
+    step = abs(np.min([log.meta['basic_statistics']['avg_step'] for log in logs]))
 
     # order log_names by runs
     logs_order = [(log.dataset_id, log._id) for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True)]
@@ -81,10 +82,14 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     # define top and bottom of the spliced log
     min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
     max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs])
-    new_md = np.arange(min_depth, max_depth, step)
+    new_md = np.arange(min_depth, max_depth + step, step)
 
     # interpolate logs
-    logs_data_interpolated = {(log.dataset_id, log._id): np.interp(new_md, log.values[:, 0], log.values[:, 1], left=np.nan, right=np.nan) for log in logs}
+    logs_data_interpolated = {}
+    for log in logs:
+        interpolated_values = scipy.interpolate.interp1d(log.values[:, 0], log.values[:, 1], fill_value=np.nan, bounds_error=False)(new_md)
+        logs_data_interpolated.update({(log.dataset_id, log._id): interpolated_values})
+
     # splice log_names
     df = pd.DataFrame(logs_data_interpolated)
     result = df[logs_order].bfill(axis=1).iloc[:, 0]

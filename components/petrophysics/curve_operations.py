@@ -101,7 +101,7 @@ def get_log_resolution(log_data: np.array, log_meta: BasicLogMeta, window: float
     if not log_meta.basic_statistics['const_step']:
         log_data = interpolate_log_by_depth(log_data, step)
 
-    window_in_samples = np.round(window / step)
+    window_in_samples = np.round(window / abs(step))
     if window_in_samples == 0 or step > 1:  # if depth step is bigger than window or if avg step is > 1 then resolution is too low and we assume it equals np.nan
         return np.nan
 
