@@ -3,7 +3,6 @@ import numpy as np
 import os
 
 from components.petrophysics.volumetric_model import VolumetricModel, VolumetricModelSolverNode
-# from components.importexport.FamilyAssigner import FamilyAssigner
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
@@ -43,10 +42,10 @@ class TestVolumetricModel(unittest.TestCase):
 
         selected_components = self.res.keys()    # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
         vm = VolumetricModel()
-        model = vm.inverse(logs, selected_components)
+        model = vm.inverse(logs, selected_components)['COMPONENT_VOLUME']
 
         # summ of all model component volumes must be 1
-        for row in zip(*(values for component, values in model.items() if component != 'MISFIT')):
+        for row in zip(*(values for component, values in model.items())):
             self.assertAlmostEqual(sum(row), 1)
         # compare results with the reference
         for component in selected_components:

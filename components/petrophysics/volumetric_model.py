@@ -58,7 +58,10 @@ class VolumetricModel():
         Perfoms inversion for provided logs to component volumes.
         :param logs: dict - input logs {'family1': [v1, v2...], ...}
         :param components: list - model components inversion is performed for
-        :return: dict - component model {'component1': [v1, v2...], ...}, including 'MISFIT' as a continious quality of the model
+        :return: dict of:
+        'COMPONENT_VOLUME' - components' volumes
+        'FORWARD_MODELED_LOG' - synthetic input logs modeled using resulting volumetric model
+        'MISFIT' - model error for every component and 'TOTAL' as overall misfit
         '''
         useless_logs = set(logs).difference_update(self.supported_log_families())
         if useless_logs:
@@ -85,10 +88,11 @@ class VolumetricModel():
         equation_system_coefficients.append([1] * len(components))   # component coefficients in equation for summ of all component volumes
 
         log_len = len(next(iter(logs.values())))    # dataset length
-        model = {component: np.full(log_len, np.nan) for component in components}
+        component_volume = {component: np.full(log_len, np.nan) for component in components}
+        synthetic_logs = {log_name: np.full(log_len, np.nan) for log_name in logs}  # synthetic input logs modeled using resulting volumetric model
         misfit = {res_log: np.full(log_len, np.nan) for res_log in equation_system_resulting_logs + ['TOTAL']}  # misfit for every input log + total misfit
 
-        if len(equation_system_coefficients) > 1:
+        if len(equation_system_coefficients) > 1:   # if there is at least one input log equation
             std = {log_name: np.nanstd(data) for log_name, data in logs.items()}
             for row in range(log_len):
                 equation_system_results = [logs[log][row] for log in equation_system_resulting_logs] + [1]    # result for every equation in the system
@@ -110,16 +114,18 @@ class VolumetricModel():
                     opt.x *= 1 / sum(opt.x)     # adjust summ of volumes to 1
                     # write down results
                     for n, component in enumerate(components):
-                        model[component][row] = opt.x[n]    # main results - componet volumes
-                    # misfit calculation
+                        component_volume[component][row] = opt.x[n]    # main results - componet volumes
                     misfit_total = 0
                     for n, res_log in enumerate(esrl_clear):
+                        # log forward modeling
+                        synthetic_logs[res_log][row] = np.sum(np.array(esc_clear[n]) * opt.x)
+                        # misfit calculation
                         mf = abs(opt.fun[n] / std[res_log]) if std[res_log] != 0 else 0     # (model log response - actual log response) / log std
                         misfit[res_log][row] = mf     # misfit per model log
                         misfit_total += mf
                     misfit['TOTAL'][row] = misfit_total     # overall model misfit at the row
-        model['MISFIT'] = misfit
-        return model
+        res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
+        return res
 
 
 def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> list[BasicLog]:
@@ -229,24 +235,33 @@ class VolumetricModelSolverNode(EngineNode):
         log_data = {log.meta.family: log.convert_units(vm.FAMILY_UNITS[log.meta.family])[:, 1] for log in logs}
 
         # run solver
-        model_logs_data = vm.inverse(log_data, model_components)
+        res = vm.inverse(log_data, model_components)
 
-        for log_name, data in model_logs_data.items():
-            # define core meta information
-            if log_name == 'MISFIT':
-                family = 'Model Fit Error'
-                unit = 'unitless'
-                data = data['TOTAL']
-            else:
-                family = log_name.lower().capitalize() + ' Volume Fraction'
-                unit = 'v/v'
-            # create output BasicLog
-            log = BasicLog(dataset_id=logs[0].dataset_id, log_id='VM_' + log_name)
-            log.meta.family = family
+        method_name = 'Volumetric model solver'
+        dataset = logs[0].dataset_id
+        # save components' volumes
+        for component_name, data in res['COMPONENT_VOLUME'].items():
+            log = BasicLog(dataset_id=dataset, log_id='VM_' + component_name)
+            log.meta.family = component_name.lower().capitalize() + ' Volume Fraction'
             log.values = np.vstack((logs[0].values[:, 0], data)).T
-            log.meta.units = unit
-            log.meta.update({'method': 'Volumetric model solver'})
+            log.meta.units = 'v/v'
+            log.meta.update({'method': method_name})
             log.save()
+        # save forward modeled logs
+        for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
+            log = BasicLog(dataset_id=dataset, log_id='VM_FM_' + logs[n].name)
+            log.meta.family = logs[n].meta.family + ' Forward Modeled'
+            log.values = np.vstack((logs[0].values[:, 0], data)).T
+            log.meta.units = logs[n].meta.units
+            log.meta.update({'method': method_name})
+            log.save()
+        # save misfit
+        log = BasicLog(dataset_id=dataset, log_id='VM_MISFIT')
+        log.meta.family = 'Model Fit Error'
+        log.values = np.vstack((logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
+        log.meta.units = 'unitless'
+        log.meta.update({'method': method_name})
+        log.save()
 
 
 def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
