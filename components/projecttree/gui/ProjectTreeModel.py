@@ -46,6 +46,8 @@ class ProjectTreeModel(QAbstractItemModel):
                                   well_name=well_name) \
                         for well_name in well_names]
 
+        self.entries.sort(key=lambda e : e.data(Qt.DisplayRole))
+
 
     def columnCount(self, index: QModelIndex):
         return len(ProjectEntryEnum)

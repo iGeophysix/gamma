@@ -85,6 +85,8 @@ class WellEntry(TreeEntry):
                                                  well=self._well,
                                                  dataset_name=dataset_name))
 
+        self.entries.sort(key=lambda e : e.data(Qt.DisplayRole))
+
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
@@ -227,6 +229,8 @@ class WellDatasetEntry(TreeEntry):
                                            parent=self,
                                            dataset=self._dataset,
                                            curve_name=curve_name))
+
+        self.entries.sort(key=lambda e : e.data(Qt.DisplayRole))
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
