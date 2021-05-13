@@ -1,6 +1,6 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
-import gzip
+import filecmp
 import math
 import os
 import unittest
@@ -11,6 +11,10 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
+from components.importexport.las import import_to_db
+from components.importexport.las.las_export import create_las_file
+from components.petrophysics.curve_operations import BasicStatisticsNode
+from settings import BASE_DIR
 
 
 class TestLasImporter(unittest.TestCase):
@@ -144,7 +148,7 @@ class TestAsyncLasLoading(unittest.TestCase):
             if not path.endswith('las'):
                 continue
             with open(path, 'rb') as f:
-                data = gzip.compress(f.read())
+                data = f.read()
             async_results.append(celery_app.send_task('tasks.async_read_las', kwargs={'filename': path, 'las_data': data}))
 
         while not all(map(check_task_completed, async_results)):
@@ -162,6 +166,34 @@ class TestAsyncLasLoading(unittest.TestCase):
         ds = WellDataset(w, 'sample_minimal.las')
         logs = ds.log_list
         self.assertEqual(7, len(logs), '7 logs in dataset must be loaded')
+
+
+def wait_till_completed(async_results):
+    pass
+
+
+class TestLasExport(unittest.TestCase):
+    def setUp(self) -> None:
+        _s = RedisStorage()
+        _s.flush_db()
+        self.folder = os.path.join(BASE_DIR, 'components', 'importexport', 'test', 'data')
+        well = Well('w1', new=True)
+        ds = WellDataset(well, 'ds1', new=True)
+        import_to_db(filename=os.path.join(self.folder, 'sample_2.0_large.las'), well=well, well_dataset=ds)
+        BasicStatisticsNode.run()
+
+    def test_las_export(self):
+        well_name = 'w1'
+        paths_to_logs = (
+            ('ds1', 'GAMMA'),
+            ('ds1', 'URANIUM'),
+            ('ds1', 'THORIUM'),
+            ('ds1', 'POTASIUM'),
+        )
+        las = create_las_file(well_name, paths_to_logs)
+        las.well.DATE = '2021-05-13 11:37:04'  # fixture for tests only
+        las.write(os.path.join(self.folder, 'exported.las'), version=2)
+        self.assertTrue(filecmp.cmp(os.path.join(self.folder, 'true_exported.las'), os.path.join(self.folder, 'exported.las')))
 
 
 if __name__ == '__main__':

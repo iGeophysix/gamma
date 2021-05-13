@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import numpy as np
+from scipy.interpolate import interp1d
 
 from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
@@ -124,6 +125,15 @@ class BasicLog:
         units_from = self.meta.units
         converted_values = np.vstack([self.values[:, 0], converter.convert(data, units_from, units_to)]).T
         return converted_values
+
+    def interpolate(self, new_reference: np.array):
+        """
+        Interpolates log values to new depth reference
+        :param new_reference: new reference as np.array
+        :return: log values
+        """
+        new_values = interp1d(self.values[:, 0], self.values[:, 1], bounds_error=False, fill_value=np.nan)(new_reference)
+        return np.vstack((new_reference, new_values)).T
 
     @property
     def non_null_values(self) -> np.array:
