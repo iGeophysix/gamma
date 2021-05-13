@@ -41,6 +41,7 @@ class CurveObject(TabletObject):
         self._dbWell = dbWell
         self._dbDataset = WellDataset(dbWell, datasetName)
         self._curveName = curveName
+        self._log = BasicLog(self._dbDataset.id, self._curveName)
 
         self._head = CurveGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = CurveGraphicsObjectBody(parent.bodyGraphicsObject(), self)
@@ -99,8 +100,7 @@ class CurveObject(TabletObject):
 
     def array(self):
         """ log10-Facade for curve representation """
-        log = BasicLog(self._dbDataset.id, self._curveName)
-        array = log.values
+        array = self._log.values
 
         if self.isLogScale():
             a = array[..., 1]
@@ -246,12 +246,15 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         painter.save()
         painter.resetTransform()
 
+
+        # Draw scale bar in curve header.
+
         lp = t.map(leftPoint)
         lp.setX(lp.x() + 2)
         rp = t.map(rightPoint)
         rp.setX(rp.x() - 2)
         line = QLineF(lp, rp)
-        line.translate(0, 4)
+        line.translate(0, 2)
         painter.drawLine(line)
         # line.translate(0.0, 0.001)
 
@@ -279,9 +282,10 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         # ct = self._curve_object._dbCurve.curve_type
 
         # name = "{} [{}]".format(ct.name, ct.unit.symbol)
-        name = f"{self._curve_object._curveName} [unit]"
+        name = f"{self._curve_object._curveName} [{self._curve_object._log.meta.units}]"
         painter.resetTransform()
         painter.translate(t.map(center))
+        painter.translate(0, fontMetrics.height() + 3)
         painter.drawText(br.width() - fontMetrics.width(name)/2, 0, name)
 
         painter.restore()
