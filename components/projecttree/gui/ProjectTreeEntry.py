@@ -14,7 +14,7 @@ class ProjectEntryEnum(Enum):
     VALUE = 1
 
 
-class TreeEntry(ABC):
+class ProjectTreeEntry(ABC):
     def __init__(self, model, parent = None):
         self._model = model
         self._parent = parent
@@ -44,6 +44,9 @@ class TreeEntry(ABC):
                 raise NoModelException()
         else:
             return self._parent._model()
+
+    def contextMenu(self):
+        return None
 
 
 

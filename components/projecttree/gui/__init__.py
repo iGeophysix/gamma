@@ -1,13 +1,14 @@
 import sys
 
-from PySide2.QtWidgets import QAction, QMenu, QTreeView, QHeaderView, QAbstractItemView
 from PySide2.QtCore import Qt
+from PySide2.QtWidgets import (QAction, QMenu, QHeaderView)
 
 from components import ComponentGuiConstructor
 from components.mainwindow.gui import GeoMainWindow
 
-from components.projecttree.gui.ProjectTreeModel import ProjectTreeModel
 from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
+from components.projecttree.gui.ProjectTreeModel import ProjectTreeModel
+from components.projecttree.gui.ProjectTreeView import ProjectTreeView
 
 
 class ProjectTreeGui(ComponentGuiConstructor):
@@ -30,22 +31,21 @@ class ProjectTreeGui(ComponentGuiConstructor):
         return self.tree_view
 
     def _setupGui(self):
-        self.tree_view = QTreeView()
-        self.tree_view.setWindowTitle("Project Tree")
-        self.tree_view.setAlternatingRowColors(True)
-        self.tree_view.setDragEnabled(True)
-        self.tree_view.setDragDropMode(QAbstractItemView.DragOnly)
-        self.tree_view.setDropIndicatorShown(True)
-        self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.tree_view = ProjectTreeView()
+
+
+
 
         self.model = ProjectTreeModel()
         self.tree_view.setModel(self.model)
-        # self.tree_view.expandAll()
-        # self.tree_view.setHeaderHidden(True)
 
         header_view = self.tree_view.header()
         header_view.setSectionResizeMode(ProjectEntryEnum.NAME.value,
                                          QHeaderView.ResizeToContents)
+
+        # self.tree_view.expandAll()
+        # self.tree_view.setHeaderHidden(True)
+
 
     def _connectSignals(self):
         self._clear_database.triggered.connect(self.model.on_clear_database)

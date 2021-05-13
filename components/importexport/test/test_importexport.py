@@ -13,7 +13,6 @@ from components.domain.WellDataset import WellDataset
 from components.importexport import las
 from components.importexport.las import import_to_db
 from components.importexport.las.las_export import create_las_file
-from components.petrophysics.curve_operations import BasicStatisticsNode
 from settings import BASE_DIR
 
 
@@ -180,7 +179,6 @@ class TestLasExport(unittest.TestCase):
         well = Well('w1', new=True)
         ds = WellDataset(well, 'ds1', new=True)
         import_to_db(filename=os.path.join(self.folder, 'sample_2.0_large.las'), well=well, well_dataset=ds)
-        BasicStatisticsNode.run()
 
     def test_las_export(self):
         well_name = 'w1'

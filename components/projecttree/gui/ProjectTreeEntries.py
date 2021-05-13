@@ -1,14 +1,19 @@
+import os
+import sys
+
 from PySide2.QtCore import Qt
 from PySide2.QtGui import QColor, QIcon, QFont
+from PySide2.QtWidgets import QMenu, QFileDialog
 
 from datetime import datetime
 
-from components.projecttree.gui.ProjectTreeEntry import TreeEntry, ProjectEntryEnum
 from components.database.RedisStorage import RedisStorage
+from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.domain.Log import BasicLog
-
+from components.mainwindow.gui import GeoMainWindow
+from components.projecttree.gui.ProjectTreeEntry import ProjectTreeEntry, ProjectEntryEnum
+from components.importexport.las.las_export import create_las_file
 
 import logging
 
@@ -18,14 +23,14 @@ gamma_logger = logging.getLogger('gamma_logger')
 # clas Groups all the wells in the database.
 # Currently not used
 
-# class WellManagerEntry(TreeEntry):
+# class WellManagerEntry(ProjectTreeEntry):
     # def __init__(self, model):
         # """
         # :param QAbstractItemModel model:
             # Used to trigger full model update when adding new wells
         # """
 
-        # TreeEntry.__init__(self, model)
+        # ProjectTreeEntry.__init__(self, model)
 
         # self.project = Project()
 
@@ -69,9 +74,9 @@ gamma_logger = logging.getLogger('gamma_logger')
 
 
 
-class WellEntry(TreeEntry):
+class WellEntry(ProjectTreeEntry):
     def __init__(self, model, parent, well_name : str):
-        TreeEntry.__init__(self, model, parent)
+        ProjectTreeEntry.__init__(self, model, parent)
 
         self._well_name = well_name
         self._well = Well(well_name)
@@ -98,7 +103,7 @@ class WellEntry(TreeEntry):
 
 
     def flags(self):
-        return TreeEntry.flags(self) | Qt.ItemIsDragEnabled
+        return ProjectTreeEntry.flags(self) | Qt.ItemIsDragEnabled
 
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:
@@ -115,9 +120,9 @@ class WellEntry(TreeEntry):
         return None
 
 
-# class WellPropertyManagerEntry(TreeEntry):
+# class WellPropertyManagerEntry(ProjectTreeEntry):
     # def __init__(self, model, parent, well : Well):
-        # TreeEntry.__init__(self, model, parent)
+        # ProjectTreeEntry.__init__(self, model, parent)
 
         # self._well = well
 
@@ -140,9 +145,9 @@ class WellEntry(TreeEntry):
         # return None
 
 
-# class WellPropertyEntry(TreeEntry):
+# class WellPropertyEntry(ProjectTreeEntry):
     # def __init__(self, model, parent, prop : WellProperty):
-        # TreeEntry.__init__(self, model, parent)
+        # ProjectTreeEntry.__init__(self, model, parent)
 
         # self._prop = prop
 
@@ -180,9 +185,9 @@ class WellEntry(TreeEntry):
 # Class groups all the datasets.
 # Not used at the time.
 
-# class WellDatasetManagerEntry(TreeEntry):
+# class WellDatasetManagerEntry(ProjectTreeEntry):
     # def __init__(self, model, parent, well_name : str, well_info):
-        # TreeEntry.__init__(self, model, parent)
+        # ProjectTreeEntry.__init__(self, model, parent)
 
         # self._well_name = well_name
         # self._well_info = well_info
@@ -213,9 +218,9 @@ class WellEntry(TreeEntry):
         # return None
 
 
-class WellDatasetEntry(TreeEntry):
+class WellDatasetEntry(ProjectTreeEntry):
     def __init__(self, model, parent, well, dataset_name):
-        TreeEntry.__init__(self, model, parent)
+        ProjectTreeEntry.__init__(self, model, parent)
 
         self._well = well
         self._dataset = WellDataset(self._well, dataset_name)
@@ -252,10 +257,38 @@ class WellDatasetEntry(TreeEntry):
 
         return None
 
+    def contextMenu(self):
 
-class CurveEntry(TreeEntry):
+        menu = QMenu()
+
+        action = menu.addAction("Export to LAS...")
+        action.triggered.connect(self.on_export)
+
+        return menu
+
+    def on_export(self):
+        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
+        fileNameSuggestion = os.path.join(root_directory, self._dataset.name)
+
+        if not fileNameSuggestion.endswith(".las"):
+            fileNameSuggestion+=".las"
+
+        file, _ = QFileDialog.getSaveFileName(GeoMainWindow(),
+                                              'Select fine name to export',
+                                              fileNameSuggestion,
+                                              'LAS Files (*.las)')
+
+        curves = []
+        for curve_name in self._dataset.log_list:
+            curves.append((self._dataset.name, curve_name))
+
+        las = create_las_file(self._well.name, curves)
+        las.write(file, version=2)
+
+
+class CurveEntry(ProjectTreeEntry):
     def __init__(self, model, parent, dataset, curve_name: str):
-        TreeEntry.__init__(self, model, parent)
+        ProjectTreeEntry.__init__(self, model, parent)
 
         self._dataset = dataset
         self._curve_name = curve_name
@@ -283,7 +316,7 @@ class CurveEntry(TreeEntry):
         return None
 
     def flags(self):
-        return TreeEntry.flags(self) | Qt.ItemIsDragEnabled
+        return ProjectTreeEntry.flags(self) | Qt.ItemIsDragEnabled
 
     def _getDisplayRole(self, column):
         if column == ProjectEntryEnum.NAME.value:
@@ -306,9 +339,9 @@ class CurveEntry(TreeEntry):
         return None
 
 
-class MetaEntry(TreeEntry):
+class MetaEntry(ProjectTreeEntry):
     def __init__(self, model, parent, meta, meta_key):
-        TreeEntry.__init__(self, model, parent)
+        ProjectTreeEntry.__init__(self, model, parent)
 
         self._meta = meta
         self._meta_key = meta_key

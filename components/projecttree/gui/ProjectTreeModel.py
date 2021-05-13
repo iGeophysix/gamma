@@ -6,7 +6,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
 from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
-from components.projecttree.gui.WellEntries import WellEntry, WellDatasetEntry, CurveEntry
+from components.projecttree.gui.ProjectTreeEntries import WellEntry, WellDatasetEntry, CurveEntry
 # from components.projecttree.TabletEntries import TabletTemplateManagerEntry
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 

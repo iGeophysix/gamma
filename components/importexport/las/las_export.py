@@ -16,10 +16,20 @@ def create_las_file(well_name: str, paths_to_logs: Iterable[tuple[str, str]]) ->
         ds = WellDataset(well, path_to_log[0])
         logs[f"{ds.name}__{path_to_log[1]}"] = BasicLog(ds.id, path_to_log[1])
 
-    # define depth reference
-    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs.values()])
-    min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs.values()])
-    max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs.values()])
+
+    step = np.inf
+    min_depth = +np.inf
+    max_depth = -np.inf
+
+    for log_data in logs.values():
+        non_null_values = log_data[~np.isnan(log_data[:, 1])]
+        min_depth = min(min_depth, np.min(non_null_values[:, 0]))
+        max_depth = max(max_depth, np.max(non_null_values[:, 0]))
+
+        derivative = np.diff(log_data[:, 0])
+        avg_step = derivative.mean()
+        step = min(step, avg_step)
+
     new_reference = np.arange(min_depth, max_depth, step)
 
     logs_interpolated = {log_path: log.interpolate(new_reference) for log_path, log in logs.items()}
@@ -36,5 +46,7 @@ def create_las_file(well_name: str, paths_to_logs: Iterable[tuple[str, str]]) ->
     for log_path, log_values in logs_interpolated.items():
         log_meta = logs[log_path].meta.asdict()
         las.add_curve(logs[log_path].name, log_values[:, 1], unit=log_meta.get('units', ''), descr=log_meta.get('family', ''))
+
+    las.params.SET = lasio.HeaderItem(mnemonic='SET', value=paths_to_logs[0][0])
 
     return las
