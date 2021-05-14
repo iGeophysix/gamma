@@ -16,26 +16,24 @@ class TestFamilyAssignment(unittest.TestCase):
 
     def test_one_by_one(self):
         result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
-                  'Outside Diameter', 'Thermal Neutron Porosity', 'Z Acceleration',
-                  'Hole Azimuth', 'Borehole Diameter', 'Gradient 045',
+                  'Outside Diameter', 'Neutron Porosity', 'Z Acceleration',
+                  'Azimuth', 'Caliper', 'Gradient 045',
                   'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
         for n, mnemonic in enumerate(self.mnem_list):
             res = self.fa.assign_family(mnemonic, one_best=True)
             self.assertIsNotNone(res)
-            family = res[0]   # res = (family, dimension, rank) or None
-            self.assertEqual(family, result[n])
+            self.assertEqual(res.family, result[n])
 
     def test_batch(self):
         result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
-                  'Nom Borehole Diameter', 'Thermal Neutron Porosity', 'Z Acceleration',
-                  'Hole Azimuth', 'Borehole Diameter', 'Gradient 045',
+                  'Nom Borehole Diameter', 'Neutron Porosity', 'Z Acceleration',
+                  'Azimuth', 'Caliper', 'Gradient 045',
                   'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
         res = self.fa.assign_families(self.mnem_list)
         for mnemonic, right_family in zip(self.mnem_list, result):
             mnem_res = res[mnemonic]    # mnem_res = (family, dimension, rank) or None
             self.assertIsNotNone(mnem_res)
-            family = mnem_res[0]
-            self.assertEqual(family, right_family)
+            self.assertEqual(mnem_res.family, right_family)
 
 
 class TestFamilyAssignerNode(unittest.TestCase):
