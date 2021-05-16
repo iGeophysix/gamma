@@ -2,43 +2,43 @@
     "Units":{
         "Fluid":"boolean",
         "Bulk Density":"g\/cm3",
-        "Thermal Neutron Porosity":"v\/v",
+        "Neutron Porosity":"v\/v",
         "Gamma Ray":"GAPI"
     },
     "Water":{
         "Fluid":true,
         "Bulk Density":1.05,
-        "Thermal Neutron Porosity":1,
+        "Neutron Porosity":1,
         "Gamma Ray":0
     },
     "Oil":{
         "Fluid":true,
         "Bulk Density":0.85,
-        "Thermal Neutron Porosity":0.9,
+        "Neutron Porosity":0.9,
         "Gamma Ray":0
     },
     "Gas":{
         "Fluid":true,
         "Bulk Density":0.5,
-        "Thermal Neutron Porosity":0.54,
+        "Neutron Porosity":0.54,
         "Gamma Ray":0
     },
     "Shale":{
         "Fluid":false,
         "Bulk Density":2.65,
-        "Thermal Neutron Porosity":0.4,
+        "Neutron Porosity":0.4,
         "Gamma Ray":150
     },
     "Quartz":{
         "Fluid":false,
         "Bulk Density":2.65,
-        "Thermal Neutron Porosity":-0.03,
+        "Neutron Porosity":-0.03,
         "Gamma Ray":30
     },
     "Calcite":{
         "Fluid":false,
         "Bulk Density":2.71,
-        "Thermal Neutron Porosity":0,
+        "Neutron Porosity":0,
         "Gamma Ray":11
     }
 }

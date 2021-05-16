@@ -161,7 +161,7 @@ class VolumetricModelSolverNode(EngineNode):
             # at least one log is required. How to state?
             {'type': BasicLog, 'meta': {'log_family': 'Gamma Ray'}, 'optional': True},
             {'type': BasicLog, 'meta': {'log_family': 'Bulk Density'}, 'optional': True},
-            {'type': BasicLog, 'meta': {'log_family': 'Thermal Neutron Porosity'}, 'optional': True}
+            {'type': BasicLog, 'meta': {'log_family': 'Neutron Porosity'}, 'optional': True}
         ]
         output = [
             {'type': BasicLog, 'id': 'VM_MISFIT', 'meta': {'log_family': 'Model Fit Error', 'method': 'Volumetric model solver'}}

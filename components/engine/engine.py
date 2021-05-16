@@ -41,7 +41,7 @@ class Engine:
         {'node': 'ProjectStatisticsNode', 'parameters': {}},
         # {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
         {'node': 'SpliceLogsNode', 'parameters': {}},
-        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity'],
+        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Neutron Porosity'],
                                                              'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
         {'node': 'ShaleVolumeLinearMethodNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LM'}},
         {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},

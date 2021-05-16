@@ -18,7 +18,7 @@ LOG_FAMILY_PRIORITY = [
     'Resistivity',
     'Formation Resistivity',
     'Compressional Slowness',
-    'Thermal Neutron Porosity',
+    'Neutron Porosity',
 ]
 
 

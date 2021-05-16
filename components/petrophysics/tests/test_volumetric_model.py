@@ -24,7 +24,7 @@ class TestVolumetricModel(unittest.TestCase):
         test_data = os.path.join(PATH_TO_TEST_DATA, filename)
         async_read_las(wellname=self.w.name, datasetname='LQC', filename=test_data)
         # assing families
-        fam_db = {'GR': 'Gamma Ray', 'RHOB': 'Bulk Density', 'TNPH': 'Thermal Neutron Porosity'}
+        fam_db = {'GR': 'Gamma Ray', 'RHOB': 'Bulk Density', 'TNPH': 'Neutron Porosity'}
         for log_name, family in fam_db.items():
             log = BasicLog(self.wd.id, log_name)
             log.meta.family = family
@@ -38,7 +38,7 @@ class TestVolumetricModel(unittest.TestCase):
         logs = {}
         logs['Gamma Ray'] = [136.6626, 128.5703, 117.5259, 116.0188, 114.295, np.nan]
         logs['Bulk Density'] = [2.551201, 2.5553, 2.5773, 2.518501, np.nan, np.nan]
-        logs['Thermal Neutron Porosity'] = [0.2839996, 0.2889999, 0.293, np.nan, np.nan, np.nan]
+        logs['Neutron Porosity'] = [0.2839996, 0.2889999, 0.293, np.nan, np.nan, np.nan]
 
         selected_components = self.res.keys()    # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
         vm = VolumetricModel()
@@ -53,7 +53,7 @@ class TestVolumetricModel(unittest.TestCase):
 
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
-        log_families = ['Gamma Ray', 'Bulk Density', 'Thermal Neutron Porosity']
+        log_families = ['Gamma Ray', 'Bulk Density', 'Neutron Porosity']
         model_components = list(self.res.keys())
 
         module.run(log_families, model_components)
