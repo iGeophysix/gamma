@@ -135,9 +135,8 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
         log_list = wd.log_list if lognames is None else lognames
 
         for log in log_list:
-            '''(log family, unit class, detection reliability)'''
             l = BasicLog(wd.id, log)
-            result = fa.assign_family(l.name)
+            result = fa.assign_family(l.name, l.meta.units)
             if result is not None:
                 l.meta.family = result.family
                 l.meta.family_assigner = {'reliability': result.reliability, 'unit_class': result.dimension, 'logging_company': result.company, 'logging_tool': result.tool}

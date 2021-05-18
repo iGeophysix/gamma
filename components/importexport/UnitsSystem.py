@@ -34,6 +34,8 @@ class UnitsSystem:
         Get dimension name of the unit.
         Return None if unit is unknown.
         '''
+        if not unit:
+            return None
         unit = self._ci_unit_unit.get(unit.lower(), unit)  # try case-insensitive search
         return self._unit_dim.get(unit)
 
