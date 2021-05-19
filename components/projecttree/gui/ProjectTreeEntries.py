@@ -268,7 +268,7 @@ class WellDatasetEntry(ProjectTreeEntry):
 
     def on_export(self):
         root_directory = os.path.dirname(sys.modules['__main__'].__file__)
-        fileNameSuggestion = os.path.join(root_directory, self._dataset.name)
+        fileNameSuggestion = os.path.join(root_directory, f'{self._well.name}__{self._dataset.name}')
 
         if not fileNameSuggestion.endswith(".las"):
             fileNameSuggestion+=".las"
