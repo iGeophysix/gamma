@@ -1,4 +1,7 @@
+import datetime
+
 from components.importexport.FamilyAssigner import FamilyAssignerNode
+from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
 from components.petrophysics.curve_operations import BasicStatisticsNode, LogResolutionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
@@ -24,8 +27,12 @@ NODES = {
     'ShaleVolumeLarionovOlderRockNode': ShaleVolumeLarionovOlderRockNode,
     'ShaleVolumeLarionovTertiaryRockNode': ShaleVolumeLarionovTertiaryRockNode,
     'PorosityFromDensityNode': PorosityFromDensityNode,
+    'LasExportNode': LasExportNode
 }
 
+class TimestampGenerator:
+    def __str__(self):
+        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
 class Engine:
     """
@@ -47,6 +54,7 @@ class Engine:
         {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},
         {'node': 'ShaleVolumeLarionovTertiaryRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LTR'}},
         {'node': 'PorosityFromDensityNode', 'parameters': {'rhob_matrix': None, 'rhob_fluid': None, 'output_log_name': 'PHIT_D'}},
+        {'node': 'LasExportNode', 'parameters': {'destination': TimestampGenerator()}},
     ]
 
     def start(self):

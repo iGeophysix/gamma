@@ -22,7 +22,7 @@ def create_las_file(well_name: str, paths_to_logs: Iterable[tuple[str, str]]) ->
     max_depth = -np.inf
 
     for log_data in logs.values():
-        non_null_values = log_data[~np.isnan(log_data[:, 1])]
+        non_null_values = log_data.non_null_values
         min_depth = min(min_depth, np.min(non_null_values[:, 0]))
         max_depth = max(max_depth, np.max(non_null_values[:, 0]))
 

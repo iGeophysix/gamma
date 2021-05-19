@@ -5,10 +5,10 @@ from celery import Celery
 from celery.result import AsyncResult
 
 # CELERY CONFIG
-QUEUE_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
-QUEUE_PORT = os.environ.get('REDIS_PORT', 6379)
-QUEUE_DB = os.environ.get('REDS_DB', 0)
-CELERY_RESULTS_DB = os.environ.get('REDS_DB', 2)
+QUEUE_HOST = os.environ.get('CELERY_REDIS_HOST', '127.0.0.1')
+QUEUE_PORT = os.environ.get('CELERY_REDIS_PORT', 6379)
+QUEUE_DB = os.environ.get('CELERY_QUEUE_DB', 0)
+CELERY_RESULTS_DB = os.environ.get('RESULTS_DB', 2)
 
 app = Celery('tasks', broker=f'redis://{QUEUE_HOST}:{QUEUE_PORT}/{QUEUE_DB}')
 app.conf.result_backend = f'redis://{QUEUE_HOST}:{QUEUE_PORT}/{CELERY_RESULTS_DB}'

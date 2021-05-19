@@ -2,6 +2,7 @@ not_for_git/
 .idea/
 venv/
 unused/
+.minio/data
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
@@ -112,7 +113,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/

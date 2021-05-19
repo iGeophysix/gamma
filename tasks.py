@@ -1,4 +1,5 @@
 import time
+from typing import Iterable
 
 from celery_conf import app
 from components.domain.Log import BasicLog
@@ -8,6 +9,7 @@ from components.engine.engine import Engine
 from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
+from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import rank_logs
 from components.petrophysics.curve_operations import get_basic_curve_statistics, rescale_curve, LogResolutionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
@@ -199,3 +201,16 @@ def async_calculate_shale_volume(well_name: str, algorithm: str = 'Linear', gr_m
         raise ValueError(f"Unknown kind of algorithm: {algorithm}."
                          f"Acceptable values: 'ShaleVolumeLinearMethodNode', 'ShaleVolumeLarionovTertiaryRockNode', 'ShaleVolumeLarionovOlderRockNode'.")
     node.calculate_for_well(well_name, gr_matrix, gr_shale, output_log_name)
+
+
+@app.task
+def async_export_well_to_s3(destination: str, wellname, datasetname: str = 'LQC', logs: Iterable[str] = None):
+    '''
+    Celery task to export data to LAS file and put it into a folder on S3
+    :param destination: name of folder in public bucket
+    :param wellname: well name to export
+    :param datasetname: dataset name to export. Default: 'LQC'
+    :param logs: log names (Iterable) to export. Default: None - export all logs
+    '''
+    node = LasExportNode()
+    node.export_well_dataset(destination, wellname, datasetname, logs)
