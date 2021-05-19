@@ -5,7 +5,7 @@ import pickle
 import re
 import time
 import copy
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Union
 from dataclasses import dataclass, field
 
 from celery_conf import app as celery_app, wait_till_completes
@@ -13,6 +13,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.engine_node import EngineNode
+from components.importexport.UnitsSystem import UnitsSystem
 
 FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignment.json')
 FAMASS_RULES_CACHE = os.path.join(os.path.dirname(FAMASS_RULES), 'FamilyAssignerDB.pickle')
@@ -95,25 +96,23 @@ class FamilyAssigner:
             self.re_match = {}  # { re.Pattern: (family, dimension), ... }
             self.nlpp = NLPParser()
 
-    @dataclass
+    @dataclass(order=True)
     class MnemonicInfo:
         '''
         Storage for mnemonic's properties
         '''
-        company: str
+        reliability: float = field(init=False, default=0)
         family: str
         dimension: str
-        tool: str
-        reliability: float = field(init=False)
-
-        def __repr__(self):
-            return str(vars(self))
+        company: str
+        tool: str = field(compare=False)    # can be None
 
     def __init__(self):
         '''
         Loads Energystics family assigning rules.
         '''
         self.db = {}  # {company: FamilyAssigner.DataBase}
+        self.units = UnitsSystem()
         retries = 5
         if os.path.exists(FAMASS_RULES_CACHE) and os.path.getmtime(FAMASS_RULES_CACHE) >= os.path.getmtime(FAMASS_RULES):
             while retries:
@@ -139,7 +138,7 @@ class FamilyAssigner:
             for mnemonics, dimension, family in rules:
                 for mnemonic in mnemonics:
                     tool = tools.get(company, {}).get(mnemonic)     # source logging tool for mnemonic
-                    mnemonic_info = FamilyAssigner.MnemonicInfo(company, family, dimension, tool)
+                    mnemonic_info = FamilyAssigner.MnemonicInfo(family, dimension, company, tool)
                     if '*' in mnemonic or '?' in mnemonic:
                         re_mask = mnemonic.replace('*', '.*').replace('?', '.')
                         re_pattern = re.compile(re_mask, re.IGNORECASE)
@@ -166,18 +165,21 @@ class FamilyAssigner:
                 return company_result
         return None
 
-    def assign_family(self, mnemonic: str, one_best: bool = True, company: str = None) -> Optional[MnemonicInfo]:
+    def assign_family(self, mnemonic: str, unit: str, one_best: bool = True, company: str = None) -> Union[MnemonicInfo, Iterable[MnemonicInfo], None]:
         '''
-        Returns MnemonicInfo with company, log family, dimension, detection reliability for the mnemonic using Energystics rules.
-        Gives all the variants if one_best=False.
-        company limits log dictionary to the particular service company.
+        Returns MnemonicInfo with company, log family, dimension, detection reliability for the mnemonic and unit.
+        :param mnemonic: str, log name
+        :param unit: str, log unit or None
+        :param one_best: bool, return only one best variant (True) or all varians (False)
+        :param company: str, filter returned variants by service company name or get them all (None)
+        :return: if one_best=True, MnemonicInfo with corresponding information or None if no match found
+        :return: if one_best=False, list of MnemonicInfo
         '''
+        results = []
         if mnemonic:
             mnemonic = mnemonic.upper()
-            results = []
             for cc in [company] if company is not None else self.db:
                 db = self.db[cc]
-                res = None
 
                 # exact matching
                 mnemonic_info = db.precise_match.get(mnemonic)
@@ -185,59 +187,58 @@ class FamilyAssigner:
                     res = copy.copy(mnemonic_info)
                     # reliability for a shortest 1-letter mnemonic is MAX_RANK_EXACT_MATCHING * 0.1, reliability for +INF-letter mnemonic is MAX_RANK_EXACT_MATCHING
                     res.reliability = MAX_RELIABILITY_EXACT_MATCHING * (1 - 0.9 / len(mnemonic) ** 2)
-
-                # pattern matching
-                if res is None:
-                    for re_pattern in db.re_match:
-                        if re_pattern.fullmatch(mnemonic):
-                            res = copy.copy(db.re_match[re_pattern])
-                            res.reliability = MAX_RELIABILITY_PATTERN_MATCHING
-                            break
-
-                # NLP
-                if res is None:
-                    nlp_res = self._nlp_assign_family(mnemonic, cc)
-                    if nlp_res is not None:
-                        family_info, reliability = nlp_res[0]
-                        res = copy.copy(family_info)
-                        res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING     # decrease maximum NLP confidence
-
-                if res is not None:
                     results.append(res)
 
-            if results:
-                if company is not None:
-                    return results[0]   # we have only one result
-                else:
-                    # remove family duplicates
-                    results.sort(key=lambda mnemonic_info: mnemonic_info.reliability, reverse=True)
-                    uniq_family_results = []
-                    for mnemonic_info in results:
-                        already_have = None
-                        for unic_mnemonic_info in uniq_family_results:
-                            if mnemonic_info.family == unic_mnemonic_info.family:   # do we already have this family in results?
-                                already_have = unic_mnemonic_info
-                                break
-                        if already_have is not None:
-                            # combine two variants
-                            # increase reliability by a part of the second variant reliability, drop second source variant
-                            already_have.reliability = min(1, already_have.reliability + mnemonic_info.reliability / len(results))
-                        else:
-                            uniq_family_results.append(mnemonic_info)  # just add the variant
+                # pattern matching
+                for re_pattern in db.re_match:
+                    if re_pattern.fullmatch(mnemonic):
+                        res = copy.copy(db.re_match[re_pattern])
+                        res.reliability = MAX_RELIABILITY_PATTERN_MATCHING
+                        results.append(res)
 
-                    uniq_family_results.sort(key=lambda mnemonic_info: mnemonic_info.reliability, reverse=True)
-                    if one_best:
-                        return uniq_family_results[0]
-                    else:
-                        return uniq_family_results
-        return None
+                # NLP
+                nlp_res = self._nlp_assign_family(mnemonic, cc)
+                if nlp_res is not None:
+                    for family_info, reliability in nlp_res:
+                        res = copy.copy(family_info)
+                        res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING     # decrease maximum NLP confidence
+                        results.append(res)
 
-    def assign_families(self, mnemonics: Iterable[str]) -> dict:
+        # filter results by unit
+        if unit is not None and self.units.known_unit(unit):
+            required_unit_dimention = self.units.unit_dimension(unit)
+            results = list(filter(lambda mnemonic_info: mnemonic_info.dimension == required_unit_dimention, results))    # convertable units have equal unit dimension
+
+        # remove family duplicates
+        results.sort(reverse=True)  # high reliability first
+        uniq_family_results = []
+        for mnemonic_info in results:
+            already_have = None
+            for unic_mnemonic_info in uniq_family_results:
+                if mnemonic_info.family == unic_mnemonic_info.family:   # do we already have this family in results?
+                    already_have = unic_mnemonic_info
+                    break
+            if already_have is not None:
+                # combine two variants
+                # increase reliability by a part of the second variant reliability, drop second source variant
+                already_have.reliability = min(1, already_have.reliability + mnemonic_info.reliability / len(results))
+            else:
+                uniq_family_results.append(mnemonic_info)  # just add the variant
+
+        uniq_family_results.sort(reverse=True)  # high reliability first
+        if one_best:
+            return uniq_family_results[0] if uniq_family_results else None
+        else:
+            return uniq_family_results
+
+    def assign_families(self, mnemonic_unit: Iterable[tuple[str, str]]) -> dict:
         '''
-        Returns {mnemonic: MnemonicInfo} for the mnemonic using Energystics rules.
+        Batch family assigning by set of mnemonics and units.
         Assumes that logs are mostly produced by a one service company.
+        :param mnemonic_unit: list of (mnemonic, unit) pairs
+        :return: {mnemonic: MnemonicInfo or None} for all mnemonic_unit pairs.
         '''
-        all_company_mnemonic_info = {m: self.assign_family(m, one_best=False) for m in mnemonics}
+        all_company_mnemonic_info = {m: self.assign_family(m, u, one_best=False) for m, u in mnemonic_unit}
         companies = []
         for mnemonic_infos in all_company_mnemonic_info.values():
             if mnemonic_infos is not None:
@@ -245,10 +246,12 @@ class FamilyAssigner:
                     companies.append(mnemonic_info.company)
         company_count = {cc: companies.count(cc) for cc in set(companies)}
         for mnemonic, mis in all_company_mnemonic_info.items():
-            if mis is not None:
-                # sort starting from the highest rank, then by company share
-                smis = sorted(mis, key=lambda mi: (mi.reliability, company_count[mi.company]), reverse=True)
+            if mis:
+                # sort adjusting reliability by company share
+                smis = sorted(mis, key=lambda mi: (mi.reliability + (company_count[mi.company] / len(companies) / 10), mi.family), reverse=True)
                 all_company_mnemonic_info[mnemonic] = smis[0]  # update with the best variant
+            else:
+                all_company_mnemonic_info[mnemonic] = None
         return all_company_mnemonic_info
 
 

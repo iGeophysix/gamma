@@ -12,26 +12,28 @@ from components.importexport.las import import_to_db
 class TestFamilyAssignment(unittest.TestCase):
     def setUp(self):
         self.fa = FamilyAssigner()
-        self.mnem_list = ['GR.NORM', 'PS', 'RB', 'BS', 'RAW-TNPH', 'FCAZ', 'HAZI', 'CALI 2', 'ГЗ1', 'СП', 'ПС']
+        self.log_list = [('GR.NORM', 'GAPI'), ('PS', 'mV'), ('RB', 'deg'), ('BS', 'mm'), ('RAW-TNPH', '%'),
+                         ('FCAZ', None), ('HAZI', None), ('CALI 2', None), ('ГЗ1', None), ('СП', None), ('ПС', None),
+                         ('RHOC_1', 'g/cm3'), ('RHOC_2', 'ohm.m')]
 
     def test_one_by_one(self):
-        result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
-                  'Outside Diameter', 'Neutron Porosity', 'Z Acceleration',
-                  'Azimuth', 'Caliper', 'Gradient 045',
-                  'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
-        for n, mnemonic in enumerate(self.mnem_list):
-            res = self.fa.assign_family(mnemonic, one_best=True)
+        result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing', 'Outside Diameter', 'Neutron Porosity',
+                  'Z Acceleration', 'Hole Azimuth', 'Caliper', 'Gradient 045', 'Spontaneous Potential', 'Spontaneous Potential',
+                  'Bulk Density', 'Resistivity']
+        for n, mnemonic_unit in enumerate(self.log_list):
+            mnemonic, unit = mnemonic_unit
+            res = self.fa.assign_family(mnemonic, unit, one_best=True)
             self.assertIsNotNone(res)
             self.assertEqual(res.family, result[n])
 
     def test_batch(self):
-        result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing',
-                  'Nom Borehole Diameter', 'Neutron Porosity', 'Z Acceleration',
-                  'Azimuth', 'Caliper', 'Gradient 045',
-                  'Spontaneous Potential', 'Spontaneous Potential', 'Spontaneous Potential']
-        res = self.fa.assign_families(self.mnem_list)
-        for mnemonic, right_family in zip(self.mnem_list, result):
-            mnem_res = res[mnemonic]    # mnem_res = (family, dimension, rank) or None
+        result = ['Gamma Ray', 'Spontaneous Potential', 'Relative Bearing', 'Nom Borehole Diameter', 'Neutron Porosity',
+                  'Z Acceleration', 'Hole Azimuth', 'Caliper', 'Gradient 045', 'Spontaneous Potential', 'Spontaneous Potential',
+                  'Bulk Density', 'Resistivity']
+        res = self.fa.assign_families(self.log_list)
+        for mnemonic_unit, right_family in zip(self.log_list, result):
+            mnemonic = mnemonic_unit[0]
+            mnem_res = res[mnemonic]
             self.assertIsNotNone(mnem_res)
             self.assertEqual(mnem_res.family, right_family)
 
