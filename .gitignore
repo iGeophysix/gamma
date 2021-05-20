@@ -293,6 +293,3 @@ cython_debug/
 
 # pickle cache
 FamilyAssignerDB.pickle
-
-# minio
-.minio/data
