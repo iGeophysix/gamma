@@ -2,6 +2,7 @@ import os
 from typing import Iterable
 
 import boto3
+import datetime
 
 from celery_conf import wait_till_completes, app as celery_app
 from components.domain.Project import Project
@@ -60,11 +61,13 @@ class LasExportNode(EngineNode):
         cls.s3.upload_file(f'{wellname}_{datasetname}.las', 'public', f'{destination}/{wellname}_{datasetname}.las')
         os.remove(f'{wellname}_{datasetname}.las')
 
-    def run(self, destination: str = 'Export', async_job: bool = True):
+    def run(self, destination: str = None, async_job: bool = True):
         """
-        :param destination: Name of output folder in public bucket of S3
+        :param destination: Name of output folder in public bucket of S3.
         """
         p = Project()
+        if destination is None:
+            destination = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         if async_job:
             tasks = []
             for well_name in p.list_wells():

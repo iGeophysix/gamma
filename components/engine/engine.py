@@ -30,10 +30,6 @@ NODES = {
     'LasExportNode': LasExportNode
 }
 
-class TimestampGenerator:
-    def __str__(self):
-        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-
 class Engine:
     """
     Class that launches EngineNodes
@@ -54,7 +50,7 @@ class Engine:
         {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},
         {'node': 'ShaleVolumeLarionovTertiaryRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LTR'}},
         {'node': 'PorosityFromDensityNode', 'parameters': {'rhob_matrix': None, 'rhob_fluid': None, 'output_log_name': 'PHIT_D'}},
-        {'node': 'LasExportNode', 'parameters': {'destination': TimestampGenerator()}},
+        {'node': 'LasExportNode', 'parameters': {}},
     ]
 
     def start(self):
