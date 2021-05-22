@@ -87,13 +87,6 @@
 		],
 		[
 			[
-				"BP_BIT_DIST"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
 				"BP_BLK_POS"
 			],
 			"Length",
@@ -241,45 +234,10 @@
 		],
 		[
 			[
-				"BP_CMT_STAGE_VOL"
-			],
-			"Volume",
-			"Stage Volume"
-		],
-		[
-			[
-				"BP_CMT_VOL"
-			],
-			"Volume",
-			"Cumulative Cement Volume"
-		],
-		[
-			[
 				"BP_CONTROLMODE_MPD"
 			],
 			"Dimensionless",
 			"Operating Mode"
-		],
-		[
-			[
-				"BP_CUMVOL_MUDPUMP1"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"BP_CUMVOL_MUDPUMP2"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"BP_CUMVOL_MUDPUMP3"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -444,20 +402,6 @@
 		],
 		[
 			[
-				"BP_GAS_ADV_BENZ"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_BENZ_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
 				"BP_GAS_ADV_C1"
 			],
 			"Dimensionless",
@@ -511,34 +455,6 @@
 			],
 			"Dimensionless",
 			"C2h6 Concentration"
-		],
-		[
-			[
-				"BP_GAS_ADV_C2H4"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C2H4_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C2H4_IN"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C2H4_IN_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -682,73 +598,10 @@
 		],
 		[
 			[
-				"BP_GAS_ADV_C6"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C6_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C7_NORM"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C7_NORM_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C8"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_C8_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_CO2"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
 				"BP_GAS_ADV_CO2_DEP"
 			],
 			"Dimensionless",
 			"Co2 Concentration"
-		],
-		[
-			[
-				"BP_GAS_ADV_CYCLO_C6"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_CYCLO_C6_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -763,34 +616,6 @@
 			],
 			"Dimensionless",
 			"H2s Concentration"
-		],
-		[
-			[
-				"BP_GAS_ADV_METHYL_CYCLO_C7"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_METHYL_CYCLO_C7_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_TOLUENE"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_GAS_ADV_TOLUENE_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -931,13 +756,6 @@
 			],
 			"Dimensionless",
 			"Mud Total Gas"
-		],
-		[
-			[
-				"BP_GAS_NORM_AVG_DEP"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -1127,55 +945,6 @@
 			],
 			"Time",
 			"Delay Time"
-		],
-		[
-			[
-				"BP_LEL"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL1_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL2_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL3_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL4_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL5_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"BP_LEL6_RIG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -1529,510 +1298,6 @@
 		],
 		[
 			[
-				"BP_PITVOL_ACT_CHNG"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT_GRP"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT10"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT11"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT12"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT4"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT5"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT6"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT7"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT8"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_ACT9"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_BRN1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_BRN2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_BRN3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_BRN4"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CATCH"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CFUGE"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CHEM1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CHEM2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CHEM3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CLN"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CMT1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CMT2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_CMT3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_COL1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_COL2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_COL3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_DEGAS"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_DESAND"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_DESILT"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_HOLD1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_HOLD2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_HOLD3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_HOLD4"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_HOLD5"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_OFLW"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_P02"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_P03"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_PO1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES_TOT_CHNG"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES_TOTAL"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES_WASTE"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES_WASTE_2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES4"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES5"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES6"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES7"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RES8"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RET1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_RET2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SANDTRAP"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SETTLE"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SHK_TOT"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SL1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SL2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SL3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SLOP1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_SLOP2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_STRIPTANK"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TOT"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TOT_CHNG"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TT_TOTAL"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TT1"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TT2"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TT3"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
-				"BP_PITVOL_TTM"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
 				"BP_PMP_BOOSTER_PRESSURE"
 			],
 			"Pressure",
@@ -2107,13 +1372,6 @@
 			],
 			"Dimensionless",
 			"Stroke Count"
-		],
-		[
-			[
-				"BP_PMP_VOL_CUM"
-			],
-			"Volume",
-			"Cumulative Volume"
 		],
 		[
 			[
@@ -2761,13 +2019,6 @@
 		],
 		[
 			[
-				"BP_VIR_TT_MPD"
-			],
-			"Volume",
-			"Mud Tank Volume"
-		],
-		[
-			[
 				"BP_WOB_AVG"
 			],
 			"Force",
@@ -2954,13 +2205,783 @@
 			],
 			"Dimensionless",
 			"Shock Level"
+		],
+		[
+			[
+				"BP_CMT_VOL"
+			],
+			"Volume",
+			"Cumulative Cement Volume"
+		],
+		[
+			[
+				"BP_PMP_VOL_CUM"
+			],
+			"Volume",
+			"Cumulative Volume"
+		],
+		[
+			[
+				"BP_CUMVOL_MUDPUMP1"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"BP_CUMVOL_MUDPUMP2"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"BP_CUMVOL_MUDPUMP3"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"BP_GAS_ADV_BENZ"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_BENZ_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C2H4"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C2H4_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C2H4_IN"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C2H4_IN_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C6"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C6_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C7_NORM"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C7_NORM_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C8"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_C8_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_CO2"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_CYCLO_C6"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_CYCLO_C6_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_METHYL_CYCLO_C7"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_METHYL_CYCLO_C7_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_TOLUENE"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_ADV_TOLUENE_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_GAS_NORM_AVG_DEP"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL1_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL2_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL3_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL4_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL5_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_LEL6_RIG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"BP_BIT_DIST"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT_CHNG"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT_GRP"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT10"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT11"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT12"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT4"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT5"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT6"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT7"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT8"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_ACT9"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_BRN1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_BRN2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_BRN3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_BRN4"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CATCH"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CFUGE"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CHEM1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CHEM2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CHEM3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CLN"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CMT1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CMT2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_CMT3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_COL1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_COL2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_COL3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_DEGAS"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_DESAND"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_DESILT"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_HOLD1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_HOLD2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_HOLD3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_HOLD4"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_HOLD5"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_OFLW"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_P02"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_P03"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_PO1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES_TOT_CHNG"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES_TOTAL"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES_WASTE"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES_WASTE_2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES4"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES5"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES6"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES7"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RES8"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RET1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_RET2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SANDTRAP"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SETTLE"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SHK_TOT"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SL1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SL2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SL3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SLOP1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_SLOP2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_STRIPTANK"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TOT"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TOT_CHNG"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TT_TOTAL"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TT1"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TT2"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TT3"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_PITVOL_TTM"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_VIR_TT_MPD"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"BP_CMT_STAGE_VOL"
+			],
+			"Volume",
+			"Stage Volume"
 		]
 	],
 	"Baker Atlas": [
 		[
 			[
-				"A2TN",
+				"BVOL",
 				"NAN"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
+		[
+			[
+				"MBW"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CVOL"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"A2TN"
 			],
 			"AttenuationPerLength",
 			"Electromagnetic Attenuation Rate"
@@ -3090,13 +3111,6 @@
 			],
 			"Length",
 			"Caliper"
-		],
-		[
-			[
-				"BVOL"
-			],
-			"Volume",
-			"Borehole Volume"
 		],
 		[
 			[
@@ -3513,13 +3527,6 @@
 		],
 		[
 			[
-				"CVOL"
-			],
-			"Volume",
-			"Cement Volume"
-		],
-		[
-			[
 				"CWV3"
 			],
 			"Dimensionless",
@@ -3531,13 +3538,6 @@
 			],
 			"Dimensionless",
 			"Acoustic Amplitude"
-		],
-		[
-			[
-				"DDV"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -3706,13 +3706,6 @@
 			],
 			"TimePerLength",
 			"Compressional Slowness"
-		],
-		[
-			[
-				"DVDT"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -4437,13 +4430,6 @@
 		],
 		[
 			[
-				"LMP"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
 				"LSD"
 			],
 			"Frequency",
@@ -4728,13 +4714,6 @@
 			],
 			"Dimensionless",
 			"Free Fluid Index"
-		],
-		[
-			[
-				"MBW"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -5354,31 +5333,10 @@
 		],
 		[
 			[
-				"PTV"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"PTVR"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
 				"PVTT"
 			],
 			"Temperature",
 			"Fluid Temperature"
-		],
-		[
-			[
-				"PVTV"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -7409,6 +7367,48 @@
 			],
 			"Pressure",
 			"Pressure"
+		],
+		[
+			[
+				"DDV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DVDT"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"LMP"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTVR"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PVTV"
+			],
+			"Volume",
+			"Fluid Volume"
 		]
 	],
 	"Baker Hughes Inteq": [
@@ -11725,20 +11725,6 @@
 		],
 		[
 			[
-				"BCVO"
-			],
-			"Volume",
-			"Borehole Volume"
-		],
-		[
-			[
-				"BCVOW"
-			],
-			"Volume",
-			"Cumulative Borehole Volume"
-		],
-		[
-			[
 				"BDC1"
 			],
 			"ElectricPotential",
@@ -12029,13 +12015,6 @@
 		],
 		[
 			[
-				"BHVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"BI"
 			],
 			"Dimensionless",
@@ -12254,27 +12233,6 @@
 			],
 			"Frequency",
 			"Frequency"
-		],
-		[
-			[
-				"BPDH"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"BPDR"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"BPDS"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -12561,21 +12519,6 @@
 		],
 		[
 			[
-				"BVLD"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"BVLDS",
-				"BVLS"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"BVLX"
 			],
 			"Dimensionless",
@@ -12590,10 +12533,10 @@
 		],
 		[
 			[
-				"BVOL"
+				"BCVO"
 			],
 			"Volume",
-			"Volume"
+			"Borehole Volume"
 		],
 		[
 			[
@@ -13213,13 +13156,6 @@
 		],
 		[
 			[
-				"CARB"
-			],
-			"Dimensionless",
-			"Carbon Volume Fraction"
-		],
-		[
-			[
 				"CARY2"
 			],
 			"Length",
@@ -13452,20 +13388,6 @@
 			],
 			"ElectricPotential",
 			"Electric Potential"
-		],
-		[
-			[
-				"CCVO"
-			],
-			"Volume",
-			"Cement Volume"
-		],
-		[
-			[
-				"CCVOW"
-			],
-			"Volume",
-			"Cumulative Borehole Volume"
 		],
 		[
 			[
@@ -14392,13 +14314,6 @@
 		],
 		[
 			[
-				"CLAY"
-			],
-			"Dimensionless",
-			"Clay Volume Fraction"
-		],
-		[
-			[
 				"CLC1"
 			],
 			"Frequency",
@@ -14469,13 +14384,6 @@
 			],
 			"PlaneAngle",
 			"Diameter"
-		],
-		[
-			[
-				"CMAT"
-			],
-			"Dimensionless",
-			"Carbon Volume Fraction"
 		],
 		[
 			[
@@ -15547,66 +15455,17 @@
 		],
 		[
 			[
-				"CPTV"
+				"MBW"
 			],
-			"Volume",
-			"Fluid Volume"
+			"Dimensionless",
+			"Bound Water Volume Fraction"
 		],
 		[
 			[
-				"CPTVF"
+				"MCBW"
 			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPTVRC"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPTVS"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPVDB"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPVDS"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPVMBF"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPVMBS"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"CPVMS"
-			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -16159,13 +16018,6 @@
 		],
 		[
 			[
-				"CUMMINV"
-			],
-			"Dimensionless",
-			"Volume"
-		],
-		[
-			[
 				"CUMMINW"
 			],
 			"Dimensionless",
@@ -16240,28 +16092,6 @@
 			],
 			"Length",
 			"Diameter"
-		],
-		[
-			[
-				"CVLD"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CVDS",
-				"CVLDS"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CVOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -16696,20 +16526,6 @@
 		],
 		[
 			[
-				"DCVO"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"DCVOW"
-			],
-			"Volume",
-			"Cumulative Borehole Volume"
-		],
-		[
-			[
 				"DD_PIST_A"
 			],
 			"Area",
@@ -16773,13 +16589,6 @@
 		],
 		[
 			[
-				"DD_VOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
 				"DDR"
 			],
 			"Flowrate",
@@ -16812,41 +16621,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"DDV"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"DDVOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"DDVOLUME_1"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"DDVOLUME_2"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"DDVOLUME_3"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -20206,13 +19980,6 @@
 			],
 			"Pressure",
 			"Pressure"
-		],
-		[
-			[
-				"FILLED SAMPLE VOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -26118,13 +25885,6 @@
 		],
 		[
 			[
-				"IRVLCL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"IS"
 			],
 			"ElectricCurrent",
@@ -27454,119 +27214,14 @@
 				"MBVI"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIA2"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIA3"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIA4"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIA5"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIB"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIB2"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"MBVIB3"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Nmr Porosity"
 		],
 		[
 			[
 				"MBVM"
 			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMA2"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMA3"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMA4"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMA5"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMB"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMB2"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBVMB3"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"MBW"
-			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Nmr Porosity"
 		],
 		[
 			[
@@ -27588,13 +27243,6 @@
 			],
 			"Temperature",
 			"Tool Temperature"
-		],
-		[
-			[
-				"MCBW"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -28885,13 +28533,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"MUDF"
-			],
-			"Dimensionless",
-			"Volume Fraction"
 		],
 		[
 			[
@@ -30615,13 +30256,6 @@
 		],
 		[
 			[
-				"OILF"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
 				"ONBOTTOM_TIME"
 			],
 			"Time",
@@ -31981,13 +31615,6 @@
 			],
 			"Mass",
 			"Length"
-		],
-		[
-			[
-				"PIT_DRILL"
-			],
-			"Volume",
-			"Mud Tank Volume"
 		],
 		[
 			[
@@ -34083,41 +33710,6 @@
 		],
 		[
 			[
-				"PTV"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"PTVR"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"PTVRC"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"PTVRS"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"PTVS"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"PUMP_AVG"
 			],
 			"Pressure",
@@ -34150,13 +33742,6 @@
 			],
 			"Temperature",
 			"Tool Temperature"
-		],
-		[
-			[
-				"PVTV"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -35448,13 +35033,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"QFM"
-			],
-			"Dimensionless",
-			"Quartz Volume Fraction"
 		],
 		[
 			[
@@ -46967,20 +46545,6 @@
 		],
 		[
 			[
-				"TCVO"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
-				"TCVOW"
-			],
-			"Volume",
-			"Cumulative Borehole Volume"
-		],
-		[
-			[
 				"TDET"
 			],
 			"Frequency",
@@ -48216,24 +47780,10 @@
 		],
 		[
 			[
-				"TOTAL PUMPED VOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
 				"TOTAL TIME ELAPSED"
 			],
 			"Time",
 			"Time"
-		],
-		[
-			[
-				"TOTAL_VOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -50693,13 +50243,6 @@
 		],
 		[
 			[
-				"V_SYS"
-			],
-			"Volume",
-			"Fluid Volume"
-		],
-		[
-			[
 				"V1"
 			],
 			"ElectricPotential",
@@ -51012,13 +50555,6 @@
 			],
 			"ElectricPotential",
 			"Electric Potential"
-		],
-		[
-			[
-				"VOLUME"
-			],
-			"Volume",
-			"Fluid Volume"
 		],
 		[
 			[
@@ -51879,13 +51415,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"WTRF"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
 		],
 		[
 			[
@@ -53743,9 +53272,508 @@
 			],
 			"Conductivity",
 			"Array Induction Conductivity"
+		],
+		[
+			[
+				"CARB"
+			],
+			"Dimensionless",
+			"Carbonate Volume Fraction"
+		],
+		[
+			[
+				"CMAT"
+			],
+			"Dimensionless",
+			"Carbonate Volume Fraction"
+		],
+		[
+			[
+				"CCVO"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"CVOL"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"CLAY"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"BCVOW"
+			],
+			"Volume",
+			"Cumulative Borehole Volume"
+		],
+		[
+			[
+				"CCVOW"
+			],
+			"Volume",
+			"Cumulative Borehole Volume"
+		],
+		[
+			[
+				"DCVOW"
+			],
+			"Volume",
+			"Cumulative Borehole Volume"
+		],
+		[
+			[
+				"TCVOW"
+			],
+			"Volume",
+			"Cumulative Borehole Volume"
+		],
+		[
+			[
+				"CPTV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPTVF"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPTVRC"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPTVS"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPVDB"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPVDS"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPVMBF"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"CPVMBS"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DCVO"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DD_VOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DDV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DDVOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DDVOLUME_1"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DDVOLUME_2"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"DDVOLUME_3"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"FILLED SAMPLE VOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMA2"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMA3"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMA4"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMA5"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMB"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMB2"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVMB3"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTVR"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTVRC"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PTVRS"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"PVTV"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"TCVO"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"TOTAL PUMPED VOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"TOTAL_VOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"V_SYS"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"VOLUME"
+			],
+			"Volume",
+			"Fluid Volume"
+		],
+		[
+			[
+				"MBVIA2"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIA3"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIA4"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIA5"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIB"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIB2"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"MBVIB3"
+			],
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
+		],
+		[
+			[
+				"PIT_DRILL"
+			],
+			"Volume",
+			"Mud Tank Volume"
+		],
+		[
+			[
+				"OILF"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"QFM"
+			],
+			"Dimensionless",
+			"Quartz Volume Fraction"
+		],
+		[
+			[
+				"BHVOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BPDH"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BPDR"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BPDS"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BVLD"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BVLDS",
+				"BVLS"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"BVOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"CPVMS"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"CUMMINV"
+			],
+			"Dimensionless",
+			"Volume"
+		],
+		[
+			[
+				"CVLD"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"CVDS",
+				"CVLDS"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"IRVLCL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"PTVS"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"MUDF"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"WTRF"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
 		]
 	],
 	"Halliburton Logging": [
+		[
+			[
+				"AHV"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
+		[
+			[
+				"AHVT"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
+		[
+			[
+				"BHV"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
+		[
+			[
+				"BHVT"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
 		[
 			[
 				"12KDIP17",
@@ -54675,14 +54703,6 @@
 		],
 		[
 			[
-				"ACCV",
-				"ACC_VOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"ACCX",
 				"ACC_X"
 			],
@@ -54707,24 +54727,10 @@
 		],
 		[
 			[
-				"ACCG"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"ACCQ"
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"ACCVCORR"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -54869,20 +54875,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"AHV"
-			],
-			"Volume",
-			"Borehole Volume"
-		],
-		[
-			[
-				"AHVT"
-			],
-			"Volume",
-			"Borehole Volume"
 		],
 		[
 			[
@@ -57863,20 +57855,6 @@
 		],
 		[
 			[
-				"BHV"
-			],
-			"Volume",
-			"Borehole Volume"
-		],
-		[
-			[
-				"BHVT"
-			],
-			"Volume",
-			"Borehole Volume"
-		],
-		[
-			[
 				"BI"
 			],
 			"Dimensionless",
@@ -60850,13 +60828,6 @@
 		],
 		[
 			[
-				"DP0MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"DP0P1DEPTH"
 			],
 			"Length",
@@ -61095,13 +61066,6 @@
 		],
 		[
 			[
-				"DP0PTVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"DP1ANNOTATE"
 			],
 			"Dimensionless",
@@ -61183,13 +61147,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"DP1MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -61428,13 +61385,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"DP1PTVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -61679,13 +61629,6 @@
 		],
 		[
 			[
-				"DVL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"DVM1"
 			],
 			"ElectricPotential",
@@ -61725,13 +61668,6 @@
 			],
 			"ElectricPotential",
 			"Electric Potential"
-		],
-		[
-			[
-				"DVOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -62605,13 +62541,6 @@
 		],
 		[
 			[
-				"EP0MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"EP0P1DEPTH"
 			],
 			"Length",
@@ -62850,13 +62779,6 @@
 		],
 		[
 			[
-				"EP0PTVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"EP1ANNOTATE"
 			],
 			"Dimensionless",
@@ -62938,13 +62860,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"EP1MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -63186,13 +63101,6 @@
 		],
 		[
 			[
-				"EP1PTVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"EP2ANNOTATE"
 			],
 			"Dimensionless",
@@ -63274,13 +63182,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"EP2MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -63522,13 +63423,6 @@
 		],
 		[
 			[
-				"EP2PTVOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"EP3ANNOTATE"
 			],
 			"Dimensionless",
@@ -63610,13 +63504,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"EP3MEASVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -63855,13 +63742,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"EP3PTVOLUME"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -65218,13 +65098,6 @@
 			],
 			"Frequency",
 			"Count Rate"
-		],
-		[
-			[
-				"FLLV"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -66614,20 +66487,6 @@
 		],
 		[
 			[
-				"GOR"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"GORQ"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
 				"GOUT"
 			],
 			"Dimensionless",
@@ -67675,13 +67534,6 @@
 		],
 		[
 			[
-				"IDDV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"IDNS"
 			],
 			"Dimensionless",
@@ -67807,13 +67659,6 @@
 		],
 		[
 			[
-				"INFV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"INHT"
 			],
 			"Dimensionless",
@@ -67825,13 +67670,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"INJV"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -70802,13 +70640,6 @@
 		],
 		[
 			[
-				"NDDV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"NDE"
 			],
 			"Frequency",
@@ -72895,8 +72726,8 @@
 			[
 				"PDDV"
 			],
-			"Volume",
-			"Volume"
+			"ElectricPotential",
+			"Electric Potential"
 		],
 		[
 			[
@@ -73357,13 +73188,6 @@
 		],
 		[
 			[
-				"PRDV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"PRES"
 			],
 			"Dimensionless",
@@ -73487,13 +73311,6 @@
 			],
 			"Pressure",
 			"Pressure"
-		],
-		[
-			[
-				"PSIZ"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -73624,24 +73441,10 @@
 		],
 		[
 			[
-				"PVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"PVOP"
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"PVR"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -75765,13 +75568,6 @@
 			],
 			"Dimensionless",
 			"Salinity"
-		],
-		[
-			[
-				"SAMP"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -78306,13 +78102,6 @@
 		],
 		[
 			[
-				"SVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"SWA"
 			],
 			"Dimensionless",
@@ -78847,13 +78636,6 @@
 		],
 		[
 			[
-				"TFV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"TDFC",
 				"TGTCFC"
 			],
@@ -79276,13 +79058,6 @@
 			],
 			"Time",
 			"Time Interval"
-		],
-		[
-			[
-				"TPTV"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -81782,13 +81557,6 @@
 			],
 			"Length",
 			"Length"
-		],
-		[
-			[
-				"VTC"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -84744,6 +84512,238 @@
 			],
 			"MassPerAreaPerTime",
 			"Acoustic Impedance"
+		],
+		[
+			[
+				"ACCV",
+				"ACC_VOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"ACCG"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"ACCVCORR"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DP0MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DP0PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DP1MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DP1PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DVL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"DVOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP0MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP0PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP1MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP1PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP2MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP2PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP3MEASVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"EP3PTVOLUME"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"FLLV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"IDDV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"INFV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"INJV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"NDDV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"PRDV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"PSIZ"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"PVOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"PVR"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"SAMP"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"SVOL"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"TFV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"TPTV"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"VTC"
+			],
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"GOR"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"GORQ"
+			],
+			"Dimensionless",
+			"Volume Fraction"
 		]
 	],
 	"Numar MRI Logging": [
@@ -85496,27 +85496,11 @@
 		],
 		[
 			[
-				"CEMENT_STAGE_VOLUME",
-				"CSV"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
 				"CEMENT_TIME",
 				"CTIME"
 			],
 			"Dimensionless",
 			"Dimensionless"
-		],
-		[
-			[
-				"CEMENT_TOTAL_STAGE_VOLUME",
-				"CTSV"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -85623,70 +85607,6 @@
 			],
 			"Dimensionless",
 			"Dimensionless"
-		],
-		[
-			[
-				"CTV1",
-				"CUSTOM_TANK1"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV2",
-				"CUSTOM_TANK2"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV3",
-				"CUSTOM_TANK3"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV4",
-				"CUSTOM_TANK4"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV5",
-				"CUSTOM_TANK5"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV6",
-				"CUSTOM_TANK6"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV7",
-				"CUSTOM_TANK7"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"CTV8",
-				"CUSTOM_TANK8"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -86442,21 +86362,6 @@
 		],
 		[
 			[
-				"MUD_GAIN_LOSS",
-				"VTGL"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"MUD_GAIN_LOSS_MY"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
 				"HIC",
 				"MUD_HYDROXYL_ION_CONC"
 			],
@@ -86525,14 +86430,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"MUD_VIS",
-				"MVIS"
-			],
-			"TimePerVolume",
-			"Time Per Volume"
 		],
 		[
 			[
@@ -86631,13 +86528,6 @@
 		],
 		[
 			[
-				"P1_CALDISPL"
-			],
-			"Volume",
-			"Stroke Volume"
-		],
-		[
-			[
 				"P1_DELTA_PULSES_JBOX"
 			],
 			"Dimensionless",
@@ -86656,13 +86546,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"P1_DISPLACEMENT"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -86702,13 +86585,6 @@
 		],
 		[
 			[
-				"P2_CALDISPL"
-			],
-			"Volume",
-			"Stroke Volume"
-		],
-		[
-			[
 				"P2_DELTA_PULSES_JBOX"
 			],
 			"Dimensionless",
@@ -86727,13 +86603,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"P2_DISPLACEMENT"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -86773,13 +86642,6 @@
 		],
 		[
 			[
-				"P3_CALDISPL"
-			],
-			"Volume",
-			"Stroke Volume"
-		],
-		[
-			[
 				"P3_DELTA_PULSES_JBOX"
 			],
 			"Dimensionless",
@@ -86798,13 +86660,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"P3_DISPLACEMENT"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -86844,24 +86699,10 @@
 		],
 		[
 			[
-				"P4_CALDISPL"
-			],
-			"Volume",
-			"Stroke Volume"
-		],
-		[
-			[
 				"P4_DELTA_STROKES"
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"P4_DISPLACEMENT"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -87095,14 +86936,6 @@
 			],
 			"Dimensionless",
 			"C3h8 Concentration"
-		],
-		[
-			[
-				"PUMP_DISPL",
-				"TPD"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -87377,70 +87210,6 @@
 		],
 		[
 			[
-				"TANK_1",
-				"TV1"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_2",
-				"TV2"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_3",
-				"TV3"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_4",
-				"TV4"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_5",
-				"TV5"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_6",
-				"TV6"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_7",
-				"TV7"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
-				"TANK_8",
-				"TV8"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
 				"BALR",
 				"TGS_BALANCE_RATIO"
 			],
@@ -87662,13 +87431,6 @@
 		],
 		[
 			[
-				"TOTAL_DELTA_DISPLACEMENT"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
 				"TFIL",
 				"TOTAL_FILL"
 			],
@@ -87701,14 +87463,6 @@
 		],
 		[
 			[
-				"MV",
-				"TOTAL_MUD"
-			],
-			"Velocity",
-			"Volume"
-		],
-		[
-			[
 				"TOTAL_P123",
 				"TS1-4"
 			],
@@ -87737,14 +87491,6 @@
 			],
 			"Temperature",
 			"Temperature"
-		],
-		[
-			[
-				"MVTT",
-				"TRIP_MUD"
-			],
-			"Velocity",
-			"Volume"
 		],
 		[
 			[
@@ -88006,6 +87752,260 @@
 			],
 			"Force",
 			"Load"
+		],
+		[
+			[
+				"P1_CALDISPL"
+			],
+			"Volume",
+			"Stroke Volume"
+		],
+		[
+			[
+				"P2_CALDISPL"
+			],
+			"Volume",
+			"Stroke Volume"
+		],
+		[
+			[
+				"P3_CALDISPL"
+			],
+			"Volume",
+			"Stroke Volume"
+		],
+		[
+			[
+				"P4_CALDISPL"
+			],
+			"Volume",
+			"Stroke Volume"
+		],
+		[
+			[
+				"MUD_VIS",
+				"MVIS"
+			],
+			"TimePerVolume",
+			"Time Per Volume"
+		],
+		[
+			[
+				"CEMENT_STAGE_VOLUME",
+				"CSV"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CEMENT_TOTAL_STAGE_VOLUME",
+				"CTSV"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV1",
+				"CUSTOM_TANK1"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV2",
+				"CUSTOM_TANK2"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV3",
+				"CUSTOM_TANK3"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV4",
+				"CUSTOM_TANK4"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV5",
+				"CUSTOM_TANK5"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV6",
+				"CUSTOM_TANK6"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV7",
+				"CUSTOM_TANK7"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"CTV8",
+				"CUSTOM_TANK8"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"MUD_GAIN_LOSS",
+				"VTGL"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"MUD_GAIN_LOSS_MY"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"P1_DISPLACEMENT"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"P2_DISPLACEMENT"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"P3_DISPLACEMENT"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"P4_DISPLACEMENT"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"PUMP_DISPL",
+				"TPD"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_1",
+				"TV1"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_2",
+				"TV2"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_3",
+				"TV3"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_4",
+				"TV4"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_5",
+				"TV5"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_6",
+				"TV6"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_7",
+				"TV7"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TANK_8",
+				"TV8"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"TOTAL_DELTA_DISPLACEMENT"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"MV",
+				"TOTAL_MUD"
+			],
+			"Velocity",
+			"Volume"
+		],
+		[
+			[
+				"MVTT",
+				"TRIP_MUD"
+			],
+			"Velocity",
+			"Volume"
 		]
 	],
 	"Russian logs": [
@@ -88359,8 +88359,1493 @@
 	"Schlumberger": [
 		[
 			[
-				"FEB1",
-				"NAN"
+				"NAN",
+				"V_ALBI"
+			],
+			"Dimensionless",
+			"Albite Volume Fraction"
+		],
+		[
+			[
+				"VALB"
+			],
+			"Dimensionless",
+			"Albite Volume Fraction"
+		],
+		[
+			[
+				"V_ANHY"
+			],
+			"Dimensionless",
+			"Anhydrite Volume Fraction"
+		],
+		[
+			[
+				"VANH"
+			],
+			"Dimensionless",
+			"Anhydrite Volume Fraction"
+		],
+		[
+			[
+				"ICV"
+			],
+			"Volume",
+			"Annulus Volume"
+		],
+		[
+			[
+				"V_ASH"
+			],
+			"Dimensionless",
+			"Ash Volume Fraction"
+		],
+		[
+			[
+				"ASH"
+			],
+			"Dimensionless",
+			"Ash Volume Fraction"
+		],
+		[
+			[
+				"V_BIOT"
+			],
+			"Dimensionless",
+			"Biotite Volume Fraction"
+		],
+		[
+			[
+				"VBIO"
+			],
+			"Dimensionless",
+			"Biotite Volume Fraction"
+		],
+		[
+			[
+				"IHV"
+			],
+			"Volume",
+			"Borehole Volume"
+		],
+		[
+			[
+				"BFV"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_1_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_1_TAP_T2I_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_2_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_2_TAP_T2I_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_3MS"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_3MS_SM"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A1P1_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A1P1_TAP"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A1P2_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A1P2_TAP"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A2P1_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A2P1_TAP"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A2P2_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_A2P2_TAP"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV1",
+				"BFV_ANT1_FIX_T2I"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT1_PP",
+				"BPP1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT1_PP_DH",
+				"BP1M"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT1_PP_RT",
+				"BP1R"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT1_TAP_T2I"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BF1M",
+				"BFV_ANT1_TAP_T2I_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BF1R",
+				"BFV_ANT1_TAP_T2I_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV2",
+				"BFV_ANT2_FIX_T2I"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2_PP",
+				"BPP2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2_PP_DH",
+				"BP2M"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2_PP_RT",
+				"BP2R"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_ANT2_TAP_T2I"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BF2M",
+				"BFV_ANT2_TAP_T2I_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BF2R",
+				"BFV_ANT2_TAP_T2I_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_BOTTOM_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_CM",
+				"BM"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_DH"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_DN"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_HR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_IMAGE"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_LEFT_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_LF"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFM",
+				"BFV_MRF"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_MW"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_MW_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_RG"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_RIGHT_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_SM"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_HR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TAPER_VHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_TOP_RT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_UP"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFV_VHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"BFVT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF1_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF2_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF3_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF4_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF5"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF5_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF6"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF6_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF7"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"CBF7_SL"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF_3MS"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF1_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF2_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF3_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF4_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF5_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF6_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_LHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_SH1"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_SH2"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_SH3"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_SH4"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_SH8"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_UHR"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"MBF7_V"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"PHIB"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"VBW"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"V_BWAT"
+			],
+			"Dimensionless",
+			"Bound Water Volume Fraction"
+		],
+		[
+			[
+				"V_CALC"
+			],
+			"Dimensionless",
+			"Calcite Volume Fraction"
+		],
+		[
+			[
+				"VCLC"
+			],
+			"Dimensionless",
+			"Calcite Volume Fraction"
+		],
+		[
+			[
+				"VLIM"
+			],
+			"Dimensionless",
+			"Calcite Volume Fraction"
+		],
+		[
+			[
+				"CARB_LITH_RQL"
+			],
+			"Dimensionless",
+			"Carbonate Volume Fraction"
+		],
+		[
+			[
+				"V_CARB"
+			],
+			"Dimensionless",
+			"Carbonate Volume Fraction"
+		],
+		[
+			[
+				"VCAR"
+			],
+			"Dimensionless",
+			"Carbonate Volume Fraction"
+		],
+		[
+			[
+				"CPSV"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"CWLV"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"SPSV"
+			],
+			"Volume",
+			"Cement Volume"
+		],
+		[
+			[
+				"V_CHLO"
+			],
+			"Dimensionless",
+			"Chlorite Volume Fraction"
+		],
+		[
+			[
+				"VCHL"
+			],
+			"Dimensionless",
+			"Chlorite Volume Fraction"
+		],
+		[
+			[
+				"CLAY_LITH_RQL"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"LLCL"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"ULCL"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"V_CLA1"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"V_CLA2"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"V_CLAY"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCEA"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCGR"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCHD"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCL"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCL_BOT"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCL_HILT"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCL1"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCL2"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCLA"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCM"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCND"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VCSP"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"VXCL"
+			],
+			"Dimensionless",
+			"Clay Volume Fraction"
+		],
+		[
+			[
+				"V_COAL"
+			],
+			"Dimensionless",
+			"Coal Volume Fraction"
+		],
+		[
+			[
+				"VCOA"
+			],
+			"Dimensionless",
+			"Coal Volume Fraction"
+		],
+		[
+			[
+				"VCOL"
+			],
+			"Dimensionless",
+			"Coal Volume Fraction"
+		],
+		[
+			[
+				"CUM_GAS_VOLUME"
+			],
+			"Volume",
+			"Cumulative Gas Volume"
+		],
+		[
+			[
+				"CUM_OIL_VOLUME"
+			],
+			"Volume",
+			"Cumulative Oil Volume"
+		],
+		[
+			[
+				"TANK_FLUID_VOLUME",
+				"TNKV"
+			],
+			"Volume",
+			"Cumulative Oil Volume"
+		],
+		[
+			[
+				"CUVO"
+			],
+			"Volume",
+			"Cumulative Volume"
+		],
+		[
+			[
+				"CVBL"
+			],
+			"Volume",
+			"Cumulative Volume"
+		],
+		[
+			[
+				"CUM_WATER_VOLUME"
+			],
+			"Volume",
+			"Cumulative Water Volume"
+		],
+		[
+			[
+				"V_DOLO"
+			],
+			"Dimensionless",
+			"Dolomite Volume Fraction"
+		],
+		[
+			[
+				"VDOL"
+			],
+			"Dimensionless",
+			"Dolomite Volume Fraction"
+		],
+		[
+			[
+				"VDC1"
+			],
+			"Dimensionless",
+			"Dry Clay Volume Fraction"
+		],
+		[
+			[
+				"VDC2"
+			],
+			"Dimensionless",
+			"Dry Clay Volume Fraction"
+		],
+		[
+			[
+				"VDCL"
+			],
+			"Dimensionless",
+			"Dry Clay Volume Fraction"
+		],
+		[
+			[
+				"V_DCLA"
+			],
+			"Dimensionless",
+			"Dry Clay Volume Fraction"
+		],
+		[
+			[
+				"VDCN"
+			],
+			"Dimensionless",
+			"Dry Clay Volume Fraction"
+		],
+		[
+			[
+				"V_EVAP"
+			],
+			"Dimensionless",
+			"Evaporite Volume Fraction"
+		],
+		[
+			[
+				"VEVA"
+			],
+			"Dimensionless",
+			"Evaporite Volume Fraction"
+		],
+		[
+			[
+				"V_FELD"
+			],
+			"Dimensionless",
+			"Feldspar Volume Fraction"
+		],
+		[
+			[
+				"VFEL"
+			],
+			"Dimensionless",
+			"Feldspar Volume Fraction"
+		],
+		[
+			[
+				"FEB1"
 			],
 			"Dimensionless",
 			"Error Band"
@@ -88938,34 +90423,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"3XVPTV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"3XVPTV_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"3XVPV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"3XVPV_DL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -93656,13 +95113,6 @@
 		],
 		[
 			[
-				"ADVL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"ADVLVSTA"
 			],
 			"Dimensionless",
@@ -94156,13 +95606,6 @@
 			],
 			"Dimensionless",
 			"Count"
-		],
-		[
-			[
-				"AFVM"
-			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -94754,13 +96197,6 @@
 		],
 		[
 			[
-				"AHFVM"
-			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
-		],
-		[
-			[
 				"AHIBC",
 				"AIBC"
 			],
@@ -95030,14 +96466,6 @@
 		],
 		[
 			[
-				"AHOVM",
-				"AOVM"
-			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
-		],
-		[
-			[
 				"AHQABN",
 				"AQAN"
 			],
@@ -95299,14 +96727,6 @@
 			],
 			"Dimensionless",
 			"Water Saturation"
-		],
-		[
-			[
-				"AHTVM",
-				"ATVM"
-			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -97162,13 +98582,6 @@
 		],
 		[
 			[
-				"AMTV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"AMUD"
 			],
 			"AttenuationPerLength",
@@ -97569,13 +98982,6 @@
 		],
 		[
 			[
-				"ANSA"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
 				"ANT_Q"
 			],
 			"Dimensionless",
@@ -97783,6 +99189,13 @@
 			],
 			"Dimensionless",
 			"Water Saturation"
+		],
+		[
+			[
+				"V_XBWA"
+			],
+			"Dimensionless",
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -99567,10 +100980,10 @@
 		],
 		[
 			[
-				"ASFVM"
+				"VXBW"
 			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
+			"Dimensionless",
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -99581,10 +100994,10 @@
 		],
 		[
 			[
-				"ASH"
+				"VXBW_LHR"
 			],
 			"Dimensionless",
-			"Ash Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -99855,10 +101268,11 @@
 		],
 		[
 			[
-				"ASOVM"
+				"VXBM",
+				"VXBW_MRF"
 			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
+			"Dimensionless",
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -100194,10 +101608,10 @@
 		],
 		[
 			[
-				"ASTVM"
+				"VXBW_SH1"
 			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
+			"Dimensionless",
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -101916,6 +103330,13 @@
 			],
 			"Attenuation",
 			"Attenuation"
+		],
+		[
+			[
+				"VXBW_SH2"
+			],
+			"Dimensionless",
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -106616,147 +108037,157 @@
 		],
 		[
 			[
-				"BFV"
+				"VXBW_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_1_DH"
+				"VXBW_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_1_TAP_T2I_RT"
+				"VXBW_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_2_DH"
+				"VXBW_SL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_2_TAP_T2I_RT"
+				"VXBW_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_3MS"
+				"V_XDS"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Dissolved Salt Volume Fraction"
 		],
 		[
 			[
-				"BFV_3MS_SM"
+				"VXDS"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Dissolved Salt Volume Fraction"
 		],
 		[
 			[
-				"BFV_A1P1_DH"
+				"V_XSF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A1P1_TAP"
+				"VXSF1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A1P2_DH"
+				"VXSF1_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A1P2_TAP"
+				"VXSF1_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A2P1_DH"
+				"VXSF1_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A2P1_TAP"
+				"VXSF1_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A2P2_DH"
+				"VXSF1_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_A2P2_TAP"
+				"VXSF1_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT1"
+				"VXSF1_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV1",
-				"BFV_ANT1_FIX_T2I"
+				"VXSF2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT1_PP",
-				"BPP1"
+				"VXSF2_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT1_PP_DH",
-				"BP1M"
+				"VXSF2_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT1_PP_RT",
-				"BP1R"
+				"VXSF2_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
+		],
+		[
+			[
+				"VXSF2_SH3"
+			],
+			"Dimensionless",
+			"Flushed Zone Fluid Volume Fraction"
+		],
+		[
+			[
+				"VXSF2_SH4"
+			],
+			"Dimensionless",
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
@@ -106783,72 +108214,74 @@
 		],
 		[
 			[
-				"BFV_ANT1_TAP_T2I"
+				"VXSF2_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BF1M",
-				"BFV_ANT1_TAP_T2I_DH"
+				"VXSF2_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Fluid Volume Fraction"
 		],
 		[
 			[
-				"BF1R",
-				"BFV_ANT1_TAP_T2I_RT"
+				"V_XFW"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT2"
+				"VXFW"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT2_DH"
+				"VXFW_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV2",
-				"BFV_ANT2_FIX_T2I"
+				"VXFM",
+				"VXFW_MRF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT2_PP",
-				"BPP2"
+				"VXFW_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT2_PP_DH",
-				"BP2M"
+				"VXFW_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_ANT2_PP_RT",
-				"BP2R"
+				"VXFW_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
+		],
+		[
+			[
+				"VXFW_SH4"
+			],
+			"Dimensionless",
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
@@ -106875,105 +108308,102 @@
 		],
 		[
 			[
-				"BFV_ANT2_TAP_T2I"
+				"VXFW_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BF2M",
-				"BFV_ANT2_TAP_T2I_DH"
+				"VXFW_SL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BF2R",
-				"BFV_ANT2_TAP_T2I_RT"
+				"VXFW_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Free Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_BOTTOM_RT"
+				"V_XGAS"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_CM",
-				"BM"
+				"VXGA"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_DH"
+				"VXGA_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_DN"
+				"VXGA_MRF",
+				"VXGM"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_HR"
+				"VXGA_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_IMAGE"
+				"VXGA_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_LEFT_RT"
+				"VXGA_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_LF"
+				"VXGA_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_LHR"
+				"VXGA_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFM",
-				"BFV_MRF"
+				"VXGA_SL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"BFV_MW"
+				"VXGA_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Gas Volume Fraction"
 		],
 		[
 			[
@@ -106992,59 +108422,66 @@
 		],
 		[
 			[
-				"BFV_MW_SL"
+				"V_XHC"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_RG"
+				"VXHC_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_RIGHT_RT"
+				"VXHC_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_SH1"
+				"VXHC_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_SH2"
+				"VXHC_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_SH3"
+				"VXHC_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_SH4"
+				"VXHC_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"BFV_SH8"
+				"VXHC_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Hydrocarbon Volume Fraction"
+		],
+		[
+			[
+				"VXHY"
+			],
+			"Dimensionless",
+			"Flushed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
@@ -107063,17 +108500,17 @@
 		],
 		[
 			[
-				"BFV_SL"
+				"V_XIWA"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"BFV_SM"
+				"VXIW"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -107084,122 +108521,132 @@
 		],
 		[
 			[
-				"BFV_TAPER"
+				"VXMF",
+				"V_XOBMF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_HR"
+				"VXOBMF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_LHR"
+				"VXOBMF_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SH1"
+				"VXMM",
+				"VXOBMF_MRF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SH2"
+				"VXOBMF_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SH3"
+				"VXOBMF_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SH4"
+				"VXOBMF_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SH8"
+				"VXOBMF_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_SL"
+				"VXOBMF_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_UHR"
+				"VXOBMF_SL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TAPER_VHR"
+				"VXOBMF_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Obmf Volume Fraction"
 		],
 		[
 			[
-				"BFV_TOP_RT"
+				"V_XOIL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BFV_UHR"
+				"VXOI"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BFV_UP"
+				"VXOI_LHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BFV_VHR"
+				"VXOI_MRF",
+				"VXOM"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BFVT"
+				"VXOI_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BGAS"
+				"VXOI_SH2"
 			],
 			"Dimensionless",
-			"Gas Formation Volume Factor"
+			"Flushed Zone Oil Volume Fraction"
+		],
+		[
+			[
+				"VXOI_SH3"
+			],
+			"Dimensionless",
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
@@ -108522,10 +109969,10 @@
 		],
 		[
 			[
-				"BOIL"
+				"VXOI_SH4"
 			],
 			"Dimensionless",
-			"Oil Formation Volume Factor"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
@@ -110933,38 +112380,24 @@
 		],
 		[
 			[
-				"BVG"
+				"VXOI_SH8"
 			],
 			"Dimensionless",
-			"Gas Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BVL"
+				"VXOI_SL"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
-				"BVO"
+				"VXOI_UHR"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"BVPP"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
-				"BVSS"
-			],
-			"Dimensionless",
-			"Sand Volume Fraction"
+			"Flushed Zone Oil Volume Fraction"
 		],
 		[
 			[
@@ -110975,45 +112408,59 @@
 		],
 		[
 			[
-				"BVW"
+				"EWXE"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"BVWC"
+				"EWXT"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"BVWE"
+				"PSX0"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"BVWP"
+				"PSXO"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"BVWR"
+				"UPSX"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"BVWT"
+				"V_XWAT"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
+		],
+		[
+			[
+				"VWX0"
+			],
+			"Dimensionless",
+			"Flushed Zone Water Volume Fraction"
+		],
+		[
+			[
+				"VXA"
+			],
+			"Dimensionless",
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -111101,10 +112548,10 @@
 		],
 		[
 			[
-				"BWAT"
+				"VXO"
 			],
 			"Dimensionless",
-			"Water Formation Volume Factor"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -111411,10 +112858,10 @@
 		],
 		[
 			[
-				"C2IL"
+				"VXOT"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -111987,17 +113434,17 @@
 		],
 		[
 			[
-				"CARB"
+				"VXWA"
 			],
 			"Dimensionless",
-			"Carbon Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CARB_LITH_RQL"
+				"VXWA_LHR"
 			],
 			"Dimensionless",
-			"Carbonate Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -112266,101 +113713,95 @@
 		],
 		[
 			[
-				"CBF1"
+				"VXWA_MRF",
+				"VXWM"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF1_SL"
+				"VXWA_SH1"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF2"
+				"VXWA_SH2"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF2_SL"
+				"VXWA_SH3"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF3"
+				"VXWA_SH4"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF3_SL"
+				"VXWA_SH8"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF4"
+				"VXWA_SL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF4_SL"
+				"VXWA_UHR"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
-				"CBF5"
+				"BGAS"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Gas Formation Volume Factor"
 		],
 		[
 			[
-				"CBF5_SL"
+				"FA1_ERR_FVF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Gas Formation Volume Factor"
 		],
 		[
 			[
-				"CBF6"
+				"FA1_FVF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Gas Formation Volume Factor"
 		],
 		[
 			[
-				"CBF6_SL"
+				"FA2_ERR_FVF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Gas Formation Volume Factor"
 		],
 		[
 			[
-				"CBF7"
+				"FA2_FVF"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"CBF7_SL"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Gas Formation Volume Factor"
 		],
 		[
 			[
@@ -112574,27 +114015,6 @@
 		],
 		[
 			[
-				"CBPG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
-				"CBPO"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"CBPW"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
 				"CBSF"
 			],
 			"Dimensionless",
@@ -112613,13 +114033,6 @@
 			],
 			"Dimensionless",
 			"Tool Status"
-		],
-		[
-			[
-				"CBVW"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
 		],
 		[
 			[
@@ -115840,13 +117253,6 @@
 		],
 		[
 			[
-				"CH1V"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"CH4U_RT"
 			],
 			"Dimensionless",
@@ -117485,13 +118891,6 @@
 		],
 		[
 			[
-				"CLAY_LITH_RQL"
-			],
-			"Dimensionless",
-			"Clay Volume Fraction"
-		],
-		[
-			[
 				"CLEX"
 			],
 			"Dimensionless",
@@ -117587,13 +118986,6 @@
 			],
 			"PlaneAngle",
 			"Electromagnetic Phase Shift"
-		],
-		[
-			[
-				"CLT"
-			],
-			"Dimensionless",
-			"Volume Fraction"
 		],
 		[
 			[
@@ -119253,13 +120645,6 @@
 			],
 			"Time",
 			"Time"
-		],
-		[
-			[
-				"COARS_VOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -121478,13 +122863,6 @@
 		],
 		[
 			[
-				"CPAS"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
 				"CPBP1",
 				"ZBP1"
 			],
@@ -122061,96 +123439,6 @@
 			],
 			"Dimensionless",
 			"Type"
-		],
-		[
-			[
-				"CPPV1",
-				"ZPV1"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPV1_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPV2",
-				"ZPV2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPV2_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPV3",
-				"ZPV3"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPV3_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ1",
-				"ZSV1"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ1_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ2",
-				"ZSV2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ2_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ3",
-				"ZSV3"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"CPPVSQ3_DL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -123159,13 +124447,6 @@
 			],
 			"Temperature",
 			"Tool Temperature"
-		],
-		[
-			[
-				"CPSV"
-			],
-			"Volume",
-			"Cement Volume"
 		],
 		[
 			[
@@ -125802,13 +127083,6 @@
 		],
 		[
 			[
-				"CUM_GAS_VOLUME"
-			],
-			"Volume",
-			"Cumulative Gas Volume"
-		],
-		[
-			[
 				"CUM_INCLUSION_TYPE_PROPORTION"
 			],
 			"Dimensionless",
@@ -125823,24 +127097,10 @@
 		],
 		[
 			[
-				"CUM_OIL_VOLUME"
-			],
-			"Volume",
-			"Cumulative Oil Volume"
-		],
-		[
-			[
 				"CUM_SAND_PROD"
 			],
 			"Mass",
 			"Mass"
-		],
-		[
-			[
-				"CUM_WATER_VOLUME"
-			],
-			"Volume",
-			"Cumulative Water Volume"
 		],
 		[
 			[
@@ -125855,13 +127115,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"CURSEQPTVOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -125907,17 +127160,24 @@
 		],
 		[
 			[
-				"CUVO"
+				"V_GAS"
 			],
-			"Volume",
-			"Cumulative Volume"
+			"Dimensionless",
+			"Gas Volume Fraction"
 		],
 		[
 			[
-				"CVBL"
+				"BVG"
 			],
-			"Volume",
-			"Cumulative Volume"
+			"Dimensionless",
+			"Gas Volume Fraction"
+		],
+		[
+			[
+				"CBPG"
+			],
+			"Dimensionless",
+			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -125991,52 +127251,52 @@
 		],
 		[
 			[
-				"CVP0"
+				"SBPG"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Gas Volume Fraction"
 		],
 		[
 			[
-				"CVP1"
+				"TGAS"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Gas Volume Fraction"
 		],
 		[
 			[
-				"CVP2"
+				"V_GLAU"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Glauconite Volume Fraction"
 		],
 		[
 			[
-				"CVP3"
+				"VGLA"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Glauconite Volume Fraction"
 		],
 		[
 			[
-				"CVPD"
+				"V_GYPS"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Gypsum Volume Fraction"
 		],
 		[
 			[
-				"CVPL"
+				"VGYP"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Gypsum Volume Fraction"
 		],
 		[
 			[
-				"CVPS"
+				"V_HALI"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Halite Volume Fraction"
 		],
 		[
 			[
@@ -126320,10 +127580,10 @@
 		],
 		[
 			[
-				"CWLV"
+				"VHAL"
 			],
-			"Volume",
-			"Cement Volume"
+			"Dimensionless",
+			"Halite Volume Fraction"
 		],
 		[
 			[
@@ -127230,17 +128490,17 @@
 		],
 		[
 			[
-				"D_VOL_FN"
+				"VSAL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Halite Volume Fraction"
 		],
 		[
 			[
-				"D_VOL_IV"
+				"VSLT"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Halite Volume Fraction"
 		],
 		[
 			[
@@ -129725,10 +130985,17 @@
 		],
 		[
 			[
-				"DDVOL"
+				"V_HYDC"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Hydrocarbon Volume Fraction"
+		],
+		[
+			[
+				"VH"
+			],
+			"Dimensionless",
+			"Hydrocarbon Volume Fraction"
 		],
 		[
 			[
@@ -134158,10 +135425,10 @@
 		],
 		[
 			[
-				"DOLI"
+				"V_IGNE"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Igneous Volume Fraction"
 		],
 		[
 			[
@@ -142459,10 +143726,10 @@
 		],
 		[
 			[
-				"DU_COARS_VOL"
+				"VIGN"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Igneous Volume Fraction"
 		],
 		[
 			[
@@ -142508,10 +143775,10 @@
 		],
 		[
 			[
-				"DU_PUMPD_VOL"
+				"V_ILLI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Illite Volume Fraction"
 		],
 		[
 			[
@@ -142550,10 +143817,10 @@
 		],
 		[
 			[
-				"DU_TOT_VOL"
+				"VILL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Illite Volume Fraction"
 		],
 		[
 			[
@@ -142561,13 +143828,6 @@
 			],
 			"Time",
 			"Time"
-		],
-		[
-			[
-				"DU_WRAP_VOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -142893,13 +144153,6 @@
 		],
 		[
 			[
-				"DVOY_VOLU_RQL"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
 				"DVP1"
 			],
 			"Length",
@@ -143016,13 +144269,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"DVUOI"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
 		],
 		[
 			[
@@ -145755,13 +147001,6 @@
 		],
 		[
 			[
-				"EBWA"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
 				"ECAL"
 			],
 			"Length",
@@ -146004,13 +147243,6 @@
 		],
 		[
 			[
-				"ECD_BIT_HY"
-			],
-			"MassPerVolume",
-			"Mass Per Volume"
-		],
-		[
-			[
 				"ECD_CDR"
 			],
 			"MassPerVolume",
@@ -146022,13 +147254,6 @@
 			],
 			"MassPerVolume",
 			"Equivalent Circulating Density"
-		],
-		[
-			[
-				"ECD_CSG_HY"
-			],
-			"MassPerVolume",
-			"Mass Per Volume"
 		],
 		[
 			[
@@ -147485,24 +148710,17 @@
 		],
 		[
 			[
-				"EFITVOL"
+				"V_BVI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"EFITVOLCOL"
+				"MBVI_LHR"
 			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"EFITVOLCUST"
-			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -147520,10 +148738,10 @@
 		],
 		[
 			[
-				"EFITVOLMETH"
+				"MBVI_SH1"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -150900,17 +152118,17 @@
 		],
 		[
 			[
-				"EVALTPMPVOL1"
+				"MBVI_SH2"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"EVALTPMPVOL2"
+				"MBVI_SH3"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -151000,17 +152218,17 @@
 		],
 		[
 			[
-				"EWXE"
+				"MBVI_SH4"
 			],
 			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"EWXT"
+				"MBVI_SH8"
 			],
 			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -154876,10 +156094,10 @@
 		],
 		[
 			[
-				"FA1_ERR_FVF"
+				"MBVI_UHR"
 			],
 			"Dimensionless",
-			"Gas Formation Volume Factor"
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -154897,10 +156115,10 @@
 		],
 		[
 			[
-				"FA1_FVF"
+				"MBVI_V"
 			],
 			"Dimensionless",
-			"Gas Formation Volume Factor"
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -155968,10 +157186,10 @@
 		],
 		[
 			[
-				"FA2_ERR_FVF"
+				"SBVC"
 			],
 			"Dimensionless",
-			"Gas Formation Volume Factor"
+			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -155989,10 +157207,10 @@
 		],
 		[
 			[
-				"FA2_FVF"
+				"V_ISOL"
 			],
 			"Dimensionless",
-			"Gas Formation Volume Factor"
+			"Isolated Porosity Volume Fraction"
 		],
 		[
 			[
@@ -159661,10 +160879,10 @@
 		],
 		[
 			[
-				"FEDO"
+				"VISO"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Isolated Porosity Volume Fraction"
 		],
 		[
 			[
@@ -160573,10 +161791,10 @@
 		],
 		[
 			[
-				"FIN_DD_VOL"
+				"V_KAOL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Kaolinite Volume Fraction"
 		],
 		[
 			[
@@ -161309,11 +162527,10 @@
 		],
 		[
 			[
-				"FLOCO_OIL_VOLUME",
-				"FLOV"
+				"VKAO"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Kaolinite Volume Fraction"
 		],
 		[
 			[
@@ -161553,10 +162770,10 @@
 		],
 		[
 			[
-				"FLVOLCORR"
+				"ECD_BIT_HY"
 			],
-			"Volume",
-			"Volume"
+			"MassPerVolume",
+			"Mass Per Volume"
 		],
 		[
 			[
@@ -162695,45 +163912,45 @@
 		],
 		[
 			[
-				"FPV1"
+				"ECD_CSG_HY"
 			],
-			"Volume",
-			"Volume"
+			"MassPerVolume",
+			"Mass Per Volume"
 		],
 		[
 			[
-				"FPV1_DL"
+				"MDIA"
 			],
-			"Volume",
-			"Volume"
+			"MassPerVolume",
+			"Mass Per Volume"
 		],
 		[
 			[
-				"FPV2"
+				"MDOA"
 			],
-			"Volume",
-			"Volume"
+			"MassPerVolume",
+			"Mass Per Volume"
 		],
 		[
 			[
-				"FPV2_DL"
+				"UGE"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
-				"FPV3"
+				"UGE_ACQ"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
-				"FPV3_DL"
+				"UGE_INCP"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -164596,10 +165813,10 @@
 		],
 		[
 			[
-				"FVPD"
+				"UGE_WALK2"
 			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
+			"Dimensionless",
+			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -164666,10 +165883,10 @@
 		],
 		[
 			[
-				"FVT"
+				"UMA"
 			],
 			"Dimensionless",
-			"Tar Volume Fraction"
+			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -165253,10 +166470,10 @@
 		],
 		[
 			[
-				"GAS_VOLUME"
+				"V_META"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Metamorphic Volume Fraction"
 		],
 		[
 			[
@@ -166282,10 +167499,10 @@
 		],
 		[
 			[
-				"GDSI"
+				"VMET"
 			],
 			"Dimensionless",
-			"Shale Volume Fraction"
+			"Metamorphic Volume Fraction"
 		],
 		[
 			[
@@ -169714,10 +170931,10 @@
 		],
 		[
 			[
-				"GRSI"
+				"V_MONT"
 			],
 			"Dimensionless",
-			"Shale Volume Fraction"
+			"Montmorillonite Volume Fraction"
 		],
 		[
 			[
@@ -171160,10 +172377,10 @@
 		],
 		[
 			[
-				"H1PV"
+				"VMON"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Montmorillonite Volume Fraction"
 		],
 		[
 			[
@@ -171230,10 +172447,10 @@
 		],
 		[
 			[
-				"H2PV"
+				"V_MHYD"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Moved Hydrocarbon Volume Fraction"
 		],
 		[
 			[
@@ -171286,10 +172503,10 @@
 		],
 		[
 			[
-				"H3PV"
+				"VMH"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Moved Hydrocarbon Volume Fraction"
 		],
 		[
 			[
@@ -173299,10 +174516,10 @@
 		],
 		[
 			[
-				"HIFVM"
+				"VMHY"
 			],
-			"Area",
-			"Mud Filtrate Volume Per Length"
+			"Dimensionless",
+			"Moved Hydrocarbon Volume Fraction"
 		],
 		[
 			[
@@ -173600,7 +174817,7 @@
 		],
 		[
 			[
-				"HIOVM"
+				"AFVM"
 			],
 			"Area",
 			"Mud Filtrate Volume Per Length"
@@ -173932,7 +175149,7 @@
 		],
 		[
 			[
-				"HITVM"
+				"AHFVM"
 			],
 			"Area",
 			"Mud Filtrate Volume Per Length"
@@ -175008,45 +176225,40 @@
 		],
 		[
 			[
-				"HPV1"
+				"AHOVM",
+				"AOVM"
 			],
-			"Volume",
-			"Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
-				"HPV1_DL"
+				"AHTVM",
+				"ATVM"
 			],
-			"Volume",
-			"Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
-				"HPV2"
+				"ASFVM"
 			],
-			"Volume",
-			"Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
-				"HPV2_DL"
+				"ASOVM"
 			],
-			"Volume",
-			"Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
-				"HPV3"
+				"ASTVM"
 			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"HPV3_DL"
-			],
-			"Volume",
-			"Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -176217,13 +177429,6 @@
 		],
 		[
 			[
-				"HULS"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"HUMF"
 			],
 			"Frequency",
@@ -176478,10 +177683,10 @@
 		],
 		[
 			[
-				"HVOL"
+				"FVPD"
 			],
-			"Dimensionless",
-			"Residual Hydrocarbon Volume Fraction"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -177031,10 +178236,10 @@
 		],
 		[
 			[
-				"IBVW"
+				"HIFVM"
 			],
-			"Dimensionless",
-			"Water Volume Fraction"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -177214,10 +178419,10 @@
 		],
 		[
 			[
-				"ICV"
+				"HIOVM"
 			],
-			"Volume",
-			"Annulus Volume"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -177466,10 +178671,10 @@
 		],
 		[
 			[
-				"IDU"
+				"HITVM"
 			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
+			"Area",
+			"Mud Filtrate Volume Per Length"
 		],
 		[
 			[
@@ -177748,13 +178953,6 @@
 		],
 		[
 			[
-				"IHV"
-			],
-			"Volume",
-			"Borehole Volume"
-		],
-		[
-			[
 				"IHY"
 			],
 			"Length",
@@ -177913,13 +179111,6 @@
 			],
 			"Dimensionless",
 			"Processing Option"
-		],
-		[
-			[
-				"ILFE"
-			],
-			"Dimensionless",
-			"Volume Fraction"
 		],
 		[
 			[
@@ -178555,13 +179746,6 @@
 		],
 		[
 			[
-				"INFVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"INFVOLPER"
 			],
 			"Dimensionless",
@@ -178938,13 +180122,6 @@
 			],
 			"PressurePerTime",
 			"Slope"
-		],
-		[
-			[
-				"INV_DD_VOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -183325,13 +184502,6 @@
 		],
 		[
 			[
-				"LAST_DD_V"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"LAT_AMP_DH"
 			],
 			"Length",
@@ -184073,41 +185243,6 @@
 		],
 		[
 			[
-				"LEGS"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"LEGS_IFA1"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"LEGS_IFA2"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"LEGS_IFAX1"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"LEGS_IFAX2"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
 				"LEI"
 			],
 			"Dimensionless",
@@ -184451,13 +185586,6 @@
 			],
 			"Dimensionless",
 			"Ratio"
-		],
-		[
-			[
-				"LISA"
-			],
-			"Dimensionless",
-			"Volume Fraction"
 		],
 		[
 			[
@@ -184948,13 +186076,6 @@
 			],
 			"Resistivity",
 			"Deep Laterolog Resistivity"
-		],
-		[
-			[
-				"LLCL"
-			],
-			"Dimensionless",
-			"Clay Volume Fraction"
 		],
 		[
 			[
@@ -187816,27 +188937,6 @@
 		],
 		[
 			[
-				"MARKER_VOL_EJECTED_GMET1_SL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"MARKER_VOL_EJECTED_GMET2_SL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"MARKER_VOL_EJECTED_GMET3_SL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"EMQS",
 				"MARQ_UPDATE_20"
 			],
@@ -188239,451 +189339,24 @@
 		],
 		[
 			[
-				"MBF_3MS"
+				"V_MUSC"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Muscovite Volume Fraction"
 		],
 		[
 			[
-				"MBF1"
+				"VMUS"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Muscovite Volume Fraction"
 		],
 		[
 			[
-				"MBF1_LHR"
+				"BOIL"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF1_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF2_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF3_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF4_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF5_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF6_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_LHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_SH1"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_SH2"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_SH3"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_SH4"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_SH8"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_UHR"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
-		],
-		[
-			[
-				"MBF7_V"
-			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Oil Formation Volume Factor"
 		],
 		[
 			[
@@ -189282,59 +189955,66 @@
 		],
 		[
 			[
-				"MBVI_LHR"
+				"V_OIL"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_SH1"
+				"BVO"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_SH2"
+				"CBPO"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_SH3"
+				"LEGS"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_SH4"
+				"LEGS_IFA1"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_SH8"
+				"LEGS_IFA2"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_UHR"
+				"LEGS_IFAX1"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
-				"MBVI_V"
+				"LEGS_IFAX2"
 			],
 			"Dimensionless",
-			"Irreducible Water Volume Fraction"
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OILF"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -189464,10 +190144,10 @@
 		],
 		[
 			[
-				"MDIA"
+				"OILF_AFA"
 			],
-			"MassPerVolume",
-			"Mass Per Volume"
+			"Dimensionless",
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -189520,10 +190200,10 @@
 		],
 		[
 			[
-				"MDOA"
+				"OILF_AFA_DL"
 			],
-			"MassPerVolume",
-			"Mass Per Volume"
+			"Dimensionless",
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -191684,10 +192364,10 @@
 		],
 		[
 			[
-				"MOIS"
+				"OILF_AFA2"
 			],
 			"Dimensionless",
-			"Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -192677,10 +193357,10 @@
 		],
 		[
 			[
-				"MSI"
+				"OILF_AFA3"
 			],
 			"Dimensionless",
-			"Shale Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -193544,10 +194224,10 @@
 		],
 		[
 			[
-				"MVBL"
+				"OILF_DL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -195234,10 +195914,10 @@
 		],
 		[
 			[
-				"NAVW"
+				"OILF_LFA"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -197055,10 +197735,10 @@
 		],
 		[
 			[
-				"NFVW"
+				"OILF_LFA_DL"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -198605,10 +199285,10 @@
 		],
 		[
 			[
-				"NPSI"
+				"OILF_LFA2"
 			],
 			"Dimensionless",
-			"Shale Volume Fraction"
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -200305,10 +200985,10 @@
 		],
 		[
 			[
-				"OIL_VOLUME"
+				"OILF_LFA2_DL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Oil Volume Fraction"
 		],
 		[
 			[
@@ -200351,76 +201031,6 @@
 		],
 		[
 			[
-				"OILF"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_AFA"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_AFA_DL"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_AFA2"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_AFA3"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_DL"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_LFA"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_LFA_DL"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_LFA2"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
-				"OILF_LFA2_DL"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
 				"OILF_LFA3"
 			],
 			"Dimensionless",
@@ -200453,6 +201063,76 @@
 			],
 			"Dimensionless",
 			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OLF"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OSC"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OSL"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OTL"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"OTLR"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"SBPO"
+			],
+			"Dimensionless",
+			"Oil Volume Fraction"
+		],
+		[
+			[
+				"V_ORTH"
+			],
+			"Dimensionless",
+			"Orthoclase Volume Fraction"
+		],
+		[
+			[
+				"VORT"
+			],
+			"Dimensionless",
+			"Orthoclase Volume Fraction"
+		],
+		[
+			[
+				"V_PARA"
+			],
+			"Dimensionless",
+			"Parallel Porosity Volume Fraction"
+		],
+		[
+			[
+				"VPAR"
+			],
+			"Dimensionless",
+			"Parallel Porosity Volume Fraction"
 		],
 		[
 			[
@@ -200608,10 +201288,17 @@
 		],
 		[
 			[
-				"OLF"
+				"V_POT"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
+			"Potash Volume Fraction"
+		],
+		[
+			[
+				"VPOT"
+			],
+			"Dimensionless",
+			"Potash Volume Fraction"
 		],
 		[
 			[
@@ -200923,10 +201610,10 @@
 		],
 		[
 			[
-				"OSC"
+				"V_PYRI"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
+			"Pyrite Volume Fraction"
 		],
 		[
 			[
@@ -200979,10 +201666,10 @@
 		],
 		[
 			[
-				"OSL"
+				"VPYR"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
+			"Pyrite Volume Fraction"
 		],
 		[
 			[
@@ -201021,17 +201708,17 @@
 		],
 		[
 			[
-				"OTL"
+				"V_QFM"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
+			"Qfm Volume Fraction"
 		],
 		[
 			[
-				"OTLR"
+				"VQFM"
 			],
 			"Dimensionless",
-			"Oil Volume Fraction"
+			"Qfm Volume Fraction"
 		],
 		[
 			[
@@ -201661,10 +202348,10 @@
 		],
 		[
 			[
-				"P_MOT_VOL"
+				"V_QUAR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Quartz Volume Fraction"
 		],
 		[
 			[
@@ -206242,115 +206929,115 @@
 		],
 		[
 			[
-				"PAIV"
+				"VQUA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Quartz Volume Fraction"
 		],
 		[
 			[
-				"PAIV_DL"
+				"HVOL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Residual Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"PAIV2"
+				"V_XHYD"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Residual Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"PAIV2_DL"
+				"VR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Residual Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"PAIV3"
+				"BVSS"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIV3_DL"
+				"SAND_LITH_RQL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIV4"
+				"V_SAND"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIV4_DL"
+				"VSAC"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIVO"
+				"VSAN"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIVO_DL"
+				"VSND"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Sand Volume Fraction"
 		],
 		[
 			[
-				"PAIVO2"
+				"GDSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PAIVO2_DL"
+				"GRSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PAIVO3"
+				"MSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PAIVO3_DL"
+				"NPSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PAIVO4"
+				"PNSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PAIVO4_DL"
+				"SPSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -208998,10 +209685,10 @@
 		],
 		[
 			[
-				"PBTV"
+				"V_SHAL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -211770,10 +212457,10 @@
 		],
 		[
 			[
-				"PHIB"
+				"VSCG"
 			],
 			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -213333,10 +214020,10 @@
 		],
 		[
 			[
-				"PMPCVOL"
+				"VSCP"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -213354,10 +214041,10 @@
 		],
 		[
 			[
-				"PMPRCVOL"
+				"VSCR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -213375,10 +214062,10 @@
 		],
 		[
 			[
-				"PMPVOL"
+				"VSDI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -213652,7 +214339,7 @@
 		],
 		[
 			[
-				"PNSI"
+				"VSDN"
 			],
 			"Dimensionless",
 			"Shale Volume Fraction"
@@ -213702,33 +214389,31 @@
 		],
 		[
 			[
-				"CCV",
-				"POCCV"
+				"VSDS"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"CCV2",
-				"POCCV2"
+				"VSEX"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POCV"
+				"VSGR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POCV2"
+				"VSH"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214019,31 +214704,31 @@
 		],
 		[
 			[
-				"POPV"
+				"VSHA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POPV_DL"
+				"VSLO"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POPV2"
+				"VSMN"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POPV2_DL"
+				"VSNP"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214054,32 +214739,31 @@
 		],
 		[
 			[
-				"PORCV",
-				"PORV"
+				"VSNR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PORCV_DL"
+				"VSNS"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PORCV2"
+				"VSPC"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"PORCV2_DL"
+				"VSPN"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214309,10 +214993,10 @@
 		],
 		[
 			[
-				"POTCV"
+				"VSQ"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214352,17 +215036,17 @@
 		],
 		[
 			[
-				"POTV"
+				"VSRA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POTV_DL"
+				"VSRT"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214387,31 +215071,31 @@
 		],
 		[
 			[
-				"POUDCCV"
+				"VSSG"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDCCV2"
+				"VSSI"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDCV"
+				"VSSO"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDCV2"
+				"VSSP"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
@@ -214660,60 +215344,59 @@
 		],
 		[
 			[
-				"POUDPV",
-				"PV"
+				"VSSR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDPV_DL"
+				"VSTC"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDPV2"
+				"VSTP"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDPV2_DL"
+				"VSUC"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Shale Volume Fraction"
 		],
 		[
 			[
-				"POUDRCV"
+				"V_SIDE"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Siderite Volume Fraction"
 		],
 		[
 			[
-				"POUDRCV_DL"
+				"VSID"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Siderite Volume Fraction"
 		],
 		[
 			[
-				"POUDRCV2"
+				"V_SILT"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Silt Volume Fraction"
 		],
 		[
 			[
-				"POUDRCV2_DL"
+				"VSIL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Silt Volume Fraction"
 		],
 		[
 			[
@@ -216134,48 +216817,10 @@
 		],
 		[
 			[
-				"PQPTV1",
-				"PTV1"
+				"FVT"
 			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"PQPTV1_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"PQPTV2",
-				"PTV2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"PQPTV2_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"PQPTV3",
-				"PTV3"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"PQPTV3_DL"
-			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Tar Volume Fraction"
 		],
 		[
 			[
@@ -217290,17 +217935,17 @@
 		],
 		[
 			[
-				"PRE_MOT_VOL"
+				"V_TAR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Tar Volume Fraction"
 		],
 		[
 			[
-				"PRE_MOT_VOL_S"
+				"VTAR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Tar Volume Fraction"
 		],
 		[
 			[
@@ -217514,10 +218159,17 @@
 		],
 		[
 			[
-				"PRODVOL"
+				"V_TRO"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Trona Volume Fraction"
+		],
+		[
+			[
+				"VTRO"
+			],
+			"Dimensionless",
+			"Trona Volume Fraction"
 		],
 		[
 			[
@@ -219147,10 +219799,10 @@
 		],
 		[
 			[
-				"PSTNVOL"
+				"V_UBWA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
@@ -219203,17 +219855,24 @@
 		],
 		[
 			[
-				"PSW"
+				"VUBW"
 			],
 			"Dimensionless",
-			"Undisturbed Zone Water Volume Fraction"
+			"Undisturbed Zone Bound Water Volume Fraction"
 		],
 		[
 			[
-				"PSX0"
+				"V_UDS"
 			],
 			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
+			"Undisturbed Zone Dissolved Salt Volume Fraction"
+		],
+		[
+			[
+				"VUDS"
+			],
+			"Dimensionless",
+			"Undisturbed Zone Dissolved Salt Volume Fraction"
 		],
 		[
 			[
@@ -219245,10 +219904,17 @@
 		],
 		[
 			[
-				"PSXO"
+				"V_UFW"
 			],
 			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
+			"Undisturbed Zone Free Water Volume Fraction"
+		],
+		[
+			[
+				"VUFW"
+			],
+			"Dimensionless",
+			"Undisturbed Zone Free Water Volume Fraction"
 		],
 		[
 			[
@@ -220175,52 +220841,73 @@
 		],
 		[
 			[
-				"PTV_XPT"
+				"V_UGAS"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"PTV_XPT_DL"
+				"VUGA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Gas Volume Fraction"
 		],
 		[
 			[
-				"PTV1_DL"
+				"V_UHYD"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"PTV2_DL"
+				"VUHY"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Hydrocarbon Volume Fraction"
 		],
 		[
 			[
-				"PTV3_DL"
+				"V_UIWA"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"PTVL"
+				"VUIW"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Irreducible Water Volume Fraction"
 		],
 		[
 			[
-				"PTVOL"
+				"V_UOIL"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Undisturbed Zone Oil Volume Fraction"
+		],
+		[
+			[
+				"VUOI"
+			],
+			"Dimensionless",
+			"Undisturbed Zone Oil Volume Fraction"
+		],
+		[
+			[
+				"PSW"
+			],
+			"Dimensionless",
+			"Undisturbed Zone Water Volume Fraction"
+		],
+		[
+			[
+				"V_UWAT"
+			],
+			"Dimensionless",
+			"Undisturbed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -220897,10 +221584,10 @@
 		],
 		[
 			[
-				"PWFLOW"
+				"VUWA"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Undisturbed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -220960,10 +221647,10 @@
 		],
 		[
 			[
-				"PWI"
+				"VWT"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
+			"Undisturbed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -229756,13 +230443,6 @@
 		],
 		[
 			[
-				"REU"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"REV"
 			],
 			"ElectricPotential",
@@ -236686,14 +237366,6 @@
 		],
 		[
 			[
-				"ROOV",
-				"ROTRON_OIL_VOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"ROTS"
 			],
 			"Velocity",
@@ -238674,13 +239346,6 @@
 			],
 			"ElectricPotential",
 			"Electric Potential"
-		],
-		[
-			[
-				"RSVL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -242370,13 +243035,6 @@
 		],
 		[
 			[
-				"SA_VOLUME"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"SA1"
 			],
 			"ElectricPotential",
@@ -242633,13 +243291,6 @@
 			],
 			"MassPerTime",
 			"Mass Flowrate"
-		],
-		[
-			[
-				"SAND_LITH_RQL"
-			],
-			"Dimensionless",
-			"Sand Volume Fraction"
 		],
 		[
 			[
@@ -243199,13 +243850,6 @@
 		],
 		[
 			[
-				"SBPG"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
-		],
-		[
-			[
 				"SBPM"
 			],
 			"MassPerVolume",
@@ -243213,24 +243857,10 @@
 		],
 		[
 			[
-				"SBPO"
-			],
-			"Dimensionless",
-			"Oil Volume Fraction"
-		],
-		[
-			[
 				"SBPP"
 			],
 			"MassPerVolume",
 			"Pore Pressure Gradient"
-		],
-		[
-			[
-				"SBPW"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
 		],
 		[
 			[
@@ -243301,13 +243931,6 @@
 			],
 			"Time",
 			"Start Time"
-		],
-		[
-			[
-				"SBVC"
-			],
-			"Dimensionless",
-			"Irreducible Water Volume Fraction"
 		],
 		[
 			[
@@ -244586,13 +245209,6 @@
 		],
 		[
 			[
-				"SDVW"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
 				"SEAL"
 			],
 			"Dimensionless",
@@ -245186,27 +245802,6 @@
 		],
 		[
 			[
-				"SFITVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SFITVOLCOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SFITVOLCUST"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"SFITVOLEXP"
 			],
 			"Dimensionless",
@@ -245218,13 +245813,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"SFITVOLMETH"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -245657,34 +246245,6 @@
 			],
 			"Pressure",
 			"Pressure"
-		],
-		[
-			[
-				"SFTIV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SFTIV_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SFTIV2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SFTIV2_DL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -249672,13 +250232,6 @@
 		],
 		[
 			[
-				"SMPDEVVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"SMPID"
 			],
 			"Dimensionless",
@@ -249802,13 +250355,6 @@
 			],
 			"Frequency",
 			"Count Rate"
-		],
-		[
-			[
-				"SNAN"
-			],
-			"Dimensionless",
-			"Volume Fraction"
 		],
 		[
 			[
@@ -252109,13 +252655,6 @@
 		],
 		[
 			[
-				"SPECTCAPTVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"SPEED_FLAG"
 			],
 			"Dimensionless",
@@ -253626,13 +254165,6 @@
 		],
 		[
 			[
-				"SPSI"
-			],
-			"Dimensionless",
-			"Shale Volume Fraction"
-		],
-		[
-			[
 				"SPSL"
 			],
 			"RotationPerLength",
@@ -253658,13 +254190,6 @@
 			],
 			"Flowrate",
 			"Flowrate"
-		],
-		[
-			[
-				"SPSV"
-			],
-			"Volume",
-			"Cement Volume"
 		],
 		[
 			[
@@ -254533,62 +255058,6 @@
 			],
 			"Dimensionless",
 			"Amount"
-		],
-		[
-			[
-				"SRIV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIV_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIV2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIV2_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIVO"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIVO_DL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIVO2"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
-				"SRIVO2_DL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -271097,14 +271566,6 @@
 		],
 		[
 			[
-				"TANK_FLUID_VOLUME",
-				"TNKV"
-			],
-			"Volume",
-			"Cumulative Oil Volume"
-		],
-		[
-			[
 				"TANK_PRES",
 				"TNKP"
 			],
@@ -272691,13 +273152,6 @@
 			],
 			"Dimensionless",
 			"Gain"
-		],
-		[
-			[
-				"TGAS"
-			],
-			"Dimensionless",
-			"Gas Volume Fraction"
 		],
 		[
 			[
@@ -276670,13 +277124,6 @@
 		],
 		[
 			[
-				"TOTVOLPMPBSMP"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"TOUG"
 			],
 			"Pressure",
@@ -277128,13 +277575,6 @@
 		],
 		[
 			[
-				"TPMPVOL"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"TPPW"
 			],
 			"TimePerLength",
@@ -277189,13 +277629,6 @@
 			],
 			"Temperature",
 			"Tool Temperature"
-		],
-		[
-			[
-				"TPTVOL"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -280645,13 +281078,6 @@
 		],
 		[
 			[
-				"TTV"
-			],
-			"Volume",
-			"Volume"
-		],
-		[
-			[
 				"TTWF"
 			],
 			"Dimensionless",
@@ -280756,13 +281182,6 @@
 			],
 			"Time",
 			"Two Way Time"
-		],
-		[
-			[
-				"TVA"
-			],
-			"Volume",
-			"Volume"
 		],
 		[
 			[
@@ -281232,34 +281651,6 @@
 			],
 			"Pressure",
 			"Stress"
-		],
-		[
-			[
-				"U"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"U_CDN"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"U_REC"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"U_RT"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -282460,13 +282851,6 @@
 		],
 		[
 			[
-				"U8"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UA3F"
 			],
 			"Dimensionless",
@@ -282597,13 +282981,6 @@
 			],
 			"Acceleration",
 			"Z Acceleration"
-		],
-		[
-			[
-				"UB"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -283833,27 +284210,6 @@
 		],
 		[
 			[
-				"UGE"
-			],
-			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"UGE_ACQ"
-			],
-			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"UGE_INCP"
-			],
-			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UGE_SIG"
 			],
 			"Dimensionless",
@@ -283865,13 +284221,6 @@
 			],
 			"Dimensionless",
 			"Uncertainty"
-		],
-		[
-			[
-				"UGE_WALK2"
-			],
-			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -283924,13 +284273,6 @@
 		],
 		[
 			[
-				"UI"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UIAX"
 			],
 			"ElectricCurrent",
@@ -283945,31 +284287,10 @@
 		],
 		[
 			[
-				"UL"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"ULAY"
 			],
 			"Dimensionless",
 			"Resistivity"
-		],
-		[
-			[
-				"ULCL"
-			],
-			"Dimensionless",
-			"Clay Volume Fraction"
-		],
-		[
-			[
-				"ULDS"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -284075,20 +284396,6 @@
 		],
 		[
 			[
-				"UMA"
-			],
-			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
-		],
-		[
-			[
-				"UMA_HILT"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UMSD"
 			],
 			"Dimensionless",
@@ -284117,13 +284424,6 @@
 		],
 		[
 			[
-				"UMUD"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UMV"
 			],
 			"ElectricPotential",
@@ -284142,13 +284442,6 @@
 			],
 			"ElectricPotential",
 			"Electric Potential"
-		],
-		[
-			[
-				"UN"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -284838,13 +285131,6 @@
 		],
 		[
 			[
-				"UP"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UPAV"
 			],
 			"Pressure",
@@ -284971,24 +285257,10 @@
 		],
 		[
 			[
-				"UPSX"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
 				"UPUF"
 			],
 			"Pressure",
 			"Pressure"
-		],
-		[
-			[
-				"UR"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -285246,13 +285518,6 @@
 		],
 		[
 			[
-				"USC"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"USEC"
 			],
 			"Length",
@@ -285321,13 +285586,6 @@
 			],
 			"Dimensionless",
 			"None"
-		],
-		[
-			[
-				"USI"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -285412,13 +285670,6 @@
 			],
 			"Dimensionless",
 			"Water Saturation"
-		],
-		[
-			[
-				"UT"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
 		],
 		[
 			[
@@ -285513,13 +285764,6 @@
 		],
 		[
 			[
-				"UU"
-			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
-		],
-		[
-			[
 				"UVRD"
 			],
 			"MassPerVolume",
@@ -285592,346 +285836,276 @@
 		],
 		[
 			[
-				"UZ"
+				"3XVPTV"
 			],
-			"Dimensionless",
-			"Volumetric Photoelectric Factor"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_ALBI"
+				"3XVPTV_DL"
 			],
-			"Dimensionless",
-			"Albite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_ANHY"
+				"3XVPV"
 			],
-			"Dimensionless",
-			"Anhydrite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_BIOT"
+				"3XVPV_DL"
 			],
-			"Dimensionless",
-			"Biotite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CALC"
+				"ADVL"
 			],
-			"Dimensionless",
-			"Calcite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CARB"
+				"AMTV"
 			],
-			"Dimensionless",
-			"Carbonate Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CHLO"
+				"CH1V"
 			],
-			"Dimensionless",
-			"Chlorite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CLA1"
+				"COARS_VOL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CLA2"
+				"CPPV1",
+				"ZPV1"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_CLAY"
+				"CPPV1_DL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_COAL"
+				"CPPV2",
+				"ZPV2"
 			],
-			"Dimensionless",
-			"Coal Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_DOLO"
+				"CPPV2_DL"
 			],
-			"Dimensionless",
-			"Dolomite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_EVAP"
+				"CPPV3",
+				"ZPV3"
 			],
-			"Dimensionless",
-			"Evaporite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_GLAU"
+				"CPPV3_DL"
 			],
-			"Dimensionless",
-			"Glauconite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_GYPS"
+				"CPPVSQ1",
+				"ZSV1"
 			],
-			"Dimensionless",
-			"Gypsum Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_HALI"
+				"CPPVSQ1_DL"
 			],
-			"Dimensionless",
-			"Halite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_IGNE"
+				"CPPVSQ2",
+				"ZSV2"
 			],
-			"Dimensionless",
-			"Igneous Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_ILLI"
+				"CPPVSQ2_DL"
 			],
-			"Dimensionless",
-			"Illite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_ISOL"
+				"CPPVSQ3",
+				"ZSV3"
 			],
-			"Dimensionless",
-			"Isolated Porosity Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_KAOL"
+				"CPPVSQ3_DL"
 			],
-			"Dimensionless",
-			"Kaolinite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_META"
+				"CURSEQPTVOL"
 			],
-			"Dimensionless",
-			"Metamorphic Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_MHYD"
+				"D_VOL_FN"
 			],
-			"Dimensionless",
-			"Moved Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_MONT"
+				"D_VOL_IV"
 			],
-			"Dimensionless",
-			"Montmorillonite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_MUSC"
+				"DDVOL"
 			],
-			"Dimensionless",
-			"Muscovite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_MWAT"
+				"DU_COARS_VOL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_ORTH"
+				"DU_PUMPD_VOL"
 			],
-			"Dimensionless",
-			"Orthoclase Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_PARA"
+				"DU_TOT_VOL"
 			],
-			"Dimensionless",
-			"Parallel Porosity Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_PYRI"
+				"DU_WRAP_VOL"
 			],
-			"Dimensionless",
-			"Pyrite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_QUAR"
+				"EFITVOL"
 			],
-			"Dimensionless",
-			"Quartz Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SAND"
+				"EFITVOLCOL"
 			],
-			"Dimensionless",
-			"Sand Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SHAL"
+				"EFITVOLCUST"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SIDE"
+				"EFITVOLMETH"
 			],
-			"Dimensionless",
-			"Siderite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SILT"
+				"EVALTPMPVOL1"
 			],
-			"Dimensionless",
-			"Silt Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SMI1"
+				"EVALTPMPVOL2"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_SMI2"
+				"FIN_DD_VOL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_UBWA"
+				"FLOCO_OIL_VOLUME",
+				"FLOV"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Bound Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_UGAS"
+				"FLVOLCORR"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Gas Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V_UHYD"
+				"FPV1"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"V_UIWA"
-			],
-			"Dimensionless",
-			"Undisturbed Zone Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"V_UOIL"
-			],
-			"Dimensionless",
-			"Undisturbed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"V_USFL"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"V_UWAT"
-			],
-			"Dimensionless",
-			"Undisturbed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"V_XBWA"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"V_XGAS"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"V_XHYD"
-			],
-			"Dimensionless",
-			"Residual Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"V_XIWA"
-			],
-			"Dimensionless",
-			"Flushed Zone Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"V_XOIL"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"V_XSFL"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"V_XWAT"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -285949,17 +286123,17 @@
 		],
 		[
 			[
-				"V1M3"
+				"FPV1_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"V2M3"
+				"FPV2"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -285970,10 +286144,10 @@
 		],
 		[
 			[
-				"V3M3"
+				"FPV2_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286047,10 +286221,10 @@
 		],
 		[
 			[
-				"VALB"
+				"FPV3"
 			],
-			"Dimensionless",
-			"Albite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286082,17 +286256,17 @@
 		],
 		[
 			[
-				"VANH"
+				"FPV3_DL"
 			],
-			"Dimensionless",
-			"Anhydrite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VANO"
+				"GAS_VOLUME"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286264,10 +286438,10 @@
 		],
 		[
 			[
-				"VBIO"
+				"H1PV"
 			],
-			"Dimensionless",
-			"Biotite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286278,10 +286452,10 @@
 		],
 		[
 			[
-				"VBW"
+				"H2PV"
 			],
-			"Dimensionless",
-			"Bound Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286313,10 +286487,10 @@
 		],
 		[
 			[
-				"VCAR"
+				"H3PV"
 			],
-			"Dimensionless",
-			"Carbonate Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286334,108 +286508,108 @@
 		],
 		[
 			[
-				"VCEA"
+				"HPV1"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCF"
+				"HPV1_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCGR"
+				"HPV2"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCHD"
+				"HPV2_DL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCHL"
+				"HPV3"
 			],
-			"Dimensionless",
-			"Chlorite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCL"
+				"HPV3_DL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCL_BOT"
+				"INFVOL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCL_HILT"
+				"INV_DD_VOL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCL1"
+				"LAST_DD_V"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCL2"
+				"MARKER_VOL_EJECTED_GMET1_SL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCLA"
+				"MARKER_VOL_EJECTED_GMET2_SL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCLC"
+				"MARKER_VOL_EJECTED_GMET3_SL"
 			],
-			"Dimensionless",
-			"Calcite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCM"
+				"MVBL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCM1"
+				"OIL_VOLUME"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCM2"
+				"P_MOT_VOL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286495,31 +286669,31 @@
 		],
 		[
 			[
-				"VCND"
+				"PAIV"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCOA"
+				"PAIV_DL"
 			],
-			"Dimensionless",
-			"Coal Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCOL"
+				"PAIV2"
 			],
-			"Dimensionless",
-			"Coal Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VCSP"
+				"PAIV2_DL"
 			],
-			"Dimensionless",
-			"Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286530,17 +286704,17 @@
 		],
 		[
 			[
-				"VDC1"
+				"PAIV3"
 			],
-			"Dimensionless",
-			"Dry Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VDC2"
+				"PAIV3_DL"
 			],
-			"Dimensionless",
-			"Dry Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286551,17 +286725,17 @@
 		],
 		[
 			[
-				"VDCL"
+				"PAIV4"
 			],
-			"Dimensionless",
-			"Dry Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VDCN"
+				"PAIV4_DL"
 			],
-			"Dimensionless",
-			"Dry Clay Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286691,17 +286865,17 @@
 		],
 		[
 			[
-				"VDOL"
+				"PAIVO"
 			],
-			"Dimensionless",
-			"Dolomite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VDST"
+				"PAIVO_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286824,10 +286998,10 @@
 		],
 		[
 			[
-				"VEVA"
+				"PAIVO2"
 			],
-			"Dimensionless",
-			"Evaporite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -286964,10 +287138,10 @@
 		],
 		[
 			[
-				"VFEL"
+				"PAIVO2_DL"
 			],
-			"Dimensionless",
-			"Feldspar Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287132,31 +287306,31 @@
 		],
 		[
 			[
-				"VGLA"
+				"PAIVO3"
 			],
-			"Dimensionless",
-			"Glauconite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VGYP"
+				"PAIVO3_DL"
 			],
-			"Dimensionless",
-			"Gypsum Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VH"
+				"PAIVO4"
 			],
-			"Dimensionless",
-			"Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VHAL"
+				"PAIVO4_DL"
 			],
-			"Dimensionless",
-			"Halite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287340,17 +287514,17 @@
 		],
 		[
 			[
-				"VIGN"
+				"PBTV"
 			],
-			"Dimensionless",
-			"Igneous Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VILL"
+				"PMPCVOL"
 			],
-			"Dimensionless",
-			"Illite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287396,10 +287570,10 @@
 		],
 		[
 			[
-				"VISO"
+				"PMPRCVOL"
 			],
-			"Dimensionless",
-			"Isolated Porosity Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287410,10 +287584,10 @@
 		],
 		[
 			[
-				"VKAO"
+				"PMPVOL"
 			],
-			"Dimensionless",
-			"Kaolinite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287424,10 +287598,11 @@
 		],
 		[
 			[
-				"VLIM"
+				"CCV",
+				"POCCV"
 			],
-			"Dimensionless",
-			"Calcite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287480,31 +287655,32 @@
 		],
 		[
 			[
-				"VM1"
+				"CCV2",
+				"POCCV2"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VM12"
+				"POCV"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VM2"
+				"POCV2"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VM3"
+				"POPV"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287515,45 +287691,46 @@
 		],
 		[
 			[
-				"VMAT"
+				"POPV_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VMET"
+				"POPV2"
 			],
-			"Dimensionless",
-			"Metamorphic Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VMH"
+				"POPV2_DL"
 			],
-			"Dimensionless",
-			"Moved Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VMHY"
+				"PORCV",
+				"PORV"
 			],
-			"Dimensionless",
-			"Moved Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VMON"
+				"PORCV_DL"
 			],
-			"Dimensionless",
-			"Montmorillonite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VMUS"
+				"PORCV2"
 			],
-			"Dimensionless",
-			"Muscovite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287676,10 +287853,10 @@
 		],
 		[
 			[
-				"VNCM"
+				"PORCV2_DL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287690,46 +287867,45 @@
 		],
 		[
 			[
-				"VOLA"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VOLPMP"
+				"POTCV"
 			],
 			"Volume",
 			"Volume"
 		],
 		[
 			[
-				"VOLPMPBANL"
+				"POTV"
 			],
 			"Volume",
 			"Volume"
 		],
 		[
 			[
-				"VOLTOTGT"
+				"POTV_DL"
 			],
 			"Volume",
 			"Volume"
 		],
 		[
 			[
-				"VOLTOTGTCUST"
+				"POUDCCV"
 			],
 			"Volume",
 			"Volume"
 		],
 		[
 			[
-				"VOLUME_SAFETY_FACTOR",
-				"VSFT"
+				"POUDCCV2"
 			],
-			"Dimensionless",
-			"Volume Safety Factor"
+			"Volume",
+			"Volume"
+		],
+		[
+			[
+				"POUDCV"
+			],
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287747,10 +287923,10 @@
 		],
 		[
 			[
-				"VORT"
+				"POUDCV2"
 			],
-			"Dimensionless",
-			"Orthoclase Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287950,10 +288126,11 @@
 		],
 		[
 			[
-				"VPAR"
+				"POUDPV",
+				"PV"
 			],
-			"Dimensionless",
-			"Parallel Porosity Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -287971,10 +288148,10 @@
 		],
 		[
 			[
-				"VPOT"
+				"POUDPV_DL"
 			],
-			"Dimensionless",
-			"Potash Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -288044,31 +288221,31 @@
 		],
 		[
 			[
-				"VPYR"
+				"POUDPV2"
 			],
-			"Dimensionless",
-			"Pyrite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VQFM"
+				"POUDPV2_DL"
 			],
-			"Dimensionless",
-			"Qfm Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VQUA"
+				"POUDRCV"
 			],
-			"Dimensionless",
-			"Quartz Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VR"
+				"POUDRCV_DL"
 			],
-			"Dimensionless",
-			"Residual Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289213,24 +289390,25 @@
 		],
 		[
 			[
-				"VSAC"
+				"POUDRCV2"
 			],
-			"Dimensionless",
-			"Sand Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSAL"
+				"POUDRCV2_DL"
 			],
-			"Dimensionless",
-			"Halite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSAN"
+				"PQPTV1",
+				"PTV1"
 			],
-			"Dimensionless",
-			"Sand Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289241,24 +289419,25 @@
 		],
 		[
 			[
-				"VSCG"
+				"PQPTV1_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSCP"
+				"PQPTV2",
+				"PTV2"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSCR"
+				"PQPTV2_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289276,24 +289455,25 @@
 		],
 		[
 			[
-				"VSDI"
+				"PQPTV3",
+				"PTV3"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSDN"
+				"PQPTV3_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSDS"
+				"PRE_MOT_VOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289304,129 +289484,109 @@
 		],
 		[
 			[
-				"VSEX"
+				"PRE_MOT_VOL_S"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSGR"
+				"PRODVOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSH"
+				"PSTNVOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSHA"
+				"PTV_XPT"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSID"
+				"PTV_XPT_DL"
 			],
-			"Dimensionless",
-			"Siderite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSIL"
+				"PTV1_DL"
 			],
-			"Dimensionless",
-			"Silt Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSLO"
+				"PTV2_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSLT"
+				"PTV3_DL"
 			],
-			"Dimensionless",
-			"Halite Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSM0"
+				"PTVL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSM1"
+				"PTVOL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSM2"
+				"ROOV",
+				"ROTRON_OIL_VOLUME"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSM3"
+				"RSVL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSM4"
+				"SA_VOLUME"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSMN"
+				"SFITVOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSND"
+				"SFITVOLCOL"
 			],
-			"Dimensionless",
-			"Sand Volume Fraction"
-		],
-		[
-			[
-				"VSNP"
-			],
-			"Dimensionless",
-			"Shale Volume Fraction"
-		],
-		[
-			[
-				"VSNR"
-			],
-			"Dimensionless",
-			"Shale Volume Fraction"
-		],
-		[
-			[
-				"VSNS"
-			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289437,24 +289597,24 @@
 		],
 		[
 			[
-				"VSOL"
+				"SFITVOLCUST"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSPC"
+				"SFITVOLMETH"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSPN"
+				"SFTIV"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289465,17 +289625,17 @@
 		],
 		[
 			[
-				"VSQ"
+				"SFTIV_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSRA"
+				"SFTIV2"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289486,66 +289646,66 @@
 		],
 		[
 			[
-				"VSRT"
+				"SFTIV2_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSSG"
+				"SMPDEVVOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSSI"
+				"SPECTCAPTVOL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSSO"
+				"SRIV"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSSP"
+				"SRIV_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSSR"
+				"SRIV2"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSTC"
+				"SRIV2_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSTP"
+				"SRIVO"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VSUC"
+				"SRIVO_DL"
 			],
-			"Dimensionless",
-			"Shale Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289577,10 +289737,10 @@
 		],
 		[
 			[
-				"VTAR"
+				"SRIVO2"
 			],
-			"Dimensionless",
-			"Tar Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289605,10 +289765,10 @@
 		],
 		[
 			[
-				"VTRO"
+				"SRIVO2_DL"
 			],
-			"Dimensionless",
-			"Trona Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289619,66 +289779,66 @@
 		],
 		[
 			[
-				"VUBW"
+				"TOTVOLPMPBSMP"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Bound Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUDS"
+				"TPMPVOL"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Dissolved Salt Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUFW"
+				"TPTVOL"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Free Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUGA"
+				"TTV"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Gas Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUHY"
+				"TVA"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Hydrocarbon Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUIW"
+				"VOLPMP"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Irreducible Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUMI"
+				"VOLPMPBANL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUOI"
+				"VOLTOTGT"
 			],
-			"Dimensionless",
-			"Undisturbed Zone Oil Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
-				"VUOI_ALPHA_RQL"
+				"VOLTOTGTCUST"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289703,10 +289863,10 @@
 		],
 		[
 			[
-				"VUOW_VOLU_RQL"
+				"WATER_VOLUME"
 			],
-			"Dimensionless",
-			"Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289717,24 +289877,10 @@
 		],
 		[
 			[
-				"VUOY_VOLU_RQL"
+				"WRAPPED_VOL"
 			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VUSF"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VUWA"
-			],
-			"Dimensionless",
-			"Undisturbed Zone Water Volume Fraction"
+			"Volume",
+			"Volume"
 		],
 		[
 			[
@@ -289787,17 +289933,10 @@
 		],
 		[
 			[
-				"VW"
+				"ANSA"
 			],
 			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
-				"VWA"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
+			"Volume Fraction"
 		],
 		[
 			[
@@ -289847,6 +289986,806 @@
 			],
 			"Frequency",
 			"Frequency"
+		],
+		[
+			[
+				"BVL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"C2IL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CLT"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CPAS"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVP0"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVP1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVP2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVP3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVPD"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVPL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"CVPS"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"DOLI"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"DVOY_VOLU_RQL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"EBWA"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"FEDO"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"ILFE"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"LISA"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"MOIS"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VWQD"
+			],
+			"Dimensionless",
+			"Quality Indicator"
+		],
+		[
+			[
+				"VWQDI"
+			],
+			"Dimensionless",
+			"Quality Indicator"
+		],
+		[
+			[
+				"VWQI"
+			],
+			"Dimensionless",
+			"Quality Indicator"
+		],
+		[
+			[
+				"SNAN"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V_MWAT"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VWUFTEMP"
+			],
+			"Temperature",
+			"Tool Temperature"
+		],
+		[
+			[
+				"VWUQI"
+			],
+			"Dimensionless",
+			"Quality Indicator"
+		],
+		[
+			[
+				"VWUVIS"
+			],
+			"MassPerLengthPerTime",
+			"Viscosity"
+		],
+		[
+			[
+				"VWVIS"
+			],
+			"MassPerLengthPerTime",
+			"Viscosity"
+		],
+		[
+			[
+				"V_SMI1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V_SMI2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V_USFL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V_XSFL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VX12"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"VX13"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"VX22"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"VX23"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"VX42"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"VX43"
+			],
+			"ElectricPotential",
+			"Electric Potential"
+		],
+		[
+			[
+				"V1M3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V2M3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V3M3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VANO"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VCF"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VCM1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VCM2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VDST"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VM1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VM12"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VM2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VM3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VMAT"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VNCM"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VOLA"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSM0"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSM1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSM2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSM3"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSM4"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VSOL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VUMI"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VUOI_ALPHA_RQL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VUOW_VOLU_RQL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VUOY_VOLU_RQL"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VUSF"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXM"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXM1"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXM2"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"V_VOLM"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXMI"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXSF"
+			],
+			"Dimensionless",
+			"Volume Fraction"
+		],
+		[
+			[
+				"VXGA_SIG",
+				"VXGS"
+			],
+			"Dimensionless",
+			"Standard Deviation"
+		],
+		[
+			[
+				"VOLUME_SAFETY_FACTOR",
+				"VSFT"
+			],
+			"Dimensionless",
+			"Volume Safety Factor"
+		],
+		[
+			[
+				"HULS"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"IDU"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"REU"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"U"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"U_CDN"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"U_REC"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"U_RT"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"U8"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UB"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UI"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UL"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"ULDS"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UMA_HILT"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UMUD"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UN"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UP"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UR"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"USC"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"USI"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UT"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UU"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"UZ"
+			],
+			"Dimensionless",
+			"Volumetric Photoelectric Factor"
+		],
+		[
+			[
+				"BWAT"
+			],
+			"Dimensionless",
+			"Water Formation Volume Factor"
+		],
+		[
+			[
+				"BVPP"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVWC"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVWE"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVWP"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVWR"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"BVWT"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"CBPW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"CBVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"DVUOI"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"IBVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"NAVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"NFVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"PWFLOW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"PWI"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"SBPW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"SDVW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"VW"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"VWA"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"V_WAT"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
 		],
 		[
 			[
@@ -289976,34 +290915,6 @@
 		],
 		[
 			[
-				"VWQD"
-			],
-			"Dimensionless",
-			"Quality Indicator"
-		],
-		[
-			[
-				"VWQDI"
-			],
-			"Dimensionless",
-			"Quality Indicator"
-		],
-		[
-			[
-				"VWQI"
-			],
-			"Dimensionless",
-			"Quality Indicator"
-		],
-		[
-			[
-				"VWT"
-			],
-			"Dimensionless",
-			"Undisturbed Zone Water Volume Fraction"
-		],
-		[
-			[
 				"VWTD"
 			],
 			"Dimensionless",
@@ -290011,781 +290922,10 @@
 		],
 		[
 			[
-				"VWUFTEMP"
-			],
-			"Temperature",
-			"Tool Temperature"
-		],
-		[
-			[
-				"VWUQI"
-			],
-			"Dimensionless",
-			"Quality Indicator"
-		],
-		[
-			[
-				"VWUVIS"
-			],
-			"MassPerLengthPerTime",
-			"Viscosity"
-		],
-		[
-			[
-				"VWVIS"
-			],
-			"MassPerLengthPerTime",
-			"Viscosity"
-		],
-		[
-			[
-				"VWX0"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
 				"VWXE"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
-		],
-		[
-			[
-				"VWXR"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
-				"VWXT"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
-				"VX12"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VX13"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VX22"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VX23"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VX42"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VX43"
-			],
-			"ElectricPotential",
-			"Electric Potential"
-		],
-		[
-			[
-				"VXA"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBM",
-				"VXBW_MRF"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXBW_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Bound Water Volume Fraction"
-		],
-		[
-			[
-				"VXCL"
-			],
-			"Dimensionless",
-			"Clay Volume Fraction"
-		],
-		[
-			[
-				"VXDS"
-			],
-			"Dimensionless",
-			"Flushed Zone Dissolved Salt Volume Fraction"
-		],
-		[
-			[
-				"VXFW"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFM",
-				"VXFW_MRF"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXFW_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Free Water Volume Fraction"
-		],
-		[
-			[
-				"VXGA"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_MRF",
-				"VXGM"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_SIG",
-				"VXGS"
-			],
-			"Dimensionless",
-			"Standard Deviation"
-		],
-		[
-			[
-				"VXGA_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXGA_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Gas Volume Fraction"
-		],
-		[
-			[
-				"VXHC_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHC_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXHY"
-			],
-			"Dimensionless",
-			"Flushed Zone Hydrocarbon Volume Fraction"
-		],
-		[
-			[
-				"VXIW"
-			],
-			"Dimensionless",
-			"Flushed Zone Irreducible Water Volume Fraction"
-		],
-		[
-			[
-				"VXM"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VXM1"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VXM2"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VXMI"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VXO"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXMF",
-				"VXOBMF"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXMM",
-				"VXOBMF_MRF"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOBMF_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Obmf Volume Fraction"
-		],
-		[
-			[
-				"VXOI"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_MRF",
-				"VXOM"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOI_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Oil Volume Fraction"
-		],
-		[
-			[
-				"VXOT"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXSF"
-			],
-			"Dimensionless",
-			"Volume Fraction"
-		],
-		[
-			[
-				"VXSF1"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF1_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXSF2_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Fluid Volume Fraction"
-		],
-		[
-			[
-				"VXWA"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_LHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_MRF",
-				"VXWM"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SH1"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SH2"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SH3"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SH4"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SH8"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_SL"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
-		],
-		[
-			[
-				"VXWA_UHR"
-			],
-			"Dimensionless",
-			"Flushed Zone Water Volume Fraction"
 		],
 		[
 			[
@@ -292592,10 +292732,17 @@
 		],
 		[
 			[
-				"WATER_VOLUME"
+				"VWXR"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Water Volume Fraction"
+		],
+		[
+			[
+				"VWXT"
+			],
+			"Dimensionless",
+			"Water Volume Fraction"
 		],
 		[
 			[
@@ -292768,13 +292915,6 @@
 		[
 			[
 				"WATFAVGBSMP"
-			],
-			"Dimensionless",
-			"Water Volume Fraction"
-		],
-		[
-			[
-				"WATFID"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
@@ -293092,14 +293232,14 @@
 		],
 		[
 			[
-				"WCMN"
+				"WATFID"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
 		],
 		[
 			[
-				"WCMX"
+				"WCMN"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
@@ -293162,14 +293302,14 @@
 		],
 		[
 			[
-				"WCUT"
+				"WCMX"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
 		],
 		[
 			[
-				"WCUT_AVG"
+				"WCUT"
 			],
 			"Dimensionless",
 			"Water Volume Fraction"
@@ -297437,10 +297577,10 @@
 		],
 		[
 			[
-				"WRAPPED_VOL"
+				"WCUT_AVG"
 			],
-			"Volume",
-			"Volume"
+			"Dimensionless",
+			"Water Volume Fraction"
 		],
 		[
 			[
