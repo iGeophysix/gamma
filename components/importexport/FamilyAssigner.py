@@ -6,7 +6,7 @@ import re
 import time
 import copy
 from typing import Optional, Iterable, Union
-from dataclasses import dataclass, field
+import dataclasses
 
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
@@ -96,16 +96,49 @@ class FamilyAssigner:
             self.re_match = {}  # { re.Pattern: (family, dimension), ... }
             self.nlpp = NLPParser()
 
-    @dataclass(order=True)
+    @dataclasses.dataclass
     class MnemonicInfo:
         '''
         Storage for mnemonic's properties
         '''
-        reliability: float = field(init=False, default=0)
+        reliability: float = dataclasses.field(init=False, default=0)
         family: str
         dimension: str
         company: str
-        tool: str = field(compare=False)    # can be None
+        tool: str
+
+        @staticmethod
+        def _compare(a, b) -> int:
+            '''
+            Two values comparator with None support
+            :return: 0 if a == b
+            :return: negative value if a < b
+            :return: positive value if a > b
+            '''
+            if a is None:
+                if b is None:
+                    return 0    # None vs None
+                else:
+                    return -1   # None vs not None
+            elif b is None:
+                return 1        # not None vs None
+            elif a == b:
+                return 0
+            elif a > b:
+                return 1
+            else:
+                return -1
+
+        def __lt__(self, other):
+            a_values = dataclasses.astuple(self)
+            b_values = dataclasses.astuple(other)
+            for a, b in zip(a_values, b_values):
+                dif = self._compare(a, b)
+                if dif < 0:
+                    return True
+                elif dif > 0:
+                    return False
+            return False
 
     def __init__(self):
         '''
@@ -138,7 +171,7 @@ class FamilyAssigner:
             for mnemonics, dimension, family in rules:
                 for mnemonic in mnemonics:
                     tool = tools.get(company, {}).get(mnemonic)     # source logging tool for mnemonic
-                    mnemonic_info = FamilyAssigner.MnemonicInfo(family, dimension, company, tool)
+                    mnemonic_info = FamilyAssigner.MnemonicInfo(family=family, dimension=dimension, company=company, tool=tool)
                     if '*' in mnemonic or '?' in mnemonic:
                         re_mask = mnemonic.replace('*', '.*').replace('?', '.')
                         re_pattern = re.compile(re_mask, re.IGNORECASE)
@@ -222,6 +255,10 @@ class FamilyAssigner:
                 # combine two variants
                 # increase reliability by a part of the second variant reliability, drop second source variant
                 already_have.reliability = min(1, already_have.reliability + mnemonic_info.reliability / len(results))
+                if already_have.company != mnemonic_info.company:
+                    already_have.company = None     # no particular source company
+                if already_have.tool != mnemonic_info.tool:
+                    already_have.tool = None    # no particular source tool
             else:
                 uniq_family_results.append(mnemonic_info)  # just add the variant
 
