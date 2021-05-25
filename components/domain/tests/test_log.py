@@ -25,8 +25,8 @@ class TestLog(unittest.TestCase):
 
     def test_create_two_logs(self):
 
-        data = {"GR": np.array(((10, 1), (20, 2))),
-                "PS": np.array(((10, 3), (20, 4)))}
+        data = {"GR": np.array(((10, 1.0), (20, 2.0))),
+                "PS": np.array(((10, 3.0), (20, 4.0)))}
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
                 "PS": {"units": "mV", "code": "", "description": "PS"}}
         log1 = BasicLog(self.dataset.id, log_id="GR")
@@ -262,8 +262,8 @@ class TestLog(unittest.TestCase):
 
         true_values = {
             "data_hash": "43b6e247100f1688023b4e915ad852d0",
-            "meta_hash": "ebadc9c01515a7e00c84e3ded0f8e591",
-            "full_hash": "43b6e247100f1688023b4e915ad852d0ebadc9c01515a7e00c84e3ded0f8e591"
+            "meta_hash": "7384c5e4aa58577fc21624d14c99079e",
+            "full_hash": "43b6e247100f1688023b4e915ad852d07384c5e4aa58577fc21624d14c99079e"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

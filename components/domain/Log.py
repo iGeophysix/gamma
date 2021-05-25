@@ -1,14 +1,17 @@
 import copy
 import hashlib
 import json
+import warnings
 from dataclasses import dataclass
 from datetime import datetime
 
 import numpy as np
+import pandas as pd
 from scipy.interpolate import interp1d
 
 from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
+from utilities import safe_run
 
 
 class BasicLog:
@@ -256,10 +259,52 @@ class BasicLog:
         """
         _s = Storage()
         if self._changes['values']:
+            self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
             _s.update_logs(self.dataset_id, data={self._id: self._values})
             self._changes['values'] = False
 
         self._meta.save()
+
+    @staticmethod
+    def get_basic_curve_statistics(log_data: np.array) -> dict:
+        '''
+        Returns basic stats for a log (np.array)
+        :param log_data: input data as np.array
+        :return: dict with basic stats (interval of not NaN values, mean, gmean, etc)
+        '''
+
+        def geo_mean(iterable):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                a = np.log(iterable)
+                return np.exp(a.mean())
+
+        non_null_values = log_data[~pd.isnull(log_data[:, 1])]
+        if non_null_values.shape[0] == 0:  # if all values are nan
+            return {}
+
+        min_depth = safe_run(np.min)(non_null_values[:, 0])
+        max_depth = safe_run(np.max)(non_null_values[:, 0])
+        depth_span = max_depth - min_depth if max_depth is not None and min_depth is not None else None
+        min_value = safe_run(np.min)(non_null_values[:, 1])
+        max_value = safe_run(np.max)(non_null_values[:, 1])
+        mean = safe_run(np.mean)(non_null_values[:, 1])
+        log_gmean = safe_run(geo_mean)(non_null_values[:, 1])
+        stdev = safe_run(np.std)(non_null_values[:, 1])
+        derivative = safe_run(np.diff)(log_data[:, 0])
+        const_step = bool(abs(derivative.min() - derivative.max()) < 0.00001) if derivative is not None else None
+        avg_step = derivative.mean() if derivative is not None else None
+        new_meta = {"min_depth": min_depth,
+                    "max_depth": max_depth,
+                    "min_value": min_value,
+                    "max_value": max_value,
+                    "depth_span": depth_span,
+                    "avg_step": avg_step,
+                    "const_step": const_step,
+                    "mean": mean,
+                    "gmean": log_gmean,
+                    "stdev": stdev}
+        return new_meta
 
 
 @dataclass
@@ -282,6 +327,7 @@ class BasicLogMeta:
         self.name = self.log_id
         self.tags = list()
         self.history = []
+        self.units = ''
 
         _s = Storage()
         if _s.check_log_exists(self.dataset_id, self.log_id):

@@ -140,7 +140,10 @@ class TestAsyncLasLoading(unittest.TestCase):
 
     def test_celery_las_loading(self):
         folder = os.path.join(os.path.dirname(__file__), 'data')
-        paths = list(map(lambda x: os.path.join(folder, x), os.listdir(folder)))
+        paths = ['sample_2.0_large.las',
+                 'sample_2.0_minimal.las',
+                 'sample_minimal.las']
+        paths = list(map(lambda x: os.path.join(folder, x), paths))
 
         async_results = []
         for path in paths:
@@ -166,32 +169,6 @@ class TestAsyncLasLoading(unittest.TestCase):
         logs = ds.log_list
         self.assertEqual(7, len(logs), '7 logs in dataset must be loaded')
 
-
-def wait_till_completed(async_results):
-    pass
-
-
-class TestLasExport(unittest.TestCase):
-    def setUp(self) -> None:
-        _s = RedisStorage()
-        _s.flush_db()
-        self.folder = os.path.join(BASE_DIR, 'components', 'importexport', 'test', 'data')
-        well = Well('w1', new=True)
-        ds = WellDataset(well, 'ds1', new=True)
-        import_to_db(filename=os.path.join(self.folder, 'sample_2.0_large.las'), well=well, well_dataset=ds)
-
-    def test_las_export(self):
-        well_name = 'w1'
-        paths_to_logs = (
-            ('ds1', 'GAMMA'),
-            ('ds1', 'URANIUM'),
-            ('ds1', 'THORIUM'),
-            ('ds1', 'POTASIUM'),
-        )
-        las = create_las_file(well_name, paths_to_logs)
-        las.well.DATE = '2021-05-13 11:37:04'  # fixture for tests only
-        las.write(os.path.join(self.folder, 'exported.las'), version=2)
-        self.assertTrue(filecmp.cmp(os.path.join(self.folder, 'true_exported.las'), os.path.join(self.folder, 'exported.las')))
 
 
 if __name__ == '__main__':

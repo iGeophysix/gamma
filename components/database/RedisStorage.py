@@ -312,6 +312,8 @@ class RedisStorage:
         :param depth__lt: if specified then depth above is ignored and log will be sliced by depth < depth__lt
         :return: dict with log_names and values
         """
+        if not self.check_log_exists(dataset_id, logname):
+            raise KeyError(f"Log {logname} wasn't found in dataset {dataset_id}")
 
         def slice(data, top=None, bottom=None):
             top = top if top is not None else sys.float_info.min

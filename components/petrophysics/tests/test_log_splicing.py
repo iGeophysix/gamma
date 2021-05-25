@@ -49,17 +49,16 @@ class TestLogSplicing(unittest.TestCase):
         log = BasicLog(wd.id, 'Gamma Ray')
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
-                     'basic_statistics': {
-                         'avg_step': 0.09999999999999964,
-                         'const_step': True,
-                         'depth_span': 2634.6999999999907,
-                         'gmean': 3.8136451008782117,
-                         'max_depth': 2643.2999999999906,
-                         'max_value': 8.497804999995498,
-                         'mean': 4.031003762634724,
-                         'min_depth': 8.6,
-                         'min_value': 0.9,
-                         'stdev': 1.2796598690478778}
+                     'basic_statistics': {'avg_step': 0.09999999999999964,
+                                          'const_step': True,
+                                          'depth_span': 2634.7999999999906,
+                                          'gmean': 3.8137350566251675,
+                                          'max_depth': 2643.3999999999905,
+                                          'max_value': 8.497804999995498,
+                                          'mean': 4.031120237500464,
+                                          'min_depth': 8.6,
+                                          'min_value': 0.9,
+                                          'stdev': 1.2797752459412008}
                      }
         for key, val in true_meta.items():
             self.assertEqual(val, log.meta[key])
@@ -72,17 +71,16 @@ class TestLogSplicing(unittest.TestCase):
         log = BasicLog(wd.id, 'Gamma Ray')
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
-                     'basic_statistics': {
-                         'avg_step': 0.09999999999999964,
-                         'const_step': True,
-                         'depth_span': 2634.6999999999907,
-                         'gmean': 3.8136451008782117,
-                         'max_depth': 2643.2999999999906,
-                         'max_value': 8.497804999995498,
-                         'mean': 4.031003762634724,
-                         'min_depth': 8.6,
-                         'min_value': 0.9,
-                         'stdev': 1.2796598690478778},
+                     'basic_statistics': {'avg_step': 0.09999999999999964,
+                                          'const_step': True,
+                                          'depth_span': 2634.7999999999906,
+                                          'gmean': 3.8137350566251675,
+                                          'max_depth': 2643.3999999999905,
+                                          'max_value': 8.497804999995498,
+                                          'mean': 4.031120237500464,
+                                          'min_depth': 8.6,
+                                          'min_value': 0.9,
+                                          'stdev': 1.2797752459412008},
                      'tags': ['spliced']
                      }
         for key, val in true_meta.items():

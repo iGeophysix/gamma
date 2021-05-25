@@ -253,6 +253,7 @@ class VolumetricModelSolverNode(EngineNode):
             log.meta.family = logs[n].meta.family + ' Forward Modeled'
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = logs[n].meta.units
+            log.meta.add_tags('synthetic')
             log.meta.update({'method': method_name})
             log.save()
         # save misfit

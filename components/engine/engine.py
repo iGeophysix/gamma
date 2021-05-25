@@ -1,9 +1,8 @@
-import datetime
-
 from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
 from components.petrophysics.curve_operations import BasicStatisticsNode, LogResolutionNode
+from components.petrophysics.log_reconstruction import LogReconstructionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.normalization import LogNormalizationNode
 from components.petrophysics.porosity import PorosityFromDensityNode
@@ -27,8 +26,10 @@ NODES = {
     'ShaleVolumeLarionovOlderRockNode': ShaleVolumeLarionovOlderRockNode,
     'ShaleVolumeLarionovTertiaryRockNode': ShaleVolumeLarionovTertiaryRockNode,
     'PorosityFromDensityNode': PorosityFromDensityNode,
+    'LogReconstructionNode': LogReconstructionNode,
     'LasExportNode': LasExportNode
 }
+
 
 class Engine:
     """
@@ -36,21 +37,53 @@ class Engine:
     """
 
     steps = [
-        {'node': 'BasicStatisticsNode', 'parameters': {}},
+        # {'node': 'BasicStatisticsNode', 'parameters': {}},
         {'node': 'LogResolutionNode', 'parameters': {}},
         {'node': 'RunDetectionNode', 'parameters': {}},
         {'node': 'FamilyAssignerNode', 'parameters': {}},
-        {'node': 'BestLogDetectionNode', 'parameters': {}},
         {'node': 'ProjectStatisticsNode', 'parameters': {}},
+        {'node': 'BestLogDetectionNode', 'parameters': {}},
         # {'node': 'LogNormalizationNode', 'parameters': {'lower_quantile': 0.05, 'upper_quantile': 0.95}},
         {'node': 'SpliceLogsNode', 'parameters': {}},
-        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Neutron Porosity'],
-                                                             'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
+        # LQC zone
         {'node': 'ShaleVolumeLinearMethodNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LM'}},
         {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},
         {'node': 'ShaleVolumeLarionovTertiaryRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LTR'}},
         {'node': 'PorosityFromDensityNode', 'parameters': {'rhob_matrix': None, 'rhob_fluid': None, 'output_log_name': 'PHIT_D'}},
+        {'node': 'LogReconstructionNode', 'parameters': {
+            'log_families_to_train': ['Gamma Ray', 'Neutron Porosity', ],
+            'log_families_to_predict': ["Bulk Density", ],
+            'model_kwargs': {
+                'iterations': 50,
+                'depth': 12,
+                'learning_rate': 0.1,
+                'loss_function': 'MAPE',
+            },
+        }, },
+        {'node': 'LogReconstructionNode', 'parameters': {
+            'log_families_to_train': ["Bulk Density", 'Neutron Porosity', ],
+            'log_families_to_predict': ['Gamma Ray', ],
+            'model_kwargs': {
+                'iterations': 50,
+                'depth': 12,
+                'learning_rate': 0.1,
+                'loss_function': 'MAPE',
+            },
+        }, },
+        {'node': 'LogReconstructionNode', 'parameters': {
+            'log_families_to_train': ['Gamma Ray', "Bulk Density", ],
+            'log_families_to_predict': ['Neutron Porosity', ],
+            'model_kwargs': {
+                'iterations': 50,
+                'depth': 12,
+                'learning_rate': 0.1,
+                'loss_function': 'MAPE',
+            },
+        }, },
+        {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Neutron Porosity'],
+                                                             'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
         {'node': 'LasExportNode', 'parameters': {}},
+
     ]
 
     def start(self):

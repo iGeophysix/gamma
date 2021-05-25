@@ -1,12 +1,11 @@
+import math
 import random
 
-import math
 import numpy as np
 from PySide2.QtCore import QPointF, QRectF, QLineF
 from PySide2.QtGui import (
     QColor,
     QFont,
-        QFont,
     QPainter,
     QPainterPath,
     QPen,
@@ -16,18 +15,13 @@ from PySide2.QtWidgets import (
     QStyleOptionGraphicsItem,
     QWidget,
 )
-from PySide2.QtCore import QPointF, QRectF, Qt, QLineF
-
-import math
-import numpy as np
-import random
 
 # from components.domain.Curve import Curve
 from components.domain.Log import BasicLog
+from components.domain.WellDataset import WellDataset
 from components.tablet.gui.LogGridObject import LogGridObject
 from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 
-from components.domain.WellDataset import WellDataset
 
 class CurveObject(TabletObject):
     """
@@ -43,13 +37,12 @@ class CurveObject(TabletObject):
         self._curveName = curveName
         self._log = BasicLog(self._dbDataset.id, self._curveName)
 
+        self._arrayRect = None
+
         self._head = CurveGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = CurveGraphicsObjectBody(parent.bodyGraphicsObject(), self)
 
-        self._arrayRect = None
-
         self.computeArrayTransform()
-
 
     @property
     def datasetName(self):
@@ -63,7 +56,12 @@ class CurveObject(TabletObject):
         return (self.arrayRect().top(), self.arrayRect().bottom())
 
     def minMax(self):
-        return (self.arrayRect().left(), self.arrayRect().right())
+        if hasattr(self._log.meta, 'display'):
+            min_ = self._log.meta.display.get('min', np.nanmin(self._log.values[:, 1]))
+            max_ = self._log.meta.display.get('max', np.nanmax(self._log.values[:, 1]))
+            return (min_, max_)
+        else:
+            return (self._log.meta.basic_statistics['min_value'], self._log.meta.basic_statistics['max_value'])
 
     def computeArrayTransform(self):
         ## TODO: TEMPORARY, until I implement min max in DB
@@ -83,9 +81,12 @@ class CurveObject(TabletObject):
         self._head.moveBy(0, h)
 
     def color(self):
-        if not hasattr(self, "_color"):
-            r = lambda: random.randint(0, 255)
-            self._color = QColor.fromRgb(r(), r(), r())
+        if hasattr(self._log.meta, 'display'):
+            r, g, b = self._log._meta.display['color']
+            self._color = QColor.fromRgb(r, g, b)
+        elif not hasattr(self, "_color"):
+            c = lambda: random.randint(0, 255)
+            self._color = QColor.fromRgb(c(), c(), c())
 
         return self._color
 
@@ -107,18 +108,23 @@ class CurveObject(TabletObject):
             a[np.less_equal(a, 0.0, where=~np.isnan(a))] = np.nan
             array[..., 1] = np.log10(array[..., 1])
 
+        # clip left and right boundaries
+        mi, ma = self.minMax()
+        array[:, 1] = np.clip(array[:, 1], mi, ma)
+
         return array
 
     def arrayRect(self) -> QRectF:
 
         if not self._arrayRect:
             array = self.array()
-            min_ = np.flip(np.nanmin(array, axis=0))
-            max_ = np.flip(np.nanmax(array, axis=0))
+            mi, ma = self.minMax()
+            min_ = (mi, np.nanmin(array[:, 0]))
+            max_ = (ma, np.nanmax(array[:, 0]))
 
             if math.isclose(min_[0], max_[0]):
                 magnitude = round(math.log(max(1, abs(max_[0])), 10))
-                dx = 10.**magnitude * 0.5
+                dx = 10. ** magnitude * 0.5
                 min_[0] = min_[0] - dx
                 max_[0] = max_[0] + dx
 
@@ -153,6 +159,7 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
         for p in array:
             if not np.isnan(p).any():
                 p = np.flip(p)
+
                 p = QPointF(*p)
                 if not self._path:
                     self._path = QPainterPath(p)
@@ -171,8 +178,7 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
 
         self._subpathPolygones = self._path.toSubpathPolygons()
 
-    def boundingRect(self) -> QRectF:
-
+    def boundingRect(self) -> QRectF:  # TODO: Not used?
         return self._curve_object.boundingRect()
 
     def paint(self,
@@ -195,8 +201,8 @@ class CurveGraphicsObjectBody(TabletGraphicsObject):
 
         painter.drawPath(self._path)
         # for polygon in self._subpathPolygones:
-            # for i in range(len(polygon) - 1):
-                # painter.drawLine(polygon[i], polygon[i + 1]) 
+        # for i in range(len(polygon) - 1):
+        # painter.drawLine(polygon[i], polygon[i + 1])
 
         painter.restore()
 
@@ -225,8 +231,6 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
               painter: QPainter,
               option: QStyleOptionGraphicsItem,
               widget: QWidget):
-
-
         p = QPen(self._curve_object.color())
         p.setCosmetic(True)
         p.setWidthF(2.0)
@@ -245,7 +249,6 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
 
         painter.save()
         painter.resetTransform()
-
 
         # Draw scale bar in curve header.
 
@@ -286,7 +289,7 @@ class CurveGraphicsObjectHead(TabletGraphicsObject):
         painter.resetTransform()
         painter.translate(t.map(center))
         painter.translate(0, fontMetrics.height() + 3)
-        painter.drawText(br.width() - fontMetrics.width(name)/2, 0, name)
+        painter.drawText(br.width() - fontMetrics.width(name) / 2, 0, name)
 
         painter.restore()
 

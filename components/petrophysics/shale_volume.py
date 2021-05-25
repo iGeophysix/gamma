@@ -135,7 +135,7 @@ class ShaleVolumeLinearMethodNode(ShaleVolume):
         values[:, 1] = np.clip(_linear_scale(values[:, 1], gr_matrix, gr_shale), 0, 1)
         vsh.values = values
 
-        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        # vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
         vsh.meta.name = cls_output['log_id'] if name is None else name
         vsh.meta.log_id = cls_output['log_id']
         vsh.meta.family = cls_output['meta']['family']
@@ -187,7 +187,7 @@ class ShaleVolumeLarionovOlderRockNode(ShaleVolume):
         values[:, 1] = np.clip(0.33 * (2 ** (2 * gr_index) - 1), 0, 1)
         vsh.values = values
 
-        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        # vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
         vsh.meta.name = cls_output['log_id'] if name is None else name
         vsh.meta.log_id = cls_output['log_id']
         vsh.meta.family = cls_output['meta']['family']
@@ -238,7 +238,7 @@ class ShaleVolumeLarionovTertiaryRockNode(ShaleVolume):
         values[:, 1] = np.clip(0.083 * (2 ** (3.7 * gr_index) - 1), 0, 1)
         vsh.values = values
 
-        vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
+        # vsh.meta.basic_statistics = get_basic_curve_statistics(vsh.values)
         vsh.meta.name = cls_output['log_id'] if name is None else name
         vsh.meta.log_id = cls_output['log_id']
         vsh.meta.family = cls_output['meta']['family']

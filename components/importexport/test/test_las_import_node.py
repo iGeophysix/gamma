@@ -21,7 +21,10 @@ class TestLasImporter(unittest.TestCase):
 
     def test_las_import_works(self):
         folder = os.path.join(os.path.dirname(__file__), 'data')
-        paths = list(map(lambda x: os.path.join(folder, x), os.listdir(folder)))
+        paths = ['sample_2.0_large.las',
+                 'sample_2.0_minimal.las',
+                 'sample_minimal.las']
+        paths = list(map(lambda x: os.path.join(folder, x), paths))
         node = LasImportNode()
         node.run([p for p in paths if p.endswith('.las')])
 
@@ -70,7 +73,7 @@ class TestLasExportNode(unittest.TestCase):
                 raise
         os.remove('deleteme.las')
 
-    def test_export_well_merthod_raises_exception(self):
+    def test_export_well_method_raises_exception(self):
         node = LasExportNode()
         with self.assertRaises(KeyError):
             node.export_well_dataset('TestExport', '15-9-19', datasetname='LQC', logs=['GR', 'TNPH'])

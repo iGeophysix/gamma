@@ -39,7 +39,7 @@ class PorosityFromDensityNode(EngineNode):
         values[:, 1] = np.clip((rhob_matrix - values[:, 1]) / (rhob_matrix - rhob_fluid), 0, 1)
 
         phit_d.values = values
-        phit_d.meta.basic_statistics = get_basic_curve_statistics(phit_d.values)
+        # phit_d.meta.basic_statistics = get_basic_curve_statistics(phit_d.values)
         phit_d.meta.name = output_log_name
         phit_d.meta.log_id = output_log_id
         phit_d.meta.family = 'Porosity'

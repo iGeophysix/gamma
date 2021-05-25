@@ -12,6 +12,7 @@ from components.importexport.las import import_to_db
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import rank_logs
 from components.petrophysics.curve_operations import get_basic_curve_statistics, rescale_curve, LogResolutionNode
+from components.petrophysics.log_reconstruction import LogReconstructionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.run_detection import detect_runs_in_well
@@ -213,3 +214,9 @@ def async_export_well_to_s3(destination: str, wellname, datasetname: str = 'LQC'
     '''
     node = LasExportNode()
     node.export_well_dataset(destination, wellname, datasetname, logs)
+
+
+@app.task
+def async_log_reconstruction(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units):
+    node = LogReconstructionNode()
+    node.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)

@@ -1,11 +1,17 @@
 from abc import ABC
 from typing import Any
 
+import logging
+
+from settings import LOGGING_LEVEL
+
 
 class EngineNode(ABC):
     """
     This class describes general object for all computational nodes
     """
+    logger = logging.getLogger(__name__)
+    logger.setLevel(LOGGING_LEVEL)
 
     class Meta:
         name = None
