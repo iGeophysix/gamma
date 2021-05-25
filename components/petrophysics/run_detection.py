@@ -15,6 +15,8 @@ def detect_runs_in_well(well: Well, depth_tolerance: float):
     logs = []
     features = []
     for datasetname in well.datasets:
+        if datasetname == 'LQC':
+            continue
         d = WellDataset(well, datasetname)
         for log_id in d.log_list:
             log = BasicLog(d.id, log_id)

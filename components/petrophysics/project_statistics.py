@@ -27,8 +27,10 @@ class ProjectStatisticsNode(EngineNode):
         # split logs by families
         logs_by_families = defaultdict(list)
         for well in tree.values():
-            for dataset in well.values():
-                for log in dataset:
+            for dataset, logs in well.items():
+                if dataset.name == 'LQC':
+                    continue
+                for log in logs:
                     logs_by_families[log.meta.family].append(log)
 
         stats_by_family = defaultdict(dict)

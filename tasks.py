@@ -130,7 +130,7 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
     fa = FamilyAssigner()
     w = Well(wellname)
     if datasetnames is None:
-        datasetnames = w.datasets
+        datasetnames = [ds for ds in w.datasets if ds != 'LQC']
 
     for datasetname in datasetnames:
         wd = WellDataset(w, datasetname)

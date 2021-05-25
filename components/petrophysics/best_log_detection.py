@@ -92,6 +92,8 @@ class BestLogDetectionNode(EngineNode):
         for well, datasets in tree.items():
             runs = defaultdict(lambda: defaultdict(list))
             for dataset, logs in datasets.items():
+                if dataset.name == 'LQC':
+                    continue
                 # gather runs in dataset
                 for log in logs:
                     if cls.validate(log):

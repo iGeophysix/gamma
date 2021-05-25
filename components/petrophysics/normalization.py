@@ -122,6 +122,8 @@ class LogNormalizationNode(EngineNode):
             well = Well(well_name)
             dataset_names = well.datasets
             for dataset_name in dataset_names:
+                if dataset_name == 'LQC':
+                    continue
                 dataset = WellDataset(well, dataset_name)
 
                 # gather runs in dataset

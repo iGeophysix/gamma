@@ -155,6 +155,8 @@ class LogResolutionNode(EngineNode):
         for well_name in well_names:
             well = Well(well_name)
             for dataset_name in well.datasets:
+                if dataset_name == 'LQC':
+                    continue
                 dataset = WellDataset(well, dataset_name)
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
