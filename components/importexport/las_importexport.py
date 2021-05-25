@@ -1,8 +1,8 @@
+import datetime
 import os
 from typing import Iterable
 
 import boto3
-import datetime
 
 from celery_conf import wait_till_completes, app as celery_app
 from components.domain.Project import Project
@@ -68,6 +68,13 @@ class LasExportNode(EngineNode):
         p = Project()
         if destination is None:
             destination = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        else:
+            # clear destination folder
+            response = self.s3.list_objects(Bucket='public', Prefix=f'{destination}')
+            if 'Contents' in response.keys():
+                keys = [k['Key'] for k in response['Contents']]
+                for key in keys:
+                    self.s3.delete_object(Bucket='public', Key=key)
         if async_job:
             tasks = []
             for well_name in p.list_wells():
@@ -81,4 +88,4 @@ class LasExportNode(EngineNode):
 
 if __name__ == '__main__':
     node = LasExportNode()
-    node.run(async_job=False)
+    node.run(destination='LQC', async_job=False)
