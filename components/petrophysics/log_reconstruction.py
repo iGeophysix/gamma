@@ -107,7 +107,7 @@ class LogReconstructionNode(EngineNode):
                                 f"log_families_to_train = {log_families_to_train}\n"
                                 f"log_family_to_predict = {log_family_to_predict}")
             raise exc
-        return model
+        return model, units
 
     @staticmethod
     def _predict(model, input_logs):
@@ -176,11 +176,10 @@ class LogReconstructionNode(EngineNode):
 
         # create ML model
 
-        log_to_predict_units = None
         for log_family_to_predict in log_families_to_predict:
             # get wells having log families to train and predict in LQC
 
-            model = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+            model, log_to_predict_units = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
 
             if not async_job:
                 for well_name in well_names:
