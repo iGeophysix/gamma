@@ -32,7 +32,7 @@ class TestVolumetricModel(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
 
-        self.res = {'Shale': [0.93, 0.86, 0.75, 0.74, 0.72, 0.25], 'Quartz': [0.07, 0.14, 0.24, 0.14, 0.17, 0.25], 'Calcite': [0.0, 0.0, 0.0, 0.04, 0.08, 0.25], 'Water': [0.0, 0.0, 0.01, 0.08, 0.03, 0.25]}
+        self.res = {'Shale': [0.86, 0.8, 0.73, 0.75, 0.72, 0.25], 'Quartz': [0.14, 0.2, 0.12, 0.0, 0.17, 0.25], 'Calcite': [0.0, 0.0, 0.15, 0.25, 0.08, 0.25], 'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
 
     def test_solver_core(self):
         logs = {}

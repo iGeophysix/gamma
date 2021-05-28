@@ -15,6 +15,8 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.Log import BasicLog
 from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
+from components.petrophysics.best_log_detection import score_log_tags
+from components.importexport.FamilyProperties import FAMILY_PROPERTIES
 from celery_conf import app as celery_app, wait_till_completes
 import logging
 logging.basicConfig()
@@ -31,7 +33,7 @@ class VolumetricModel():
     def __init__(self):
         with open(FLUID_MINERAL_TABLE, 'r') as f:
             comp = json.load(f)
-        self.FAMILY_UNITS = comp['Units']   # units of data table
+        self.FAMILY_UNITS = {family: unit for family, unit in comp['Units'].items() if not family.startswith('_')}   # units of data table, excluding system columns
         del comp['Units']                   # except "Units" item all others are model components
         self._COMPONENTS = comp
 
@@ -39,13 +41,19 @@ class VolumetricModel():
         '''
         All known minerals
         '''
-        return set(component for component, info in self._COMPONENTS.items() if not info['Fluid'])
+        return set(component for component, info in self._COMPONENTS.items() if not info['_fluid'])
 
     def all_fluids(self) -> Iterable[str]:
         '''
         All known fluids
         '''
-        return set(component for component, info in self._COMPONENTS.items() if info['Fluid'])
+        return set(component for component, info in self._COMPONENTS.items() if info['_fluid'])
+
+    def component_family(self, component: str) -> str:
+        '''
+        Appropriate family for modeled component volume log
+        '''
+        return self._COMPONENTS[component]['_output_family']
 
     def supported_log_families(self) -> Iterable[str]:
         '''
@@ -237,31 +245,32 @@ class VolumetricModelSolverNode(EngineNode):
         # run solver
         res = vm.inverse(log_data, model_components)
 
-        method_name = 'Volumetric model solver'
+        workflow = 'VolumetricModelling'
         dataset = logs[0].dataset_id
         # save components' volumes
         for component_name, data in res['COMPONENT_VOLUME'].items():
             log = BasicLog(dataset_id=dataset, log_id='VM_' + component_name)
-            log.meta.family = component_name.lower().capitalize() + ' Volume Fraction'
+            log.meta.family = vm.component_family(component_name)
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = 'v/v'
-            log.meta.update({'method': method_name})
+            log.meta.update({'workflow': workflow, 'method': 'Deterministic Computation', 'display_priority': 1})
             log.save()
         # save forward modeled logs
         for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
-            log = BasicLog(dataset_id=dataset, log_id='VM_FM_' + logs[n].name)
-            log.meta.family = logs[n].meta.family + ' Forward Modeled'
+            input_log_family = logs[n].meta.family
+            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[input_log_family]['mnemonic'] + '_FM')
+            log.meta.family = input_log_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = logs[n].meta.units
-            log.meta.add_tags('synthetic')
-            log.meta.update({'method': method_name})
+            log.meta.add_tags('reconstructed')
+            log.meta.update({'workflow': workflow, 'method': 'Forward Modelling', 'display_priority': 2})
             log.save()
         # save misfit
         log = BasicLog(dataset_id=dataset, log_id='VM_MISFIT')
         log.meta.family = 'Model Fit Error'
         log.values = np.vstack((logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
         log.meta.units = 'unitless'
-        log.meta.update({'method': method_name})
+        log.meta.update({'workflow': workflow, 'method': 'Deterministic Computation', 'display_priority': 2})
         log.save()
 
 
@@ -272,19 +281,17 @@ def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Op
     :param log_family: name of a log family or list of acceptable family variants
     :return: best log or None
     '''
-    wanted_families = (log_family,) if isinstance(log_family, str) else set(log_family)
     best_log = None
     well = Well(well_name)
     dataset = WellDataset(well, 'LQC')
-    if not dataset.exists:
-        return None
-    for log_id in dataset.log_list:
-        log = BasicLog(dataset.id, log_id)
-        if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
-            # best variant
-            if hasattr(log.meta, 'best_log_detection') and log.meta.best_log_detection['is_best']:
-                return log
-            # just an acceptable family
-            elif best_log is None:
-                best_log = log
+    if dataset.exists:
+        wanted_families = (log_family,) if isinstance(log_family, str) else set(log_family)
+        best_log_score = float('-inf')
+        for log_id in dataset.log_list:
+            log = BasicLog(dataset.id, log_id)
+            if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
+                log_score = score_log_tags(log.meta.tags)
+                if log_score > best_log_score:
+                    best_log_score = log_score
+                    best_log = log
     return best_log

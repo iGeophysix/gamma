@@ -34,7 +34,7 @@ class LogReconstructionNode(EngineNode):
         good_target_log = None
         for target_log in target_logs:
             l = BasicLog(ds.id, target_log)
-            if not 'synthetic' in l.meta.tags:
+            if not 'reconstructed' in l.meta.tags:
                 good_target_log = target_log
                 # TODO: get better solution once we define default units for each family
                 log_to_predict_units = l.meta.units
@@ -50,7 +50,7 @@ class LogReconstructionNode(EngineNode):
         for family, feature_logs in feature_families.items():
             for feature_log in feature_logs:
                 l = BasicLog(ds.id, feature_log)
-                if not 'synthetic' in l.meta.tags:
+                if not 'reconstructed' in l.meta.tags:
                     good_feature_logs[l.meta.family] = feature_log
 
         if not all(good_feature_logs.values()):
@@ -88,7 +88,7 @@ class LogReconstructionNode(EngineNode):
             logs_in_well = []
             for log_id in well_dataset.log_list:
                 log = BasicLog(well_dataset.id, log_id)
-                if log.meta.family in required_families and not 'synthetic' in log.meta.tags:
+                if log.meta.family in required_families and not 'reconstructed' in log.meta.tags:
                     logs_in_well.append(log)
 
             # interpolate to common reference
@@ -148,7 +148,7 @@ class LogReconstructionNode(EngineNode):
         required_log_families = list(log_families_to_train)
         for log_id in well_dataset.log_list:
             log = BasicLog(well_dataset.id, log_id)
-            if log.meta.family in log_families_to_train and 'synthetic' not in log.meta.tags:
+            if log.meta.family in log_families_to_train and 'reconstructed' not in log.meta.tags:
                 input_logs.append(log)
                 required_log_families.remove(log.meta.family)
 
@@ -164,7 +164,7 @@ class LogReconstructionNode(EngineNode):
         new_log.values = cls._predict(model, input_logs)
         new_log.meta.family = log_family_to_predict
         new_log.meta.units = log_to_predict_units
-        new_log.meta.add_tags('synthetic')
+        new_log.meta.add_tags('reconstructed')
         # TODO: define display parameters # new_log.meta.display = {'color': (255, 0, 0), 'min': 1.7, 'max': 2.8, }
         new_log.save()
         cls.logger.info(f'Created synthetic {log_family_to_predict} in well {well_name}')

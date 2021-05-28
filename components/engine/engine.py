@@ -81,7 +81,7 @@ class Engine:
             },
         }, },
         {'node': 'VolumetricModelSolverNode', 'parameters': {'log_families': ['Gamma Ray', 'Bulk Density', 'Neutron Porosity'],
-                                                             'model_components': ['Shale', 'Quartz', 'Calcite', 'Water']}},
+                                                             'model_components': ['Shale', 'Quartz', 'Calcite', 'UWater']}},
         {'node': 'LasExportNode', 'parameters': {}},
 
     ]

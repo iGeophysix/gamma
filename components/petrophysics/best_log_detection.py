@@ -10,6 +10,51 @@ from components.domain.Project import Project
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 
+LOG_TAG_ASSESSMENT = {
+    'average': -5,
+    'azimuthal': -2,
+    'bad_quality': -5,
+    'best': 3,
+    'calibrated': 2,
+    'compensated': 1,
+    'computed': -5,
+    'conventional': 1,
+    'corrected': 1,
+    'delayed': -1,
+    'enhanced': 1,
+    'filtered': -1,
+    'focused': 2,
+    'high resolution': 2,
+    'horizontal': -1,
+    'image': -5,
+    'memory': 2,
+    'natural': 0,
+    'normalized': 1,
+    'ratio': -4,
+    'raw': 0,
+    'real-time': -2,
+    'reconstructed': -4,
+    'synthetic': -4,
+    'smoothed': -3,
+    'station log': -5,
+    'theoretical': -5,
+    'transmitted': 0,
+    'true': 2,
+    'uncorrected': -1,
+    'vertical': 0
+}
+
+
+def score_log_tags(tags: Iterable[str]) -> int:
+    '''
+    Calculates log usefulness by log tags
+    :param tags: set of log tags
+    :return: log usefulness score
+    '''
+    tags = set(map(str.lower, tags))    # remove duplicates, case-insensitive
+    rank = sum(LOG_TAG_ASSESSMENT.get(tag, 0) for tag in tags)
+    return rank
+
 
 class AlgorithmFailure(Exception):
     pass
@@ -79,7 +124,7 @@ class BestLogDetectionNode(EngineNode):
     @staticmethod
     def validate(log: BasicLog) -> bool:
         return 'raw' in log.meta.tags \
-               and not 'bad_quality' in log.meta.tags \
+               and 'bad_quality' not in log.meta.tags \
                and hasattr(log.meta, 'family') \
                and hasattr(log.meta, 'basic_statistics') \
                and hasattr(log.meta, 'log_resolution')

@@ -5,7 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.petrophysics.best_log_detection import get_best_log, BestLogDetectionNode
+from components.petrophysics.best_log_detection import get_best_log, BestLogDetectionNode, score_log_tags, LOG_TAG_ASSESSMENT
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
@@ -59,3 +59,14 @@ class TestBestLogDetection(unittest.TestCase):
 
         self.assertEqual(True, log1.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
         self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
+
+    def test_score_log_tags(self):
+        right_answer = sum(LOG_TAG_ASSESSMENT.values())
+        answer = 0
+        for tag in LOG_TAG_ASSESSMENT:
+            tags = []
+            tags.append(tag + '&' + tag)    # an unknown but looks similar to a known tag
+            mixed_case = ''.join(letter.upper() if n % 2 else letter.lower() for n, letter in enumerate(tag))
+            tags.append(mixed_case)     # a known tag, mixed case
+            answer += score_log_tags(tags)
+        self.assertEqual(answer, right_answer)
