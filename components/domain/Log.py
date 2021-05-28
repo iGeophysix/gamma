@@ -327,7 +327,7 @@ class BasicLogMeta:
         self.name = self.log_id
         self.tags = list()
         self.history = []
-        self.units = ''
+        self.units = ""
 
         _s = Storage()
         if _s.check_log_exists(self.dataset_id, self.log_id):
@@ -369,7 +369,11 @@ class BasicLogMeta:
 
 
 class MarkersLog(BasicLog):
-    _type = 'MarkersLog'
+
+    def __init__(self, dataset_id: str = None, log_id: str = 'New Log'):
+        super().__init__(dataset_id=dataset_id, log_id=log_id)
+        self._type = 'MarkersLog'
+        self.meta.type = 'MarkersLog'
 
     def validate(self, data):
         # check array has two columns (depth and value)
@@ -378,14 +382,3 @@ class MarkersLog(BasicLog):
         assert len(np.unique(data[:, 0])) == len(data[:, 0]), "All depth references must be unique"
 
         return True
-
-
-class MarkersLogMeta:
-    """
-    Class to manage log meta
-    """
-
-    @staticmethod
-    def validate(meta):
-        """Add validation later"""
-        pass

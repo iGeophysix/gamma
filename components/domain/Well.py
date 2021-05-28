@@ -24,6 +24,10 @@ class Well:
         """
         return self._name
 
+    @property
+    def id(self):
+        return RedisStorage._get_well_id(self._name)
+
     def exists(self) -> bool:
         """
         Check if well exists in db

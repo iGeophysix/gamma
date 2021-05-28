@@ -8,7 +8,7 @@ from typing import Any
 import h5py
 import redis
 
-from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, DEFAULT_MARKERS_NAME
 
 logger = logging.getLogger("storage")
 
@@ -162,6 +162,73 @@ class RedisStorage:
         :return: dict with all info in it
         """
         return json.loads(self.connection().hget('wells', well_id))['name']
+
+    # MARKERS SETS
+
+    def list_markersets(self):
+        """
+        Get list of MarkersSets available in the project
+        :return:
+        """
+        keys = [name.decode() for name in self.connection().hkeys("markersets")]
+        return keys
+
+    def check_markerset_exists(self, name: str) -> bool:
+        """
+        Check if MarkerSet name is exists in db
+        :param name:
+        :return:
+        """
+        return self.connection().hexists("markersets", name)
+
+    def get_markerset_by_name(self, name: str) -> dict:
+        """
+        Get marker set by name
+        :param name:
+        :return: MarkerSet
+        """
+        raw_data = self.connection().hget('markersets', name)
+        if raw_data is None:
+            raise KeyError(f'MarkerSet with name {name} was not found')
+
+        marker_set = json.loads(raw_data)
+        return marker_set
+
+    def set_markerset_by_name(self, markerset: dict) -> None:
+        """
+        Update markerset in db
+        :param markerset: MarkerSet
+        :return:
+        """
+        name = markerset['name']
+        self.connection().hset('markersets', name, json.dumps(markerset))
+
+    def delete_markerset_by_name(self, name: str):
+        """
+        Delete makerset from project
+        :param name:
+        :return:
+        """
+
+        for well in self.markerset_well_ids(name):
+            wellname = self.get_well_name_by_id(well)
+            ds_id = self._get_dataset_id(wellname, DEFAULT_MARKERS_NAME)
+            self.delete_log(ds_id, name)
+        self.connection().hdel('markersets', name)
+
+    def markerset_well_ids(self, name):
+        """
+        Get ids of wells having this markerset
+        :param name: MarkerSet name
+        :return:
+        """
+        well_ids = []
+        for well_id in self.connection().hkeys('wells'):
+            well_name = self.get_well_name_by_id(well_id)
+            ms_id = self._get_dataset_id(well_name, DEFAULT_MARKERS_NAME)
+            if self.connection().hexists(ms_id, name):
+                well_ids.append(well_id.decode())
+        return well_ids
 
     # DATASETS
     @staticmethod

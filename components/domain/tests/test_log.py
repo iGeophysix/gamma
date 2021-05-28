@@ -11,8 +11,9 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
-
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
+from components.importexport.las import import_to_db
+from components.importexport.markers_importexport import import_markers_csv
+from settings import BASE_DIR
 
 
 class TestLog(unittest.TestCase):
@@ -21,7 +22,7 @@ class TestLog(unittest.TestCase):
         _s.flush_db()
         self.well = Well("test", new=True)
         self.dataset = WellDataset(self.well, "test", new=True)
-        self.path_to_test_data = PATH_TO_TEST_DATA
+        self.path_to_test_data = os.path.join(BASE_DIR, 'components', 'domain', 'tests', 'test_data')
 
     def test_create_two_logs(self):
 
@@ -168,8 +169,6 @@ class TestLog(unittest.TestCase):
         self.assertNotIn("DEPT", log_list)
         self.assertIn("GR", log_list)
 
-
-
     def test_log_history(self):
         f = 'small_file.las'
         wellname = "log_history_test"
@@ -269,3 +268,19 @@ class TestLog(unittest.TestCase):
         self.assertEqual(true_values['data_hash'], test_log.data_hash)
         self.assertEqual(true_values['meta_hash'], test_log.meta_hash)
         self.assertEqual(true_values['full_hash'], test_log.full_hash)
+
+
+class TestMarkersLog(unittest.TestCase):
+    def setUp(self) -> None:
+        pass
+        # _s = RedisStorage()
+        # _s.flush_db()
+        self.path_to_test_data = os.path.join(BASE_DIR, 'test_data')
+        # for filename in os.listdir(os.path.join(self.path_to_test_data, 'ProjectData')):
+        #     if not filename.endswith('.las'):
+        #         continue
+        #     import_to_db(filename=os.path.join(self.path_to_test_data, 'ProjectData', filename))
+
+    def test_markers_with_gaps_loading_from_csv(self):
+        with open(os.path.join(self.path_to_test_data, 'Markers', 'FieldData_StratigraphyWithoutGaps.csv')) as raw_data:
+            import_markers_csv(raw_data=raw_data, missing_value='-9999')

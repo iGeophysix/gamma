@@ -44,3 +44,29 @@ class TestStorage(unittest.TestCase):
         extra_meta = {"PWA": "GIGI"}
         self._s.append_log_meta(dataset_id, logname, extra_meta)
         self.assertEqual({'GR': {"UWI": 434232, "PWA": "GIGI"}}, self._s.get_logs_meta(dataset_id, [logname, ]))
+
+    def test_markerset_interface(self):
+        markerset1 = {
+            'name': 'MarkerSet1',
+            'markers': {"ZoneA1": 1, "ZoneB1": 2, "ZoneC1": 3},
+            '_sequence_max': 4,
+        }
+        markerset2 = {
+            'name': 'MarkerSet2',
+            'markers': {"ZoneA2": 1, "ZoneB2": 2, "ZoneC2": 3},
+            '_sequence_max': 4,
+        }
+        self.assertEqual([], self._s.list_markersets(), 'Should be no markersets')
+
+        self._s.set_markerset_by_name(markerset1)
+        self.assertEqual(['MarkerSet1'], self._s.list_markersets(), 'Should be one markerset: MarkerSet1')
+
+        self._s.set_markerset_by_name(markerset2)
+        self.assertCountEqual(['MarkerSet1', 'MarkerSet2'], self._s.list_markersets(), 'Should be two markersets: MarkerSet1,MarkerSet1 ')
+
+        ms_raw = self._s.get_markerset_by_name('MarkerSet1')
+        self.assertEqual(markerset1, ms_raw, 'Check MarkerSet1 content')
+
+        self._s.delete_markerset_by_name('MarkerSet1')
+        self.assertEqual(['MarkerSet2'], self._s.list_markersets(), 'Should be one markerset: MarkerSet2')
+

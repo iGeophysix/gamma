@@ -4,6 +4,7 @@ import pandas as pd
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
+from components.domain.MarkersSet import MarkersSet
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 
@@ -113,3 +114,12 @@ class Project:
         _s = RedisStorage()
         current_meta = _s.get_project_meta() | {'last_update': datetime.datetime.now().isoformat()}
         _s.set_project_meta(current_meta)
+
+    @property
+    def markersets(self):
+        """
+        Get list of all markersets in the project
+        :return:
+        """
+        _s = RedisStorage()
+        return _s.list_markersets()
