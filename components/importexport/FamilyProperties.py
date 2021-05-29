@@ -7,8 +7,8 @@ import openpyxl as xl
 import itertools
 import json
 
-SOURCE_FAMSET_BOOK = os.path.join(os.path.dirname(__file__), 'rules', 'src', 'FamilySettings.xlsx')
-EXPORT_FAMSET_FILE = os.path.join(os.path.dirname(__file__), 'rules', 'FamilySettings.json')
+SOURCE_FAMSET_BOOK = os.path.join(os.path.dirname(__file__), 'rules', 'src', 'FamilyProperties.xlsx')
+EXPORT_FAMSET_FILE = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyProperties.json')
 
 DEFAULT_THICKNESS = 1
 DEFAULT_COLOR = '000000'    # black in hex RGB24
@@ -76,7 +76,7 @@ def parse_excel_table(src_path, sheet) -> dict:
 
 if __name__ == '__main__':
     # Export Excel sheet to JSON family properties file
-    family_properties = parse_excel_table(SOURCE_FAMSET_BOOK, 'FamilesSettings')
+    family_properties = parse_excel_table(SOURCE_FAMSET_BOOK, 'FamilyProperties')
     with open(EXPORT_FAMSET_FILE, 'w') as f:
         json.dump(family_properties, f, indent='\t')
 else:

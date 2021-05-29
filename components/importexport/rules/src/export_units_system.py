@@ -3,7 +3,7 @@ import json
 import os
 
 SOURCE_UNITS_TABLE = os.path.join(os.path.dirname(__file__), 'Units.xlsx')
-EXPORT_UNITS_SYSTEM = os.path.join(os.path.dirname(__file__), 'UnitsSystem.json')
+EXPORT_UNITS_SYSTEM = os.path.join(os.path.dirname(__file__), '..', 'UnitsSystem.json')
 
 
 def main():

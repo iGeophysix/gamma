@@ -1,0 +1,12547 @@
+{
+	"10 Minute Gel Strength": {
+		"splice": false,
+		"mnemonic": "10 Minute Gel Strength",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"10 Second Gel Strength": {
+		"splice": false,
+		"mnemonic": "10 Second Gel Strength",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acceleration": {
+		"splice": false,
+		"mnemonic": "ACC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			1,
+			2,
+			3
+		],
+		"thickness": 1
+	},
+	"Acoustic Amplitude": {
+		"splice": false,
+		"mnemonic": "AMPL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Attenuation Rate": {
+		"splice": false,
+		"mnemonic": "ATTN",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Caliper": {
+		"splice": false,
+		"mnemonic": "ARAD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Dispersion": {
+		"splice": false,
+		"mnemonic": "ACDSPN",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Energy": {
+		"splice": false,
+		"mnemonic": "ACENER",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Impedance": {
+		"splice": false,
+		"mnemonic": "AIMP",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Quality Indicator": {
+		"splice": false,
+		"mnemonic": "QP",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Slowness": {
+		"splice": false,
+		"mnemonic": "DTC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Travel Time": {
+		"splice": false,
+		"mnemonic": "TT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acoustic Velocity": {
+		"splice": false,
+		"mnemonic": "VELO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acquisition Shot Number": {
+		"splice": false,
+		"mnemonic": "Acquisition Shot Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Acquisition Type": {
+		"splice": false,
+		"mnemonic": "Acquisition Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Activity Code": {
+		"splice": false,
+		"mnemonic": "ACTC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Air Supply Flowrate": {
+		"splice": false,
+		"mnemonic": "Air Supply Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Aluminum Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WAL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Albite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VALBI",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Aluminum Concentration": {
+		"splice": true,
+		"mnemonic": "ALUM",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Albite Dry Weight Fraction": {
+		"splice": false,
+		"mnemonic": "WALB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Aluminum Yield": {
+		"splice": true,
+		"mnemonic": "YALUM",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Amount": {
+		"splice": false,
+		"mnemonic": "Amount",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Amplitude": {
+		"splice": false,
+		"mnemonic": "Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Angular Acceleration": {
+		"splice": false,
+		"mnemonic": "Angular Acceleration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Angular Velocity": {
+		"splice": false,
+		"mnemonic": "Angular Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Anhydrite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WANH",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Anhydrite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VANHY",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Anisotropy": {
+		"splice": false,
+		"mnemonic": "Anisotropy",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ankerite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WANK",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Annotation": {
+		"splice": false,
+		"mnemonic": "Annotation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Annulus Pressure": {
+		"splice": false,
+		"mnemonic": "Annulus Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Annulus Temperature": {
+		"splice": false,
+		"mnemonic": "Annulus Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Annulus Volume": {
+		"splice": false,
+		"mnemonic": "Annulus Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Anorthite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WANO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Antenna Quality Factor": {
+		"splice": false,
+		"mnemonic": "Antenna Quality Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Api Gravity": {
+		"splice": false,
+		"mnemonic": "Api Gravity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Api Neutron": {
+		"splice": false,
+		"mnemonic": "Api Neutron",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Dip Angle": {
+		"splice": false,
+		"mnemonic": "Apparent Dip Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Dip Azimuth North": {
+		"splice": false,
+		"mnemonic": "Apparent Dip Azimuth North",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Dip Azimuth Tool": {
+		"splice": false,
+		"mnemonic": "Apparent Dip Azimuth Tool",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Dip Azimuth Top Of Hole": {
+		"splice": false,
+		"mnemonic": "Apparent Dip Azimuth Top Of Hole",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Fluid Velocity": {
+		"splice": false,
+		"mnemonic": "Apparent Fluid Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Mud Filtrate Resistivity": {
+		"splice": false,
+		"mnemonic": "Apparent Mud Filtrate Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Porosity": {
+		"splice": true,
+		"mnemonic": "PHIA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Thickness": {
+		"splice": false,
+		"mnemonic": "Apparent Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Apparent Water Resistivity": {
+		"splice": true,
+		"mnemonic": "RWAA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Archie Porosity Constant": {
+		"splice": false,
+		"mnemonic": "Archie Porosity Constant",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Archie Porosity Exponent": {
+		"splice": false,
+		"mnemonic": "Archie Porosity Exponent",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Area": {
+		"splice": false,
+		"mnemonic": "Area",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Code": {
+		"splice": false,
+		"mnemonic": "Array Code",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Conductivity": {
+		"splice": false,
+		"mnemonic": "Array Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Induction Conductivity": {
+		"splice": false,
+		"mnemonic": "Array Induction Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Induction Quality Indicator": {
+		"splice": false,
+		"mnemonic": "Array Induction Quality Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Induction Resistivity": {
+		"splice": false,
+		"mnemonic": "Array Induction Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Laterolog Conductivity": {
+		"splice": false,
+		"mnemonic": "Array Laterolog Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Array Laterolog Resistivity": {
+		"splice": false,
+		"mnemonic": "Array Laterolog Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ash Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VASH",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Atomic Number": {
+		"splice": false,
+		"mnemonic": "Atomic Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Attenuation": {
+		"splice": false,
+		"mnemonic": "Attenuation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Attenuation Gain": {
+		"splice": false,
+		"mnemonic": "Attenuation Gain",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Attenuation Rate": {
+		"splice": false,
+		"mnemonic": "Attenuation Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Attenuation Resistivity": {
+		"splice": false,
+		"mnemonic": "Attenuation Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Amplitude": {
+		"splice": false,
+		"mnemonic": "Avg Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Bed Thickness": {
+		"splice": false,
+		"mnemonic": "Avg Bed Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Penetration Rate": {
+		"splice": false,
+		"mnemonic": "Avg Penetration Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Porosity": {
+		"splice": false,
+		"mnemonic": "Avg Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Seismic Velocity": {
+		"splice": false,
+		"mnemonic": "Avg Seismic Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Sequence Trend": {
+		"splice": false,
+		"mnemonic": "Avg Sequence Trend",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Avg Weight On Bit": {
+		"splice": false,
+		"mnemonic": "Avg Weight On Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Axial Length": {
+		"splice": false,
+		"mnemonic": "Axial Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Azimuth": {
+		"splice": false,
+		"mnemonic": "Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Azimuth Turn Rate": {
+		"splice": false,
+		"mnemonic": "Azimuth Turn Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bad Hole Flag": {
+		"splice": false,
+		"mnemonic": "Bad Hole Flag",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Barium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WBARI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Barium Yield": {
+		"splice": true,
+		"mnemonic": "YBARI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Barometric Pressure": {
+		"splice": false,
+		"mnemonic": "Barometric Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bearing": {
+		"splice": false,
+		"mnemonic": "Bearing",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Begin Element": {
+		"splice": false,
+		"mnemonic": "Begin Element",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bend 1 Bend 2 Angle": {
+		"splice": false,
+		"mnemonic": "Bend 1 Bend 2 Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bend 2 Bend 3 Angle": {
+		"splice": false,
+		"mnemonic": "Bend 2 Bend 3 Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bha Number": {
+		"splice": false,
+		"mnemonic": "Bha Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bin Porosity": {
+		"splice": false,
+		"mnemonic": "Bin Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Biot Coefficient": {
+		"splice": false,
+		"mnemonic": "Biot Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Biotite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VBIOT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Depth": {
+		"splice": false,
+		"mnemonic": "Bit Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Drilled Depth": {
+		"splice": false,
+		"mnemonic": "Bit Drilled Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Drilled Time": {
+		"splice": false,
+		"mnemonic": "Bit Drilled Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Inclination": {
+		"splice": false,
+		"mnemonic": "Bit Inclination",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Revolution Count": {
+		"splice": false,
+		"mnemonic": "Bit Revolution Count",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Rotation Speed": {
+		"splice": false,
+		"mnemonic": "Bit Rotation Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bit Run Number": {
+		"splice": false,
+		"mnemonic": "Bit Run Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Block Height": {
+		"splice": false,
+		"mnemonic": "Block Height",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Booster Pump Flow": {
+		"splice": false,
+		"mnemonic": "Booster Pump Flow",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Diameter": {
+		"splice": false,
+		"mnemonic": "Borehole Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Failure Azimuth": {
+		"splice": false,
+		"mnemonic": "Borehole Failure Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Neutron Capture Cross Section": {
+		"splice": false,
+		"mnemonic": "Borehole Neutron Capture Cross Section",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Radius": {
+		"splice": true,
+		"mnemonic": "BHR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Salinity": {
+		"splice": true,
+		"mnemonic": "BSAL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Temperature": {
+		"splice": true,
+		"mnemonic": "BHTEMP",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Borehole Volume": {
+		"splice": false,
+		"mnemonic": "Borehole Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bottom Depth": {
+		"splice": false,
+		"mnemonic": "Bottom Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bottomhole Pressure": {
+		"splice": false,
+		"mnemonic": "Bottomhole Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bottomhole Temperature": {
+		"splice": false,
+		"mnemonic": "Bottomhole Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bound Water Resistivity": {
+		"splice": false,
+		"mnemonic": "Bound Water Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bound Water Saturation": {
+		"splice": false,
+		"mnemonic": "Bound Water Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bound Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VBWAT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bubble Flow Velocity": {
+		"splice": false,
+		"mnemonic": "Bubble Flow Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bubble Point Pressure": {
+		"splice": false,
+		"mnemonic": "Bubble Point Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bubble Size": {
+		"splice": false,
+		"mnemonic": "Bubble Size",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bulk Density": {
+		"splice": true,
+		"mnemonic": "RHOB",
+		"min": 1.95,
+		"max": 2.95,
+		"unit": "g/cm3",
+		"color": [
+			238,
+			1,
+			135
+		],
+		"thickness": 1
+	},
+	"Bulk Density Correction": {
+		"splice": false,
+		"mnemonic": "Bulk Density Correction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Bulk Modulus": {
+		"splice": false,
+		"mnemonic": "Bulk Modulus",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Burst Pressure": {
+		"splice": false,
+		"mnemonic": "Burst Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"C2h6 Concentration": {
+		"splice": true,
+		"mnemonic": "C2H6",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"C3h8 Concentration": {
+		"splice": true,
+		"mnemonic": "C3H8",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"C4h10 Concentration": {
+		"splice": true,
+		"mnemonic": "C4H10",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"C5h12 Concentration": {
+		"splice": true,
+		"mnemonic": "C5H12",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cable Speed": {
+		"splice": false,
+		"mnemonic": "Cable Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Calcite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VCALC",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Calcium Concentration": {
+		"splice": true,
+		"mnemonic": "CALCIUM",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Calcium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCAL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Calcium Yield": {
+		"splice": true,
+		"mnemonic": "YCALC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Caliper": {
+		"splice": true,
+		"mnemonic": "CALI",
+		"min": 0.1,
+		"max": 0.4,
+		"unit": "m",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Capacitance": {
+		"splice": false,
+		"mnemonic": "Capacitance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Capillary Pressure": {
+		"splice": false,
+		"mnemonic": "Capillary Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Carbonate Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCARB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chlorite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCHL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Carbon Oxygen Ratio": {
+		"splice": false,
+		"mnemonic": "Carbon Oxygen Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Carbon Yield": {
+		"splice": true,
+		"mnemonic": "YCARB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Carbonate Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VCARB",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Casing Collar Locator": {
+		"splice": false,
+		"mnemonic": "Casing Collar Locator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Casing Inside Diameter": {
+		"splice": false,
+		"mnemonic": "Casing Inside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Casing Outside Diameter": {
+		"splice": false,
+		"mnemonic": "Casing Outside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Casing Shoe Depth": {
+		"splice": false,
+		"mnemonic": "Casing Shoe Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cation Concentration": {
+		"splice": true,
+		"mnemonic": "QV",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cation Exchange Capacity": {
+		"splice": false,
+		"mnemonic": "Cation Exchange Capacity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Bond Amplitude": {
+		"splice": false,
+		"mnemonic": "Cement Bond Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Bond Index": {
+		"splice": false,
+		"mnemonic": "Cement Bond Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Density": {
+		"splice": false,
+		"mnemonic": "Cement Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Sheath Thickness": {
+		"splice": false,
+		"mnemonic": "Cement Sheath Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Unit Discharge Pressure": {
+		"splice": false,
+		"mnemonic": "Cement Unit Discharge Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Unit Output": {
+		"splice": false,
+		"mnemonic": "Cement Unit Output",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cement Volume": {
+		"splice": false,
+		"mnemonic": "Cement Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Central Frequency": {
+		"splice": false,
+		"mnemonic": "Central Frequency",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cesium Concentration": {
+		"splice": true,
+		"mnemonic": "HCSC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ch4 Concentration": {
+		"splice": true,
+		"mnemonic": "CH4",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chi Square": {
+		"splice": false,
+		"mnemonic": "Chi Square",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chromium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCHR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chlorine Yield": {
+		"splice": true,
+		"mnemonic": "YCHLO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Clay Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCLA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chlorite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VCHLO",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chlorine Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCLO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chromium Yield": {
+		"splice": true,
+		"mnemonic": "YCHRO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Coal Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Clay Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VCLAY",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Co2 Concentration": {
+		"splice": true,
+		"mnemonic": "CO2",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Co2 Mole Fraction": {
+		"splice": false,
+		"mnemonic": "Co2 Mole Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cobalt Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Coal Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VCOAL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cobalt Concentration": {
+		"splice": true,
+		"mnemonic": "HCOC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Copper Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOP",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cobalt Yield": {
+		"splice": true,
+		"mnemonic": "YCOB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Coefficient": {
+		"splice": false,
+		"mnemonic": "Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Coherence": {
+		"splice": false,
+		"mnemonic": "Coherence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Collapse Pressure": {
+		"splice": false,
+		"mnemonic": "Collapse Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Color": {
+		"splice": false,
+		"mnemonic": "Color",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Color Map": {
+		"splice": false,
+		"mnemonic": "Color Map",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Completion Count": {
+		"splice": false,
+		"mnemonic": "Completion Count",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Compressibility": {
+		"splice": false,
+		"mnemonic": "Compressibility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Compressional Shear Velocity Ratio": {
+		"splice": false,
+		"mnemonic": "Compressional Shear Velocity Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Compressional Slowness": {
+		"splice": true,
+		"mnemonic": "DT",
+		"min": 120,
+		"max": 720,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Compressional Velocity": {
+		"splice": false,
+		"mnemonic": "Compressional Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Compressive Strength": {
+		"splice": false,
+		"mnemonic": "Compressive Strength",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Concentration": {
+		"splice": false,
+		"mnemonic": "Concentration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Conductance": {
+		"splice": false,
+		"mnemonic": "Conductance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Conductive Bed Proportion": {
+		"splice": false,
+		"mnemonic": "Conductive Bed Proportion",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Conductive Inclusion Contrast": {
+		"splice": false,
+		"mnemonic": "Conductive Inclusion Contrast",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Conductivity": {
+		"splice": false,
+		"mnemonic": "Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dolomite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WDOL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Copper Yield": {
+		"splice": true,
+		"mnemonic": "YCOP",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Correction": {
+		"splice": false,
+		"mnemonic": "Correction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Correction Factor": {
+		"splice": false,
+		"mnemonic": "Correction Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Correlation Coefficient": {
+		"splice": false,
+		"mnemonic": "Correlation Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Corridor Stack": {
+		"splice": false,
+		"mnemonic": "Corridor Stack",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Corrosion Indicator": {
+		"splice": false,
+		"mnemonic": "Corrosion Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Corrosion Rate": {
+		"splice": false,
+		"mnemonic": "Corrosion Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Count": {
+		"splice": false,
+		"mnemonic": "Count",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Count Rate": {
+		"splice": false,
+		"mnemonic": "Count Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Covariance": {
+		"splice": false,
+		"mnemonic": "Covariance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Drawdown Pressure": {
+		"splice": false,
+		"mnemonic": "Critical Drawdown Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Gas Saturation": {
+		"splice": false,
+		"mnemonic": "Critical Gas Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Mud Density": {
+		"splice": false,
+		"mnemonic": "Critical Mud Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Oil Saturation": {
+		"splice": false,
+		"mnemonic": "Critical Oil Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Pressure": {
+		"splice": false,
+		"mnemonic": "Critical Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Critical Water Saturation": {
+		"splice": false,
+		"mnemonic": "Critical Water Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cross Section Area": {
+		"splice": false,
+		"mnemonic": "Cross Section Area",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Crossplot Porosity": {
+		"splice": false,
+		"mnemonic": "Crossplot Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Borehole Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Borehole Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Cement Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Cement Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Gas Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Gas Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Oil Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Oil Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cumulative Water Volume": {
+		"splice": false,
+		"mnemonic": "Cumulative Water Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Current Density": {
+		"splice": false,
+		"mnemonic": "Current Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Curvature": {
+		"splice": false,
+		"mnemonic": "Curvature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Curvature Radius": {
+		"splice": false,
+		"mnemonic": "Curvature Radius",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Cuttings Diameter": {
+		"splice": false,
+		"mnemonic": "Cuttings Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Data Acquisition Mode": {
+		"splice": false,
+		"mnemonic": "Data Acquisition Mode",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Data Mask": {
+		"splice": false,
+		"mnemonic": "Data Mask",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Data Presence Flag": {
+		"splice": false,
+		"mnemonic": "Data Presence Flag",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Date": {
+		"splice": false,
+		"mnemonic": "Date",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Conductivity": {
+		"splice": false,
+		"mnemonic": "Deep Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Induction Conductivity": {
+		"splice": false,
+		"mnemonic": "Deep Induction Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Induction Resistivity": {
+		"splice": false,
+		"mnemonic": "Deep Induction Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Lateral Resistivity": {
+		"splice": false,
+		"mnemonic": "Deep Lateral Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Laterolog Conductivity": {
+		"splice": false,
+		"mnemonic": "Deep Laterolog Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Laterolog Resistivity": {
+		"splice": false,
+		"mnemonic": "Deep Laterolog Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Deep Resistivity": {
+		"splice": false,
+		"mnemonic": "Deep Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Degradation Factor": {
+		"splice": false,
+		"mnemonic": "Degradation Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Degree Of Confidence": {
+		"splice": false,
+		"mnemonic": "Degree Of Confidence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Delay Time": {
+		"splice": false,
+		"mnemonic": "Delay Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density": {
+		"splice": false,
+		"mnemonic": "Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Caliper": {
+		"splice": false,
+		"mnemonic": "Density Caliper",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Data Density": {
+		"splice": false,
+		"mnemonic": "Density Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Porosity": {
+		"splice": false,
+		"mnemonic": "Density Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Porosity Dolomite": {
+		"splice": false,
+		"mnemonic": "Density Porosity Dolomite",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Porosity Limestone": {
+		"splice": false,
+		"mnemonic": "Density Porosity Limestone",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Porosity Sandstone": {
+		"splice": false,
+		"mnemonic": "Density Porosity Sandstone",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Quality Indicator": {
+		"splice": false,
+		"mnemonic": "Density Quality Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Density Time After Bit": {
+		"splice": false,
+		"mnemonic": "Density Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Depth": {
+		"splice": false,
+		"mnemonic": "Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Depth Of Returns": {
+		"splice": false,
+		"mnemonic": "Depth Of Returns",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Depth Offset": {
+		"splice": false,
+		"mnemonic": "Depth Offset",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Description": {
+		"splice": false,
+		"mnemonic": "Description",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Detection Gain": {
+		"splice": false,
+		"mnemonic": "Detection Gain",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Detector Background Yield": {
+		"splice": false,
+		"mnemonic": "Detector Background Yield",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Diameter": {
+		"splice": false,
+		"mnemonic": "Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dielectric Constant": {
+		"splice": false,
+		"mnemonic": "Dielectric Constant",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dielectric Resistivity": {
+		"splice": false,
+		"mnemonic": "Dielectric Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Differential Caliper": {
+		"splice": false,
+		"mnemonic": "Differential Caliper",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Differential Pressure": {
+		"splice": false,
+		"mnemonic": "Differential Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Differential Radius": {
+		"splice": false,
+		"mnemonic": "Differential Radius",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Differential Temperature": {
+		"splice": false,
+		"mnemonic": "Differential Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Diffusivity": {
+		"splice": false,
+		"mnemonic": "Diffusivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dilation Angle": {
+		"splice": false,
+		"mnemonic": "Dilation Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dimensionless": {
+		"splice": false,
+		"mnemonic": "Dimensionless",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Angle": {
+		"splice": false,
+		"mnemonic": "Dip Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Azimuth": {
+		"splice": false,
+		"mnemonic": "Dip Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Classification": {
+		"splice": false,
+		"mnemonic": "Dip Classification",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Height": {
+		"splice": false,
+		"mnemonic": "Dip Height",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Number": {
+		"splice": false,
+		"mnemonic": "Dip Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dip Quality": {
+		"splice": false,
+		"mnemonic": "Dip Quality",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Direction": {
+		"splice": false,
+		"mnemonic": "Direction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Displacement": {
+		"splice": false,
+		"mnemonic": "Displacement",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Displacement Velocity": {
+		"splice": false,
+		"mnemonic": "Displacement Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Evaporite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WEVA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dolomite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VDOLO",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downhole Annulus Pressure": {
+		"splice": false,
+		"mnemonic": "Downhole Annulus Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downhole Cable Tension": {
+		"splice": false,
+		"mnemonic": "Downhole Cable Tension",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downhole Mud Pressure": {
+		"splice": false,
+		"mnemonic": "Downhole Mud Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downhole Torque": {
+		"splice": false,
+		"mnemonic": "Downhole Torque",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downhole Weight On Bit": {
+		"splice": false,
+		"mnemonic": "Downhole Weight On Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Downstream Orifice Gas Pressure": {
+		"splice": false,
+		"mnemonic": "Downstream Orifice Gas Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Drag": {
+		"splice": false,
+		"mnemonic": "Drag",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Drift Time": {
+		"splice": false,
+		"mnemonic": "Drift Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Drilling Exponent": {
+		"splice": false,
+		"mnemonic": "Drilling Exponent",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Drilling Time": {
+		"splice": false,
+		"mnemonic": "Drilling Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Drillstring Drive Torque": {
+		"splice": false,
+		"mnemonic": "Drillstring Drive Torque",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dry Clay Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VDCLA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Iron Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WFE",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Duration": {
+		"splice": false,
+		"mnemonic": "Duration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Duty Cycle": {
+		"splice": false,
+		"mnemonic": "Duty Cycle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"East Departure": {
+		"splice": false,
+		"mnemonic": "East Departure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Eccentering": {
+		"splice": false,
+		"mnemonic": "Eccentering",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Eccentering Azimuth": {
+		"splice": false,
+		"mnemonic": "Eccentering Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Echo Amplitude": {
+		"splice": false,
+		"mnemonic": "Echo Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Effective Porosity": {
+		"splice": true,
+		"mnemonic": "PHIE",
+		"min": 0,
+		"max": 0.3,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Efficiency": {
+		"splice": false,
+		"mnemonic": "Efficiency",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Elastic Impedance": {
+		"splice": false,
+		"mnemonic": "Elastic Impedance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Elastic Modulus": {
+		"splice": false,
+		"mnemonic": "Elastic Modulus",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electric Current": {
+		"splice": false,
+		"mnemonic": "Electric Current",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electric Potential": {
+		"splice": false,
+		"mnemonic": "Electric Potential",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electric Potential Gradient": {
+		"splice": false,
+		"mnemonic": "Electric Potential Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electrical Penetration": {
+		"splice": false,
+		"mnemonic": "Electrical Penetration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Attenuation Rate": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Attenuation Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Caliper": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Caliper",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Phase Shift": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Phase Shift",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Power": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Power",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Propagation Resistivity": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Propagation Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Electromagnetic Propagation Time": {
+		"splice": false,
+		"mnemonic": "Electromagnetic Propagation Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Elemental Yield": {
+		"splice": false,
+		"mnemonic": "Elemental Yield",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"End Time": {
+		"splice": false,
+		"mnemonic": "End Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Energy": {
+		"splice": false,
+		"mnemonic": "Energy",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Epithermal Neutron Near Far Ratio": {
+		"splice": false,
+		"mnemonic": "Epithermal Neutron Near Far Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Epithermal Neutron Porosity": {
+		"splice": false,
+		"mnemonic": "Epithermal Neutron Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Equivalent Circulating Density": {
+		"splice": false,
+		"mnemonic": "Equivalent Circulating Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Equivalent Dose Rate": {
+		"splice": false,
+		"mnemonic": "Equivalent Dose Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Error": {
+		"splice": false,
+		"mnemonic": "Error",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Error Band": {
+		"splice": false,
+		"mnemonic": "Error Band",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gadolinium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WGDL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Evaporite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VEVAP",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Event Time": {
+		"splice": false,
+		"mnemonic": "Event Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Exponent": {
+		"splice": false,
+		"mnemonic": "Exponent",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Failure Arc": {
+		"splice": false,
+		"mnemonic": "Failure Arc",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fault Type": {
+		"splice": false,
+		"mnemonic": "Fault Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Feldspar Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VFELD",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Filter Cake Density": {
+		"splice": false,
+		"mnemonic": "Filter Cake Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Filter Cake Photoelectric Factor": {
+		"splice": false,
+		"mnemonic": "Filter Cake Photoelectric Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Filter Cake Resistivity": {
+		"splice": false,
+		"mnemonic": "Filter Cake Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Filter Cake Thickness": {
+		"splice": false,
+		"mnemonic": "Filter Cake Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Firmware Version": {
+		"splice": false,
+		"mnemonic": "Firmware Version",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"First Derivative": {
+		"splice": false,
+		"mnemonic": "First Derivative",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flag": {
+		"splice": true,
+		"mnemonic": "FLAG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flow Velocity": {
+		"splice": false,
+		"mnemonic": "Flow Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flowing Fluid Type": {
+		"splice": false,
+		"mnemonic": "Flowing Fluid Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flowrate": {
+		"splice": false,
+		"mnemonic": "Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flowrate Gradient": {
+		"splice": false,
+		"mnemonic": "Flowrate Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flowrate Index": {
+		"splice": false,
+		"mnemonic": "Flowrate Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flow Zone Indicator": {
+		"splice": true,
+		"mnemonic": "FZI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Code": {
+		"splice": true,
+		"mnemonic": "FLUID",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Compressional Slowness": {
+		"splice": false,
+		"mnemonic": "Fluid Compressional Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Conductivity": {
+		"splice": false,
+		"mnemonic": "Fluid Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Density": {
+		"splice": false,
+		"mnemonic": "Fluid Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Level": {
+		"splice": false,
+		"mnemonic": "Fluid Level",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Loss": {
+		"splice": false,
+		"mnemonic": "Fluid Loss",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Resistivity": {
+		"splice": false,
+		"mnemonic": "Fluid Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Temperature": {
+		"splice": false,
+		"mnemonic": "Fluid Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Type": {
+		"splice": false,
+		"mnemonic": "Fluid Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Viscosity": {
+		"splice": false,
+		"mnemonic": "Fluid Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Volume": {
+		"splice": false,
+		"mnemonic": "Fluid Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluorescence": {
+		"splice": false,
+		"mnemonic": "Fluorescence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Bound Water Saturation": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Bound Water Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Bound Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXBWA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Conductivity": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Dissolved Salt Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXDS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Fluid Saturation": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Fluid Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Fluid Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXSF",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Free Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXFW",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Gas Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXGAS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Hydrocarbon Saturation": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Hydrocarbon Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Hydrocarbon Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXHC",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Irreducible Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXIWA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Obmf Saturation": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Obmf Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Obmf Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXOBMF",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Oil Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXOIL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Resistivity": {
+		"splice": false,
+		"mnemonic": "Flushed Zone Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Water Saturation": {
+		"splice": true,
+		"mnemonic": "SXO",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flushed Zone Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXWAT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flux Leakage": {
+		"splice": false,
+		"mnemonic": "Flux Leakage",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Force": {
+		"splice": false,
+		"mnemonic": "Force",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Force Per Length": {
+		"splice": false,
+		"mnemonic": "Force Per Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Conductivity": {
+		"splice": false,
+		"mnemonic": "Formation Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Resistivity": {
+		"splice": true,
+		"mnemonic": "RT",
+		"min": 0.1,
+		"max": 100,
+		"unit": "Ohmm",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Resistivity Factor": {
+		"splice": false,
+		"mnemonic": "Formation Resistivity Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Resistivity Sw100": {
+		"splice": false,
+		"mnemonic": "Formation Resistivity Sw100",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Stiffness Factor": {
+		"splice": false,
+		"mnemonic": "Formation Stiffness Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Formation Temperature": {
+		"splice": false,
+		"mnemonic": "Formation Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Conductivity": {
+		"splice": false,
+		"mnemonic": "Fracture Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Density": {
+		"splice": false,
+		"mnemonic": "Fracture Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Plausibility": {
+		"splice": false,
+		"mnemonic": "Fracture Plausibility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Pressure": {
+		"splice": true,
+		"mnemonic": "FPRESS",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Pressure Gradient": {
+		"splice": false,
+		"mnemonic": "Fracture Pressure Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Toughness": {
+		"splice": false,
+		"mnemonic": "Fracture Toughness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fracture Width": {
+		"splice": false,
+		"mnemonic": "Fracture Width",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Free Fluid Index": {
+		"splice": false,
+		"mnemonic": "Free Fluid Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Free Pipe Signal": {
+		"splice": false,
+		"mnemonic": "Free Pipe Signal",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Frequency": {
+		"splice": false,
+		"mnemonic": "Frequency",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Friction Angle": {
+		"splice": false,
+		"mnemonic": "Friction Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrogen Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WHYD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gadolinium Yield": {
+		"splice": true,
+		"mnemonic": "YGAD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gain": {
+		"splice": false,
+		"mnemonic": "Gain",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gamma Ray": {
+		"splice": true,
+		"mnemonic": "GR",
+		"min": 0,
+		"max": 150,
+		"unit": "gAPI",
+		"color": [
+			255,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gamma Ray Data Density": {
+		"splice": false,
+		"mnemonic": "Gamma Ray Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gamma Ray Minus Uranium": {
+		"splice": false,
+		"mnemonic": "Gamma Ray Minus Uranium",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gamma Ray Time After Bit": {
+		"splice": false,
+		"mnemonic": "Gamma Ray Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Density": {
+		"splice": false,
+		"mnemonic": "Gas Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Deviation Factor": {
+		"splice": false,
+		"mnemonic": "Gas Deviation Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Differential Pressure": {
+		"splice": false,
+		"mnemonic": "Gas Differential Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Flag": {
+		"splice": false,
+		"mnemonic": "Gas Flag",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Flow Velocity": {
+		"splice": false,
+		"mnemonic": "Gas Flow Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Flowrate": {
+		"splice": false,
+		"mnemonic": "Gas Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Formation Volume Factor": {
+		"splice": false,
+		"mnemonic": "Gas Formation Volume Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Fraction": {
+		"splice": false,
+		"mnemonic": "Gas Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Holdup": {
+		"splice": false,
+		"mnemonic": "Gas Holdup",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Mass Flowrate": {
+		"splice": false,
+		"mnemonic": "Gas Mass Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Oil Ratio": {
+		"splice": false,
+		"mnemonic": "Gas Oil Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Probability": {
+		"splice": false,
+		"mnemonic": "Gas Probability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Saturation": {
+		"splice": false,
+		"mnemonic": "Gas Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Viscosity": {
+		"splice": false,
+		"mnemonic": "Gas Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gas Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VGAS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Geometrical Factor": {
+		"splice": false,
+		"mnemonic": "Geometrical Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Geophone Type": {
+		"splice": false,
+		"mnemonic": "Geophone Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Glauconite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VGLAU",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gradient": {
+		"splice": false,
+		"mnemonic": "Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Grain Density": {
+		"splice": false,
+		"mnemonic": "Grain Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Grain Size": {
+		"splice": false,
+		"mnemonic": "Grain Size",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gravity": {
+		"splice": false,
+		"mnemonic": "Gravity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gravity Toolface": {
+		"splice": false,
+		"mnemonic": "Gravity Toolface",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Gypsum Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VGYPS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"H2s Concentration": {
+		"splice": true,
+		"mnemonic": "H2S",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"H2s Mole Fraction": {
+		"splice": false,
+		"mnemonic": "H2s Mole Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Halite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VHALI",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Height": {
+		"splice": false,
+		"mnemonic": "Height",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Holdup": {
+		"splice": false,
+		"mnemonic": "Holdup",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Holdup Index": {
+		"splice": false,
+		"mnemonic": "Holdup Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Azimuth": {
+		"splice": false,
+		"mnemonic": "Hole Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Deviation": {
+		"splice": false,
+		"mnemonic": "Hole Deviation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Inside Diameter": {
+		"splice": false,
+		"mnemonic": "Hole Inside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Rotation Friction Coefficient": {
+		"splice": false,
+		"mnemonic": "Hole Rotation Friction Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Sliding Friction Coefficient": {
+		"splice": false,
+		"mnemonic": "Hole Sliding Friction Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hole Translation Friction Coefficient": {
+		"splice": false,
+		"mnemonic": "Hole Translation Friction Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hook Load": {
+		"splice": false,
+		"mnemonic": "Hook Load",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Horizontal Formation Resistivity": {
+		"splice": false,
+		"mnemonic": "Horizontal Formation Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Horizontal Permeability": {
+		"splice": false,
+		"mnemonic": "Horizontal Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydraulic Power": {
+		"splice": false,
+		"mnemonic": "Hydraulic Power",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrocarbon Density": {
+		"splice": false,
+		"mnemonic": "Hydrocarbon Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrocarbon Flowrate": {
+		"splice": false,
+		"mnemonic": "Hydrocarbon Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrocarbon Saturation": {
+		"splice": false,
+		"mnemonic": "Hydrocarbon Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrocarbon Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VHYDC",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Illite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WILL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrogen Index": {
+		"splice": false,
+		"mnemonic": "Hydrogen Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrogen Yield": {
+		"splice": true,
+		"mnemonic": "YHYD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Hydrostatic Pressure": {
+		"splice": false,
+		"mnemonic": "Hydrostatic Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"C6h14 Concentration": {
+		"splice": true,
+		"mnemonic": "C6H14",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Identifier": {
+		"splice": false,
+		"mnemonic": "Identifier",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Igneous Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VIGNE",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Kaolinite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WKAO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Illite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VILLI",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Impedance": {
+		"splice": false,
+		"mnemonic": "Impedance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inclination": {
+		"splice": false,
+		"mnemonic": "Inclination",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inclination Build Rate": {
+		"splice": false,
+		"mnemonic": "Inclination Build Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inclusion Proportion": {
+		"splice": false,
+		"mnemonic": "Inclusion Proportion",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Indicator": {
+		"splice": false,
+		"mnemonic": "Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Induced Gamma Ray": {
+		"splice": false,
+		"mnemonic": "Induced Gamma Ray",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inductance": {
+		"splice": false,
+		"mnemonic": "Inductance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inlet Pressure": {
+		"splice": false,
+		"mnemonic": "Inlet Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inside Diameter": {
+		"splice": false,
+		"mnemonic": "Inside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Instantaneous Amplitude": {
+		"splice": false,
+		"mnemonic": "Instantaneous Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Integrated Mobility": {
+		"splice": false,
+		"mnemonic": "Integrated Mobility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Integrated Slowness": {
+		"splice": false,
+		"mnemonic": "Integrated Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inter Bed Contrast": {
+		"splice": false,
+		"mnemonic": "Inter Bed Contrast",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Interfacial Tension": {
+		"splice": false,
+		"mnemonic": "Interfacial Tension",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Interval Length": {
+		"splice": false,
+		"mnemonic": "Interval Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Interval Time": {
+		"splice": false,
+		"mnemonic": "Interval Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Interval Transit Time": {
+		"splice": false,
+		"mnemonic": "Interval Transit Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Interval Velocity": {
+		"splice": false,
+		"mnemonic": "Interval Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Invasion Annulus Resistivity": {
+		"splice": false,
+		"mnemonic": "Invasion Annulus Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Invasion Diameter": {
+		"splice": false,
+		"mnemonic": "Invasion Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Invasion Radius": {
+		"splice": false,
+		"mnemonic": "Invasion Radius",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Inverse Penetration Rate": {
+		"splice": false,
+		"mnemonic": "Inverse Penetration Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Investigation Radius": {
+		"splice": false,
+		"mnemonic": "Investigation Radius",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnesium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Iron Yield": {
+		"splice": true,
+		"mnemonic": "YFE",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Irreducible Water Saturation": {
+		"splice": false,
+		"mnemonic": "Irreducible Water Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Irreducible Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VBVI",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Isolated Porosity Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VISOL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Manganese Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMNG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Kaolinite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VKAOL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Key": {
+		"splice": false,
+		"mnemonic": "Key",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Kick Pressure": {
+		"splice": false,
+		"mnemonic": "Kick Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Kill Line Pressure": {
+		"splice": false,
+		"mnemonic": "Kill Line Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Klinkenberg Permeability": {
+		"splice": false,
+		"mnemonic": "Klinkenberg Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Lateral Log Resistivity": {
+		"splice": true,
+		"mnemonic": "LLD",
+		"min": 0.1,
+		"max": 100,
+		"unit": "Ohmm",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Latitude": {
+		"splice": true,
+		"mnemonic": "LAT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Length": {
+		"splice": false,
+		"mnemonic": "Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Length Recovered": {
+		"splice": false,
+		"mnemonic": "Length Recovered",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Line Style": {
+		"splice": false,
+		"mnemonic": "Line Style",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Line Thickness": {
+		"splice": false,
+		"mnemonic": "Line Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Linear Weight": {
+		"splice": false,
+		"mnemonic": "Linear Weight",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Liquid Flow Velocity": {
+		"splice": false,
+		"mnemonic": "Liquid Flow Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Liquid Flowrate": {
+		"splice": false,
+		"mnemonic": "Liquid Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Litho Description": {
+		"splice": false,
+		"mnemonic": "Litho Description",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Litho Penetration Rate": {
+		"splice": false,
+		"mnemonic": "Litho Penetration Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Litho Type": {
+		"splice": false,
+		"mnemonic": "Litho Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Lithology Code": {
+		"splice": false,
+		"mnemonic": "LITHO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Load": {
+		"splice": false,
+		"mnemonic": "Load",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Longitude": {
+		"splice": true,
+		"mnemonic": "LONG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Longitudinal Relaxation Time": {
+		"splice": false,
+		"mnemonic": "Longitudinal Relaxation Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Lwd Operating Time": {
+		"splice": false,
+		"mnemonic": "Lwd Operating Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Molybdenum Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMOL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnesium Yield": {
+		"splice": true,
+		"mnemonic": "YMAG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Declination": {
+		"splice": false,
+		"mnemonic": "Magnetic Declination",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Field Strength": {
+		"splice": false,
+		"mnemonic": "Magnetic Field Strength",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Flux Density": {
+		"splice": false,
+		"mnemonic": "Magnetic Flux Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Inclination": {
+		"splice": false,
+		"mnemonic": "Magnetic Inclination",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Permeability": {
+		"splice": false,
+		"mnemonic": "Magnetic Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Susceptibility": {
+		"splice": false,
+		"mnemonic": "Magnetic Susceptibility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Magnetic Toolface": {
+		"splice": false,
+		"mnemonic": "Magnetic Toolface",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Major Axis": {
+		"splice": false,
+		"mnemonic": "Major Axis",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Montmorillonite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMON",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Manganese Yield": {
+		"splice": true,
+		"mnemonic": "YMANG",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mass": {
+		"splice": false,
+		"mnemonic": "Mass",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mass Flowrate": {
+		"splice": false,
+		"mnemonic": "Mass Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mass Fraction": {
+		"splice": false,
+		"mnemonic": "Mass Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mass Per Time": {
+		"splice": false,
+		"mnemonic": "Mass Per Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mass Per Volume": {
+		"splice": false,
+		"mnemonic": "Mass Per Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Bulk Density": {
+		"splice": false,
+		"mnemonic": "RHOMAA",
+		"min": 1.95,
+		"max": 2.95,
+		"unit": "g/cm3",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Compressional Slowness": {
+		"splice": false,
+		"mnemonic": "Matrix Compressional Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Electromagnetic Propagation Time": {
+		"splice": false,
+		"mnemonic": "Matrix Electromagnetic Propagation Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Epithermal Neutron Porosity": {
+		"splice": false,
+		"mnemonic": "Matrix Epithermal Neutron Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Neutron Capture Cross Section": {
+		"splice": false,
+		"mnemonic": "Matrix Neutron Capture Cross Section",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Photoelectric Factor": {
+		"splice": false,
+		"mnemonic": "Matrix Photoelectric Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Shear Slowness": {
+		"splice": false,
+		"mnemonic": "Matrix Shear Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Thermal Neutron Porosity": {
+		"splice": false,
+		"mnemonic": "Matrix Thermal Neutron Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Volumetric Photoelectric Factor": {
+		"splice": false,
+		"mnemonic": "Matrix Volumetric Photoelectric Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Max Amplitude": {
+		"splice": false,
+		"mnemonic": "Max Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Max Thickness": {
+		"splice": false,
+		"mnemonic": "Max Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Measured Depth": {
+		"splice": false,
+		"mnemonic": "Measured Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mechanical Specific Energy": {
+		"splice": false,
+		"mnemonic": "Mechanical Specific Energy",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Medium Induction Conductivity": {
+		"splice": false,
+		"mnemonic": "Medium Induction Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Medium Induction Resistivity": {
+		"splice": false,
+		"mnemonic": "Medium Induction Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Medium Laterolog Conductivity": {
+		"splice": false,
+		"mnemonic": "Medium Laterolog Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Medium Laterolog Resistivity": {
+		"splice": false,
+		"mnemonic": "Medium Laterolog Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Medium Resistivity": {
+		"splice": false,
+		"mnemonic": "Medium Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Memory Usage": {
+		"splice": false,
+		"mnemonic": "Memory Usage",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Metamorphic Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VMETA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Method Type": {
+		"splice": false,
+		"mnemonic": "Method Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Conductivity": {
+		"splice": false,
+		"mnemonic": "Micro Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Cylindrically Focused Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Cylindrically Focused Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Inverse Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Inverse Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Lateral Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Lateral Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Laterolog Conductivity": {
+		"splice": false,
+		"mnemonic": "Micro Laterolog Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Laterolog Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Laterolog Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Normal Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Normal Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Spherically Focused Conductivity": {
+		"splice": false,
+		"mnemonic": "Micro Spherically Focused Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Micro Spherically Focused Resistivity": {
+		"splice": false,
+		"mnemonic": "Micro Spherically Focused Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Min Horizontal Stress Azimuth": {
+		"splice": false,
+		"mnemonic": "Min Horizontal Stress Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Min Porosity": {
+		"splice": false,
+		"mnemonic": "Min Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Min Thickness": {
+		"splice": false,
+		"mnemonic": "Min Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mineral Hardness": {
+		"splice": false,
+		"mnemonic": "Mineral Hardness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Minor Axis": {
+		"splice": false,
+		"mnemonic": "Minor Axis",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mobility": {
+		"splice": false,
+		"mnemonic": "Mobility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Model Fit Error": {
+		"splice": false,
+		"mnemonic": "Model Fit Error",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Model Name": {
+		"splice": false,
+		"mnemonic": "Model Name",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Molar Concentration": {
+		"splice": false,
+		"mnemonic": "Molar Concentration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nahcolite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNHC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Molybdenum Yield": {
+		"splice": true,
+		"mnemonic": "YMOLY",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nickel Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNIC",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Montmorillonite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VMONT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Morpho Type": {
+		"splice": false,
+		"mnemonic": "Morpho Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Motor Speed": {
+		"splice": false,
+		"mnemonic": "Motor Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Moved Hydrocarbon Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VMHYD",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Compressional Slowness": {
+		"splice": false,
+		"mnemonic": "Mud Compressional Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Density": {
+		"splice": false,
+		"mnemonic": "Mud Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Density In": {
+		"splice": false,
+		"mnemonic": "Mud Density In",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Density Out": {
+		"splice": false,
+		"mnemonic": "Mud Density Out",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Filtrate Resistivity": {
+		"splice": false,
+		"mnemonic": "Mud Filtrate Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Filtrate Volume Per Length": {
+		"splice": false,
+		"mnemonic": "Mud Filtrate Volume Per Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Flow In": {
+		"splice": false,
+		"mnemonic": "Mud Flow In",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Flow Out": {
+		"splice": false,
+		"mnemonic": "Mud Flow Out",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Flowrate": {
+		"splice": false,
+		"mnemonic": "Mud Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Pump Discharge Pressure": {
+		"splice": false,
+		"mnemonic": "Mud Pump Discharge Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Pump Output": {
+		"splice": false,
+		"mnemonic": "Mud Pump Output",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Resistivity": {
+		"splice": true,
+		"mnemonic": "BH_RES",
+		"min": 0.1,
+		"max": 2,
+		"unit": "Ohmm",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Resistivity In": {
+		"splice": false,
+		"mnemonic": "Mud Resistivity In",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Resistivity Out": {
+		"splice": false,
+		"mnemonic": "Mud Resistivity Out",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Tank Volume": {
+		"splice": false,
+		"mnemonic": "Mud Tank Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Temperature": {
+		"splice": false,
+		"mnemonic": "Mud Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Temperature In": {
+		"splice": false,
+		"mnemonic": "Mud Temperature In",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Temperature Out": {
+		"splice": false,
+		"mnemonic": "Mud Temperature Out",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Total Gas": {
+		"splice": false,
+		"mnemonic": "Mud Total Gas",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mud Type": {
+		"splice": false,
+		"mnemonic": "Mud Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Multi Use Property": {
+		"splice": false,
+		"mnemonic": "Multi Use Property",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Muscovite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VMUSC",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mwd Data Density": {
+		"splice": false,
+		"mnemonic": "Mwd Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mwd Dpoint": {
+		"splice": false,
+		"mnemonic": "Mwd Dpoint",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mwd Operating Time": {
+		"splice": false,
+		"mnemonic": "Mwd Operating Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Mwd Tool Code": {
+		"splice": false,
+		"mnemonic": "Mwd Tool Code",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nitrogen Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNIT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Name": {
+		"splice": false,
+		"mnemonic": "Name",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Neo-c5 Concentration": {
+		"splice": false,
+		"mnemonic": "Neo-c5 Concentration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Net Pay Hc Porosity Thickness": {
+		"splice": false,
+		"mnemonic": "Net Pay Hc Porosity Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Net Pay Porosity Thickness": {
+		"splice": false,
+		"mnemonic": "Net Pay Porosity Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Net Reservoir Porosity Thickness": {
+		"splice": false,
+		"mnemonic": "Net Reservoir Porosity Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Neutron Capture Cross Section": {
+		"splice": false,
+		"mnemonic": "Neutron Capture Cross Section",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Neutron Data Density": {
+		"splice": false,
+		"mnemonic": "Neutron Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Neutron Porosity": {
+		"splice": true,
+		"mnemonic": "NPHI",
+		"min": -0.05,
+		"max": 0.45,
+		"unit": "v/v",
+		"color": [
+			0,
+			153,
+			255
+		],
+		"thickness": 1
+	},
+	"Neutron Porosity Dolomite": {
+		"splice": true,
+		"mnemonic": "NPHI_DOL",
+		"min": null,
+		"max": null,
+		"unit": "v/v",
+		"color": [
+			0,
+			153,
+			255
+		],
+		"thickness": 1
+	},
+	"Neutron Porosity Limestone": {
+		"splice": true,
+		"mnemonic": "NPHI_LIM",
+		"min": null,
+		"max": null,
+		"unit": "v/v",
+		"color": [
+			0,
+			153,
+			255
+		],
+		"thickness": 1
+	},
+	"Neutron Porosity Sandstone": {
+		"splice": true,
+		"mnemonic": "NPHI_SS",
+		"min": null,
+		"max": null,
+		"unit": "v/v",
+		"color": [
+			0,
+			153,
+			255
+		],
+		"thickness": 1
+	},
+	"Neutron Slowing Down Length": {
+		"splice": false,
+		"mnemonic": "Neutron Slowing Down Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Neutron Time After Bit": {
+		"splice": false,
+		"mnemonic": "Neutron Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Organic Carbon Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WOCAR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nickel Yield": {
+		"splice": true,
+		"mnemonic": "YNICK",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Orthoclase Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WORT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nitrogen Flowrate": {
+		"splice": false,
+		"mnemonic": "Nitrogen Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nitrogen Yield": {
+		"splice": true,
+		"mnemonic": "YNITR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Amplitude Distribution": {
+		"splice": false,
+		"mnemonic": "Nmr Amplitude Distribution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Dc Distribution": {
+		"splice": false,
+		"mnemonic": "Nmr Dc Distribution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Dct1 Map": {
+		"splice": false,
+		"mnemonic": "Nmr Dct1 Map",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Dct2 Map": {
+		"splice": false,
+		"mnemonic": "Nmr Dct2 Map",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Diffusion Coefficient": {
+		"splice": false,
+		"mnemonic": "Nmr Diffusion Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Fitting Error": {
+		"splice": false,
+		"mnemonic": "Nmr Fitting Error",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Permeability": {
+		"splice": false,
+		"mnemonic": "Nmr Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Porosity": {
+		"splice": false,
+		"mnemonic": "Nmr Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Quality Indicator": {
+		"splice": false,
+		"mnemonic": "Nmr Quality Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr Relaxation Time Ratio Distribution": {
+		"splice": false,
+		"mnemonic": "Nmr Relaxation Time Ratio Distribution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr T1 Distribution": {
+		"splice": false,
+		"mnemonic": "Nmr T1 Distribution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr T1t2 Map": {
+		"splice": false,
+		"mnemonic": "Nmr T1t2 Map",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nmr T2 Distribution": {
+		"splice": false,
+		"mnemonic": "Nmr T2 Distribution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Noise Amplitude": {
+		"splice": false,
+		"mnemonic": "Noise Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Noise To Signal Ratio": {
+		"splice": false,
+		"mnemonic": "Noise To Signal Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nom Borehole Diameter": {
+		"splice": false,
+		"mnemonic": "Nom Borehole Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"None": {
+		"splice": false,
+		"mnemonic": "None",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Normal Moveout": {
+		"splice": false,
+		"mnemonic": "Normal Moveout",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Normalization Factor": {
+		"splice": false,
+		"mnemonic": "Normalization Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"North Departure": {
+		"splice": false,
+		"mnemonic": "North Departure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Nuclear Magnetic Data Density": {
+		"splice": false,
+		"mnemonic": "Nuclear Magnetic Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Occurrence": {
+		"splice": false,
+		"mnemonic": "Occurrence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Occurrence Probability": {
+		"splice": false,
+		"mnemonic": "Occurrence Probability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Offset": {
+		"splice": false,
+		"mnemonic": "Offset",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Density": {
+		"splice": false,
+		"mnemonic": "Oil Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Flowrate": {
+		"splice": false,
+		"mnemonic": "Oil Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Formation Volume Factor": {
+		"splice": false,
+		"mnemonic": "Oil Formation Volume Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Gas Ratio": {
+		"splice": false,
+		"mnemonic": "Oil Gas Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Holdup": {
+		"splice": false,
+		"mnemonic": "Oil Holdup",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Mass Flowrate": {
+		"splice": false,
+		"mnemonic": "Oil Mass Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Probability": {
+		"splice": false,
+		"mnemonic": "Oil Probability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Saturation": {
+		"splice": false,
+		"mnemonic": "Oil Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Temperature": {
+		"splice": false,
+		"mnemonic": "Oil Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Viscosity": {
+		"splice": false,
+		"mnemonic": "Oil Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oil Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VOIL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"One Way Time": {
+		"splice": false,
+		"mnemonic": "One Way Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Open Fraction": {
+		"splice": false,
+		"mnemonic": "Open Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Operating Mode": {
+		"splice": false,
+		"mnemonic": "Operating Mode",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Optical Density": {
+		"splice": false,
+		"mnemonic": "Optical Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Optical Wave Length": {
+		"splice": false,
+		"mnemonic": "Optical Wave Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ordinal Number": {
+		"splice": false,
+		"mnemonic": "Ordinal Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Orientation": {
+		"splice": false,
+		"mnemonic": "Orientation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Orifice Meter Gas Temperature": {
+		"splice": false,
+		"mnemonic": "Orifice Meter Gas Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Phosphorus Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPHO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Orthoclase Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VORTH",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Output Pressure": {
+		"splice": false,
+		"mnemonic": "Output Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Outside Diameter": {
+		"splice": false,
+		"mnemonic": "Outside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ovality": {
+		"splice": false,
+		"mnemonic": "Ovality",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Oxygen Yield": {
+		"splice": true,
+		"mnemonic": "YOXY",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pad Force": {
+		"splice": false,
+		"mnemonic": "Pad Force",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pad Pressure": {
+		"splice": false,
+		"mnemonic": "Pad Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Parallel Porosity Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VPARA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Partial Density": {
+		"splice": false,
+		"mnemonic": "Partial Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pattern Name": {
+		"splice": false,
+		"mnemonic": "Pattern Name",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Penetration Depth": {
+		"splice": false,
+		"mnemonic": "Penetration Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Penetration Per Rotation": {
+		"splice": false,
+		"mnemonic": "Penetration Per Rotation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Penetration Rate": {
+		"splice": false,
+		"mnemonic": "Penetration Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Period": {
+		"splice": false,
+		"mnemonic": "Period",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Permeability": {
+		"splice": false,
+		"mnemonic": "Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Permeability Thickness": {
+		"splice": false,
+		"mnemonic": "Permeability Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Permittivity": {
+		"splice": false,
+		"mnemonic": "Permittivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ph": {
+		"splice": false,
+		"mnemonic": "Ph",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Phase Shift": {
+		"splice": false,
+		"mnemonic": "Phase Shift",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Phase Shift Resistivity": {
+		"splice": false,
+		"mnemonic": "Phase Shift Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Potassium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPOT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Phosphorus Yield": {
+		"splice": true,
+		"mnemonic": "YPHOS",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Photoelectric Factor": {
+		"splice": false,
+		"mnemonic": "Photoelectric Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pickup Hook Load": {
+		"splice": false,
+		"mnemonic": "Pickup Hook Load",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pipe Inside Diameter": {
+		"splice": false,
+		"mnemonic": "Pipe Inside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pipe Outside Diameter": {
+		"splice": false,
+		"mnemonic": "Pipe Outside Diameter",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pitch Length": {
+		"splice": false,
+		"mnemonic": "Pitch Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Plane Angle": {
+		"splice": false,
+		"mnemonic": "Plane Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Plastic Viscosity": {
+		"splice": false,
+		"mnemonic": "Plastic Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Poisson Ratio": {
+		"splice": false,
+		"mnemonic": "Poisson Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pore Pressure": {
+		"splice": false,
+		"mnemonic": "Pore Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pore Pressure Gradient": {
+		"splice": false,
+		"mnemonic": "Pore Pressure Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Porosity": {
+		"splice": true,
+		"mnemonic": "PHIT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Porosity Correction": {
+		"splice": false,
+		"mnemonic": "Porosity Correction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Potash Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VPOT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Potassium Chloride Yield": {
+		"splice": true,
+		"mnemonic": "YPOTCL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Potassium Concentration": {
+		"splice": true,
+		"mnemonic": "POTA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pyrite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPYR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Potassium Yield": {
+		"splice": true,
+		"mnemonic": "YPOT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Power": {
+		"splice": false,
+		"mnemonic": "Power",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pressure": {
+		"splice": false,
+		"mnemonic": "Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pressure Digit": {
+		"splice": false,
+		"mnemonic": "Pressure Digit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pressure Gradient": {
+		"splice": false,
+		"mnemonic": "Pressure Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pressure Loss": {
+		"splice": false,
+		"mnemonic": "Pressure Loss",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pressure Rate": {
+		"splice": false,
+		"mnemonic": "Pressure Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Primary Porosity": {
+		"splice": false,
+		"mnemonic": "Primary Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Probability": {
+		"splice": false,
+		"mnemonic": "Probability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Processing Option": {
+		"splice": false,
+		"mnemonic": "Processing Option",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Productivity Index": {
+		"splice": false,
+		"mnemonic": "Productivity Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Profile Conductance": {
+		"splice": false,
+		"mnemonic": "Profile Conductance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Profile Conductivity": {
+		"splice": false,
+		"mnemonic": "Profile Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Profile Resistivity": {
+		"splice": false,
+		"mnemonic": "Profile Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Proportion": {
+		"splice": false,
+		"mnemonic": "Proportion",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Proppant Concentration": {
+		"splice": true,
+		"mnemonic": "PRCO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Proppant Density": {
+		"splice": false,
+		"mnemonic": "Proppant Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pseudocritical Pressure": {
+		"splice": false,
+		"mnemonic": "Pseudocritical Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pseudocritical Temperature": {
+		"splice": false,
+		"mnemonic": "Pseudocritical Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pumping Time": {
+		"splice": false,
+		"mnemonic": "Pumping Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Qfm Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WQFM",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Pyrite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VPYRI",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Quartz Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WQUA",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Qfm Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VQFM",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Quality Factor": {
+		"splice": false,
+		"mnemonic": "Quality Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Quality Indicator": {
+		"splice": false,
+		"mnemonic": "Quality Indicator",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rhodochrosite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WRHD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Quartz Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VQUAR",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Radius": {
+		"splice": false,
+		"mnemonic": "Radius",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ratio": {
+		"splice": false,
+		"mnemonic": "Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Reciprocal Time": {
+		"splice": false,
+		"mnemonic": "Reciprocal Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Reflection Coefficient": {
+		"splice": false,
+		"mnemonic": "Reflection Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Refractive Index": {
+		"splice": false,
+		"mnemonic": "Refractive Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Regularization Factor": {
+		"splice": false,
+		"mnemonic": "Regularization Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Bearing": {
+		"splice": false,
+		"mnemonic": "Relative Bearing",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Dip Angle": {
+		"splice": false,
+		"mnemonic": "Relative Dip Angle",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Dip Azimuth": {
+		"splice": false,
+		"mnemonic": "Relative Dip Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Fluorescence": {
+		"splice": false,
+		"mnemonic": "Relative Fluorescence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Permeability": {
+		"splice": false,
+		"mnemonic": "Relative Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Permeability Gas": {
+		"splice": false,
+		"mnemonic": "Relative Permeability Gas",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Permeability Oil": {
+		"splice": false,
+		"mnemonic": "Relative Permeability Oil",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Permeability Water": {
+		"splice": false,
+		"mnemonic": "Relative Permeability Water",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relative Reflection Intensity": {
+		"splice": false,
+		"mnemonic": "Relative Reflection Intensity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relaxation Time": {
+		"splice": false,
+		"mnemonic": "Relaxation Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Relaxation Time Ratio": {
+		"splice": false,
+		"mnemonic": "Relaxation Time Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Remarks": {
+		"splice": false,
+		"mnemonic": "Remarks",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Reservoir Fluid Compressibility": {
+		"splice": false,
+		"mnemonic": "Reservoir Fluid Compressibility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Reservoir Fluid Density": {
+		"splice": false,
+		"mnemonic": "Reservoir Fluid Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Residual Gas Saturation": {
+		"splice": false,
+		"mnemonic": "Residual Gas Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Residual Hydrocarbon Saturation": {
+		"splice": false,
+		"mnemonic": "Residual Hydrocarbon Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Residual Hydrocarbon Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VXHYD",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Residual Oil Saturation": {
+		"splice": false,
+		"mnemonic": "Residual Oil Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistance": {
+		"splice": false,
+		"mnemonic": "Resistance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistance Gradient": {
+		"splice": false,
+		"mnemonic": "Resistance Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistive Inclusion Contrast": {
+		"splice": false,
+		"mnemonic": "Resistive Inclusion Contrast",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistivity": {
+		"splice": false,
+		"mnemonic": "Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistivity Data Density": {
+		"splice": false,
+		"mnemonic": "Resistivity Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistivity Index": {
+		"splice": false,
+		"mnemonic": "Resistivity Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resistivity Time After Bit": {
+		"splice": false,
+		"mnemonic": "Resistivity Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Resolution": {
+		"splice": false,
+		"mnemonic": "Resolution",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Response Frequency": {
+		"splice": false,
+		"mnemonic": "Response Frequency",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Salt Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSALT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rig Heave": {
+		"splice": false,
+		"mnemonic": "Rig Heave",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rms Velocity": {
+		"splice": false,
+		"mnemonic": "Rms Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rotary Speed": {
+		"splice": false,
+		"mnemonic": "Rotary Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rotating Weight": {
+		"splice": false,
+		"mnemonic": "Rotating Weight",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rotation": {
+		"splice": false,
+		"mnemonic": "Rotation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rotation Gradient": {
+		"splice": false,
+		"mnemonic": "Rotation Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Rugosity": {
+		"splice": false,
+		"mnemonic": "Rugosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Run Number": {
+		"splice": false,
+		"mnemonic": "Run Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Running Speed": {
+		"splice": false,
+		"mnemonic": "Running Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Russian Gamma Ray": {
+		"splice": true,
+		"mnemonic": "GR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Salinity": {
+		"splice": false,
+		"mnemonic": "Salinity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Samarium Yield": {
+		"splice": true,
+		"mnemonic": "YSAM",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sample Count": {
+		"splice": false,
+		"mnemonic": "Sample Count",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sample Number": {
+		"splice": false,
+		"mnemonic": "Sample Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sampling Duration": {
+		"splice": false,
+		"mnemonic": "Sampling Duration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sandstone Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VSAND",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Saturation Exponent": {
+		"splice": false,
+		"mnemonic": "Saturation Exponent",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Secondary Porosity": {
+		"splice": false,
+		"mnemonic": "Secondary Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sediment And Water": {
+		"splice": false,
+		"mnemonic": "Sediment And Water",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Seismic Offset": {
+		"splice": false,
+		"mnemonic": "Seismic Offset",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Semblance": {
+		"splice": false,
+		"mnemonic": "Semblance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Semi Major Axis": {
+		"splice": false,
+		"mnemonic": "Semi Major Axis",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Semi Minor Axis": {
+		"splice": false,
+		"mnemonic": "Semi Minor Axis",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sensitivity": {
+		"splice": false,
+		"mnemonic": "Sensitivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sensor Azimuth": {
+		"splice": false,
+		"mnemonic": "Sensor Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sensor Standoff": {
+		"splice": false,
+		"mnemonic": "Sensor Standoff",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sensor Start Time": {
+		"splice": false,
+		"mnemonic": "Sensor Start Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sensor Temperature": {
+		"splice": false,
+		"mnemonic": "Sensor Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Separator Temperature": {
+		"splice": false,
+		"mnemonic": "Separator Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Serial Number": {
+		"splice": false,
+		"mnemonic": "Serial Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Service Date": {
+		"splice": false,
+		"mnemonic": "Service Date",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Setting Force": {
+		"splice": false,
+		"mnemonic": "Setting Force",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shale Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VSHAL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			4,
+			209,
+			86
+		],
+		"thickness": 1
+	},
+	"Shallow Conductivity": {
+		"splice": false,
+		"mnemonic": "Shallow Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shallow Laterolog Conductivity": {
+		"splice": false,
+		"mnemonic": "Shallow Laterolog Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shallow Laterolog Resistivity": {
+		"splice": false,
+		"mnemonic": "Shallow Laterolog Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shallow Normal Resistivity": {
+		"splice": false,
+		"mnemonic": "Shallow Normal Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shallow Resistivity": {
+		"splice": false,
+		"mnemonic": "Shallow Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shape": {
+		"splice": false,
+		"mnemonic": "Shape",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Compressional Slowness Ratio": {
+		"splice": false,
+		"mnemonic": "Shear Compressional Slowness Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Compressional Velocity Ratio": {
+		"splice": false,
+		"mnemonic": "Shear Compressional Velocity Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Failure Mode": {
+		"splice": false,
+		"mnemonic": "Shear Failure Mode",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Modulus": {
+		"splice": false,
+		"mnemonic": "Shear Modulus",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Slowness": {
+		"splice": false,
+		"mnemonic": "Shear Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Stress": {
+		"splice": false,
+		"mnemonic": "Shear Stress",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shear Velocity": {
+		"splice": false,
+		"mnemonic": "Shear Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shock Level": {
+		"splice": false,
+		"mnemonic": "Shock Level",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shock Rate": {
+		"splice": false,
+		"mnemonic": "Shock Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Shrinkage Factor": {
+		"splice": false,
+		"mnemonic": "Shrinkage Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Silicon Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Siderite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSID",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Siderite Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VSIDE",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Signal Amplitude": {
+		"splice": false,
+		"mnemonic": "Signal Amplitude",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Signal To Noise Ratio": {
+		"splice": false,
+		"mnemonic": "Signal To Noise Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sodium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSOD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Silicon Yield": {
+		"splice": true,
+		"mnemonic": "YSIL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Silt Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VSILT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Slackoff Hook Load": {
+		"splice": false,
+		"mnemonic": "Slackoff Hook Load",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Slew Rate": {
+		"splice": false,
+		"mnemonic": "Slew Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Slippage Velocity": {
+		"splice": false,
+		"mnemonic": "Slippage Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Slope": {
+		"splice": false,
+		"mnemonic": "Slope",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Slowness Time Coherence": {
+		"splice": false,
+		"mnemonic": "Slowness Time Coherence",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sodium Chloride Yield": {
+		"splice": true,
+		"mnemonic": "YSODCL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sulfur Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSUL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sodium Yield": {
+		"splice": true,
+		"mnemonic": "YSOD",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Solution Gas Oil Ratio": {
+		"splice": false,
+		"mnemonic": "Solution Gas Oil Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Data Density": {
+		"splice": false,
+		"mnemonic": "Sonic Data Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Porosity": {
+		"splice": false,
+		"mnemonic": "Sonic Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Porosity Dolomite": {
+		"splice": false,
+		"mnemonic": "Sonic Porosity Dolomite",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Porosity Limestone": {
+		"splice": false,
+		"mnemonic": "Sonic Porosity Limestone",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Porosity Sandstone": {
+		"splice": false,
+		"mnemonic": "Sonic Porosity Sandstone",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sonic Time After Bit": {
+		"splice": false,
+		"mnemonic": "Sonic Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Specific Acoustic Impedance": {
+		"splice": false,
+		"mnemonic": "Specific Acoustic Impedance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Spectral Fluorescence Intensity": {
+		"splice": false,
+		"mnemonic": "Spectral Fluorescence Intensity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Spherically Focused Conductivity": {
+		"splice": false,
+		"mnemonic": "Spherically Focused Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Spherically Focused Resistivity": {
+		"splice": false,
+		"mnemonic": "Spherically Focused Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Spinner Speed": {
+		"splice": false,
+		"mnemonic": "Spinner Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Spontaneous Potential": {
+		"splice": false,
+		"mnemonic": "Spontaneous Potential",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stage Volume": {
+		"splice": false,
+		"mnemonic": "Stage Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Standard Deviation": {
+		"splice": false,
+		"mnemonic": "Standard Deviation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Standoff": {
+		"splice": false,
+		"mnemonic": "Standoff",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Standoff Porosity": {
+		"splice": false,
+		"mnemonic": "Standoff Porosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Standpipe Pressure": {
+		"splice": false,
+		"mnemonic": "Standpipe Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Start Time": {
+		"splice": false,
+		"mnemonic": "Start Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Station Number": {
+		"splice": false,
+		"mnemonic": "Station Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Statistical Property": {
+		"splice": false,
+		"mnemonic": "Statistical Property",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Status": {
+		"splice": false,
+		"mnemonic": "Status",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stoneley Slowness": {
+		"splice": false,
+		"mnemonic": "Stoneley Slowness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stress": {
+		"splice": false,
+		"mnemonic": "Stress",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stress Gradient": {
+		"splice": false,
+		"mnemonic": "Stress Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stretch": {
+		"splice": false,
+		"mnemonic": "Stretch",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stroke Count": {
+		"splice": false,
+		"mnemonic": "Stroke Count",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stroke Rate": {
+		"splice": false,
+		"mnemonic": "Stroke Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Stroke Volume": {
+		"splice": false,
+		"mnemonic": "Stroke Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Strontium Yield": {
+		"splice": true,
+		"mnemonic": "YSTR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Subsea Vertical Depth": {
+		"splice": false,
+		"mnemonic": "Subsea Vertical Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thorium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WTHOR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Sulfur Yield": {
+		"splice": true,
+		"mnemonic": "YSUL",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Surface Cable Tension": {
+		"splice": false,
+		"mnemonic": "Surface Cable Tension",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Surface Temperature": {
+		"splice": false,
+		"mnemonic": "Surface Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Surface Torque": {
+		"splice": false,
+		"mnemonic": "Surface Torque",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Surface Weight On Bit": {
+		"splice": false,
+		"mnemonic": "Surface Weight On Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Survey Type": {
+		"splice": false,
+		"mnemonic": "Survey Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Synthetic Seismic Section": {
+		"splice": false,
+		"mnemonic": "Synthetic Seismic Section",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Synthetic Seismogram": {
+		"splice": false,
+		"mnemonic": "Synthetic Seismogram",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tar Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VTAR",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Temperature": {
+		"splice": false,
+		"mnemonic": "Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Temperature Rate": {
+		"splice": false,
+		"mnemonic": "Temperature Rate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tensile Failure Mode": {
+		"splice": false,
+		"mnemonic": "Tensile Failure Mode",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tensile Strength": {
+		"splice": false,
+		"mnemonic": "Tensile Strength",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tension": {
+		"splice": false,
+		"mnemonic": "Tension",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Test Depth": {
+		"splice": false,
+		"mnemonic": "Test Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Test Number": {
+		"splice": false,
+		"mnemonic": "Test Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thermal Gradient": {
+		"splice": false,
+		"mnemonic": "Thermal Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thermal Neutron Decay Time": {
+		"splice": false,
+		"mnemonic": "Thermal Neutron Decay Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thermal Neutron Near Far Ratio": {
+		"splice": false,
+		"mnemonic": "Thermal Neutron Near Far Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thermal Neutron Porosity": {
+		"splice": true,
+		"mnemonic": "TNPH",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thickness": {
+		"splice": false,
+		"mnemonic": "Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thickness Loss": {
+		"splice": false,
+		"mnemonic": "Thickness Loss",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thomsen Delta": {
+		"splice": false,
+		"mnemonic": "Thomsen Delta",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thomsen Epsilon": {
+		"splice": false,
+		"mnemonic": "Thomsen Epsilon",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thomsen Gamma": {
+		"splice": false,
+		"mnemonic": "Thomsen Gamma",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thorium Concentration": {
+		"splice": true,
+		"mnemonic": "THOR",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Titanium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WTI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thorium Potassium Ratio": {
+		"splice": false,
+		"mnemonic": "Thorium Potassium Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Thorium Uranium Ratio": {
+		"splice": false,
+		"mnemonic": "Thorium Uranium Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Threshold": {
+		"splice": false,
+		"mnemonic": "Threshold",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time": {
+		"splice": false,
+		"mnemonic": "Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time After Bit": {
+		"splice": false,
+		"mnemonic": "Time After Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time Constant": {
+		"splice": false,
+		"mnemonic": "Time Constant",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time Increment": {
+		"splice": false,
+		"mnemonic": "Time Increment",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time Interval": {
+		"splice": false,
+		"mnemonic": "Time Interval",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time Per Volume": {
+		"splice": false,
+		"mnemonic": "Time Per Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Time Stamp": {
+		"splice": false,
+		"mnemonic": "Time Stamp",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Uranium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WURAN",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Titanium Yield": {
+		"splice": true,
+		"mnemonic": "YTIT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Azimuth": {
+		"splice": false,
+		"mnemonic": "Tool Azimuth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Background Yield": {
+		"splice": false,
+		"mnemonic": "Tool Background Yield",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Control": {
+		"splice": false,
+		"mnemonic": "Tool Control",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Deviation": {
+		"splice": false,
+		"mnemonic": "Tool Deviation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Deviation X": {
+		"splice": false,
+		"mnemonic": "Tool Deviation X",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Deviation Y": {
+		"splice": false,
+		"mnemonic": "Tool Deviation Y",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Rotation Speed": {
+		"splice": false,
+		"mnemonic": "Tool Rotation Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Speed": {
+		"splice": false,
+		"mnemonic": "Tool Speed",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Status": {
+		"splice": false,
+		"mnemonic": "Tool Status",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tool Temperature": {
+		"splice": false,
+		"mnemonic": "Tool Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Toolface": {
+		"splice": false,
+		"mnemonic": "Toolface",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Top Depth": {
+		"splice": false,
+		"mnemonic": "Top Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Torque": {
+		"splice": false,
+		"mnemonic": "Torque",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Total Flowrate": {
+		"splice": false,
+		"mnemonic": "Total Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Total Porosity": {
+		"splice": true,
+		"mnemonic": "PHIT",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Trace Length": {
+		"splice": false,
+		"mnemonic": "Trace Length",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Trajectory": {
+		"splice": false,
+		"mnemonic": "Trajectory",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Transit Time": {
+		"splice": false,
+		"mnemonic": "Transit Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Transmission Coefficient": {
+		"splice": false,
+		"mnemonic": "Transmission Coefficient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Transverse Relaxation Time": {
+		"splice": false,
+		"mnemonic": "Transverse Relaxation Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Trona Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VTRO",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"True Stratigraphic Thickness": {
+		"splice": false,
+		"mnemonic": "True Stratigraphic Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"True Vertical Depth": {
+		"splice": false,
+		"mnemonic": "True Vertical Depth",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"True Vertical Thickness": {
+		"splice": false,
+		"mnemonic": "True Vertical Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Tube Wall Thickness": {
+		"splice": false,
+		"mnemonic": "Tube Wall Thickness",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Two Way Time": {
+		"splice": false,
+		"mnemonic": "Two Way Time",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Type": {
+		"splice": false,
+		"mnemonic": "Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Ultrasonic Caliper": {
+		"splice": false,
+		"mnemonic": "Ultrasonic Caliper",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Uncertainty": {
+		"splice": false,
+		"mnemonic": "Uncertainty",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Bound Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUBWA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Dissolved Salt Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUDS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Free Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUFW",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Gas Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUGAS",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Hydrocarbon Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUHYD",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Irreducible Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUIWA",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Oil Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUOIL",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Undisturbed Zone Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VUWAT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Unit Code": {
+		"splice": false,
+		"mnemonic": "Unit Code",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Uranium Concentration": {
+		"splice": true,
+		"mnemonic": "URAN",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Dry Weight Fraction": {
+		"splice": false,
+		"mnemonic": "Dry Weight Fraction",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Uranium Potassium Ratio": {
+		"splice": false,
+		"mnemonic": "Uranium Potassium Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Value Number": {
+		"splice": false,
+		"mnemonic": "Value Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Variance": {
+		"splice": false,
+		"mnemonic": "Variance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Velocity": {
+		"splice": false,
+		"mnemonic": "Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Vertical Formation Resistivity": {
+		"splice": false,
+		"mnemonic": "Vertical Formation Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Vertical Permeability": {
+		"splice": false,
+		"mnemonic": "Vertical Permeability",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Vertical Rotation": {
+		"splice": false,
+		"mnemonic": "Vertical Rotation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Vertical Section": {
+		"splice": false,
+		"mnemonic": "Vertical Section",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Viscosity": {
+		"splice": false,
+		"mnemonic": "Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Vitrinite Reflectance": {
+		"splice": false,
+		"mnemonic": "Vitrinite Reflectance",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Volume": {
+		"splice": false,
+		"mnemonic": "Volume",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VVOLM",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Volume Safety Factor": {
+		"splice": false,
+		"mnemonic": "Volume Safety Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Volumetric Photoelectric Factor": {
+		"splice": false,
+		"mnemonic": "Volumetric Photoelectric Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Von Mises Stress": {
+		"splice": false,
+		"mnemonic": "Von Mises Stress",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Von Mises To Yield Ratio": {
+		"splice": false,
+		"mnemonic": "Von Mises To Yield Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Conductivity": {
+		"splice": false,
+		"mnemonic": "Water Conductivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Density": {
+		"splice": false,
+		"mnemonic": "Water Density",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Flow Velocity": {
+		"splice": false,
+		"mnemonic": "Water Flow Velocity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Flowrate": {
+		"splice": false,
+		"mnemonic": "Water Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Formation Volume Factor": {
+		"splice": false,
+		"mnemonic": "Water Formation Volume Factor",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Holdup": {
+		"splice": false,
+		"mnemonic": "Water Holdup",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Mass Flowrate": {
+		"splice": false,
+		"mnemonic": "Water Mass Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Oil Ratio": {
+		"splice": false,
+		"mnemonic": "Water Oil Ratio",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Resistivity": {
+		"splice": false,
+		"mnemonic": "Water Resistivity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Salinity": {
+		"splice": false,
+		"mnemonic": "Water Salinity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Saturation": {
+		"splice": false,
+		"mnemonic": "Water Saturation",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Viscosibility": {
+		"splice": false,
+		"mnemonic": "Water Viscosibility",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Viscosity": {
+		"splice": false,
+		"mnemonic": "Water Viscosity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Water Volume Fraction": {
+		"splice": true,
+		"mnemonic": "VWAT",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Wave Differential Energy": {
+		"splice": false,
+		"mnemonic": "Wave Differential Energy",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Weight": {
+		"splice": false,
+		"mnemonic": "Weight",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Weight On Bit": {
+		"splice": false,
+		"mnemonic": "Weight On Bit",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Well Test Type": {
+		"splice": false,
+		"mnemonic": "Well Test Type",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Well Thermal Gradient": {
+		"splice": false,
+		"mnemonic": "Well Thermal Gradient",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Wellhead Gas Flowrate": {
+		"splice": false,
+		"mnemonic": "Wellhead Gas Flowrate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Wellhead Pressure": {
+		"splice": false,
+		"mnemonic": "Wellhead Pressure",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Wellhead Temperature": {
+		"splice": false,
+		"mnemonic": "Wellhead Temperature",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Wettability Index": {
+		"splice": false,
+		"mnemonic": "Wettability Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"X Acceleration": {
+		"splice": false,
+		"mnemonic": "X Acceleration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"X Coordinate": {
+		"splice": false,
+		"mnemonic": "X Coordinate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"X Displacement": {
+		"splice": false,
+		"mnemonic": "X Displacement",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"X Gravity": {
+		"splice": false,
+		"mnemonic": "X Gravity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"X Magnetometer": {
+		"splice": false,
+		"mnemonic": "X Magnetometer",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Y Acceleration": {
+		"splice": false,
+		"mnemonic": "Y Acceleration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Y Coordinate": {
+		"splice": false,
+		"mnemonic": "Y Coordinate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Y Displacement": {
+		"splice": false,
+		"mnemonic": "Y Displacement",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Y Gravity": {
+		"splice": false,
+		"mnemonic": "Y Gravity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Y Magnetometer": {
+		"splice": false,
+		"mnemonic": "Y Magnetometer",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Yield Stress": {
+		"splice": false,
+		"mnemonic": "Yield Stress",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Young Modulus": {
+		"splice": false,
+		"mnemonic": "Young Modulus",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Z Acceleration": {
+		"splice": false,
+		"mnemonic": "Z Acceleration",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Z Coordinate": {
+		"splice": false,
+		"mnemonic": "Z Coordinate",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Z Gravity": {
+		"splice": false,
+		"mnemonic": "Z Gravity",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Z Magnetometer": {
+		"splice": false,
+		"mnemonic": "Z Magnetometer",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Zone Number": {
+		"splice": false,
+		"mnemonic": "Zone Number",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	}
+}

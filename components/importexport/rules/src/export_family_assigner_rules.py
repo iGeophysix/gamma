@@ -3,8 +3,8 @@ import json
 import os
 
 SOURCE_FAMASS_BOOK = os.path.join(os.path.dirname(__file__), 'PWLS v3.0 Logs.xlsx')
-EXPORT_FAMASS_FILE = os.path.join(os.path.dirname(__file__), 'FamilyAssignment.json')
-EXPORT_TOOLS_FILE = os.path.join(os.path.dirname(__file__), 'LoggingTools.json')
+EXPORT_FAMASS_FILE = os.path.join(os.path.dirname(__file__), '..', 'FamilyAssignment.json')
+EXPORT_TOOLS_FILE = os.path.join(os.path.dirname(__file__), '..', 'LoggingTools.json')
 
 
 def capitalize(s):
