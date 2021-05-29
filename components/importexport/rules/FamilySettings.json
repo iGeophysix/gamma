@@ -19,7 +19,7 @@
 		"max": null,
 		"unit": null,
 		"color": [
-			1,
+			0,
 			0,
 			0
 		],
@@ -27,7 +27,7 @@
 	},
 	"Acceleration": {
 		"splice": false,
-		"mnemonic": "Acceleration",
+		"mnemonic": "ACC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -40,7 +40,7 @@
 	},
 	"Acoustic Amplitude": {
 		"splice": false,
-		"mnemonic": "Acoustic Amplitude",
+		"mnemonic": "AMPL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -53,7 +53,7 @@
 	},
 	"Acoustic Attenuation Rate": {
 		"splice": false,
-		"mnemonic": "Acoustic Attenuation Rate",
+		"mnemonic": "ATTN",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -66,7 +66,7 @@
 	},
 	"Acoustic Caliper": {
 		"splice": false,
-		"mnemonic": "Acoustic Caliper",
+		"mnemonic": "ARAD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -79,7 +79,7 @@
 	},
 	"Acoustic Dispersion": {
 		"splice": false,
-		"mnemonic": "Acoustic Dispersion",
+		"mnemonic": "ACDSPN",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -92,7 +92,7 @@
 	},
 	"Acoustic Energy": {
 		"splice": false,
-		"mnemonic": "Acoustic Energy",
+		"mnemonic": "ACENER",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -105,7 +105,7 @@
 	},
 	"Acoustic Impedance": {
 		"splice": false,
-		"mnemonic": "Acoustic Impedance",
+		"mnemonic": "AIMP",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -118,7 +118,7 @@
 	},
 	"Acoustic Quality Indicator": {
 		"splice": false,
-		"mnemonic": "Acoustic Quality Indicator",
+		"mnemonic": "QP",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -131,7 +131,7 @@
 	},
 	"Acoustic Slowness": {
 		"splice": false,
-		"mnemonic": "Acoustic Slowness",
+		"mnemonic": "DTC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -144,7 +144,7 @@
 	},
 	"Acoustic Travel Time": {
 		"splice": false,
-		"mnemonic": "Acoustic Travel Time",
+		"mnemonic": "TT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -157,7 +157,7 @@
 	},
 	"Acoustic Velocity": {
 		"splice": false,
-		"mnemonic": "Acoustic Velocity",
+		"mnemonic": "VELO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -196,7 +196,7 @@
 	},
 	"Activity Code": {
 		"splice": false,
-		"mnemonic": "Activity Code",
+		"mnemonic": "ACTC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -220,9 +220,9 @@
 		],
 		"thickness": 1
 	},
-	"Albite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Albite Dry Weight Fraction",
+	"Aluminum Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WAL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -235,7 +235,7 @@
 	},
 	"Albite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ALBI",
+		"mnemonic": "VALBI",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -247,8 +247,8 @@
 		"thickness": 1
 	},
 	"Aluminum Concentration": {
-		"splice": false,
-		"mnemonic": "Aluminum Concentration",
+		"splice": true,
+		"mnemonic": "ALUM",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -259,9 +259,9 @@
 		],
 		"thickness": 1
 	},
-	"Aluminum Dry Weight Fraction": {
+	"Albite Dry Weight Fraction": {
 		"splice": false,
-		"mnemonic": "Aluminum Dry Weight Fraction",
+		"mnemonic": "WALB",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -273,8 +273,8 @@
 		"thickness": 1
 	},
 	"Aluminum Yield": {
-		"splice": false,
-		"mnemonic": "Aluminum Yield",
+		"splice": true,
+		"mnemonic": "YALUM",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -338,8 +338,8 @@
 		"thickness": 1
 	},
 	"Anhydrite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Anhydrite Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WANH",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -352,7 +352,7 @@
 	},
 	"Anhydrite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ANHY",
+		"mnemonic": "VANHY",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -377,8 +377,8 @@
 		"thickness": 1
 	},
 	"Ankerite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Ankerite Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WANK",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -442,8 +442,8 @@
 		"thickness": 1
 	},
 	"Anorthite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Anorthite Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WANO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -572,8 +572,8 @@
 		"thickness": 1
 	},
 	"Apparent Porosity": {
-		"splice": false,
-		"mnemonic": "Apparent Porosity",
+		"splice": true,
+		"mnemonic": "PHIA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -598,8 +598,8 @@
 		"thickness": 1
 	},
 	"Apparent Water Resistivity": {
-		"splice": false,
-		"mnemonic": "Apparent Water Resistivity",
+		"splice": true,
+		"mnemonic": "RWAA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -742,7 +742,7 @@
 	},
 	"Ash Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ASH",
+		"mnemonic": "VASH",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -962,8 +962,8 @@
 		"thickness": 1
 	},
 	"Barium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Barium Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WBARI",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -975,8 +975,8 @@
 		"thickness": 1
 	},
 	"Barium Yield": {
-		"splice": false,
-		"mnemonic": "Barium Yield",
+		"splice": true,
+		"mnemonic": "YBARI",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1093,7 +1093,7 @@
 	},
 	"Biotite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_BIOT",
+		"mnemonic": "VBIOT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -1379,7 +1379,7 @@
 	},
 	"Bound Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_BWAT",
+		"mnemonic": "VBWAT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -1482,8 +1482,8 @@
 		"thickness": 1
 	},
 	"C2h6 Concentration": {
-		"splice": false,
-		"mnemonic": "C2h6 Concentration",
+		"splice": true,
+		"mnemonic": "C2H6",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1495,8 +1495,8 @@
 		"thickness": 1
 	},
 	"C3h8 Concentration": {
-		"splice": false,
-		"mnemonic": "C3h8 Concentration",
+		"splice": true,
+		"mnemonic": "C3H8",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1508,8 +1508,8 @@
 		"thickness": 1
 	},
 	"C4h10 Concentration": {
-		"splice": false,
-		"mnemonic": "C4h10 Concentration",
+		"splice": true,
+		"mnemonic": "C4H10",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1521,8 +1521,8 @@
 		"thickness": 1
 	},
 	"C5h12 Concentration": {
-		"splice": false,
-		"mnemonic": "C5h12 Concentration",
+		"splice": true,
+		"mnemonic": "C5H12",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1546,22 +1546,9 @@
 		],
 		"thickness": 1
 	},
-	"Calcite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Calcite Dry Weight Fraction",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
 	"Calcite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_CALC",
+		"mnemonic": "VCALC",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -1573,8 +1560,8 @@
 		"thickness": 1
 	},
 	"Calcium Concentration": {
-		"splice": false,
-		"mnemonic": "Calcium Concentration",
+		"splice": true,
+		"mnemonic": "CALCIUM",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1586,8 +1573,8 @@
 		"thickness": 1
 	},
 	"Calcium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Calcium Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WCAL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1599,8 +1586,8 @@
 		"thickness": 1
 	},
 	"Calcium Yield": {
-		"splice": false,
-		"mnemonic": "Calcium Yield",
+		"splice": true,
+		"mnemonic": "YCALC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1650,9 +1637,22 @@
 		],
 		"thickness": 1
 	},
-	"Carbon Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Carbon Dry Weight Fraction",
+	"Carbonate Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCARB",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Chlorite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCHL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1677,8 +1677,8 @@
 		"thickness": 1
 	},
 	"Carbon Yield": {
-		"splice": false,
-		"mnemonic": "Carbon Yield",
+		"splice": true,
+		"mnemonic": "YCARB",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1691,7 +1691,7 @@
 	},
 	"Carbonate Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_CARB",
+		"mnemonic": "VCARB",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -1755,8 +1755,8 @@
 		"thickness": 1
 	},
 	"Cation Concentration": {
-		"splice": false,
-		"mnemonic": "Cation Concentration",
+		"splice": true,
+		"mnemonic": "QV",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1885,8 +1885,8 @@
 		"thickness": 1
 	},
 	"Cesium Concentration": {
-		"splice": false,
-		"mnemonic": "Cesium Concentration",
+		"splice": true,
+		"mnemonic": "HCSC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1898,8 +1898,8 @@
 		"thickness": 1
 	},
 	"Ch4 Concentration": {
-		"splice": false,
-		"mnemonic": "Ch4 Concentration",
+		"splice": true,
+		"mnemonic": "CH4",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1923,9 +1923,9 @@
 		],
 		"thickness": 1
 	},
-	"Chlorine Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Chlorine Dry Weight Fraction",
+	"Chromium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCHR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1937,8 +1937,8 @@
 		"thickness": 1
 	},
 	"Chlorine Yield": {
-		"splice": false,
-		"mnemonic": "Chlorine Yield",
+		"splice": true,
+		"mnemonic": "YCHLO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1949,9 +1949,9 @@
 		],
 		"thickness": 1
 	},
-	"Chlorite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Chlorite Dry Weight Fraction",
+	"Clay Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCLA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1964,7 +1964,7 @@
 	},
 	"Chlorite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_CHLO",
+		"mnemonic": "VCHLO",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -1975,9 +1975,9 @@
 		],
 		"thickness": 1
 	},
-	"Chromium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Chromium Dry Weight Fraction",
+	"Chlorine Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCLO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -1989,8 +1989,8 @@
 		"thickness": 1
 	},
 	"Chromium Yield": {
-		"splice": false,
-		"mnemonic": "Chromium Yield",
+		"splice": true,
+		"mnemonic": "YCHRO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2001,9 +2001,9 @@
 		],
 		"thickness": 1
 	},
-	"Clay Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Clay Dry Weight Fraction",
+	"Coal Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2016,7 +2016,7 @@
 	},
 	"Clay Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_CLAY",
+		"mnemonic": "VCLAY",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -2028,8 +2028,8 @@
 		"thickness": 1
 	},
 	"Co2 Concentration": {
-		"splice": false,
-		"mnemonic": "Co2 Concentration",
+		"splice": true,
+		"mnemonic": "CO2",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2053,9 +2053,9 @@
 		],
 		"thickness": 1
 	},
-	"Coal Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Coal Dry Weight Fraction",
+	"Cobalt Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOB",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2068,7 +2068,7 @@
 	},
 	"Coal Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_COAL",
+		"mnemonic": "VCOAL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -2080,8 +2080,8 @@
 		"thickness": 1
 	},
 	"Cobalt Concentration": {
-		"splice": false,
-		"mnemonic": "Cobalt Concentration",
+		"splice": true,
+		"mnemonic": "HCOC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2092,9 +2092,9 @@
 		],
 		"thickness": 1
 	},
-	"Cobalt Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Cobalt Dry Weight Fraction",
+	"Copper Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WCOP",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2106,8 +2106,8 @@
 		"thickness": 1
 	},
 	"Cobalt Yield": {
-		"splice": false,
-		"mnemonic": "Cobalt Yield",
+		"splice": true,
+		"mnemonic": "YCOB",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2326,9 +2326,9 @@
 		],
 		"thickness": 1
 	},
-	"Copper Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Copper Dry Weight Fraction",
+	"Dolomite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WDOL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -2340,8 +2340,8 @@
 		"thickness": 1
 	},
 	"Copper Yield": {
-		"splice": false,
-		"mnemonic": "Copper Yield",
+		"splice": true,
+		"mnemonic": "YCOP",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -3327,9 +3327,9 @@
 		],
 		"thickness": 1
 	},
-	"Dolomite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Dolomite Dry Weight Fraction",
+	"Evaporite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WEVA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -3342,7 +3342,7 @@
 	},
 	"Dolomite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_DOLO",
+		"mnemonic": "VDOLO",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -3498,7 +3498,7 @@
 	},
 	"Dry Clay Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_DCLA",
+		"mnemonic": "VDCLA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -3509,9 +3509,9 @@
 		],
 		"thickness": 1
 	},
-	"Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Dry Weight Fraction",
+	"Iron Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WFE",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -3899,9 +3899,9 @@
 		],
 		"thickness": 1
 	},
-	"Evaporite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Evaporite Dry Weight Fraction",
+	"Gadolinium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WGDL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -3914,7 +3914,7 @@
 	},
 	"Evaporite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_EVAP",
+		"mnemonic": "VEVAP",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -3979,7 +3979,7 @@
 	},
 	"Feldspar Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_FELD",
+		"mnemonic": "VFELD",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4069,8 +4069,8 @@
 		"thickness": 1
 	},
 	"Flag": {
-		"splice": false,
-		"mnemonic": "Flag",
+		"splice": true,
+		"mnemonic": "FLAG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -4136,6 +4136,32 @@
 	"Flowrate Index": {
 		"splice": false,
 		"mnemonic": "Flowrate Index",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Flow Zone Indicator": {
+		"splice": true,
+		"mnemonic": "FZI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Fluid Code": {
+		"splice": true,
+		"mnemonic": "FLUID",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -4304,7 +4330,7 @@
 	},
 	"Flushed Zone Bound Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XBWA",
+		"mnemonic": "VXBWA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4330,7 +4356,7 @@
 	},
 	"Flushed Zone Dissolved Salt Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XDS",
+		"mnemonic": "VXDS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4356,7 +4382,7 @@
 	},
 	"Flushed Zone Fluid Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XSF",
+		"mnemonic": "VXSF",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4369,7 +4395,7 @@
 	},
 	"Flushed Zone Free Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XFW",
+		"mnemonic": "VXFW",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4382,7 +4408,7 @@
 	},
 	"Flushed Zone Gas Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XGAS",
+		"mnemonic": "VXGAS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4408,7 +4434,7 @@
 	},
 	"Flushed Zone Hydrocarbon Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XHC",
+		"mnemonic": "VXHC",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4421,7 +4447,7 @@
 	},
 	"Flushed Zone Irreducible Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XIWA",
+		"mnemonic": "VXIWA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4447,7 +4473,7 @@
 	},
 	"Flushed Zone Obmf Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XOBMF",
+		"mnemonic": "VXOBMF",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4460,7 +4486,7 @@
 	},
 	"Flushed Zone Oil Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XOIL",
+		"mnemonic": "VXOIL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4485,11 +4511,11 @@
 		"thickness": 1
 	},
 	"Flushed Zone Water Saturation": {
-		"splice": false,
-		"mnemonic": "Flushed Zone Water Saturation",
-		"min": null,
-		"max": null,
-		"unit": null,
+		"splice": true,
+		"mnemonic": "SXO",
+		"min": 0,
+		"max": 1,
+		"unit": "v/v",
 		"color": [
 			0,
 			0,
@@ -4499,7 +4525,7 @@
 	},
 	"Flushed Zone Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XWAT",
+		"mnemonic": "VXWAT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -4667,8 +4693,8 @@
 		"thickness": 1
 	},
 	"Fracture Pressure": {
-		"splice": false,
-		"mnemonic": "Fracture Pressure",
+		"splice": true,
+		"mnemonic": "FPRESS",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -4770,9 +4796,9 @@
 		],
 		"thickness": 1
 	},
-	"Gadolinium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Gadolinium Dry Weight Fraction",
+	"Hydrogen Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WHYD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -4784,8 +4810,8 @@
 		"thickness": 1
 	},
 	"Gadolinium Yield": {
-		"splice": false,
-		"mnemonic": "Gadolinium Yield",
+		"splice": true,
+		"mnemonic": "YGAD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -4810,13 +4836,13 @@
 		"thickness": 1
 	},
 	"Gamma Ray": {
-		"splice": false,
-		"mnemonic": "Gamma Ray",
-		"min": null,
-		"max": null,
-		"unit": null,
+		"splice": true,
+		"mnemonic": "GR",
+		"min": 0,
+		"max": 150,
+		"unit": "gAPI",
 		"color": [
-			0,
+			255,
 			0,
 			0
 		],
@@ -5045,7 +5071,7 @@
 	},
 	"Gas Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_GAS",
+		"mnemonic": "VGAS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5084,7 +5110,7 @@
 	},
 	"Glauconite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_GLAU",
+		"mnemonic": "VGLAU",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5162,7 +5188,7 @@
 	},
 	"Gypsum Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_GYPS",
+		"mnemonic": "VGYPS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5174,8 +5200,8 @@
 		"thickness": 1
 	},
 	"H2s Concentration": {
-		"splice": false,
-		"mnemonic": "H2s Concentration",
+		"splice": true,
+		"mnemonic": "H2S",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5201,7 +5227,7 @@
 	},
 	"Halite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_HALI",
+		"mnemonic": "VHALI",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5422,7 +5448,7 @@
 	},
 	"Hydrocarbon Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_HYDC",
+		"mnemonic": "VHYDC",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5433,9 +5459,9 @@
 		],
 		"thickness": 1
 	},
-	"Hydrogen Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Hydrogen Dry Weight Fraction",
+	"Illite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WILL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5460,8 +5486,8 @@
 		"thickness": 1
 	},
 	"Hydrogen Yield": {
-		"splice": false,
-		"mnemonic": "Hydrogen Yield",
+		"splice": true,
+		"mnemonic": "YHYD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5485,35 +5511,9 @@
 		],
 		"thickness": 1
 	},
-	"I C4h10 Concentration": {
-		"splice": false,
-		"mnemonic": "I C4h10 Concentration",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
-	"I C5h12 Concentration": {
-		"splice": false,
-		"mnemonic": "I C5h12 Concentration",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
-	"I C6h14 Concentration": {
-		"splice": false,
-		"mnemonic": "I C6h14 Concentration",
+	"C6h14 Concentration": {
+		"splice": true,
+		"mnemonic": "C6H14",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5539,7 +5539,7 @@
 	},
 	"Igneous Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_IGNE",
+		"mnemonic": "VIGNE",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5550,9 +5550,9 @@
 		],
 		"thickness": 1
 	},
-	"Illite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Illite Dry Weight Fraction",
+	"Kaolinite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WKAO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5565,7 +5565,7 @@
 	},
 	"Illite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ILLI",
+		"mnemonic": "VILLI",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5875,9 +5875,9 @@
 		],
 		"thickness": 1
 	},
-	"Iron Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Iron Dry Weight Fraction",
+	"Magnesium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5889,8 +5889,8 @@
 		"thickness": 1
 	},
 	"Iron Yield": {
-		"splice": false,
-		"mnemonic": "Iron Yield",
+		"splice": true,
+		"mnemonic": "YFE",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5916,7 +5916,7 @@
 	},
 	"Irreducible Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_BVI",
+		"mnemonic": "VBVI",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5929,7 +5929,7 @@
 	},
 	"Isolated Porosity Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ISOL",
+		"mnemonic": "VISOL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -5940,9 +5940,9 @@
 		],
 		"thickness": 1
 	},
-	"Kaolinite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Kaolinite Dry Weight Fraction",
+	"Manganese Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMNG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -5955,7 +5955,7 @@
 	},
 	"Kaolinite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_KAOL",
+		"mnemonic": "VKAOL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -6032,8 +6032,8 @@
 		"thickness": 1
 	},
 	"Latitude": {
-		"splice": false,
-		"mnemonic": "Latitude",
+		"splice": true,
+		"mnemonic": "LAT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6174,6 +6174,19 @@
 		],
 		"thickness": 1
 	},
+	"Lithology Code": {
+		"splice": false,
+		"mnemonic": "LITHO",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
 	"Load": {
 		"splice": false,
 		"mnemonic": "Load",
@@ -6188,8 +6201,8 @@
 		"thickness": 1
 	},
 	"Longitude": {
-		"splice": false,
-		"mnemonic": "Longitude",
+		"splice": true,
+		"mnemonic": "LONG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6226,9 +6239,9 @@
 		],
 		"thickness": 1
 	},
-	"Magnesium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Magnesium Dry Weight Fraction",
+	"Molybdenum Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMOL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6240,8 +6253,8 @@
 		"thickness": 1
 	},
 	"Magnesium Yield": {
-		"splice": false,
-		"mnemonic": "Magnesium Yield",
+		"splice": true,
+		"mnemonic": "YMAG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6356,9 +6369,9 @@
 		],
 		"thickness": 1
 	},
-	"Manganese Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Manganese Dry Weight Fraction",
+	"Montmorillonite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WMON",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6370,8 +6383,8 @@
 		"thickness": 1
 	},
 	"Manganese Yield": {
-		"splice": false,
-		"mnemonic": "Manganese Yield",
+		"splice": true,
+		"mnemonic": "YMANG",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6440,6 +6453,19 @@
 		"min": null,
 		"max": null,
 		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
+	"Matrix Bulk Density": {
+		"splice": false,
+		"mnemonic": "RHOMAA",
+		"min": 1.95,
+		"max": 2.95,
+		"unit": "g/cm3",
 		"color": [
 			0,
 			0,
@@ -6683,7 +6709,7 @@
 	},
 	"Metamorphic Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_META",
+		"mnemonic": "VMETA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -6954,9 +6980,9 @@
 		],
 		"thickness": 1
 	},
-	"Molybdenum Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Molybdenum Dry Weight Fraction",
+	"Nahcolite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNHC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6968,8 +6994,8 @@
 		"thickness": 1
 	},
 	"Molybdenum Yield": {
-		"splice": false,
-		"mnemonic": "Molybdenum Yield",
+		"splice": true,
+		"mnemonic": "YMOLY",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6980,9 +7006,9 @@
 		],
 		"thickness": 1
 	},
-	"Montmorillonite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Montmorillonite Dry Weight Fraction",
+	"Nickel Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNIC",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -6995,7 +7021,7 @@
 	},
 	"Montmorillonite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_MONT",
+		"mnemonic": "VMONT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -7034,7 +7060,7 @@
 	},
 	"Moved Hydrocarbon Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_MHYD",
+		"mnemonic": "VMHYD",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -7320,7 +7346,7 @@
 	},
 	"Muscovite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_MUSC",
+		"mnemonic": "VMUSC",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -7383,48 +7409,9 @@
 		],
 		"thickness": 1
 	},
-	"N C4h10 Concentration": {
-		"splice": false,
-		"mnemonic": "N C4h10 Concentration",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
-	"N C5h12 Concentration": {
-		"splice": false,
-		"mnemonic": "N C5h12 Concentration",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
-	"N C6h14 Concentration": {
-		"splice": false,
-		"mnemonic": "N C6h14 Concentration",
-		"min": null,
-		"max": null,
-		"unit": null,
-		"color": [
-			0,
-			0,
-			0
-		],
-		"thickness": 1
-	},
-	"Nahcolite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Nahcolite Dry Weight Fraction",
+	"Nitrogen Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WNIT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -7533,9 +7520,9 @@
 		"max": 0.45,
 		"unit": "v/v",
 		"color": [
-			4,
-			209,
-			86
+			0,
+			153,
+			255
 		],
 		"thickness": 1
 	},
@@ -7546,9 +7533,9 @@
 		"max": null,
 		"unit": "v/v",
 		"color": [
-			4,
-			209,
-			86
+			0,
+			153,
+			255
 		],
 		"thickness": 1
 	},
@@ -7559,9 +7546,9 @@
 		"max": null,
 		"unit": "v/v",
 		"color": [
-			4,
-			209,
-			86
+			0,
+			153,
+			255
 		],
 		"thickness": 1
 	},
@@ -7572,9 +7559,9 @@
 		"max": null,
 		"unit": "v/v",
 		"color": [
-			4,
-			209,
-			86
+			0,
+			153,
+			255
 		],
 		"thickness": 1
 	},
@@ -7604,9 +7591,9 @@
 		],
 		"thickness": 1
 	},
-	"Nickel Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Nickel Dry Weight Fraction",
+	"Organic Carbon Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WOCAR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -7618,8 +7605,8 @@
 		"thickness": 1
 	},
 	"Nickel Yield": {
-		"splice": false,
-		"mnemonic": "Nickel Yield",
+		"splice": true,
+		"mnemonic": "YNICK",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -7630,9 +7617,9 @@
 		],
 		"thickness": 1
 	},
-	"Nitrogen Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Nitrogen Dry Weight Fraction",
+	"Orthoclase Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WORT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -7657,8 +7644,8 @@
 		"thickness": 1
 	},
 	"Nitrogen Yield": {
-		"splice": false,
-		"mnemonic": "Nitrogen Yield",
+		"splice": true,
+		"mnemonic": "YNITR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8113,7 +8100,7 @@
 	},
 	"Oil Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_OIL",
+		"mnemonic": "VOIL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -8228,9 +8215,9 @@
 		],
 		"thickness": 1
 	},
-	"Orthoclase Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Orthoclase Dry Weight Fraction",
+	"Phosphorus Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPHO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8243,7 +8230,7 @@
 	},
 	"Orthoclase Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_ORTH",
+		"mnemonic": "VORTH",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -8294,8 +8281,8 @@
 		"thickness": 1
 	},
 	"Oxygen Yield": {
-		"splice": false,
-		"mnemonic": "Oxygen Yield",
+		"splice": true,
+		"mnemonic": "YOXY",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8334,7 +8321,7 @@
 	},
 	"Parallel Porosity Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_PARA",
+		"mnemonic": "VPARA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -8501,9 +8488,9 @@
 		],
 		"thickness": 1
 	},
-	"Phosphorus Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Phosphorus Dry Weight Fraction",
+	"Potassium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPOT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8515,8 +8502,8 @@
 		"thickness": 1
 	},
 	"Phosphorus Yield": {
-		"splice": false,
-		"mnemonic": "Phosphorus Yield",
+		"splice": true,
+		"mnemonic": "YPHOS",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8685,7 +8672,7 @@
 	},
 	"Potash Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_POT",
+		"mnemonic": "VPOT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -8697,8 +8684,8 @@
 		"thickness": 1
 	},
 	"Potassium Chloride Yield": {
-		"splice": false,
-		"mnemonic": "Potassium Chloride Yield",
+		"splice": true,
+		"mnemonic": "YPOTCL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8710,8 +8697,8 @@
 		"thickness": 1
 	},
 	"Potassium Concentration": {
-		"splice": false,
-		"mnemonic": "Potassium Concentration",
+		"splice": true,
+		"mnemonic": "POTA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8722,9 +8709,9 @@
 		],
 		"thickness": 1
 	},
-	"Potassium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Potassium Dry Weight Fraction",
+	"Pyrite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WPYR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8736,8 +8723,8 @@
 		"thickness": 1
 	},
 	"Potassium Yield": {
-		"splice": false,
-		"mnemonic": "Potassium Yield",
+		"splice": true,
+		"mnemonic": "YPOT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8931,8 +8918,8 @@
 		"thickness": 1
 	},
 	"Proppant Concentration": {
-		"splice": false,
-		"mnemonic": "Proppant Concentration",
+		"splice": true,
+		"mnemonic": "PRCO",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -8995,9 +8982,9 @@
 		],
 		"thickness": 1
 	},
-	"Pyrite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Pyrite Dry Weight Fraction",
+	"Qfm Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WQFM",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -9010,7 +8997,7 @@
 	},
 	"Pyrite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_PYRI",
+		"mnemonic": "VPYRI",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -9021,9 +9008,9 @@
 		],
 		"thickness": 1
 	},
-	"Qfm Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Qfm Dry Weight Fraction",
+	"Quartz Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WQUA",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -9036,7 +9023,7 @@
 	},
 	"Qfm Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_QFM",
+		"mnemonic": "VQFM",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -9073,9 +9060,9 @@
 		],
 		"thickness": 1
 	},
-	"Quartz Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Quartz Dry Weight Fraction",
+	"Rhodochrosite Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WRHD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -9088,7 +9075,7 @@
 	},
 	"Quartz Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_QUAR",
+		"mnemonic": "VQUAR",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -9387,7 +9374,7 @@
 	},
 	"Residual Hydrocarbon Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_XHYD",
+		"mnemonic": "VXHYD",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -9528,9 +9515,9 @@
 		],
 		"thickness": 1
 	},
-	"Rhodochrosite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Rhodochrosite Dry Weight Fraction",
+	"Salt Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSALT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -9685,8 +9672,8 @@
 		"thickness": 1
 	},
 	"Samarium Yield": {
-		"splice": false,
-		"mnemonic": "Samarium Yield",
+		"splice": true,
+		"mnemonic": "YSAM",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -9736,9 +9723,9 @@
 		],
 		"thickness": 1
 	},
-	"Sand Volume Fraction": {
+	"Sandstone Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_SAND",
+		"mnemonic": "VSAND",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -9959,7 +9946,7 @@
 	},
 	"Shale Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_SHAL",
+		"mnemonic": "VSHAL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -10178,9 +10165,22 @@
 		],
 		"thickness": 1
 	},
+	"Silicon Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSI",
+		"min": null,
+		"max": null,
+		"unit": null,
+		"color": [
+			0,
+			0,
+			0
+		],
+		"thickness": 1
+	},
 	"Siderite Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Siderite Dry Weight Fraction",
+		"splice": true,
+		"mnemonic": "WSID",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10193,7 +10193,7 @@
 	},
 	"Siderite Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_SIDE",
+		"mnemonic": "VSIDE",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -10230,9 +10230,9 @@
 		],
 		"thickness": 1
 	},
-	"Silicon Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Silicon Dry Weight Fraction",
+	"Sodium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSOD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10244,8 +10244,8 @@
 		"thickness": 1
 	},
 	"Silicon Yield": {
-		"splice": false,
-		"mnemonic": "Silicon Yield",
+		"splice": true,
+		"mnemonic": "YSIL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10258,7 +10258,7 @@
 	},
 	"Silt Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_SILT",
+		"mnemonic": "VSILT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -10335,8 +10335,8 @@
 		"thickness": 1
 	},
 	"Sodium Chloride Yield": {
-		"splice": false,
-		"mnemonic": "Sodium Chloride Yield",
+		"splice": true,
+		"mnemonic": "YSODCL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10347,9 +10347,9 @@
 		],
 		"thickness": 1
 	},
-	"Sodium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Sodium Dry Weight Fraction",
+	"Sulfur Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WSUL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10361,8 +10361,8 @@
 		"thickness": 1
 	},
 	"Sodium Yield": {
-		"splice": false,
-		"mnemonic": "Sodium Yield",
+		"splice": true,
+		"mnemonic": "YSOD",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10751,8 +10751,8 @@
 		"thickness": 1
 	},
 	"Strontium Yield": {
-		"splice": false,
-		"mnemonic": "Strontium Yield",
+		"splice": true,
+		"mnemonic": "YSTR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10776,9 +10776,9 @@
 		],
 		"thickness": 1
 	},
-	"Sulfur Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Sulfur Dry Weight Fraction",
+	"Thorium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WTHOR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10790,8 +10790,8 @@
 		"thickness": 1
 	},
 	"Sulfur Yield": {
-		"splice": false,
-		"mnemonic": "Sulfur Yield",
+		"splice": true,
+		"mnemonic": "YSUL",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -10895,7 +10895,7 @@
 	},
 	"Tar Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_TAR",
+		"mnemonic": "VTAR",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11115,8 +11115,8 @@
 		"thickness": 1
 	},
 	"Thorium Concentration": {
-		"splice": false,
-		"mnemonic": "Thorium Concentration",
+		"splice": true,
+		"mnemonic": "THOR",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11127,9 +11127,9 @@
 		],
 		"thickness": 1
 	},
-	"Thorium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Thorium Dry Weight Fraction",
+	"Titanium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WTI",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11270,9 +11270,9 @@
 		],
 		"thickness": 1
 	},
-	"Titanium Dry Weight Fraction": {
-		"splice": false,
-		"mnemonic": "Titanium Dry Weight Fraction",
+	"Uranium Dry Weight Fraction": {
+		"splice": true,
+		"mnemonic": "WURAN",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11284,8 +11284,8 @@
 		"thickness": 1
 	},
 	"Titanium Yield": {
-		"splice": false,
-		"mnemonic": "Titanium Yield",
+		"splice": true,
+		"mnemonic": "YTIT",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11558,7 +11558,7 @@
 	},
 	"Trona Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_TRO",
+		"mnemonic": "VTRO",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11675,7 +11675,7 @@
 	},
 	"Undisturbed Zone Bound Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UBWA",
+		"mnemonic": "VUBWA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11688,7 +11688,7 @@
 	},
 	"Undisturbed Zone Dissolved Salt Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UDS",
+		"mnemonic": "VUDS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11701,7 +11701,7 @@
 	},
 	"Undisturbed Zone Free Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UFW",
+		"mnemonic": "VUFW",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11714,7 +11714,7 @@
 	},
 	"Undisturbed Zone Gas Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UGAS",
+		"mnemonic": "VUGAS",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11727,7 +11727,7 @@
 	},
 	"Undisturbed Zone Hydrocarbon Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UHYD",
+		"mnemonic": "VUHYD",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11740,7 +11740,7 @@
 	},
 	"Undisturbed Zone Irreducible Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UIWA",
+		"mnemonic": "VUIWA",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11753,7 +11753,7 @@
 	},
 	"Undisturbed Zone Oil Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UOIL",
+		"mnemonic": "VUOIL",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11766,7 +11766,7 @@
 	},
 	"Undisturbed Zone Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_UWAT",
+		"mnemonic": "VUWAT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -11791,8 +11791,8 @@
 		"thickness": 1
 	},
 	"Uranium Concentration": {
-		"splice": false,
-		"mnemonic": "Uranium Concentration",
+		"splice": true,
+		"mnemonic": "URAN",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11803,9 +11803,9 @@
 		],
 		"thickness": 1
 	},
-	"Uranium Dry Weight Fraction": {
+	"Dry Weight Fraction": {
 		"splice": false,
-		"mnemonic": "Uranium Dry Weight Fraction",
+		"mnemonic": "Dry Weight Fraction",
 		"min": null,
 		"max": null,
 		"unit": null,
@@ -11961,7 +11961,7 @@
 	},
 	"Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_VOLM",
+		"mnemonic": "VVOLM",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
@@ -12195,7 +12195,7 @@
 	},
 	"Water Volume Fraction": {
 		"splice": true,
-		"mnemonic": "V_WAT",
+		"mnemonic": "VWAT",
 		"min": 0,
 		"max": 1,
 		"unit": "v/v",
