@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pandas as pd
 import scipy.interpolate
@@ -8,7 +10,8 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.petrophysics.curve_operations import get_basic_curve_statistics
+from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
+from settings import DEFAULT_LQC_NAME
 
 LOG_FAMILY_PRIORITY = [
     'Gamma Ray',
@@ -45,7 +48,12 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     results_data = {}
     results_meta = {}
 
-    for family in LOG_FAMILY_PRIORITY:
+    with open(EXPORT_FAMSET_FILE, 'r') as f:
+        FAMILY_SETTINGS = json.load(f)
+
+    for family, family_meta in FAMILY_SETTINGS.items():
+        if not family_meta.get('splice', False):
+            continue
         # select log_names of defined family
         logs_in_family = [l for l in logs.values() if l.meta['family'] == family]
         # if no log_names in of this family - skip
@@ -54,12 +62,19 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         # splice log_names
         spliced = splice_logs_in_family(logs_in_family)
         # define meta information
-        meta = {'basic_statistics': get_basic_curve_statistics(spliced)}
+        # meta = {'basic_statistics': get_basic_curve_statistics(spliced)}
+        meta = {}
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
         meta['family'] = family
-        meta['units'] = logs_in_family[0].meta.units  # TODO: check spliced log units are defined correctly
-        results_data.update({family: spliced})  # Log name will be defined here
-        results_meta.update({family: meta})  # log name will be defined here
+        meta['units'] = family_meta.get('unit', None)
+        meta['display'] = {
+            'min': family_meta.get('min', None),
+            'max': family_meta.get('max', None),
+            'color': family_meta.get('color', [0, 0, 0]),
+            'thickness': family_meta.get('thickness', 1),
+        }
+        results_data.update({family_meta.get('mnemonic', family): spliced})  # Log name will be defined here
+        results_meta.update({family_meta.get('mnemonic', family): meta})  # log name will be defined here
 
     return results_data, results_meta
 
@@ -103,7 +118,7 @@ class SpliceLogsNode(EngineNode):
     """
 
     @staticmethod
-    def calculate_for_well(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = 'Spliced'):
+    def calculate_for_well(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = DEFAULT_LQC_NAME):
         """
             Method to splice logs in a well. Takes logs in datasets and outputs it into a specified output dataset
             :param wellname: Well name as string
@@ -123,11 +138,33 @@ class SpliceLogsNode(EngineNode):
             log.save()
 
     @classmethod
-    def run(cls, output_dataset_name: str = "LQC"):
+    def run(cls, output_dataset_name: str = "LQC", async_job: bool = True):
+        """
+        Run log splicing calculations
+        :param output_dataset_name:
+        :param async_job: run via Celery or in this process
+        :return:
+        """
         p = Project()
-        well_names = p.list_wells()
-        tasks = []
-        for well_name in well_names:
-            tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs={'wellname': well_name, 'tags': ['processing', ], 'output_dataset_name': output_dataset_name}))
+        if async_job:
+            tasks = [
+                celery_app.send_task('tasks.async_splice_logs', kwargs={
+                    'wellname': well_name,
+                    'tags': ['processing', ],
+                    'output_dataset_name': output_dataset_name}
+                                     )
+                for well_name in p.list_wells()
+            ]
+            wait_till_completes(tasks)
+        else:
+            for well_name in p.list_wells():
+                cls.calculate_for_well(**{
+                    'wellname': well_name,
+                    'tags': ['processing', ],
+                    'output_dataset_name': output_dataset_name}
+                                       )
 
-        wait_till_completes(tasks)
+
+if __name__ == '__main__':
+    node = SpliceLogsNode()
+    node.run(async_job=False)

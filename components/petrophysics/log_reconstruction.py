@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import defaultdict
 
@@ -11,6 +12,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
+from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
 from settings import LOGGING_LEVEL
 
 
@@ -160,9 +162,21 @@ class LogReconstructionNode(EngineNode):
             cls.logger.info(f"Well {well_name} misses log of families {log_families_to_train} to predict {log_family_to_predict}")
             return
 
-        new_log = BasicLog(well_dataset.id, f'SYNTH_{log_family_to_predict}')
+        with open(EXPORT_FAMSET_FILE, 'r') as f:
+            family_meta = json.load(f).get(log_family_to_predict, {})
+
+
+        new_log = BasicLog(well_dataset.id, f"SYNTH_{family_meta.get('mnemonic', log_family_to_predict)}")
+
         new_log.values = cls._predict(model, input_logs)
         new_log.meta.family = log_family_to_predict
+        new_log.meta.display = {
+            'min': family_meta.get('min', None),
+            'max': family_meta.get('max', None),
+            'color': family_meta.get('color', [0, 0, 0]),
+            'thickness': family_meta.get('thickness', 1),
+        }
+        new_log.meta.name = f"SYNTH_{family_meta.get('mnemonic', log_family_to_predict)}"
         new_log.meta.units = log_to_predict_units
         new_log.meta.add_tags('reconstructed')
         # TODO: define display parameters # new_log.meta.display = {'color': (255, 0, 0), 'min': 1.7, 'max': 2.8, }
