@@ -56,24 +56,20 @@ class TestLogRestorationNode(TestCase):
                 'depth': 12,
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
-            }
+            },
+            async_job=False
         )
 
         for well_name in well_names_to_predict:
             well = Well(well_name)
             ds = WellDataset(well, 'LQC')
             true_rhob = BasicLog(ds.id, 'RHOB_NORM')
-            synth_rhob = BasicLog(ds.id, 'SYNTH_Bulk Density')
+            synth_rhob = BasicLog(ds.id, 'RHOB_SYNTH')
 
-            misfit = BasicLog(ds.id, 'SYNTH_Bulk Density_MISFIT')
+            misfit = BasicLog(ds.id, 'RHOB_SYNTH_MISFIT')
             # interp true values
             true_rhob_values_interp = interp1d(true_rhob.values[:, 0], true_rhob.values[:, 1])(synth_rhob.values[:, 0])
             misfit.values = np.vstack((synth_rhob.values[:, 0], synth_rhob.values[:, 1] - true_rhob_values_interp)).T
             misfit.meta.family = 'Synthetic Bulk Density Misfit'
             misfit.meta.units = ''
-            # misfit.meta.basic_statistics = get_basic_curve_statistics(misfit.values)
             misfit.save()
-
-            # export data
-            las = create_las_file(well_name, [(ds.name, log) for log in ds.log_list])
-            las.write(f'{well_name}.las', version=2)

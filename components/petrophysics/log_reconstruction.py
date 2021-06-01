@@ -79,7 +79,7 @@ class LogReconstructionNode(EngineNode):
 
         if not well_names_to_train:
             cls.logger.info(f"Not found wells to restore synthetic {log_family_to_predict} on {log_families_to_train}")
-            return
+            return None, None
 
         # get train data
         log_data = pd.DataFrame()
@@ -166,7 +166,7 @@ class LogReconstructionNode(EngineNode):
             family_meta = json.load(f).get(log_family_to_predict, {})
 
 
-        new_log = BasicLog(well_dataset.id, f"SYNTH_{family_meta.get('mnemonic', log_family_to_predict)}")
+        new_log = BasicLog(well_dataset.id, f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH")
 
         new_log.values = cls._predict(model, input_logs)
         new_log.meta.family = log_family_to_predict
@@ -176,10 +176,9 @@ class LogReconstructionNode(EngineNode):
             'color': family_meta.get('color', [0, 0, 0]),
             'thickness': family_meta.get('thickness', 1),
         }
-        new_log.meta.name = f"SYNTH_{family_meta.get('mnemonic', log_family_to_predict)}"
+        new_log.meta.name = f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH"
         new_log.meta.units = log_to_predict_units
         new_log.meta.add_tags('reconstructed')
-        # TODO: define display parameters # new_log.meta.display = {'color': (255, 0, 0), 'min': 1.7, 'max': 2.8, }
         new_log.save()
         cls.logger.info(f'Created synthetic {log_family_to_predict} in well {well_name}')
 
@@ -194,7 +193,8 @@ class LogReconstructionNode(EngineNode):
             # get wells having log families to train and predict in LQC
 
             model, log_to_predict_units = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
-
+            if model is None:
+                continue
             if not async_job:
                 for well_name in well_names:
                     cls.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)
