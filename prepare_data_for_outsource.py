@@ -30,13 +30,14 @@ except Exception as e:
 files_to_copy = [
     "./components/__init__.py",
     "./components/database/__init__.py",
-    "./components/database/settings.py",
+    "./settings.py",
     "./components/database/RedisStorage.py",
     "./components/domain/__init__.py",
     "./components/domain/Log.py",
     "./components/domain/Project.py",
     "./components/domain/Well.py",
     "./components/domain/WellDataset.py",
+    "./components/domain/MarkersSet.py",
     "./components/importexport/__init__.py",
     "./components/importexport/las",
     "./components/importexport/UnitsSystem.py",
@@ -96,7 +97,7 @@ readme_content = \
     python import_data_for_outsource.py
     ```
 
-6. You are now ready to access the data in a Redis db with credentials in `components/database/settings`
+6. You are now ready to access the data in a Redis db with credentials in `settings.py`
 """
 
 
