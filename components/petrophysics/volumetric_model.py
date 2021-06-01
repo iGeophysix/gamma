@@ -73,7 +73,7 @@ class VolumetricModel():
         '''
         useless_logs = set(logs).difference_update(self.supported_log_families())
         if useless_logs:
-            logger.warning(f'the following logs is useless: {useless_logs}')
+            logger.warning(f'the following logs are useless: {useless_logs}')
         # Equation system:
         # log1_response = component1_log1_response * Vcomponent1 + ... + componentN_log1_response * VcomponentN
         # ...
@@ -172,70 +172,49 @@ class VolumetricModelSolverNode(EngineNode):
             {'type': BasicLog, 'meta': {'log_family': 'Neutron Porosity'}, 'optional': True}
         ]
         output = [
-            {'type': BasicLog, 'id': 'VM_MISFIT', 'meta': {'log_family': 'Model Fit Error', 'method': 'Volumetric model solver'}}
+            {'type': BasicLog, 'id': 'VMISFIT', 'meta': {'log_family': 'Model Fit Error', 'method': 'Volumetric model solver'}}
             # plus dynamic set of output logs based on input model_components. How to define?
         ]
 
     @classmethod
-    def validate_input(cls, log_families: Iterable[str], model_components: Iterable[str]) -> None:
+    def validate_input(cls, model_components: Iterable[str]) -> None:
         '''
         Validate inputs
-        :param log_families: list of input log families (see FluidMineralConstants.json)
         :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
-        # check logs amount
-        if not log_families:
-            raise ValueError('presence of at least one input log is mandatory')
-        # check types
-        for family in log_families:
-            if not isinstance(family, str):
-                raise TypeError('all log families must be str')
         for component in model_components:
             if not isinstance(component, str):
                 raise TypeError('all model component names must be str')
-        # check log families and units
-        vm = VolumetricModel()
-        for family in log_families:
-            if family not in vm.supported_log_families():
-                raise ValueError(f'log family {family} is not supported by solver')
 
     @classmethod
-    def run(cls, log_families: Iterable[str], model_components: Iterable[str]) -> None:
+    def run(cls, model_components: Iterable[str]) -> None:
         '''
         Volumetric model solver
-        Creates set of VM_[COMPONENT] logs - volume of a component and VM_MISFIT log - Model Fit Error
-        :param log_families: list of input log families (see FluidMineralConstants.json)
+        Creates set of V[COMPONENT] logs - volume of a component and VMISFIT log - Model Fit Error
         :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
-        cls.validate_input(log_families, model_components)
+        cls.validate_input(model_components)
 
         tasks = []
         for well_name in Project().list_wells():
-            # cls.calculate_for_well(well_name, log_families, model_components)
-            tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, log_families, model_components)))
+            tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, model_components)))
 
         wait_till_completes(tasks)
 
     @staticmethod
-    def calculate_for_well(well_name, log_families, model_components):
+    def calculate_for_well(well_name, model_components):
         vm = VolumetricModel()
-        us = UnitsSystem()
         # pick input logs
         logs = []
-        for family in log_families:
-            log = family_best_log(well_name, family)
+        for family in vm.supported_log_families():
+            log = family_best_log(well_name, family, vm.FAMILY_UNITS[family])
             if log is not None:
                 logs.append(log)
-        if not logs:
-            logger.info(f'well {well_name} has no logs suitable for calculation')
-            return
-        # check logs' units
-        bad_units = False
-        for log in logs:
-            if not us.convertable_units(log.meta.units, vm.FAMILY_UNITS[log.meta.family]):
-                logger.error(f'log {log.name} has inappropriate units {log.meta.units}')
-                bad_units = True
-        if bad_units:
+        if logs:
+            log_list = ', '.join(f'{log.name} [{log.meta.family}]' for log in logs)
+            logger.info(f'input logs in well {well_name}: {log_list}')
+        else:
+            logger.warning(f'well {well_name} has no logs suitable for calculation')
             return
         # bring all logs' values to a common reference
         logs = interpolate_to_common_reference(logs)
@@ -249,8 +228,9 @@ class VolumetricModelSolverNode(EngineNode):
         dataset = logs[0].dataset_id
         # save components' volumes
         for component_name, data in res['COMPONENT_VOLUME'].items():
-            log = BasicLog(dataset_id=dataset, log_id='VM_' + component_name)
-            log.meta.family = vm.component_family(component_name)
+            component_family = vm.component_family(component_name)
+            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[component_family]['mnemonic'])
+            log.meta.family = component_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = 'v/v'
             log.meta.update({'workflow': workflow, 'method': 'Deterministic Computation', 'display_priority': 1})
@@ -266,7 +246,7 @@ class VolumetricModelSolverNode(EngineNode):
             log.meta.update({'workflow': workflow, 'method': 'Forward Modelling', 'display_priority': 2})
             log.save()
         # save misfit
-        log = BasicLog(dataset_id=dataset, log_id='VM_MISFIT')
+        log = BasicLog(dataset_id=dataset, log_id='VMISFIT')
         log.meta.family = 'Model Fit Error'
         log.values = np.vstack((logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
         log.meta.units = 'unitless'
@@ -274,13 +254,15 @@ class VolumetricModelSolverNode(EngineNode):
         log.save()
 
 
-def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Optional[BasicLog]:
+def family_best_log(well_name: str, log_family: Union[str, Iterable[str]], unit: str) -> Optional[BasicLog]:
     '''
     Finds the best log version of the specific family(ies)
     :param well_name: well to search into
     :param log_family: name of a log family or list of acceptable family variants
+    :param unit: acceptable log unit (or convertable to)
     :return: best log or None
     '''
+    us = UnitsSystem()
     best_log = None
     well = Well(well_name)
     dataset = WellDataset(well, 'LQC')
@@ -289,7 +271,8 @@ def family_best_log(well_name: str, log_family: Union[str, Iterable[str]]) -> Op
         best_log_score = float('-inf')
         for log_id in dataset.log_list:
             log = BasicLog(dataset.id, log_id)
-            if hasattr(log.meta, 'family') and log.meta.family in wanted_families:
+            if hasattr(log.meta, 'family') and log.meta.family in wanted_families \
+               and 'reconstructed' not in log.meta.tags and us.convertable_units(log.meta.units, unit):     # all reconstructed logs are excluded for now
                 log_score = score_log_tags(log.meta.tags)
                 if log_score > best_log_score:
                     best_log_score = log_score

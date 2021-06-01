@@ -7,7 +7,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from tasks import async_read_las, async_get_basic_log_stats
+from tasks import async_read_las
 
 PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
@@ -29,10 +29,15 @@ class TestVolumetricModel(unittest.TestCase):
             log = BasicLog(self.wd.id, log_name)
             log.meta.family = family
             log.save()
-        # getting basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
 
-        self.res = {'Shale': [0.86, 0.8, 0.73, 0.75, 0.72, 0.25], 'Quartz': [0.14, 0.2, 0.12, 0.0, 0.17, 0.25], 'Calcite': [0.0, 0.0, 0.15, 0.25, 0.08, 0.25], 'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
+        self.res = {'Shale': [0.86, 0.8, 0.73, 0.75, 0.72, 0.25],
+                    'Quartz': [0.14, 0.2, 0.12, 0.0, 0.17, 0.25],
+                    'Calcite': [0.0, 0.0, 0.15, 0.25, 0.08, 0.25],
+                    'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
+        self.res_component_logs = {'Shale': 'VSHAL',
+                                   'Quartz': 'VQUAR',
+                                   'Calcite': 'VCALC',
+                                   'UWater': 'VUWAT'}
 
     def test_solver_core(self):
         logs = {}
@@ -53,13 +58,12 @@ class TestVolumetricModel(unittest.TestCase):
 
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
-        log_families = ['Gamma Ray', 'Bulk Density', 'Neutron Porosity']
         model_components = list(self.res.keys())
 
-        module.run(log_families, model_components)
+        module.run(model_components)
 
         for component in model_components:
-            log_name = 'VM_' + component
+            log_name = self.res_component_logs[component]
             log = BasicLog(self.wd.id, log_name)
             self.assertTrue(log.exists())
             right_answ = self.res[component][:3]

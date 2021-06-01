@@ -178,9 +178,9 @@ def async_detect_best_log(log_paths: tuple[tuple[str, str]]) -> None:
 
 
 @app.task
-def async_calculate_volumetric_model(well_name, log_families, model_components):
+def async_calculate_volumetric_model(well_name, model_components):
     vm = VolumetricModelSolverNode()
-    vm.calculate_for_well(well_name, log_families, model_components)
+    vm.calculate_for_well(well_name, model_components)
 
 
 @app.task
