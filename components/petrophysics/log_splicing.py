@@ -1,4 +1,5 @@
 import json
+import logging
 
 import numpy as np
 import pandas as pd
@@ -11,6 +12,7 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
 from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
+from components.importexport.UnitsSystem import UnitConversionError
 from settings import DEFAULT_LQC_NAME
 
 LOG_FAMILY_PRIORITY = [
@@ -23,6 +25,8 @@ LOG_FAMILY_PRIORITY = [
     'Compressional Slowness',
     'Neutron Porosity',
 ]
+
+logger = logging.getLogger('LogSplicingNode')
 
 
 def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str] = None, tags: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
@@ -54,19 +58,24 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     for family, family_meta in FAMILY_SETTINGS.items():
         if not family_meta.get('splice', False):
             continue
+
         # select log_names of defined family
         logs_in_family = [l for l in logs.values() if l.meta['family'] == family]
         # if no log_names in of this family - skip
         if not logs_in_family:
             continue
         # splice log_names
-        spliced = splice_logs_in_family(logs_in_family)
+        target_units = family_meta.get('unit', None)
+        try:
+            spliced = splice_logs_in_family(logs_in_family, target_units=target_units)
+        except AttributeError as exc:
+            logger.warning(str(exc) + f" Family: {family}")
+            continue
         # define meta information
-        # meta = {'basic_statistics': get_basic_curve_statistics(spliced)}
         meta = {}
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
         meta['family'] = family
-        meta['units'] = family_meta.get('unit', None)
+        meta['units'] = target_units
         meta['display'] = {
             'min': family_meta.get('min', None),
             'max': family_meta.get('max', None),
@@ -79,12 +88,13 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     return results_data, results_meta
 
 
-def splice_logs_in_family(logs: list) -> np.ndarray:
+def splice_logs_in_family(logs: list, target_units: str = None) -> np.ndarray:
     '''
     This function takes all log_names defined in log_names meta and splices them into one
     Docs: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/f/Logs-Splicing-45J9iu3UhOtI
     :param well: Well object to work on
     :param logs_meta: dictionary with complex key {(datasetname, logname):{...meta...}, ...}
+    :param target_units: output logs family. Default: None - no conversion
     :return: spliced log as np.ndarray
     '''
 
@@ -92,7 +102,6 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     step = abs(np.min([log.meta['basic_statistics']['avg_step'] for log in logs]))
 
     # order log_names by runs
-    logs_order = [(log.dataset_id, log._id) for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True)]
 
     # define top and bottom of the spliced log
     min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
@@ -102,11 +111,24 @@ def splice_logs_in_family(logs: list) -> np.ndarray:
     # interpolate logs
     logs_data_interpolated = {}
     for log in logs:
-        interpolated_values = scipy.interpolate.interp1d(log.values[:, 0], log.values[:, 1], fill_value=np.nan, bounds_error=False)(new_md)
+        if target_units is not None:
+            try:
+                log_values = log.convert_units(target_units)
+            except UnitConversionError:
+                continue
+        interpolated_values = scipy.interpolate.interp1d(log_values[:, 0], log_values[:, 1], fill_value=np.nan, bounds_error=False)(new_md)
         logs_data_interpolated.update({(log.dataset_id, log._id): interpolated_values})
 
     # splice log_names
+    if not logs_data_interpolated:
+        raise AttributeError(f"Cannot get any data for splicing. Check log units first.")
     df = pd.DataFrame(logs_data_interpolated)
+
+    logs_order = []
+    for log in sorted(logs, key=lambda x: x.meta['run']['value'], reverse=True):
+        if (log.dataset_id, log._id) in logs_data_interpolated:
+            logs_order.append((log.dataset_id, log._id))
+
     result = df[logs_order].bfill(axis=1).iloc[:, 0]
 
     return np.vstack((new_md, result)).T

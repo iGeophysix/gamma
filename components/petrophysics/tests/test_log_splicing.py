@@ -28,12 +28,12 @@ class TestLogSplicing(unittest.TestCase):
 
         # adding more metadata
         meta = {
-            'GK_D2258_D': {'family': 'Gamma Ray', 'run': {'value': '70_(2450_2600)'}, 'tags': ['processing', ]},
-            'GK_D1910_D': {'family': 'Gamma Ray', 'run': {'value': '60_(2450_2600)'}, 'tags': ['processing', ]},
-            'GK_D1911_D_2': {'family': 'Gamma Ray', 'run': {'value': '50_(2450_2600)'}, 'tags': ['processing', ]},
-            'GK_D2395_D': {'family': 'Gamma Ray', 'run': {'value': '40_(2450_2600)'}, 'tags': ['processing', ]},
-            'GK_D2265_D': {'family': 'Gamma Ray', 'run': {'value': '30_(2450_2600)'}, 'tags': ['processing', ]},
-            'GK_D1911_D': {'family': 'Gamma Ray', 'run': {'value': '20_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D2258_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '70_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D1910_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '60_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D1911_D_2': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '50_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D2395_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '40_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D2265_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '30_(2450_2600)'}, 'tags': ['processing', ]},
+            'GK_D1911_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '20_(2450_2600)'}, 'tags': ['processing', ]},
         }
         for log_id, values in meta.items():
             l = BasicLog(self.wd.id, log_id)
@@ -46,7 +46,7 @@ class TestLogSplicing(unittest.TestCase):
     def test_log_splicing_works_correctly(self):
         async_splice_logs(wellname='609', output_dataset_name='Spliced')
         wd = WellDataset(self.w, 'Spliced')
-        log = BasicLog(wd.id, 'Gamma Ray')
+        log = BasicLog(wd.id, 'GR')
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
                      'basic_statistics': {'avg_step': 0.09999999999999964,
@@ -68,7 +68,7 @@ class TestLogSplicing(unittest.TestCase):
         node.run(output_dataset_name='LQC2')
 
         wd = WellDataset(self.w, 'LQC2')
-        log = BasicLog(wd.id, 'Gamma Ray')
+        log = BasicLog(wd.id, 'GR')
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
                      'basic_statistics': {'avg_step': 0.09999999999999964,
