@@ -3,12 +3,13 @@ from collections import Counter
 import numpy as np
 from sklearn.cluster import KMeans
 
+from celery_conf import app as celery_app, check_task_completed
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from celery_conf import app as celery_app, check_task_completed
+
 
 def detect_runs_in_well(well: Well, depth_tolerance: float):
     # gather all logs
@@ -20,6 +21,10 @@ def detect_runs_in_well(well: Well, depth_tolerance: float):
         d = WellDataset(well, datasetname)
         for log_id in d.log_list:
             log = BasicLog(d.id, log_id)
+            if 'main_depth' in log.meta.tags \
+                    or not 'raw' in log.meta.tags \
+                    or log.meta.type != 'BasicLog':
+                continue
             logs.append(log)
             avg_depth = (log.meta.basic_statistics['max_depth'] + log.meta.basic_statistics['min_depth']) / 2
             log_length = log.meta.basic_statistics['max_depth'] - log.meta.basic_statistics['min_depth']
@@ -49,7 +54,7 @@ def detect_runs_in_well(well: Well, depth_tolerance: float):
 
 def _define_clusters(depth_tolerance, features):
     kmns, run_ids = None, None
-    for clusters_number in range(1, len(features)+1):
+    for clusters_number in range(1, len(features) + 1):
         kmns = KMeans(clusters_number, n_init=20)
         run_ids = kmns.fit_predict(features)
         if kmns.inertia_ < depth_tolerance ** 2:

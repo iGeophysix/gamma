@@ -7,11 +7,15 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
+from components.importexport.UnitsSystem import UnitsSystem
+from settings import DEFAULT_DEPTH_UNITS
 
 gamma_logger = logging.getLogger('gamma_logger')
 
+
 class LoadingException(Exception):
     pass
+
 
 def import_to_db(filename: str = None,
                  las_structure=None,
@@ -61,15 +65,20 @@ def import_to_db(filename: str = None,
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
     md_values = raw_curves[md_key]
 
+    # convert depth reference to default depth units
+    unit_converter = UnitsSystem()
+    md_values = unit_converter.convert(md_values, las_structure.logs_info()[md_key]['units'], DEFAULT_DEPTH_UNITS)
+
     for log, values in raw_curves.items():
-        if log == md_key:
-            continue
         this_log = BasicLog(dataset_id=well_dataset.id, log_id=log)
         this_log.values = np.array(tuple(zip(md_values, values)))
         this_log.meta = las_structure.logs_info()[log]
+        this_log.meta.depth_reference = md_key
         this_log.save()
         this_log.meta.append_history(f"Loaded from {las_structure.filename}")
         this_log.meta.add_tags('raw')
+        if log == md_key:
+            this_log.meta.add_tags('main_depth')
         this_log.save()
 
     # write meta-information about this well

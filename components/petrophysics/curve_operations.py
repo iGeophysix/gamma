@@ -130,6 +130,8 @@ class LogResolutionNode(EngineNode):
         '''
         if not 'raw' in log.meta.tags:
             raise TypeError('Not raw data')
+        if 'main_depth' in log.meta.tags:
+            raise TypeError('Depth data')
         assert abs(log.meta.basic_statistics['min_depth'] - log.meta.basic_statistics['max_depth']) > 50, 'Log is too short'
 
     @classmethod

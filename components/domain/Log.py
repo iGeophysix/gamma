@@ -319,6 +319,7 @@ class BasicLogMeta:
     history: list
     units: str
     type: str = 'BasicLog'
+    depth_reference: str = 'MD'
 
     def __init__(self, dataset_id, log_id):
         self.dataset_id = dataset_id

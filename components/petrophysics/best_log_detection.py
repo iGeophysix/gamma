@@ -127,7 +127,8 @@ class BestLogDetectionNode(EngineNode):
                and 'bad_quality' not in log.meta.tags \
                and hasattr(log.meta, 'family') \
                and hasattr(log.meta, 'basic_statistics') \
-               and hasattr(log.meta, 'log_resolution')
+               and hasattr(log.meta, 'log_resolution') \
+               and not 'main_depth' in log.meta.tags
 
     @classmethod
     def run(cls):

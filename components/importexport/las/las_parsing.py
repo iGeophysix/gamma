@@ -62,8 +62,8 @@ class LasStructure():
         return self.required_well_entries | self.additional_well_entries
 
     def logs_info(self):
-        md_key = list(self.data.keys())[0]
-        return {k: v._asdict() for k, v in self.log_information_entries.items() if k != md_key}
+        # md_key = list(self.data.keys())[0]
+        return {k: v._asdict() for k, v in self.log_information_entries.items()}
 
     def valid(self):
         """

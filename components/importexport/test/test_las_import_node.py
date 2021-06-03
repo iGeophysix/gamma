@@ -39,7 +39,7 @@ class TestLasImporter(unittest.TestCase):
         w = Well('ANY ET AL A9-16-49-20')
         ds = WellDataset(w, 'sample_minimal.las')
         logs = ds.log_list
-        self.assertEqual(7, len(logs), '7 logs in dataset must be loaded')
+        self.assertEqual(8, len(logs), '8 logs in dataset must be loaded')
 
 
 class TestLasExportNode(unittest.TestCase):
