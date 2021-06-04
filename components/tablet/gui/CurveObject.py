@@ -57,8 +57,8 @@ class CurveObject(TabletObject):
 
     def minMax(self):
         if hasattr(self._log.meta, 'display'):
-            min_ = self._log.meta.display.get('min', np.nanmin(self._log.values[:, 1]))
-            max_ = self._log.meta.display.get('max', np.nanmax(self._log.values[:, 1]))
+            min_ = self._log.meta.display.get('min', None) if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
+            max_ = self._log.meta.display.get('max', None) if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
             return (min_, max_)
         else:
             return (self._log.meta.basic_statistics['min_value'], self._log.meta.basic_statistics['max_value'])

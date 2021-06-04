@@ -16,6 +16,7 @@ from components.petrophysics.log_reconstruction import LogReconstructionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.run_detection import detect_runs_in_well
+from components.petrophysics.saturation import SaturationArchieNode
 from components.petrophysics.shale_volume import ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode, ShaleVolumeLinearMethodNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 
@@ -220,3 +221,9 @@ def async_export_well_to_s3(destination: str, wellname, datasetname: str = 'LQC'
 def async_log_reconstruction(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units):
     node = LogReconstructionNode()
     node.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)
+
+
+@app.task
+def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
+    node = SaturationArchieNode()
+    node.calculate_for_item(well_name, a, m, n, rw, output_log_name)

@@ -8,9 +8,11 @@ from components.petrophysics.normalization import LogNormalizationNode
 from components.petrophysics.porosity import PorosityFromDensityNode
 from components.petrophysics.project_statistics import ProjectStatisticsNode
 from components.petrophysics.run_detection import RunDetectionNode
+from components.petrophysics.saturation import SaturationArchieNode
 from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 from utilities import my_timer
+
 
 NODES = {
     'BasicStatisticsNode': BasicStatisticsNode,
@@ -27,9 +29,9 @@ NODES = {
     'ShaleVolumeLarionovTertiaryRockNode': ShaleVolumeLarionovTertiaryRockNode,
     'PorosityFromDensityNode': PorosityFromDensityNode,
     'LogReconstructionNode': LogReconstructionNode,
+    'SaturationArchieNode': SaturationArchieNode,
     'LasExportNode': LasExportNode
 }
-
 class Engine:
     """
     Class that launches EngineNodes
@@ -49,6 +51,7 @@ class Engine:
         {'node': 'ShaleVolumeLarionovOlderRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LOR'}},
         {'node': 'ShaleVolumeLarionovTertiaryRockNode', 'parameters': {'gr_matrix': None, 'gr_shale': None, 'output_log_name': 'VSH_GR_LTR'}},
         {'node': 'PorosityFromDensityNode', 'parameters': {'rhob_matrix': None, 'rhob_fluid': None, 'output_log_name': 'PHIT_D'}},
+        {'node': 'SaturationArchieNode', 'parameters': {}},
         {'node': 'LogReconstructionNode', 'parameters': {
             'log_families_to_train': ['Gamma Ray', 'Neutron Porosity', ],
             'log_families_to_predict': ["Bulk Density", ],
