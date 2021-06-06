@@ -8,7 +8,6 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.petrophysics.curve_operations import get_basic_curve_statistics
 
 
 class PorosityFromDensityNode(EngineNode):

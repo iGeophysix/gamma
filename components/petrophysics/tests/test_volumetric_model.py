@@ -1,15 +1,17 @@
-import unittest
-import numpy as np
 import os
+import unittest
 
-from components.petrophysics.volumetric_model import VolumetricModel, VolumetricModelSolverNode
+import numpy as np
+from settings import BASE_DIR
+
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.petrophysics.volumetric_model import VolumetricModel, VolumetricModelSolverNode
 from tasks import async_read_las
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
 
 class TestVolumetricModel(unittest.TestCase):
@@ -45,7 +47,7 @@ class TestVolumetricModel(unittest.TestCase):
         logs['Bulk Density'] = [2.551201, 2.5553, 2.5773, 2.518501, np.nan, np.nan]
         logs['Neutron Porosity'] = [0.2839996, 0.2889999, 0.293, np.nan, np.nan, np.nan]
 
-        selected_components = self.res.keys()    # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
+        selected_components = self.res.keys()  # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
         vm = VolumetricModel()
         model = vm.inverse(logs, selected_components)['COMPONENT_VOLUME']
 

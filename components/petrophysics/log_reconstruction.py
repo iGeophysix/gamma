@@ -1,4 +1,3 @@
-import json
 import logging
 from collections import defaultdict
 
@@ -12,7 +11,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
+from components.importexport.FamilyProperties import FamilyProperties
 from settings import LOGGING_LEVEL
 
 
@@ -90,7 +89,9 @@ class LogReconstructionNode(EngineNode):
             logs_in_well = []
             for log_id in well_dataset.log_list:
                 log = BasicLog(well_dataset.id, log_id)
-                if log.meta.family in required_families and not 'reconstructed' in log.meta.tags:
+                if hasattr(log.meta, 'family') \
+                        and log.meta.family in required_families \
+                        and not 'reconstructed' in log.meta.tags:
                     logs_in_well.append(log)
 
             # interpolate to common reference
@@ -150,7 +151,9 @@ class LogReconstructionNode(EngineNode):
         required_log_families = list(log_families_to_train)
         for log_id in well_dataset.log_list:
             log = BasicLog(well_dataset.id, log_id)
-            if log.meta.family in log_families_to_train and 'reconstructed' not in log.meta.tags:
+            if hasattr(log.meta, 'family') and \
+                    log.meta.family in log_families_to_train \
+                    and 'reconstructed' not in log.meta.tags:
                 input_logs.append(log)
                 required_log_families.remove(log.meta.family)
 
@@ -162,20 +165,12 @@ class LogReconstructionNode(EngineNode):
             cls.logger.info(f"Well {well_name} misses log of families {log_families_to_train} to predict {log_family_to_predict}")
             return
 
-        with open(EXPORT_FAMSET_FILE, 'r') as f:
-            family_meta = json.load(f).get(log_family_to_predict, {})
-
+        family_meta = FamilyProperties()[log_family_to_predict]
 
         new_log = BasicLog(well_dataset.id, f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH")
 
         new_log.values = cls._predict(model, input_logs)
         new_log.meta.family = log_family_to_predict
-        new_log.meta.display = {
-            'min': family_meta.get('min', None),
-            'max': family_meta.get('max', None),
-            'color': family_meta.get('color', [0, 0, 0]),
-            'thickness': family_meta.get('thickness', 1),
-        }
         new_log.meta.name = f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH"
         new_log.meta.units = log_to_predict_units
         new_log.meta.add_tags('reconstructed')

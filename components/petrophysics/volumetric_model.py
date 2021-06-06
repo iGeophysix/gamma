@@ -1,40 +1,42 @@
-from typing import Union, Iterable, Optional
-
-from scipy.optimize import lsq_linear
-import statistics
-import numpy as np
-import os
-import json
-from collections.abc import Iterable
 import copy
+import json
+import logging
+import os
+from collections.abc import Iterable
+from typing import Union, Optional
 
-from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
-from components.petrophysics.curve_operations import interpolate_log_by_depth
+import numpy as np
+from scipy.optimize import lsq_linear
+
+from celery_conf import app as celery_app, wait_till_completes
+from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
-from components.domain.Log import BasicLog
-from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
+from components.domain.WellDataset import WellDataset
+from components.engine_node import EngineNode
+from components.importexport.FamilyProperties import FamilyProperties
+from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
-from components.importexport.FamilyProperties import FAMILY_PROPERTIES
-from celery_conf import app as celery_app, wait_till_completes
-import logging
+from components.petrophysics.curve_operations import interpolate_log_by_depth
+
 logging.basicConfig()
 logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
 FLUID_MINERAL_TABLE = os.path.join(os.path.dirname(__file__), 'data', 'FluidMineralConstants.json')
+FAMILY_PROPERTIES = FamilyProperties()
 
 
 class VolumetricModel():
     '''
     Solver of volumetric mineral and fluid components model.
     '''
+
     def __init__(self):
         with open(FLUID_MINERAL_TABLE, 'r') as f:
             comp = json.load(f)
-        self.FAMILY_UNITS = {family: unit for family, unit in comp['Units'].items() if not family.startswith('_')}   # units of data table, excluding system columns
-        del comp['Units']                   # except "Units" item all others are model components
+        self.FAMILY_UNITS = {family: unit for family, unit in comp['Units'].items() if not family.startswith('_')}  # units of data table, excluding system columns
+        del comp['Units']  # except "Units" item all others are model components
         self._COMPONENTS = comp
 
     def all_minerals(self) -> Iterable[str]:
@@ -82,7 +84,7 @@ class VolumetricModel():
         equation_system_coefficients = []
         equation_system_resulting_logs = []
         for log_name in logs:
-            coef = []   # coefficients of linear equation for the log
+            coef = []  # coefficients of linear equation for the log
             empty_coef = True
             for component in components:
                 log_response = self._COMPONENTS[component].get(log_name, 0)
@@ -93,17 +95,17 @@ class VolumetricModel():
                 equation_system_coefficients.append(coef)
                 equation_system_resulting_logs.append(log_name)
         # the last equation Vcomponent1 + ... + VcomponentN = 1
-        equation_system_coefficients.append([1] * len(components))   # component coefficients in equation for summ of all component volumes
+        equation_system_coefficients.append([1] * len(components))  # component coefficients in equation for summ of all component volumes
 
-        log_len = len(next(iter(logs.values())))    # dataset length
+        log_len = len(next(iter(logs.values())))  # dataset length
         component_volume = {component: np.full(log_len, np.nan) for component in components}
         synthetic_logs = {log_name: np.full(log_len, np.nan) for log_name in logs}  # synthetic input logs modeled using resulting volumetric model
         misfit = {res_log: np.full(log_len, np.nan) for res_log in equation_system_resulting_logs + ['TOTAL']}  # misfit for every input log + total misfit
 
-        if len(equation_system_coefficients) > 1:   # if there is at least one input log equation
+        if len(equation_system_coefficients) > 1:  # if there is at least one input log equation
             std = {log_name: np.nanstd(data) for log_name, data in logs.items()}
             for row in range(log_len):
-                equation_system_results = [logs[log][row] for log in equation_system_resulting_logs] + [1]    # result for every equation in the system
+                equation_system_results = [logs[log][row] for log in equation_system_resulting_logs] + [1]  # result for every equation in the system
                 # remove equations for absent logs
                 esc_clear = equation_system_coefficients[:]
                 esrl_clear = equation_system_resulting_logs[:]
@@ -119,19 +121,19 @@ class VolumetricModel():
                 # run solver
                 opt = lsq_linear(esc_clear, esr_clear, [0, 1])  # componet volumes are limited to [0, 1]
                 if opt.success:
-                    opt.x *= 1 / sum(opt.x)     # adjust summ of volumes to 1
+                    opt.x *= 1 / sum(opt.x)  # adjust summ of volumes to 1
                     # write down results
                     for n, component in enumerate(components):
-                        component_volume[component][row] = opt.x[n]    # main results - componet volumes
+                        component_volume[component][row] = opt.x[n]  # main results - componet volumes
                     misfit_total = 0
                     for n, res_log in enumerate(esrl_clear):
                         # log forward modeling
                         synthetic_logs[res_log][row] = np.sum(np.array(esc_clear[n]) * opt.x)
                         # misfit calculation
-                        mf = abs(opt.fun[n] / std[res_log]) if std[res_log] != 0 else 0     # (model log response - actual log response) / log std
-                        misfit[res_log][row] = mf     # misfit per model log
+                        mf = abs(opt.fun[n] / std[res_log]) if std[res_log] != 0 else 0  # (model log response - actual log response) / log std
+                        misfit[res_log][row] = mf  # misfit per model log
                         misfit_total += mf
-                    misfit['TOTAL'][row] = misfit_total     # overall model misfit at the row
+                    misfit['TOTAL'][row] = misfit_total  # overall model misfit at the row
         res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
         return res
 
@@ -229,7 +231,7 @@ class VolumetricModelSolverNode(EngineNode):
         # save components' volumes
         for component_name, data in res['COMPONENT_VOLUME'].items():
             component_family = vm.component_family(component_name)
-            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[component_family]['mnemonic'])
+            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[component_family].get('mnemonic', component_family))
             log.meta.family = component_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = 'v/v'
@@ -238,7 +240,7 @@ class VolumetricModelSolverNode(EngineNode):
         # save forward modeled logs
         for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
             input_log_family = logs[n].meta.family
-            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[input_log_family]['mnemonic'] + '_FM')
+            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[input_log_family].get('mnemonic', input_log_family) + '_FM')
             log.meta.family = input_log_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = logs[n].meta.units
@@ -272,7 +274,7 @@ def family_best_log(well_name: str, log_family: Union[str, Iterable[str]], unit:
         for log_id in dataset.log_list:
             log = BasicLog(dataset.id, log_id)
             if hasattr(log.meta, 'family') and log.meta.family in wanted_families \
-               and 'reconstructed' not in log.meta.tags and us.convertable_units(log.meta.units, unit):     # all reconstructed logs are excluded for now
+                    and 'reconstructed' not in log.meta.tags and us.convertable_units(log.meta.units, unit):  # all reconstructed logs are excluded for now
                 log_score = score_log_tags(log.meta.tags)
                 if log_score > best_log_score:
                     best_log_score = log_score

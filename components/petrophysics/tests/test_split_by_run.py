@@ -7,9 +7,10 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport.las import import_to_db
 from components.petrophysics.run_detection import RunDetectionNode
+from settings import BASE_DIR
 from tasks import async_split_by_runs, async_get_basic_log_stats
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
 
 class TestSplitByRun(unittest.TestCase):

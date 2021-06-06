@@ -6,9 +6,10 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.best_log_detection import get_best_log, BestLogDetectionNode, score_log_tags, LOG_TAG_ASSESSMENT
-from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
+from settings import BASE_DIR
+from tasks import async_read_las, async_log_resolution
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
 
 class TestBestLogDetection(unittest.TestCase):
@@ -24,11 +25,10 @@ class TestBestLogDetection(unittest.TestCase):
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
         # deleting duplicated log
         self.wd.delete_log('GR_D4417_D')
-        # calculating basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
 
         # adding more metadata
         for log_id in self.wd.get_log_list():
+            if log_id == 'MD': continue  # skip depth log
             log = BasicLog(self.wd.id, log_id)
             log.meta.update({'family': 'Gamma Ray', 'run': {'value': '56_(2650_2800)'}})
             log.save()
@@ -37,9 +37,10 @@ class TestBestLogDetection(unittest.TestCase):
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
     def test_best_log_detection_works_correct(self):
-        best_log, new_meta = get_best_log(datasets=[self.wd,], family='Gamma Ray', run_name='56_(2650_2800)')
+        best_log, new_meta = get_best_log(datasets=[self.wd, ], family='Gamma Ray', run_name='56_(2650_2800)')
 
         for log_id, values in new_meta.items():
+            if log_id == 'MD': continue  # skip depth log
             l = BasicLog(self.wd.id, log_id)
             l.meta = values
             l.save()
@@ -65,8 +66,8 @@ class TestBestLogDetection(unittest.TestCase):
         answer = 0
         for tag in LOG_TAG_ASSESSMENT:
             tags = []
-            tags.append(tag + '&' + tag)    # an unknown but looks similar to a known tag
+            tags.append(tag + '&' + tag)  # an unknown but looks similar to a known tag
             mixed_case = ''.join(letter.upper() if n % 2 else letter.lower() for n, letter in enumerate(tag))
-            tags.append(mixed_case)     # a known tag, mixed case
+            tags.append(mixed_case)  # a known tag, mixed case
             answer += score_log_tags(tags)
         self.assertEqual(answer, right_answer)

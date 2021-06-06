@@ -151,7 +151,7 @@ class TestLog(unittest.TestCase):
             log.meta = new_logs_meta[new_log]
             log.save()
 
-        self.assertEqual(len(dataset.log_list), 20 + log_count)
+        self.assertEqual(len(dataset.log_list), 21 + log_count)
         d = BasicLog(dataset.id, 'LOG_1')
         self.assertEqual(len(d), 84)
 
@@ -166,7 +166,6 @@ class TestLog(unittest.TestCase):
                          well_dataset=dataset)
 
         log_list = dataset.get_log_list()
-        self.assertNotIn("DEPT", log_list)
         self.assertIn("GR", log_list)
 
     def test_log_history(self):
@@ -261,8 +260,8 @@ class TestLog(unittest.TestCase):
 
         true_values = {
             "data_hash": "43b6e247100f1688023b4e915ad852d0",
-            "meta_hash": "7384c5e4aa58577fc21624d14c99079e",
-            "full_hash": "43b6e247100f1688023b4e915ad852d07384c5e4aa58577fc21624d14c99079e"
+            "meta_hash": "a9bbbe27c7043ab26b44dde3b7e7af9c",
+            "full_hash": "43b6e247100f1688023b4e915ad852d0a9bbbe27c7043ab26b44dde3b7e7af9c"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

@@ -10,26 +10,22 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport.las import import_to_db
-from components.importexport.las.las_export import create_las_file
-from components.petrophysics.curve_operations import BasicStatisticsNode, get_basic_curve_statistics
 from components.petrophysics.log_reconstruction import LogReconstructionNode
 from settings import BASE_DIR
 
 PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'for_log_restoration')
 
 
-class TestLogRestorationNode(TestCase):
+class TestLogReconstructionNode(TestCase):
     def setUp(self) -> None:
         _s = RedisStorage()
         _s.flush_db()
-
         for filename in os.listdir(PATH_TO_TEST_DATA):
             abs_path = os.path.join(PATH_TO_TEST_DATA, filename)
             well = Well(filename.split("_")[0], new=True)
             ds_name = filename.split('_')[1][:-4]
             well_dataset = WellDataset(well, ds_name, new=True)
             import_to_db(filename=abs_path, well=well, well_dataset=well_dataset)
-        BasicStatisticsNode.run()
 
         # Family Assigner
         log_to_family = {

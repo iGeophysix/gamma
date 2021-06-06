@@ -129,6 +129,8 @@ class LogNormalizationNode(EngineNode):
                 # gather runs in dataset
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
+                    if not hasattr(log.meta, 'family'):
+                        continue
                     logs_by_families[log.meta.family].append(log)
 
         for family, logs in logs_by_families.items():

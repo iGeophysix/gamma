@@ -44,7 +44,11 @@ class RedisStorage:
     def flush_db(self):
         """Erase the whole database.
         Use with caution!"""
-        self.connection().flushdb()
+        # self.connection().flushdb()
+        for wellname in self.list_wells():
+            self.delete_well(wellname)
+        for markerset in self.list_markersets():
+            self.delete_markerset_by_name(markerset)
 
     # PROJECT
     def get_project_meta(self) -> dict:
@@ -65,6 +69,55 @@ class RedisStorage:
         :return:
         '''
         self.connection().set('project', json.dumps(meta))
+
+    # COMMON META (FamilyProperties, Units,...)
+
+    def table_keys(self, table_name) -> list:
+        """
+        Lists all keys in the table
+        :param table_name: Name of a hash-table
+        :return: list
+        """
+        return [key.decode() for key in self.connection().hkeys(table_name)]
+
+    def table_key_exists(self, table_name, key):
+        return self.connection().hexists(table_name, key)
+
+    def table_key_get(self, table_name, key):
+        """
+        General get method for hash-tables
+        :param table_name:
+        :param key:
+        :return:
+        """
+        if self.table_key_exists(table_name, key):
+            return json.loads(self.connection().hget(table_name, key))
+        else:
+            raise KeyError(f"Key {key} wasn't found in table {table_name}")
+
+    def table_key_set(self, table_name, key=None, data=None, mapping=None):
+        """
+        General set method for hash-tables
+        :param table_name:
+        :param key:
+        :param data:
+        :return:
+        """
+        if mapping:
+            encoded_data = {key: json.dumps(val) for key, val in mapping.items()}
+            self.connection().hset(table_name, mapping=encoded_data)
+        else:
+            self.connection().hset(table_name, key, json.dumps(data))
+
+    def table_key_delete(self, table_name, key):
+        """
+        General delete method for hash-tables
+        :param table_name:
+        :param key:
+        :return:
+        """
+        if self.table_key_exists(table_name, key):
+            self.connection().hdel(table_name, key)
 
     # WELLS
 

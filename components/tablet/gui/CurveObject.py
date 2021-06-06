@@ -19,6 +19,7 @@ from PySide2.QtWidgets import (
 # from components.domain.Curve import Curve
 from components.domain.Log import BasicLog
 from components.domain.WellDataset import WellDataset
+from components.importexport.FamilyProperties import FamilyProperties
 from components.tablet.gui.LogGridObject import LogGridObject
 from components.tablet.gui.TabletObject import TabletObject, TabletGraphicsObject
 
@@ -59,9 +60,14 @@ class CurveObject(TabletObject):
         if hasattr(self._log.meta, 'display'):
             min_ = self._log.meta.display.get('min', None) if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
             max_ = self._log.meta.display.get('max', None) if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
-            return (min_, max_)
+            return min_, max_
+        elif FamilyProperties.exists(self._log.meta.family):
+            fam = FamilyProperties()[self._log.meta.family]
+            min_ = fam['min'] if fam.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
+            max_ = fam['max'] if fam.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
+            return min_, max_
         else:
-            return (self._log.meta.basic_statistics['min_value'], self._log.meta.basic_statistics['max_value'])
+            return self._log.meta.basic_statistics['min_value'], self._log.meta.basic_statistics['max_value']
 
     def computeArrayTransform(self):
         ## TODO: TEMPORARY, until I implement min max in DB
@@ -82,7 +88,11 @@ class CurveObject(TabletObject):
 
     def color(self):
         if hasattr(self._log.meta, 'display'):
-            r, g, b = self._log._meta.display['color']
+            r, g, b = self._log._meta.display.get('color', (0, 0, 0))
+            self._color = QColor.fromRgb(r, g, b)
+        elif FamilyProperties.exists(self._log.meta.family):
+            fam = FamilyProperties()[self._log.meta.family]
+            r, g, b = fam.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
         elif not hasattr(self, "_color"):
             c = lambda: random.randint(0, 255)

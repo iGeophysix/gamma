@@ -6,14 +6,15 @@ import numpy as np
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
-from components.domain.Well import Well, get_well_by_id
-from components.domain.WellDataset import WellDataset, get_dataset_by_id
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
 from components.importexport.las import import_to_db
 from components.petrophysics.curve_operations import get_basic_curve_statistics
-from components.petrophysics.normalization import log_normalization, LogNormalizationNode
+from components.petrophysics.normalization import LogNormalizationNode
+from settings import BASE_DIR
 from tasks import async_get_basic_log_stats
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data', 'normalization')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics', 'normalization')
 
 
 class TestLogNormalization(unittest.TestCase):

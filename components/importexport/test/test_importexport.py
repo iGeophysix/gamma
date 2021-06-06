@@ -1,6 +1,5 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
-import filecmp
 import math
 import os
 import unittest
@@ -11,9 +10,6 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
-from components.importexport.las import import_to_db
-from components.importexport.las.las_export import create_las_file
-from settings import BASE_DIR
 
 
 class TestLasImporter(unittest.TestCase):
@@ -167,8 +163,7 @@ class TestAsyncLasLoading(unittest.TestCase):
         w = Well('ANY ET AL A9-16-49-20')
         ds = WellDataset(w, 'sample_minimal.las')
         logs = ds.log_list
-        self.assertEqual(7, len(logs), '7 logs in dataset must be loaded')
-
+        self.assertEqual(8, len(logs), '8 logs in dataset must be loaded')
 
 
 if __name__ == '__main__':

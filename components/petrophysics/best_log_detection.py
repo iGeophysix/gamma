@@ -51,7 +51,7 @@ def score_log_tags(tags: Iterable[str]) -> int:
     :param tags: set of log tags
     :return: log usefulness score
     '''
-    tags = set(map(str.lower, tags))    # remove duplicates, case-insensitive
+    tags = set(map(str.lower, tags))  # remove duplicates, case-insensitive
     rank = sum(LOG_TAG_ASSESSMENT.get(tag, 0) for tag in tags)
     return rank
 
@@ -74,7 +74,10 @@ def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) ->
     for ds in datasets:
         for log_id in ds.log_list:
             log = BasicLog(ds.id, log_id)
-            if log.meta.family == family and log.meta.run['value'] == run_name and 'raw' in log.meta.tags:
+            if 'raw' in log.meta.tags \
+                    and not 'main_depth' in log.meta.tags \
+                    and log.meta.family == family \
+                    and log.meta.run['value'] == run_name:
                 logs_meta.update({log_id: log.meta})
 
     if not logs_meta:

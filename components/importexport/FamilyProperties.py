@@ -2,16 +2,18 @@
 # Manually run this script to update JSON file
 # Import FAMILY_PROPERTIES from this script to get access to family properties
 
-import os
-import openpyxl as xl
 import itertools
-import json
+import os
 
-SOURCE_FAMSET_BOOK = os.path.join(os.path.dirname(__file__), 'rules', 'src', 'FamilyProperties.xlsx')
-EXPORT_FAMSET_FILE = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyProperties.json')
+import openpyxl as xl
+
+from components.database.RedisStorage import RedisStorage
+from settings import BASE_DIR
+
+SOURCE_FAMSET_BOOK = os.path.join(BASE_DIR, 'components', 'importexport', 'rules', 'src', 'FamilyProperties.xlsx')
 
 DEFAULT_THICKNESS = 1
-DEFAULT_COLOR = '000000'    # black in hex RGB24
+DEFAULT_COLOR = '000000'  # black in hex RGB24
 
 # Family properties storage {'Family': {'splice': bool, 'mnemonic': str, 'min': float or None, 'max': float or None, 'unit': str or None, 'color': (R, G, B), 'thickness': int} }
 FAMILY_PROPERTIES = {}
@@ -28,16 +30,16 @@ def parse_excel_table(src_path, sheet) -> dict:
     '''
     Generates family properties dictionary from excel sheet
     '''
-    left_top_row = 1    # table start
-    left_top_col = 1    #
+    left_top_row = 1  # table start
+    left_top_col = 1  #
 
     wb = xl.load_workbook(src_path, read_only=True, data_only=True)
     ws = wb[sheet]
     # read header
-    header = {}     # maping column name to column index
+    header = {}  # maping column name to column index
     for c in itertools.count(left_top_col):
         col_name = ws.cell(left_top_row, c).value
-        if not col_name:    # table header ends with first empty cell
+        if not col_name:  # table header ends with first empty cell
             break
         header[col_name] = c - 1
     # read table data
@@ -60,26 +62,59 @@ def parse_excel_table(src_path, sheet) -> dict:
             bg_color = cell_background.start_color
             # theme color is not supported
             if bg_color.type == 'rgb':
-                color = bg_color.rgb[-6:]   # cut off alpha channel
+                color = bg_color.rgb[-6:]  # cut off alpha channel
             elif bg_color.type == 'indexed':
                 color = xl.styles.colors.COLOR_INDEX[bg_color.indexed][-6:]
-        else:   # color may be typed as cell text
+        else:  # color may be typed as cell text
             s_color = row_data[header['Color']].value
             if s_color is not None:
                 color = s_color[-6:]
-        rgb_triplet = tuple(int(color[n: n + 2], 16) for n in range(0, 6, 2))   # converts 0A0B0C to (10, 11, 12)
+        rgb_triplet = tuple(int(color[n: n + 2], 16) for n in range(0, 6, 2))  # converts 0A0B0C to (10, 11, 12)
 
         data[family] = {'splice': splice, 'mnemonic': mnemonic, 'min': min, 'max': max, 'unit': unit, 'color': rgb_triplet, 'thickness': thickness}
 
     return data
 
 
+class FamilyProperties:
+    _table_name = 'FamilyProperties'
+
+    @classmethod
+    def load(cls, src_path, sheet='FamilyProperties'):
+        data = parse_excel_table(src_path, sheet)
+        s = RedisStorage()
+        s.table_key_set(cls._table_name, mapping=data)
+
+    @classmethod
+    def exists(cls, item) -> bool:
+        s = RedisStorage()
+        return s.table_key_exists(cls._table_name, item)
+
+    @classmethod
+    def __getitem__(cls, item) -> dict:
+        s = RedisStorage()
+        if s.table_key_exists(cls._table_name, item):
+            return s.table_key_get(cls._table_name, item)
+        else:
+            return {}
+
+    @classmethod
+    def __setitem__(cls, key, value):
+        s = RedisStorage()
+        s.table_key_set(cls._table_name, key, value)
+
+    @classmethod
+    def items(cls):
+        s = RedisStorage()
+        for key in s.table_keys(cls._table_name):
+            yield (key, s.table_key_get(cls._table_name, key))
+
+
 if __name__ == '__main__':
     # Export Excel sheet to JSON family properties file
-    family_properties = parse_excel_table(SOURCE_FAMSET_BOOK, 'FamilyProperties')
-    with open(EXPORT_FAMSET_FILE, 'w') as f:
-        json.dump(family_properties, f, indent='\t')
+    node = FamilyProperties()
+    node.load(SOURCE_FAMSET_BOOK)
 else:
     # Initialize FAMILY_PROPERTIES from JSON file
-    with open(EXPORT_FAMSET_FILE, 'r') as f:
-        FAMILY_PROPERTIES = json.load(f)
+    FAMILY_PROPERTIES = FamilyProperties()
+    FAMILY_PROPERTIES.load(SOURCE_FAMSET_BOOK)

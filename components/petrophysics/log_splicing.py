@@ -1,4 +1,3 @@
-import json
 import logging
 
 import numpy as np
@@ -11,7 +10,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
+from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitConversionError
 from settings import DEFAULT_LQC_NAME
 
@@ -52,15 +51,12 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     results_data = {}
     results_meta = {}
 
-    with open(EXPORT_FAMSET_FILE, 'r') as f:
-        FAMILY_SETTINGS = json.load(f)
-
-    for family, family_meta in FAMILY_SETTINGS.items():
+    for family, family_meta in FamilyProperties().items():
         if not family_meta.get('splice', False):
             continue
 
         # select log_names of defined family
-        logs_in_family = [l for l in logs.values() if l.meta['family'] == family]
+        logs_in_family = [l for l in logs.values() if hasattr(l.meta, 'family') and l.meta['family'] == family]
         # if no log_names in of this family - skip
         if not logs_in_family:
             continue
@@ -76,12 +72,6 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
         meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
         meta['family'] = family
         meta['units'] = target_units
-        meta['display'] = {
-            'min': family_meta.get('min', None),
-            'max': family_meta.get('max', None),
-            'color': family_meta.get('color', [0, 0, 0]),
-            'thickness': family_meta.get('thickness', 1),
-        }
         results_data.update({family_meta.get('mnemonic', family): spliced})  # Log name will be defined here
         results_meta.update({family_meta.get('mnemonic', family): meta})  # log name will be defined here
 

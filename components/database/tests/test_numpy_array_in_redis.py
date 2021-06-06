@@ -36,6 +36,7 @@ class TestArrayInRedis(unittest.TestCase):
         # print("RESULT ARRAY", b)
 
         self.assertEqual(a.all(), b.all())
+        self.conn.delete("t")
 
     def test_store_txt_array(self):
         a = np.array(((10, 20), (30, 40)))
@@ -52,6 +53,7 @@ class TestArrayInRedis(unittest.TestCase):
 
 
         self.assertEqual(a.all(), b.all())
+        self.conn.delete("t")
 
     def test_store_map_of_arrays(self):
         a = np.array(((10, 20), (30, 40)))

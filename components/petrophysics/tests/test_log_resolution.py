@@ -8,9 +8,10 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.curve_operations import LogResolutionNode
+from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
 
-PATH_TO_TEST_DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
 
 class TestLogResolution(unittest.TestCase):

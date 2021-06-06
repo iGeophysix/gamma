@@ -1,4 +1,3 @@
-import json
 import logging
 
 import numpy as np
@@ -9,7 +8,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.importexport.FamilyProperties import EXPORT_FAMSET_FILE
+from components.importexport.FamilyProperties import FamilyProperties
 
 
 class SaturationArchieNode(EngineNode):
@@ -86,21 +85,13 @@ class SaturationArchieNode(EngineNode):
 
     @staticmethod
     def _prepare_output_log(dataset_id, output_family, output_log_name, md_ref, sw_values_clipped):
-        with open(EXPORT_FAMSET_FILE, 'r') as f:
-            FAMILY_SETTINGS = json.load(f)
-            family_meta = FAMILY_SETTINGS.get(output_family, {})
+        family_meta = FamilyProperties()[output_family]
 
         log = BasicLog(dataset_id, output_log_name)
         log.values = np.vstack((md_ref, sw_values_clipped)).T
 
         log.meta.family = output_family
         log.meta.units = family_meta.get('unit', 'v/v')
-        log.meta.display = {
-            'min': family_meta.get('min', None),
-            'max': family_meta.get('max', None),
-            'color': family_meta.get('color', [0, 0, 0]),
-            'thickness': family_meta.get('thickness', 1),
-        }
         # log.meta.name = family_meta.get('mnemonic', output_log_name)
         log.meta.workstep = 'Saturation'
         log.meta.method = 'Archie'
