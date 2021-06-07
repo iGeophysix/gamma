@@ -41,6 +41,7 @@ files_to_copy = [
     "./components/importexport/__init__.py",
     "./components/importexport/las",
     "./components/importexport/UnitsSystem.py",
+    "./utilities.py",
     "./requirements.txt",
     "./data_for_outsource",
     "./import_data_for_outsource.py",

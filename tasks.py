@@ -2,6 +2,7 @@ import time
 from typing import Iterable
 
 from celery_conf import app
+from components.database.tasks import *
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
@@ -235,3 +236,5 @@ def async_log_reconstruction(model, well_name, log_families_to_train, log_family
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
     node = SaturationArchieNode()
     node.calculate_for_item(well_name, a, m, n, rw, output_log_name)
+
+

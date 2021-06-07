@@ -3,6 +3,7 @@ import io
 import json
 import logging
 import sys
+from collections import defaultdict
 from typing import Any
 
 import h5py
@@ -11,6 +12,9 @@ import redis
 from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, DEFAULT_MARKERS_NAME
 
 logger = logging.getLogger("storage")
+WELL_META_FIELDS_INDEX = 'well_meta_fields_index'
+DATASET_META_FIELDS_INDEX = 'dataset_meta_fields_index'
+LOG_META_FIELDS_INDEX = 'log_meta_fields_index'
 
 BLOCKING_TIMEOUT = 5
 
@@ -593,3 +597,116 @@ class RedisStorage:
             except redis.exceptions.LockError:
                 logger.error("Couldn't acquire lock in wells. Please try again later...")
                 raise
+
+
+def flatten_keys(d, parent_key='', sep='.') -> list:
+    """
+    get flat list of nested dicts keys
+    :param d: initial dictionary
+    :param parent_key: key in initial dictionary to start from
+    :param sep: serparator
+    :return: list of flatten keys
+    """
+    items = []
+    for k, v in d.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_keys(v, new_key, sep=sep))
+        else:
+            items.append(new_key)
+    return items
+
+
+def build_log_meta_fields_index():
+    '''
+    This task builds index of meta fields available in logs
+    :return:
+    '''
+    meta_field_index = defaultdict(list)
+
+    # get list of datasets
+    # then take each log meta and flatten it
+    # then add it to meta field index
+    s = RedisStorage()
+    ds_ids = s.table_keys('datasets')
+    for ds_id in ds_ids:
+        ds_id_meta = f'{ds_id}_meta'
+        for log_id in s.table_keys(ds_id_meta):
+            meta = s.table_key_get(ds_id_meta, log_id)
+            flat_meta = flatten_keys(meta)
+            for meta_key in flat_meta:
+                meta_field_index[meta_key].append((ds_id, log_id), )
+
+    # store results
+    # delete unused fields
+    keys_to_delete = [key for key in s.table_keys(LOG_META_FIELDS_INDEX) if key not in meta_field_index.keys()]
+    for key in keys_to_delete:
+        s.table_key_delete(LOG_META_FIELDS_INDEX, key)
+
+    # insert index
+    if meta_field_index:
+        s.table_key_set(LOG_META_FIELDS_INDEX, mapping=meta_field_index)
+
+    return {'updated_keys': len(meta_field_index), 'deleted': len(keys_to_delete)}
+
+
+def build_dataset_meta_fields_index():
+    '''
+    This task builds index of meta fields available in datasets
+    :return:
+    '''
+    meta_field_index = defaultdict(list)
+
+    # get list of datasets
+    # then take each log meta and flatten it
+    # then add it to meta field index
+    s = RedisStorage()
+    ds_ids = s.table_keys('datasets')
+    for ds_id in ds_ids:
+        meta = s.table_key_get('datasets', ds_id)
+        flat_meta = flatten_keys(meta)
+        for meta_key in flat_meta:
+            meta_field_index[meta_key].append((ds_id), )
+
+    # store results
+    # delete unused fields
+    keys_to_delete = [key for key in s.table_keys(DATASET_META_FIELDS_INDEX) if key not in meta_field_index.keys()]
+    for key in keys_to_delete:
+        s.table_key_delete(DATASET_META_FIELDS_INDEX, key)
+
+    # insert index
+    if meta_field_index:
+        s.table_key_set(DATASET_META_FIELDS_INDEX, mapping=meta_field_index)
+
+    return {'updated_keys': len(meta_field_index), 'deleted': len(keys_to_delete)}
+
+
+def build_well_meta_fields_index():
+    '''
+    This task builds index of meta fields available in wells
+    :return:
+    '''
+    meta_field_index = defaultdict(list)
+
+    # get list of datasets
+    # then take each log meta and flatten it
+    # then add it to meta field index
+    s = RedisStorage()
+    well_ids = s.table_keys('wells')
+    for well_id in well_ids:
+        meta = s.table_key_get('wells', well_id)
+        flat_meta = flatten_keys(meta)
+        for meta_key in flat_meta:
+            meta_field_index[meta_key].append((well_id), )
+
+    # store results
+    # delete unused fields
+    keys_to_delete = [key for key in s.table_keys(WELL_META_FIELDS_INDEX) if key not in meta_field_index.keys()]
+    for key in keys_to_delete:
+        s.table_key_delete(WELL_META_FIELDS_INDEX, key)
+
+    # insert index
+    if meta_field_index:
+        s.table_key_set(WELL_META_FIELDS_INDEX, mapping=meta_field_index)
+
+    return {'updated_keys': len(meta_field_index), 'deleted': len(keys_to_delete)}

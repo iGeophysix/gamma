@@ -1,3 +1,4 @@
+import celery_conf
 from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
@@ -94,7 +95,9 @@ class Engine:
             my_timer(node.run)(**step['parameters'])
 
             print(f'Finished {step}')
-
+        celery_conf.app.send_task('components.database.tasks.build_log_meta_fields_index', ())
+        celery_conf.app.send_task('components.database.tasks.build_dataset_meta_fields_index', ())
+        celery_conf.app.send_task('components.database.tasks.build_well_meta_fields_index', ())
 
 if __name__ == '__main__':
     engine = Engine()
