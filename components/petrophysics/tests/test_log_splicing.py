@@ -22,7 +22,9 @@ class TestLogSplicing(unittest.TestCase):
         # loading data
         filename = '609_ULN_LQC.las'
         self.wd = WellDataset(self.w, filename, new=True)
-        async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
+        async_read_las(wellname=self.w.name,
+                       datasetname=filename,
+                       filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
         # calculating basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
@@ -44,10 +46,9 @@ class TestLogSplicing(unittest.TestCase):
         # define log resolution
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
-    def test_log_splicing_works_correctly(self):
-        async_splice_logs(wellname='609', output_dataset_name='Spliced')
-        wd = WellDataset(self.w, 'Spliced')
-        log = BasicLog(wd.id, 'GR')
+
+
+    def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
                      'basic_statistics': {'avg_step': 0.09999999999999964,
@@ -61,28 +62,28 @@ class TestLogSplicing(unittest.TestCase):
                                           'min_value': 0.9,
                                           'stdev': 1.2797752459412008}
                      }
+
+        return true_meta
+
+
+    def test_log_splicing_works_correctly(self):
+        async_splice_logs(wellname='609', output_dataset_name='Spliced')
+        wd = WellDataset(self.w, 'Spliced')
+        log = BasicLog(wd.id, 'GR')
+
+        true_meta = self._true_meta()
+
         for key, val in true_meta.items():
             self.assertEqual(val, log.meta[key])
 
     def test_log_splicing_engine_node_works_correctly(self):
-        node = SpliceLogsNode()
-        node.run(output_dataset_name='LQC2')
+
+        SpliceLogsNode.run(output_dataset_name='LQC2')
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')
-        true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
-                     'family': 'Gamma Ray',
-                     'basic_statistics': {'avg_step': 0.09999999999999964,
-                                          'const_step': True,
-                                          'depth_span': 2634.7999999999906,
-                                          'gmean': 3.8137350566251675,
-                                          'max_depth': 2643.3999999999905,
-                                          'max_value': 8.497804999995498,
-                                          'mean': 4.031120237500464,
-                                          'min_depth': 8.6,
-                                          'min_value': 0.9,
-                                          'stdev': 1.2797752459412008},
-                     'tags': ['spliced']
-                     }
+
+        true_meta = self._true_meta()
+
         for key, val in true_meta.items():
             self.assertEqual(val, log.meta[key])

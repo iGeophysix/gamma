@@ -9,7 +9,7 @@ from components.petrophysics.project_statistics import ProjectStatisticsNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_log_resolution
 
-PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data')
+PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'ProjectData')
 
 
 class TestProjectStatisticsNode(TestCase):
@@ -18,7 +18,9 @@ class TestProjectStatisticsNode(TestCase):
         _s.flush_db()
 
         for f in os.listdir(PATH_TO_TEST_DATA):
-            if f.endswith('.las'):
+            if f.startswith('100_LAS') or \
+               f.startswith('101_LAS') or \
+               f.startswith('200_LAS'):
                 import_to_db(filename=os.path.join(PATH_TO_TEST_DATA, f))
 
         p = Project()

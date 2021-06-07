@@ -72,6 +72,13 @@ class RedisStorage:
 
     # COMMON META (FamilyProperties, Units,...)
 
+
+    def table_exists(self, table_name) -> bool:
+        """
+        Checks if the table exists in the db.
+        """
+        return self.connection().exists(table_name) > 0
+
     def table_keys(self, table_name) -> list:
         """
         Lists all keys in the table

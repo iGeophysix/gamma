@@ -28,7 +28,10 @@ LOG_FAMILY_PRIORITY = [
 logger = logging.getLogger('LogSplicingNode')
 
 
-def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str] = None, tags: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
+def splice_logs(well: Well,
+                dataset_names: list[str] = None,
+                log_names: list[str] = None,
+                tags: list[str] = None) -> tuple[dict[str, np.ndarray], dict[str, dict]]:
     """
     This function processes the well and generates a dataset with spliced logs and its meta information
     :param well: Well object to process
@@ -42,6 +45,7 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     for dataset_name in dataset_names:
         wd = WellDataset(well, dataset_name)
         logs_in_dataset = wd.log_list if log_names is None else log_names
+
         logs.update({(dataset_name, log_name): BasicLog(wd.id, log_name) for log_name in logs_in_dataset})
 
     if tags is not None:
@@ -51,12 +55,18 @@ def splice_logs(well: Well, dataset_names: list[str] = None, log_names: list[str
     results_data = {}
     results_meta = {}
 
+
     for family, family_meta in FamilyProperties().items():
         if not family_meta.get('splice', False):
             continue
 
+
+        log_belongs_to_family = lambda log, family: hasattr(log.meta, 'family') and \
+                                                    log.meta['family'] == family
+
         # select log_names of defined family
-        logs_in_family = [l for l in logs.values() if hasattr(l.meta, 'family') and l.meta['family'] == family]
+        logs_in_family = [l for l in logs.values() if log_belongs_to_family(l, family)]
+
         # if no log_names in of this family - skip
         if not logs_in_family:
             continue
@@ -130,15 +140,19 @@ class SpliceLogsNode(EngineNode):
     """
 
     @staticmethod
-    def calculate_for_well(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = DEFAULT_LQC_NAME):
+    def calculate_for_well(wellname: str,
+                           datasetnames: list[str] = None,
+                           logs: list[str] = None,
+                           tags: list[str] = None,
+                           output_dataset_name: str = DEFAULT_LQC_NAME):
         """
-            Method to splice logs in a well. Takes logs in datasets and outputs it into a specified output dataset
-            :param wellname: Well name as string
-            :param datasetnames: Datasets' name as list of strings. If None then uses all datasets
-            :param logs: Logs' names as list of string. If None then uses all logs available in datasets
-            :param tags: tags that must be in logs to process the logs (one of)
-            :param output_dataset_name: Name of output dataset
-            """
+        Method to splice logs in a well. Takes logs in datasets and outputs it into a specified output dataset
+        :param wellname: Well name as string
+        :param datasetnames: Datasets' name as list of strings. If None then uses all datasets
+        :param logs: Logs' names as list of string. If None then uses all logs available in datasets
+        :param tags: tags that must be in logs to process the logs (one of)
+        :param output_dataset_name: Name of output dataset
+        """
         w = Well(wellname)
         logs_data, logs_meta = splice_logs(w, datasetnames, logs, tags)
         wd = WellDataset(w, output_dataset_name, new=True)
@@ -157,24 +171,26 @@ class SpliceLogsNode(EngineNode):
         :param async_job: run via Celery or in this process
         :return:
         """
+
+
         p = Project()
         if async_job:
-            tasks = [
-                celery_app.send_task('tasks.async_splice_logs', kwargs={
-                    'wellname': well_name,
-                    'tags': ['processing', ],
-                    'output_dataset_name': output_dataset_name}
-                                     )
-                for well_name in p.list_wells()
-            ]
+            tasks = []
+
+            for well_name in p.list_wells():
+                params = { 'wellname': well_name,
+                           'tags': ['processing', ],
+                           'output_dataset_name': output_dataset_name
+                         }
+                tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs=params))
             wait_till_completes(tasks)
         else:
             for well_name in p.list_wells():
-                cls.calculate_for_well(**{
-                    'wellname': well_name,
-                    'tags': ['processing', ],
-                    'output_dataset_name': output_dataset_name}
-                                       )
+                params = { 'wellname': well_name,
+                           'tags': ['processing', ],
+                           'output_dataset_name': output_dataset_name
+                         }
+                cls.calculate_for_well(**params)
 
 
 if __name__ == '__main__':

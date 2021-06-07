@@ -14,7 +14,7 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine_node import EngineNode
-from components.importexport.FamilyProperties import FamilyProperties
+from components.importexport.FamilyProperties import FamilyProperties 
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
 from components.petrophysics.curve_operations import interpolate_log_by_depth
@@ -24,7 +24,6 @@ logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
 FLUID_MINERAL_TABLE = os.path.join(os.path.dirname(__file__), 'data', 'FluidMineralConstants.json')
-FAMILY_PROPERTIES = FamilyProperties()
 
 
 class VolumetricModel():
@@ -228,10 +227,14 @@ class VolumetricModelSolverNode(EngineNode):
 
         workflow = 'VolumetricModelling'
         dataset = logs[0].dataset_id
+
+        family_properties = FamilyProperties()
+
         # save components' volumes
         for component_name, data in res['COMPONENT_VOLUME'].items():
             component_family = vm.component_family(component_name)
-            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[component_family].get('mnemonic', component_family))
+            log = BasicLog(dataset_id=dataset,
+                           log_id=family_properties[component_family].get('mnemonic', component_family))
             log.meta.family = component_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = 'v/v'
@@ -240,7 +243,8 @@ class VolumetricModelSolverNode(EngineNode):
         # save forward modeled logs
         for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
             input_log_family = logs[n].meta.family
-            log = BasicLog(dataset_id=dataset, log_id=FAMILY_PROPERTIES[input_log_family].get('mnemonic', input_log_family) + '_FM')
+            log = BasicLog(dataset_id=dataset,
+                           log_id=family_properties[input_log_family].get('mnemonic', input_log_family) + '_FM')
             log.meta.family = input_log_family
             log.values = np.vstack((logs[0].values[:, 0], data)).T
             log.meta.units = logs[n].meta.units

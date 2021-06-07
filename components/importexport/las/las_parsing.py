@@ -105,6 +105,8 @@ def parse(filename, data: bytearray = None, use_chardet=True) -> LasStructure:
         lines = [l.strip() for l in lines]
         lines = [l for l in lines if not l.startswith('#')]
 
+        f.close()
+
         ####
         las_file = LasStructure(os.path.basename(filename))
 

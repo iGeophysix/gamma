@@ -4,17 +4,14 @@ import unittest
 import numpy as np
 import redis
 
-from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
+from components.database.RedisStorage import RedisStorage
 
 
 class TestArrayInRedis(unittest.TestCase):
 
     def setUp(self):
-        self.conn = redis.Redis(host=REDIS_HOST,
-                                port=REDIS_PORT,
-                                db=REDIS_DB,
-                                password=REDIS_PASSWORD)
-        self.conn.flushdb()
+        self._s = RedisStorage()
+        self._s.flush_db()
 
     def test_store_compressed_array(self):
         a = np.array(((10, 20), (30, 40)))
@@ -25,9 +22,9 @@ class TestArrayInRedis(unittest.TestCase):
 
         # print("BYTES", stream.getvalue())
 
-        self.conn.set("t", stream.getvalue())
+        self._s.connection().set("t", stream.getvalue())
 
-        b = self.conn.get("t")
+        b = self._s.connection().get("t")
 
         # print("BYTES", b)
 
@@ -36,7 +33,7 @@ class TestArrayInRedis(unittest.TestCase):
         # print("RESULT ARRAY", b)
 
         self.assertEqual(a.all(), b.all())
-        self.conn.delete("t")
+        self._s.connection().delete("t")
 
     def test_store_txt_array(self):
         a = np.array(((10, 20), (30, 40)))
@@ -45,15 +42,15 @@ class TestArrayInRedis(unittest.TestCase):
         stream = io.BytesIO()
         np.savetxt(stream, a, fmt='%s')
 
-        self.conn.set("t", stream.getvalue())
+        self._s.connection().set("t", stream.getvalue())
 
-        b = self.conn.get("t")
+        b = self._s.connection().get("t")
 
         b = np.loadtxt(io.BytesIO(b))
 
 
         self.assertEqual(a.all(), b.all())
-        self.conn.delete("t")
+        self._s.connection().delete("t")
 
     def test_store_map_of_arrays(self):
         a = np.array(((10, 20), (30, 40)))
@@ -70,9 +67,9 @@ class TestArrayInRedis(unittest.TestCase):
 
         # print("BYTES MAP", mb)
 
-        self.conn.hset("m", mapping=mb)
+        self._s.connection().hset("m", mapping=mb)
 
-        mb2 = {k: self.conn.hget("m", k) for k in ["a", "b"]}
+        mb2 = {k: self._s.connection().hget("m", k) for k in ["a", "b"]}
 
         # print("BYTES MAP", mb2)
 

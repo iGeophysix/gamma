@@ -150,16 +150,24 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
 
 
 @app.task
-def async_splice_logs(wellname: str, datasetnames: list[str] = None, logs: list[str] = None, tags: list[str] = None, output_dataset_name: str = 'Spliced') -> None:
+def async_splice_logs(wellname: str,
+                      datasetnames: list[str] = None,
+                      logs: list[str] = None,
+                      tags: list[str] = None,
+                      output_dataset_name: str = 'Spliced') -> None:
     """
-    Async method to splice logs. Takes  logs in datasets and outputs it into a specified output dataset
+    Async method to splice logs. Takes  logs in datasets and outputs it into a
+    specified output dataset
     :param wellname: Well name as string
     :param datasetnames: Datasets' name as list of strings. If None then uses all datasets
     :param logs: Logs' names as list of string. If None then uses all logs available in datasets
     :param output_dataset_name: Name of output dataset
     """
-    node = SpliceLogsNode()
-    node.calculate_for_well(wellname, datasetnames, logs, tags, output_dataset_name)
+    SpliceLogsNode.calculate_for_well(wellname,
+                                      datasetnames,
+                                      logs,
+                                      tags,
+                                      output_dataset_name)
 
 
 @app.task
