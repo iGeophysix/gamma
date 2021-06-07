@@ -28469,301 +28469,301 @@
 				"DAZ3X"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZCB"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZDP"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZEI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZG2"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZGT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZGX"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZHD"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZNM"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZOD"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZPK"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZST"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZW"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZWS"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZXE"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DAZZ"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"ACTINNX1"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"ATK_INNM2"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"ATK_INNX"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"COPINXYR"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"COPINXYX"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DBMAR"
 			],
 			"ForcePerLength",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEV3X"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVCB"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVDP"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVEI"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVFT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVG2"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVGT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVGX"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVHD"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVIN"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVNM"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVOD"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVOD2"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVPK"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVS"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVST"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVW"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVWS"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVXE"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVZ"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INNM"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -38296,7 +38296,7 @@
 				"INCL"
 			],
 			"PlaneAngle",
-			"Plane Angle"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -76231,14 +76231,14 @@
 				"INCL"
 			],
 			"PlaneAngle",
-			"Inclination"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCLINATION"
 			],
 			"PlaneAngle",
-			"Inclination"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -77782,7 +77782,7 @@
 				"NPHI"
 			],
 			"Dimensionless",
-			"Porosity"
+			"Neutron Porosity"
 		],
 		[
 			[
@@ -84732,7 +84732,7 @@
 				"SWA"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Apparent"
 		],
 		[
 			[
@@ -85225,21 +85225,21 @@
 				"BVW"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Bulk Volume Water"
 		],
 		[
 			[
 				"CBVWE"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Bulk Volume Water"
 		],
 		[
 			[
 				"CBVWT"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Bulk Volume Water"
 		],
 		[
 			[
@@ -87232,7 +87232,7 @@
 				"INCLIN"
 			],
 			"PlaneAngle",
-			"Plane Angle"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -88259,7 +88259,7 @@
 				"\u041d\u041a\u0422"
 			],
 			"Dimensionless",
-			"Neutron Porosity"
+			"Neutron Far"
 		],
 		[
 			[
@@ -123230,98 +123230,98 @@
 				"CCXP"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XD_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XD_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XO_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XO_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XS_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"M2_XS_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XD_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XD_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XO_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XO_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XS_ADT"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MN_XS_ADT_SIG"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
 				"MXP"
 			],
 			"Dimensionless",
-			"Archie Porosity Exponent"
+			"Cementation Exponent"
 		],
 		[
 			[
@@ -199193,490 +199193,490 @@
 				"AHAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZ_G"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZIDES"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZIM_CONT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZIM_CONT_RT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZIM_EU"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"AZTR_G"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"CAZIM_UNC"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"CRS_CNAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA_G"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA15_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA21_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA27_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA39_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA54_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_LB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_LB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_UB_1DN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAA72_UB_1DT"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ_BHC"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ_G"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ15_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ15_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ15_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ21_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ21_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ21_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ27_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ27_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ27_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ39_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ39_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ39_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ54_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ54_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ54_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ72_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ72_LB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"DPAZ72_UB_1D"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"GD_HAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"GD_RAWHAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HAZI_ADN"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
@@ -199684,196 +199684,196 @@
 				"HAZR"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HAZI_SL"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HAZIM"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HDA"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"HLAZ"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"PDAZIM"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"PDAZIMLO"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"ROAZ"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"TAZD"
 			],
 			"Dimensionless",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"TRIHAZI"
 			],
 			"PlaneAngle",
-			"Hole Azimuth"
+			"Borehole Azimuth"
 		],
 		[
 			[
 				"ASDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CDE1"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CDE2"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CDE3"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CDE4"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CNINC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"CRS_CNINC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEFL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_ADN"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_AVG"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_EMS"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_NCMT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_PGMS"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_PGMS_SL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_PMIT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_PSTT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -199881,343 +199881,343 @@
 				"DEVR"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_SL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_SL_PSTT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVI_TL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVIM"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DEVS"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DVC"
 			],
 			"Dimensionless",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"DVI"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"EDV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"EDVC"
 			],
 			"Dimensionless",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"GD_DEVI"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"GD_RAWDEVI"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"GDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"GDEV_EDTC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"GYRO_CINC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"HDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_CONT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_CONT_ECO_RT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_CONT_RT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_EU"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_RAB"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_RAB_RT"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCL_RAW"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCLDES"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"INCLIN_ARC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P01DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P02DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P03DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P04DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P05DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P06DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P07DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P08DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P09DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P10DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P11DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P12DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P13DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P14DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P15DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"P16DEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"PDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"PDINCL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"RDE1"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"RDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"SDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"SDEV_MR"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"SDEV_SL"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -200225,21 +200225,21 @@
 				"SDEVM"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"SLS_CINC"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
 				"TRISDEV"
 			],
 			"PlaneAngle",
-			"Hole Deviation"
+			"Borehole Inclination"
 		],
 		[
 			[
@@ -207122,63 +207122,63 @@
 				"DT_MATR"
 			],
 			"TimePerLength",
-			"Matrix Compressional Slowness"
+			"Compressional Slowness Matrix"
 		],
 		[
 			[
 				"DTMX"
 			],
 			"TimePerLength",
-			"Matrix Compressional Slowness"
+			"Compressional Slowness Matrix"
 		],
 		[
 			[
 				"TPMA"
 			],
 			"TimePerLength",
-			"Matrix Electromagnetic Propagation Time"
+			"Electromagnetic Propagation Time Matrix"
 		],
 		[
 			[
 				"ENGE"
 			],
 			"Dimensionless",
-			"Matrix Epithermal Neutron Porosity"
+			"Epithermal Neutron Porosity Matrix"
 		],
 		[
 			[
 				"ENGE_ACQ"
 			],
 			"Dimensionless",
-			"Matrix Epithermal Neutron Porosity"
+			"Epithermal Neutron Porosity Matrix"
 		],
 		[
 			[
 				"ENGE_INCP"
 			],
 			"Dimensionless",
-			"Matrix Epithermal Neutron Porosity"
+			"Epithermal Neutron Porosity Matrix"
 		],
 		[
 			[
 				"ENGE_WALK2"
 			],
 			"Dimensionless",
-			"Matrix Epithermal Neutron Porosity"
+			"Epithermal Neutron Porosity Matrix"
 		],
 		[
 			[
 				"SIGE"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SIGE_ACQ"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
@@ -207186,98 +207186,98 @@
 				"SIGE_ECO_RT"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SIGE_INCP"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SIGE_WALK2"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SIGS"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SIMA"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"SMXA"
 			],
 			"Area",
-			"Matrix Neutron Capture Cross Section"
+			"Neutron Capture Cross Section Matrix"
 		],
 		[
 			[
 				"TNGE"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"TNGE_ACQ"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"TNGE_ECO_RT"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"TNGE_INCP"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"TNGE_WALK2"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"TNGE_WALK2_ECO_RT"
 			],
 			"Dimensionless",
-			"Matrix Neutron Porosity"
+			"Neutron Porosity Matrix"
 		],
 		[
 			[
 				"PEGE"
 			],
 			"Dimensionless",
-			"Matrix Photoelectric Factor"
+			"Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"PEGE_ACQ"
 			],
 			"Dimensionless",
-			"Matrix Photoelectric Factor"
+			"Photoelectric Factor Matrix"
 		],
 		[
 			[
@@ -207285,63 +207285,63 @@
 				"PGER"
 			],
 			"Dimensionless",
-			"Matrix Photoelectric Factor"
+			"Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"PEGE_INCP"
 			],
 			"Dimensionless",
-			"Matrix Photoelectric Factor"
+			"Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"PEGE_WALK2"
 			],
 			"Dimensionless",
-			"Matrix Photoelectric Factor"
+			"Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"DTSM_MATR"
 			],
 			"TimePerLength",
-			"Matrix Shear Slowness"
+			"Shear Slowness Matrix"
 		],
 		[
 			[
 				"UGE"
 			],
 			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
+			"Volumetric Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"UGE_ACQ"
 			],
 			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
+			"Volumetric Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"UGE_INCP"
 			],
 			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
+			"Volumetric Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"UGE_WALK2"
 			],
 			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
+			"Volumetric Photoelectric Factor Matrix"
 		],
 		[
 			[
 				"UMA"
 			],
 			"Dimensionless",
-			"Matrix Volumetric Photoelectric Factor"
+			"Volumetric Photoelectric Factor Matrix"
 		],
 		[
 			[
@@ -298495,21 +298495,21 @@
 				"CPPW"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Core"
 		],
 		[
 			[
 				"CSWI"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Connate Core"
 		],
 		[
 			[
 				"CSWM"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Core"
 		],
 		[
 			[
@@ -298579,7 +298579,7 @@
 				"SWA"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Apparent"
 		],
 		[
 			[
@@ -298621,7 +298621,7 @@
 				"SWE"
 			],
 			"Dimensionless",
-			"Water Saturation"
+			"Water Saturation Effective"
 		],
 		[
 			[
@@ -301046,7 +301046,7 @@
 				"RHOMAA"
 			],
 			"MassPerVolume",
-			"Matrix Bulk Density"
+			"Bulk Density Matrix"
 		],
 		[
 			[
@@ -301290,6 +301290,41 @@
 			],
 			"Dimensionless",
 			"Titanium Yield"
+		],
+		[
+			[
+				"MISFIT"
+			],
+			"Dimensionless",
+			"Model Fit Error"
+		],
+		[
+			[
+				"N"
+			],
+			"Dimensionless",
+			"Saturation Exponent"
+		],
+		[
+			[
+				"M"
+			],
+			"Dimensionless",
+			"Cementation Exponent"
+		],
+		[
+			[
+				"A"
+			],
+			"Dimensionless",
+			"Tortuosity Factor"
+		],
+		[
+			[
+				"RHOFLU"
+			],
+			"Dimensionless",
+			"Bulk Density Fluid"
 		]
 	]
 }
