@@ -33,7 +33,7 @@ class TestFamilyAssignment(unittest.TestCase):
                  'Outside Diameter',
                  'Neutron Porosity',
                  'Z Acceleration',
-                 'Hole Azimuth',
+                 'Borehole Azimuth',
                  'Caliper',
                  'Gradient 045',
                  'Spontaneous Potential',
