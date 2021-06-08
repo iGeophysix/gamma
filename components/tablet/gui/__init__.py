@@ -1,12 +1,10 @@
-import sys
 import logging
+import sys
 
-from PySide2.QtWidgets import QAction, QMenu, QFileDialog, QProgressDialog
-from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QMenu
 
 from components import ComponentGuiConstructor
 from components.mainwindow.gui import GeoMainWindow
-
 from components.tablet.gui.TabletWidget import TabletWidget
 
 gamma_logger = logging.getLogger("gamma_logger")
@@ -25,7 +23,6 @@ class TabletGui(ComponentGuiConstructor):
         pass
 
     def _showTableWidget(self):
-
         GeoMainWindow().addToCentral(TabletWidget(), "Tablet")
 
 

@@ -10,11 +10,12 @@ import openpyxl as xl
 from components.database.RedisStorage import RedisStorage
 from settings import BASE_DIR
 
-SOURCE_FAMSET_BOOK = os.path.join(BASE_DIR, 'components',
-                                            'importexport',
-                                            'rules',
-                                            'src',
-                                            'FamilyProperties.xlsx')
+SOURCE_FAMSET_BOOK = os.path.join(BASE_DIR,
+                                  'components',
+                                  'importexport',
+                                  'rules',
+                                  'src',
+                                  'FamilyProperties.xlsx')
 
 DEFAULT_THICKNESS = 1
 DEFAULT_COLOR = '000000'  # black in hex RGB24
@@ -117,17 +118,16 @@ class FamilyProperties:
 
     _table_name = 'FamilyProperties'
 
-
     def __init__(self):
         self._s = RedisStorage()
 
         if not self._s.table_exists(self._table_name):
             self.load(SOURCE_FAMSET_BOOK)
 
-
-    def load(self, src_path, sheet='FamilyProperties'):
+    @classmethod
+    def load(cls, src_path=SOURCE_FAMSET_BOOK, sheet='FamilyProperties'):
         data = parse_excel_table(src_path, sheet)
-        self._s.table_key_set(self._table_name, mapping=data)
+        RedisStorage().table_key_set(cls._table_name, mapping=data)
 
     def exists(self, item) -> bool:
         return self._s.table_key_exists(self._table_name, item)
@@ -139,7 +139,7 @@ class FamilyProperties:
             return {}
 
     def __setitem__(self, key, value):
-        s.table_key_set(self._table_name, key, value)
+        self._s.table_key_set(self._table_name, key, value)
 
     def items(self):
         for key in self._s.table_keys(self._table_name):

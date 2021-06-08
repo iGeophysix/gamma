@@ -1,10 +1,13 @@
-import pandas
-import json
 import os
+import pickle
+import re
+
+import pandas
+
+from components.database.RedisStorage import RedisStorage
+from components.importexport.FamilyAssigner import FamilyAssigner
 
 SOURCE_FAMASS_BOOK = os.path.join(os.path.dirname(__file__), 'PWLS v3.0 Logs.xlsx')
-EXPORT_FAMASS_FILE = os.path.join(os.path.dirname(__file__), '..', 'FamilyAssignment.json')
-EXPORT_TOOLS_FILE = os.path.join(os.path.dirname(__file__), '..', 'LoggingTools.json')
 
 
 def capitalize(s):
@@ -34,15 +37,15 @@ def readTools() -> dict:
     return cc_mnem_tool
 
 
-def main():
+def build_family_assigner():
     # read family assignment rules from Excel
     cols = ['Company Name', 'Curve Mnemonic', 'Alt Mnemonics', 'Family', 'Dimension']
     with open(SOURCE_FAMASS_BOOK, 'rb') as f:
         df = pandas.read_excel(f, 'Curves', header=0, usecols=cols)
 
     # create family assignment database
-    fa = {}     # { company: [ ({mnemonics}, dimension, family), ...] }
-    known_mnemonics = {}    # { company: {mnemonics} }; already saved mnemonics to avoid duplicate records
+    fa_rules = {}  # { company: [ ({mnemonics}, dimension, family), ...] }
+    known_mnemonics = {}  # { company: {mnemonics} }; already saved mnemonics to avoid duplicate records
     for r in range(len(df.index)):
         company = df['Company Name'][r].strip()
         family = capitalize(df['Family'][r].strip())
@@ -53,24 +56,34 @@ def main():
         for alternative_mnemonic in map(str.strip, str(df['Alt Mnemonics'][r]).split(',')):
             if alternative_mnemonic:
                 mnemonics.add(alternative_mnemonic.upper())
-        mnemonics.difference_update(known_mnemonics.setdefault(company, set()))    # remove possible multiple entries of a mnemonic
+        mnemonics.difference_update(known_mnemonics.setdefault(company, set()))  # remove possible multiple entries of a mnemonic
 
         # add record to db
         if company and mnemonics and dimension and family:
-            fa.setdefault(company, []).append((sorted(mnemonics), dimension, family))
+            fa_rules.setdefault(company, []).append((sorted(mnemonics), dimension, family))
             known_mnemonics[company].update(mnemonics)
 
-    # export family assignment JSON
-    with open(EXPORT_FAMASS_FILE, 'w') as f:
-        json.dump(fa, f, sort_keys=True, indent='\t')
-
     # read logging tools from Excel
-    cc_mnen_tool = readTools()
+    tools = readTools()
 
-    # export logging tools JSON
-    with open(EXPORT_TOOLS_FILE, 'w') as f:
-        json.dump(cc_mnen_tool, f, sort_keys=True, indent='\t')
+    db = {}
+    for company, rules in fa_rules.items():
+        cdb = db[company] = FamilyAssigner.DataBase()  # initialize company FamilyAssigner db
+        for mnemonics, dimension, family in rules:
+            for mnemonic in mnemonics:
+                tool = tools.get(company, {}).get(mnemonic)  # source logging tool for mnemonic
+                mnemonic_info = FamilyAssigner.MnemonicInfo(family=family, dimension=dimension, company=company, tool=tool)
+                if '*' in mnemonic or '?' in mnemonic:
+                    re_mask = mnemonic.replace('*', '.*').replace('?', '.')
+                    re_pattern = re.compile(re_mask, re.IGNORECASE)
+                    cdb.re_match[re_pattern] = mnemonic_info
+                else:
+                    cdb.precise_match[mnemonic] = mnemonic_info
+                cdb.nlpp.learn(mnemonic, mnemonic_info)
+
+    s = RedisStorage()
+    s.object_set(FamilyAssigner.TABLE_NAME, pickle.dumps(db))
 
 
 if __name__ == '__main__':
-    main()
+    build_family_assigner()

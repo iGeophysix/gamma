@@ -2,8 +2,6 @@ import logging
 import time
 from functools import wraps
 
-import numpy as np
-
 logging.basicConfig()
 debug = logging.getLogger("utilities")
 debug.setLevel(logging.INFO)

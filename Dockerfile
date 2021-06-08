@@ -13,9 +13,5 @@ RUN groupadd -g 999 celery && \
 COPY . /app
 WORKDIR /app
 
-# load common data to Redis (e.g. FamilyProperties)
-# RUN python load_common_data.py
-
 RUN chown celery:celery -R /app
 USER celery
-

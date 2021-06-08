@@ -1,6 +1,8 @@
 import unittest
-from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
+
 import numpy as np
+
+from components.importexport.UnitsSystem import UnitsSystem, UnitConversionError
 
 
 class TestUnitSystem(unittest.TestCase):

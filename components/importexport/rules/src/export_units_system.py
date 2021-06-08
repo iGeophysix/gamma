@@ -1,12 +1,14 @@
-import pandas
-import json
 import os
+import pickle
+
+import pandas
+
+from components.database.RedisStorage import RedisStorage
 
 SOURCE_UNITS_TABLE = os.path.join(os.path.dirname(__file__), 'Units.xlsx')
-EXPORT_UNITS_SYSTEM = os.path.join(os.path.dirname(__file__), '..', 'UnitsSystem.json')
 
 
-def main():
+def build_unit_system():
     # read Excel table
     cols = ['Dimension Name', 'BaseUnit', 'Unit', 'Scale', 'Offset', 'Drop']
     with open(SOURCE_UNITS_TABLE, 'rb') as f:
@@ -40,31 +42,48 @@ def main():
             for dimension2, compat_units2 in units.items():
                 for unit2 in compat_units2:
                     lunit2 = unit2.lower()
-                    if dimension == dimension2 and unit == unit2:   # it's me, skip
+                    if dimension == dimension2 and unit == unit2:  # it's me, skip
                         continue
                     assert unit != unit2, f'Units must be unique. Double entry of {dimension}."{unit}" and {dimension2}."{unit2}"'
                     if lunit == lunit2:
-                        if dimension == dimension2:     # same dimension, compatible units with different case
+                        if dimension == dimension2:  # same dimension, compatible units with different case
                             unit_info = compat_units[unit]
                             unit2_info = compat_units2[unit2]
                             if unit_info['k'] == unit2_info['k'] and unit_info.get('b') == unit2_info.get('b'):  # same unit with different case
                                 if (dimension, unit) not in delete_later and (dimension2, unit2) not in delete_later:
-                                    if unit_info.get('base', False):    # not going to delete a base unit
+                                    if unit_info.get('base', False):  # not going to delete a base unit
                                         delete_later.add((dimension2, unit2))
                                     else:
                                         delete_later.add((dimension, unit))
-                            else:   # different units with case difference
+                            else:  # different units with case difference
                                 compat_units[unit]['case-sensitive'] = True
-                        else:   # units from diferent dimensions are always different
+                        else:  # units from diferent dimensions are always different
                             compat_units[unit]['case-sensitive'] = True
 
     for dimension, unit in delete_later:
         del units[dimension][unit]
 
     # export units system JSON
-    with open(EXPORT_UNITS_SYSTEM, 'w') as f:
-        json.dump(units, f, sort_keys=True, indent='\t')
+    _unit_dim = {}  # unit -> dimension
+    _dim_base_unit = {}  # dimension -> base unit
+    _ci_unit_unit = {}  # lower_case_unit -> unit. Search for case-insensitive units
+    for dimension, unit in units.items():
+        for unit_name, unit_info in unit.items():
+            _unit_dim[unit_name] = dimension
+            if not unit_info.get('case-sensitive', False):
+                _ci_unit_unit[unit_name.lower()] = unit_name
+            if unit_info.get('base', False):
+                _dim_base_unit[dimension] = unit_name
+    result = {
+        '_db': units,
+        '_unit_dim': _unit_dim,
+        '_dim_base_unit': _dim_base_unit,
+        '_ci_unit_unit': _ci_unit_unit
+    }
+
+    s = RedisStorage()
+    s.object_set('UnitSystem', pickle.dumps(result))
 
 
 if __name__ == '__main__':
-    main()
+    build_unit_system()

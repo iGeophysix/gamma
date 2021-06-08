@@ -1,6 +1,6 @@
 import os
 import unittest
-import celery_conf
+
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
@@ -23,7 +23,7 @@ class TestSplitByRun(unittest.TestCase):
         well = Well(wellname, True)
         datasets = ['Well622_ULN_Combined', ]
         for file in datasets:
-            f = os.path.join(self.path_to_test_data, file+'.las')
+            f = os.path.join(self.path_to_test_data, file + '.las')
             dataset_name = file
             dataset = WellDataset(well, dataset_name, True)
             import_to_db(f, well=well, well_dataset=dataset)

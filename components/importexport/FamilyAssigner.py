@@ -1,23 +1,18 @@
-import json
+import copy
+import dataclasses
 import logging
-import os
 import pickle
 import re
-import time
-import copy
 from typing import Optional, Iterable, Union
-import dataclasses
 
 from celery_conf import app as celery_app, wait_till_completes
+from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.engine_node import EngineNode
 from components.importexport.UnitsSystem import UnitsSystem
 
-FAMASS_RULES = os.path.join(os.path.dirname(__file__), 'rules', 'FamilyAssignment.json')
-FAMASS_RULES_CACHE = os.path.join(os.path.dirname(FAMASS_RULES), 'FamilyAssignerDB.pickle')
-TOOLS = os.path.join(os.path.dirname(__file__), 'rules', 'LoggingTools.json')
 GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
 MAX_RELIABILITY_EXACT_MATCHING = 1
@@ -85,6 +80,7 @@ class FamilyAssigner:
     '''
     Main family assigner class.
     '''
+    TABLE_NAME = "FamilyAssigner"
 
     class DataBase:
         '''
@@ -117,11 +113,11 @@ class FamilyAssigner:
             '''
             if a is None:
                 if b is None:
-                    return 0    # None vs None
+                    return 0  # None vs None
                 else:
-                    return -1   # None vs not None
+                    return -1  # None vs not None
             elif b is None:
-                return 1        # not None vs None
+                return 1  # not None vs None
             elif a == b:
                 return 0
             elif a > b:
@@ -144,43 +140,10 @@ class FamilyAssigner:
         '''
         Loads Energystics family assigning rules.
         '''
-        self.db = {}  # {company: FamilyAssigner.DataBase}
-        self.units = UnitsSystem()
-        retries = 5
-        if os.path.exists(FAMASS_RULES_CACHE) and os.path.getmtime(FAMASS_RULES_CACHE) >= os.path.getmtime(FAMASS_RULES):
-            while retries:
-                try:
-                    with open(FAMASS_RULES_CACHE, 'rb') as f:
-                        self.db = pickle.load(f)
-                except pickle.UnpicklingError:
-                    retries -= 1
-                    time.sleep(1)
-                    continue
-                else:
-                    break
-        else:
-            self.recreate_family_database()
 
-    def recreate_family_database(self) -> None:
-        with open(FAMASS_RULES, 'r') as f:
-            fa_rules = json.load(f)
-        with open(TOOLS, 'r') as f:
-            tools = json.load(f)
-        for company, rules in fa_rules.items():
-            cdb = self.db[company] = FamilyAssigner.DataBase()  # initialize company FamilyAssigner db
-            for mnemonics, dimension, family in rules:
-                for mnemonic in mnemonics:
-                    tool = tools.get(company, {}).get(mnemonic)     # source logging tool for mnemonic
-                    mnemonic_info = FamilyAssigner.MnemonicInfo(family=family, dimension=dimension, company=company, tool=tool)
-                    if '*' in mnemonic or '?' in mnemonic:
-                        re_mask = mnemonic.replace('*', '.*').replace('?', '.')
-                        re_pattern = re.compile(re_mask, re.IGNORECASE)
-                        cdb.re_match[re_pattern] = mnemonic_info
-                    else:
-                        cdb.precise_match[mnemonic] = mnemonic_info
-                    cdb.nlpp.learn(mnemonic, mnemonic_info)
-        with open(FAMASS_RULES_CACHE, 'wb') as f:
-            pickle.dump(self.db, f)
+        self.units = UnitsSystem()
+        s = RedisStorage()
+        self.db = pickle.loads(s.object_get(self.TABLE_NAME))
 
     def _nlp_assign_family(self, mnemonic: str, company: str = None) -> Optional[MnemonicInfo]:
         '''
@@ -234,13 +197,13 @@ class FamilyAssigner:
                 if nlp_res is not None:
                     for family_info, reliability in nlp_res:
                         res = copy.copy(family_info)
-                        res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING     # decrease maximum NLP confidence
+                        res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING  # decrease maximum NLP confidence
                         results.append(res)
 
         # filter results by unit
         if unit is not None and self.units.known_unit(unit):
             required_unit_dimention = self.units.unit_dimension(unit)
-            results = list(filter(lambda mnemonic_info: mnemonic_info.dimension == required_unit_dimention, results))    # convertable units have equal unit dimension
+            results = list(filter(lambda mnemonic_info: mnemonic_info.dimension == required_unit_dimention, results))  # convertable units have equal unit dimension
 
         # remove family duplicates
         results.sort(reverse=True)  # high reliability first
@@ -248,7 +211,7 @@ class FamilyAssigner:
         for mnemonic_info in results:
             already_have = None
             for unic_mnemonic_info in uniq_family_results:
-                if mnemonic_info.family == unic_mnemonic_info.family:   # do we already have this family in results?
+                if mnemonic_info.family == unic_mnemonic_info.family:  # do we already have this family in results?
                     already_have = unic_mnemonic_info
                     break
             if already_have is not None:
@@ -256,9 +219,9 @@ class FamilyAssigner:
                 # increase reliability by a part of the second variant reliability, drop second source variant
                 already_have.reliability = min(1, already_have.reliability + mnemonic_info.reliability / len(results))
                 if already_have.company != mnemonic_info.company:
-                    already_have.company = None     # no particular source company
+                    already_have.company = None  # no particular source company
                 if already_have.tool != mnemonic_info.tool:
-                    already_have.tool = None    # no particular source tool
+                    already_have.tool = None  # no particular source tool
             else:
                 uniq_family_results.append(mnemonic_info)  # just add the variant
 

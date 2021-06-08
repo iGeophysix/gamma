@@ -74,6 +74,40 @@ class RedisStorage:
         '''
         self.connection().set('project', json.dumps(meta))
 
+    # COMMON OBJECT (Pickle)
+    def object_exists(self, key: str) -> bool:
+        """
+        Check if an object exists in Redis
+        :param key: object name
+        :return:
+        """
+        return self.connection().exists(key)
+
+    def object_get(self, key: str) -> bytes:
+        """
+        Get object value
+        :param key: object name
+        :return: object value as string
+        """
+        return self.connection().get(key)
+
+    def object_set(self, key: str, value: bytes) -> None:
+        """
+        Set object value
+        :param key: object name
+        :param value: object value as string
+        :return:
+        """
+        self.connection().set(key, value)
+
+    def object_delete(self, key) -> None:
+        """
+        Delete object
+        :param key: object name
+        :return:
+        """
+        self.connection().delete(key)
+
     # COMMON META (FamilyProperties, Units,...)
 
 

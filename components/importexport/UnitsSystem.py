@@ -1,9 +1,8 @@
-import json
-import os
+import pickle
 
 import numpy as np
 
-UNIT_SYSTEM_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rules', 'UnitsSystem.json')
+from components.database.RedisStorage import RedisStorage
 
 
 class UnitConversionError(Exception):
@@ -16,18 +15,12 @@ class UnitsSystem:
     '''
 
     def __init__(self):
-        with open(UNIT_SYSTEM_PATH, 'r') as f:
-            self._db = json.load(f)
-        self._unit_dim = {}  # unit -> dimension
-        self._dim_base_unit = {}  # dimension -> base unit
-        self._ci_unit_unit = {}  # lower_case_unit -> unit. Search for case-insensitive units
-        for dimension, units in self._db.items():
-            for unit, unit_info in units.items():
-                self._unit_dim[unit] = dimension
-                if not unit_info.get('case-sensitive', False):
-                    self._ci_unit_unit[unit.lower()] = unit
-                if unit_info.get('base', False):
-                    self._dim_base_unit[dimension] = unit
+        s = RedisStorage()
+        unit_system = pickle.loads(s.object_get('UnitSystem'))
+        self._db = unit_system['_db']
+        self._unit_dim = unit_system['_unit_dim']  # unit -> dimension
+        self._dim_base_unit = unit_system['_dim_base_unit']  # dimension -> base unit
+        self._ci_unit_unit = unit_system['_ci_unit_unit']  # lower_case_unit -> unit. Search for case-insensitive units
 
     def unit_dimension(self, unit: str):
         '''

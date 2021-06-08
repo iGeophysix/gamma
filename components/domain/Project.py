@@ -4,7 +4,6 @@ import pandas as pd
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
-from components.domain.MarkersSet import MarkersSet
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 
