@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from typing import Iterable
+from typing import Iterable, Dict, Tuple
 
 import numpy as np
 
@@ -75,7 +75,7 @@ def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) ->
         for log_id in ds.log_list:
             log = BasicLog(ds.id, log_id)
             if 'raw' in log.meta.tags \
-                    and not 'main_depth' in log.meta.tags \
+                    and 'main_depth' not in log.meta.tags \
                     and log.meta.family == family \
                     and log.meta.run['value'] == run_name:
                 logs_meta.update({log_id: log.meta})
@@ -88,10 +88,29 @@ def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) ->
     return best_log, new_logs_meta
 
 
-def rank_logs(logs_meta):
-    averages = {('basic_statistics', "mean"): None, ('basic_statistics', "stdev"): None, ('log_resolution', 'value'): None}
+def rank_logs(logs_meta: Dict[BasicLog, dict], additional_logs_meta: Dict[BasicLog, dict] = None) -> Tuple[BasicLog, dict]:
+    '''
+    Updates logs' meta with ranking
+    :param logs_meta: ranking logs' meta
+    :param additional_logs_meta: logs from different runs to make reference statistics representative
+    '''
+    if not logs_meta:
+        raise AlgorithmFailure('No logs were defined as best')
+    averages = {('basic_statistics', 'mean'): None, ('basic_statistics', 'stdev'): None, ('log_resolution', 'value'): None}
     for category, metric in averages.keys():
-        val = np.median([logs_meta[log_id][category][metric] for log_id in logs_meta.keys()])
+        metric_data = [logs_meta[log_id][category][metric] for log_id in logs_meta.keys()]
+        if additional_logs_meta is not None:
+            metric_data += [additional_logs_meta[log_id][category][metric] for log_id in additional_logs_meta.keys()]
+        if len(logs_meta) != 2:
+            val = np.median(metric_data)
+        else:
+            # it's impossible to choose the best one from two logs. Involve overall project statistics
+            log_family = next(iter(logs_meta.values()))['family']   # ranking logs' family
+            project_stat = Project().meta['basic_statistics'][log_family]
+            if project_stat['number_of_logs'] > 2:
+                val = project_stat[metric if category == 'basic_statistics' else category]
+            else:
+                raise AlgorithmFailure('No logs were defined as best')
         # little trick to avoid division by zero : https://gammalog.jetbrains.space/im/review/2vqWfb3Gfp0m?message=1Jv0001Jv&channel=2pl5Dd4IH2oq
         averages[(category, metric)] = val if val != 0 else val + 1e-16
 
@@ -102,22 +121,44 @@ def rank_logs(logs_meta):
     best_score = np.inf
     best_log = None
     new_logs_meta = {log_id: {} for log_id in logs_meta.keys()}
-    for log_id in logs_meta.keys():
-        sum_deltas = sum(abs((logs_meta[log_id][category][metric] - averages[(category, metric)]) / averages[(category, metric)]) for category, metric in averages.keys())
-        depth_correction = abs((logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth']) / average_depth_correction)
+    for log_id, log_meta in logs_meta.items():
+        sum_deltas = sum(abs((log_meta[category][metric] - averages[(category, metric)]) / averages[(category, metric)]) for category, metric in averages.keys())
+        depth_correction = abs((log_meta['basic_statistics']['max_depth'] - log_meta['basic_statistics']['min_depth']) / average_depth_correction)
         result = sum_deltas / depth_correction
         if result < best_score:
             best_log = log_id
             best_score = result
-        new_logs_meta[log_id].update({'best_log_detection': {"value": result, 'is_best': False}})
+        new_logs_meta[log_id].update({'best_log_detection': {'value': result}})
     if best_log is None:
         raise AlgorithmFailure('No logs were defined as best')
     # define ranking
     ranking = sorted(new_logs_meta.items(), key=lambda v: v[1]['best_log_detection']['value'])
     for i, meta in enumerate(ranking):
-        new_logs_meta[meta[0]]['best_log_detection']['rank'] = i + 1
-    new_logs_meta[best_log]['best_log_detection']['is_best'] = True
+        new_logs_meta[meta[0]]['best_log_detection'].update({'rank': i + 1, 'is_best': i == 0})
     return best_log, new_logs_meta
+
+
+def intervals_overlap(r1: tuple[float, float], r2: tuple[float, float]) -> float:
+    '''
+    Intervals overlap size
+    :param r1, r2: (top, bottom) of interval
+    :return: positive overlap thickness if overlaping or negative value of distance between intervals if there is no overlap
+    '''
+    return min(r1[1], r2[1]) - max(r1[0], r2[0])
+
+
+def intervals_similarity(run: tuple[float, float], other_run: tuple[float, float]) -> float:
+    '''
+    Estimates expected statistical similarity of two intervals
+    :param run: reference interval (top, bottom)
+    :param other_run: other interval (top, bottom)
+    :return: similarity score
+    '''
+    # overlapped thickness, bigger is better
+    overlap_h = intervals_overlap(run, other_run)
+    # not overlapped thickness of the candidate, smaller is better because it brings out-of-interval data
+    uniq_h = (other_run[1] - other_run[0]) - overlap_h
+    return overlap_h - uniq_h
 
 
 class BestLogDetectionNode(EngineNode):
@@ -131,7 +172,8 @@ class BestLogDetectionNode(EngineNode):
                and hasattr(log.meta, 'family') \
                and hasattr(log.meta, 'basic_statistics') \
                and hasattr(log.meta, 'log_resolution') \
-               and not 'main_depth' in log.meta.tags
+               and hasattr(log.meta, 'run') \
+               and 'main_depth' not in log.meta.tags
 
     @classmethod
     def run(cls):
@@ -146,11 +188,22 @@ class BestLogDetectionNode(EngineNode):
                 # gather runs in dataset
                 for log in logs:
                     if cls.validate(log):
-                        runs[log.meta.run['value']][log.meta.family].append(log)
+                        runs[(log.meta.run['top'], log.meta.run['bottom'])][log.meta.family].append(log)
 
             for run, families in runs.items():
                 for family, logs in families.items():
                     logs_paths = [(log.dataset_id, log._id) for log in logs]
-                    tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths,)))
+                    additional_logs_paths = None
+                    if len(logs_paths) == 2:
+                        # logs amount in the run is not enough to choose the best one
+                        # get additional logs from nearest runs
+                        other_runs = [other_run for other_run in runs if other_run != run]
+                        nearest_runs = sorted(other_runs, key=lambda other_run: intervals_similarity(run, other_run), reverse=True)
+                        additional_logs_paths = []
+                        for additional_run in nearest_runs:
+                            additional_logs_paths += [(log.dataset_id, log._id) for log in runs[additional_run][family]]
+                            if len(logs_paths) + len(additional_logs_paths) > 2:
+                                break   # that's enough
+                    tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths, additional_logs_paths)))
 
         wait_till_completes(tasks)

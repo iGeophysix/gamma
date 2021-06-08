@@ -1,5 +1,5 @@
 import time
-from typing import Iterable
+from typing import Iterable, Optional
 
 from components.database.tasks import *
 from components.domain.Log import BasicLog
@@ -171,19 +171,26 @@ def async_splice_logs(wellname: str,
 
 
 @app.task
-def async_detect_best_log(log_paths: tuple[tuple[str, str]]) -> None:
+def async_detect_best_log(log_paths: tuple[tuple[str, str]], additional_logs_paths: Optional[tuple[tuple[str, str]]]) -> None:
     '''
     Celery task to run best log detection from BestLogDetectionNode
-    :param log_paths:
-    :return:
+    :param log_paths: list of (dataset_id, log_id) - best log candidates
+    :param additional_logs_paths: list of (dataset_id, log_id) - additional logs to make statistics represenatative
     '''
     logs = {log: BasicLog(log[0], log[1]) for log in log_paths}
     logs_meta = {log: log.meta for log in logs.values()}
+    if additional_logs_paths is not None:
+        logs = {log: BasicLog(log[0], log[1]) for log in additional_logs_paths}
+        additional_logs_meta = {log: log.meta for log in logs.values()}
+    else:
+        additional_logs_meta = None
+
     try:
-        best_log, new_meta = rank_logs(logs_meta)
+        _, new_meta = rank_logs(logs_meta, additional_logs_meta)
     except AlgorithmFailure:
-        BestLogDetectionNode.logger.info(f"No best log in {logs_meta.values()}")
+        BestLogDetectionNode.logger.info(f'No best log in {logs_meta.values()}')
         return
+
     for log, values in new_meta.items():
         log.meta.update(values)
         log.meta.add_tags('processing')

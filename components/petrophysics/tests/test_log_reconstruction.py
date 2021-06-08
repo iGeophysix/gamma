@@ -52,6 +52,7 @@ class TestLogReconstructionNode(TestCase):
                 'depth': 12,
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
+                'allow_writing_files': False
             },
             async_job=False
         )

@@ -62,6 +62,7 @@ class Engine:
                 'depth': 12,
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
+                'allow_writing_files': False
             },
         }, },
         {'node': 'LogReconstructionNode', 'parameters': {
@@ -72,6 +73,7 @@ class Engine:
                 'depth': 12,
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
+                'allow_writing_files': False
             },
         }, },
         {'node': 'LogReconstructionNode', 'parameters': {
@@ -82,6 +84,7 @@ class Engine:
                 'depth': 12,
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
+                'allow_writing_files': False
             },
         }, },
         {'node': 'VolumetricModelSolverNode', 'parameters': {'model_components': ['Shale', 'Quartz', 'Calcite', 'UWater']}},

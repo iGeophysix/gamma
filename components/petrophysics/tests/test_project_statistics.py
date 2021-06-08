@@ -19,8 +19,8 @@ class TestProjectStatisticsNode(TestCase):
 
         for f in os.listdir(PATH_TO_TEST_DATA):
             if f.startswith('100_LAS') or \
-               f.startswith('101_LAS') or \
-               f.startswith('200_LAS'):
+                    f.startswith('101_LAS') or \
+                    f.startswith('200_LAS'):
                 import_to_db(filename=os.path.join(PATH_TO_TEST_DATA, f))
 
         p = Project()
@@ -30,8 +30,19 @@ class TestProjectStatisticsNode(TestCase):
 
         FamilyAssignerNode.run()
 
-
     def test_node_works(self):
-        print('run')
         node = ProjectStatisticsNode()
         node.run()
+
+        p = Project()
+        stats_by_family = p.meta['basic_statistics']
+        self.assertEqual(16, len(stats_by_family))
+
+        gr_stats = {'mean': 108.6400,
+                    'gmean': 99.636,
+                    'stdev': 57.900,
+                    'log_resolution': 14.158,
+                    'number_of_logs': 3}
+
+        for metric, ref_value in gr_stats.items():
+            self.assertAlmostEqual(stats_by_family['Gamma Ray'][metric], ref_value, delta=0.001)

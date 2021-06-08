@@ -42,6 +42,7 @@ class ProjectStatisticsNode(EngineNode):
                 'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in good_logs]),
                 'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
                 'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
+                'number_of_logs': len(good_logs)
             }
 
         p.update_meta({'basic_statistics': stats_by_family})

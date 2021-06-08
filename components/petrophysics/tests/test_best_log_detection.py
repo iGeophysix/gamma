@@ -30,7 +30,7 @@ class TestBestLogDetection(unittest.TestCase):
         for log_id in self.wd.get_log_list():
             if log_id == 'MD': continue  # skip depth log
             log = BasicLog(self.wd.id, log_id)
-            log.meta.update({'family': 'Gamma Ray', 'run': {'value': '56_(2650_2800)'}})
+            log.meta.update({'family': 'Gamma Ray', 'run': {'value': '56_(2650_2800)', 'top': 2650, 'bottom': 2800}})
             log.save()
 
         # define log resolution
