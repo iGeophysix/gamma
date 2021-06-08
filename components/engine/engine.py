@@ -14,7 +14,6 @@ from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, Sh
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 from utilities import my_timer
 
-
 NODES = {
     'BasicStatisticsNode': BasicStatisticsNode,
     'LogResolutionNode': LogResolutionNode,
@@ -33,6 +32,8 @@ NODES = {
     'SaturationArchieNode': SaturationArchieNode,
     'LasExportNode': LasExportNode
 }
+
+
 class Engine:
     """
     Class that launches EngineNodes
@@ -95,9 +96,10 @@ class Engine:
             my_timer(node.run)(**step['parameters'])
 
             print(f'Finished {step}')
-        celery_conf.app.send_task('components.database.tasks.build_log_meta_fields_index', ())
-        celery_conf.app.send_task('components.database.tasks.build_dataset_meta_fields_index', ())
-        celery_conf.app.send_task('components.database.tasks.build_well_meta_fields_index', ())
+        celery_conf.app.send_task('components.database.RedisStorage.build_log_meta_fields_index', ())
+        celery_conf.app.send_task('components.database.RedisStorage.build_dataset_meta_fields_index', ())
+        celery_conf.app.send_task('components.database.RedisStorage.build_well_meta_fields_index', ())
+
 
 if __name__ == '__main__':
     engine = Engine()

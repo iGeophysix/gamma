@@ -1,7 +1,6 @@
 import time
 from typing import Iterable
 
-from celery_conf import app
 from components.database.tasks import *
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
@@ -11,7 +10,7 @@ from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.importexport.las_importexport import LasExportNode
-from components.petrophysics.best_log_detection import rank_logs
+from components.petrophysics.best_log_detection import rank_logs, AlgorithmFailure, BestLogDetectionNode
 from components.petrophysics.curve_operations import get_basic_curve_statistics, rescale_curve, LogResolutionNode
 from components.petrophysics.log_reconstruction import LogReconstructionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
@@ -180,7 +179,11 @@ def async_detect_best_log(log_paths: tuple[tuple[str, str]]) -> None:
     '''
     logs = {log: BasicLog(log[0], log[1]) for log in log_paths}
     logs_meta = {log: log.meta for log in logs.values()}
-    best_log, new_meta = rank_logs(logs_meta)
+    try:
+        best_log, new_meta = rank_logs(logs_meta)
+    except AlgorithmFailure:
+        BestLogDetectionNode.logger.info(f"No best log in {logs_meta.values()}")
+        return
     for log, values in new_meta.items():
         log.meta.update(values)
         log.meta.add_tags('processing')
@@ -236,5 +239,3 @@ def async_log_reconstruction(model, well_name, log_families_to_train, log_family
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
     node = SaturationArchieNode()
     node.calculate_for_item(well_name, a, m, n, rw, output_log_name)
-
-

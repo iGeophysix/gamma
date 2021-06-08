@@ -3,7 +3,7 @@ from collections import Counter
 import numpy as np
 from sklearn.cluster import KMeans
 
-from celery_conf import app as celery_app, check_task_completed
+from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -22,6 +22,7 @@ def detect_runs_in_well(well: Well, depth_tolerance: float):
         for log_id in d.log_list:
             log = BasicLog(d.id, log_id)
             if 'main_depth' in log.meta.tags \
+                    or 'bad_quality' in log.meta.tags \
                     or not 'raw' in log.meta.tags \
                     or log.meta.type != 'BasicLog':
                 continue
@@ -69,7 +70,7 @@ class RunDetectionNode(EngineNode):
     Engine node that detects runs in all wells
     """
 
-    def run(self, depth_tolerance: float = 50):
+    def run(self, depth_tolerance: float = 50, async_job: bool = True):
         """
         Detect pseudo-runs in each well
         :param depth_tolerance:
@@ -77,9 +78,16 @@ class RunDetectionNode(EngineNode):
         """
         p = Project()
         tasks = []
-        for well_name in p.list_wells():
-            result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
-            tasks.append(result)
+        if not async_job:
+            for well_name in p.list_wells():
+                detect_runs_in_well(Well(well_name), depth_tolerance)
+        else:
+            for well_name in p.list_wells():
+                result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
+                tasks.append(result)
 
-        while not all(map(check_task_completed, tasks)):
-            continue
+            wait_till_completes(tasks)
+
+
+if __name__ == '__main__':
+    RunDetectionNode().run(async_job=False)

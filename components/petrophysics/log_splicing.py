@@ -60,7 +60,6 @@ def splice_logs(well: Well,
         if not family_meta.get('splice', False):
             continue
 
-
         log_belongs_to_family = lambda log, family: hasattr(log.meta, 'family') and \
                                                     log.meta['family'] == family
 
@@ -75,7 +74,7 @@ def splice_logs(well: Well,
         try:
             spliced = splice_logs_in_family(logs_in_family, target_units=target_units)
         except AttributeError as exc:
-            logger.warning(str(exc) + f" Family: {family}")
+            logger.warning(str(exc) + f" Well {well.name}. Family: {family}")
             continue
         # define meta information
         meta = {}
@@ -116,6 +115,8 @@ def splice_logs_in_family(logs: list, target_units: str = None) -> np.ndarray:
                 log_values = log.convert_units(target_units)
             except UnitConversionError:
                 continue
+        else:
+            log_values = log.values
         interpolated_values = scipy.interpolate.interp1d(log_values[:, 0], log_values[:, 1], fill_value=np.nan, bounds_error=False)(new_md)
         logs_data_interpolated.update({(log.dataset_id, log._id): interpolated_values})
 
