@@ -6,7 +6,7 @@ from components.importexport import las
 data_path = os.path.abspath("data_for_outsource")
 
 for root, dirnames, filenames in os.walk(data_path):
-    print("Start importing {len(filenames)} files.")
+    print(f"Start importing {len(filenames)} files.")
     l = len(filenames)
     for i, filename in enumerate(filenames):
         print(f"{i + 1}/{l}")
@@ -18,3 +18,4 @@ for root, dirnames, filenames in os.walk(data_path):
 build_log_meta_fields_index()
 build_dataset_meta_fields_index()
 build_well_meta_fields_index()
+print("Done building indices")
