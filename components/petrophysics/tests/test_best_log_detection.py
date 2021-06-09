@@ -5,9 +5,15 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.petrophysics.best_log_detection import get_best_log, BestLogDetectionNode, score_log_tags, LOG_TAG_ASSESSMENT
+from components.petrophysics.best_log_detection import (get_best_log_for_run_and_family,
+                                                        BestLogDetectionNode,
+                                                        score_log_tags,
+                                                        LOG_TAG_ASSESSMENT)
+
 from settings import BASE_DIR
-from tasks import async_read_las, async_log_resolution
+
+from tasks import (async_read_las,
+                   async_log_resolution)
 
 PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
@@ -37,7 +43,9 @@ class TestBestLogDetection(unittest.TestCase):
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
     def test_best_log_detection_works_correct(self):
-        best_log, new_meta = get_best_log(datasets=[self.wd, ], family='Gamma Ray', run_name='56_(2650_2800)')
+        best_log, new_meta = get_best_log_for_run_and_family(datasets=[self.wd,],
+                                                             family='Gamma Ray',
+                                                             run_name='56_(2650_2800)')
 
         for log_id, values in new_meta.items():
             if log_id == 'MD': continue  # skip depth log
@@ -48,18 +56,21 @@ class TestBestLogDetection(unittest.TestCase):
         self.assertEqual('GK_D4417_D', best_log, msg='Best log in this dataset is GK_D4417_D')
         log1 = BasicLog(self.wd.id, 'GK_D4417_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
-        self.assertEqual(True, log1.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
-        self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
+        self.assertEqual(True, log1.meta.best_log_detection['is_best'],
+                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
+        self.assertEqual(False, log2.meta.best_log_detection['is_best'],
+                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
 
     def test_best_log_detection_engine_node_works_correctly(self):
-        bld = BestLogDetectionNode()
-        bld.run()
+        BestLogDetectionNode.run()
 
         log1 = BasicLog(self.wd.id, 'GK_D4417_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
 
-        self.assertEqual(True, log1.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
-        self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
+        self.assertEqual(True, log1.meta.best_log_detection['is_best'],
+                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
+        self.assertEqual(False, log2.meta.best_log_detection['is_best'],
+                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
 
     def test_score_log_tags(self):
         right_answer = sum(LOG_TAG_ASSESSMENT.values())

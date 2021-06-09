@@ -5,13 +5,15 @@ import pandas as pd
 import scipy.interpolate
 
 from celery_conf import app as celery_app, wait_till_completes
+
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitConversionError
+
 from settings import DEFAULT_LQC_NAME
 
 LOG_FAMILY_PRIORITY = [

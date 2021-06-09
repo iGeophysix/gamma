@@ -31,8 +31,7 @@ class TestProjectStatisticsNode(TestCase):
         FamilyAssignerNode.run()
 
     def test_node_works(self):
-        node = ProjectStatisticsNode()
-        node.run()
+        ProjectStatisticsNode.run()
 
         p = Project()
         stats_by_family = p.meta['basic_statistics']

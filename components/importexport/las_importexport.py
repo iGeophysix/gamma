@@ -8,7 +8,7 @@ from celery_conf import wait_till_completes, app as celery_app
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 from components.importexport.las import import_to_db
 from components.importexport.las.las_export import create_las_file
 from settings import MINIO_HOST, MINIO_PORT, MINIO_USER, MINIO_PASSWORD

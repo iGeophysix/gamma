@@ -1,14 +1,15 @@
-import logging
 from collections import defaultdict
 from typing import Iterable, Dict, Tuple
+from datetime import datetime
 
+import logging
 import numpy as np
 
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 
 LOG_TAG_ASSESSMENT = {
     'average': -5,
@@ -60,7 +61,9 @@ class AlgorithmFailure(Exception):
     pass
 
 
-def get_best_log(datasets: Iterable[WellDataset], family: str, run_name: str) -> tuple[str, dict]:
+def get_best_log_for_run_and_family(datasets: Iterable[WellDataset],
+                                    family: str,
+                                    run_name: str) -> tuple[str, dict]:
     """
     This method defines best in family log in a dataset withing one run
     :param datasets: list of WellDataset objects to process
@@ -115,7 +118,7 @@ def rank_logs(logs_meta: Dict[BasicLog, dict], additional_logs_meta: Dict[BasicL
         averages[(category, metric)] = val if val != 0 else val + 1e-16
 
     average_depth_correction = np.max([logs_meta[log_id]['basic_statistics']['max_depth'] - logs_meta[log_id]['basic_statistics']['min_depth'] for log_id in logs_meta.keys()])
-    # little trick to avoid division by zero : https://gammalog.jetbrains.space/im/review/2vqWfb3Gfp0m?message=1Jv0001Jv&channel=2pl5Dd4IH2oq
+
     average_depth_correction = average_depth_correction if average_depth_correction != 0 else average_depth_correction + 1e-16
 
     best_score = np.inf
@@ -162,6 +165,7 @@ def intervals_similarity(run: tuple[float, float], other_run: tuple[float, float
 
 
 class BestLogDetectionNode(EngineNode):
+
     logger = logging.getLogger("BestLogDetectionNode")
     logger.setLevel(logging.INFO)
 
@@ -176,21 +180,50 @@ class BestLogDetectionNode(EngineNode):
                and 'main_depth' not in log.meta.tags
 
     @classmethod
-    def run(cls):
+    def version(cls):
+        return 0
+
+    @classmethod
+    def run_for_item(cls, **kwargs):
+        log_paths = kwargs['log_paths']
+        additional_logs_paths = kwargs['additional_logs_paths']
+
+        logs = {log: BasicLog(log[0], log[1]) for log in log_paths}
+        logs_meta = {log: log.meta for log in logs.values()}
+        if additional_logs_paths is not None:
+            logs = {log: BasicLog(log[0], log[1]) for log in additional_logs_paths}
+            additional_logs_meta = {log: log.meta for log in logs.values()}
+        else:
+            additional_logs_meta = None
+
+        try:
+            _, new_meta = rank_logs(logs_meta, additional_logs_meta)
+        except AlgorithmFailure:
+            BestLogDetectionNode.logger.info(f'No best log in {logs_meta.values()}')
+            return
+
+        for log, values in new_meta.items():
+            log.meta.update(values)
+            log.meta.add_tags('processing')
+            log.save()
+
+
+    @classmethod
+    def run(cls, **kwargs):
         p = Project()
         tree = p.tree_oop()
         tasks = []
         for well, datasets in tree.items():
-            runs = defaultdict(lambda: defaultdict(list))
+            run_family_logs = defaultdict(lambda: defaultdict(list))
             for dataset, logs in datasets.items():
                 if dataset.name == 'LQC':
                     continue
-                # gather runs in dataset
+                # gather run_family_logs in dataset
                 for log in logs:
                     if cls.validate(log):
-                        runs[(log.meta.run['top'], log.meta.run['bottom'])][log.meta.family].append(log)
+                        run_family_logs[(log.meta.run['top'], log.meta.run['bottom'])][log.meta.family].append(log)
 
-            for run, families in runs.items():
+            for run, families in run_family_logs.items():
                 for family, logs in families.items():
                     logs_paths = [(log.dataset_id, log._id) for log in logs]
                     additional_logs_paths = None
@@ -207,3 +240,13 @@ class BestLogDetectionNode(EngineNode):
                     tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths, additional_logs_paths)))
 
         wait_till_completes(tasks)
+
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        kwargs['log'].meta.append_history({ 'node': cls.name(),
+                                            'node_version': cls.version(),
+                                            'timestamp': datetime.now().isoformat(),
+                                            'parent_logs': [],
+                                            'parameters': {}
+                                          })

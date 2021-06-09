@@ -1,15 +1,18 @@
 import logging
 import warnings
+from datetime import datetime
 
-import numpy as np
+from datetime import datetime
 from scipy import signal
+import numpy as np
 
 from celery_conf import app as celery_app, wait_till_completes
+
 from components.domain.Log import BasicLog, BasicLogMeta
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 
 
 def geo_mean(iterable):
@@ -20,11 +23,11 @@ def geo_mean(iterable):
 
 
 def get_basic_curve_statistics(log_data: np.array) -> dict:
-    '''
+    """
     Returns basic stats for a log (np.array)
     :param log_data: input data as np.array
     :return: dict with basic stats (interval of not NaN values, mean, gmean, etc)
-    '''
+    """
     non_null_values = log_data[~np.isnan(log_data[:, 1])]
     min_depth = np.min(non_null_values[:, 0])
     max_depth = np.max(non_null_values[:, 0])
@@ -50,13 +53,13 @@ def get_basic_curve_statistics(log_data: np.array) -> dict:
 
 
 def rescale_curve(data, min_value: float = 0, max_value: float = 100):
-    '''
+    """
     This function applies linear normalization to the whole curve. NaN values remain NaN
     :param data:
     :param min_value:
     :param max_value:
     :return:
-    '''
+    """
 
     inv_range = 1.0 / (max_value - min_value)
     offset = min_value * inv_range
@@ -66,10 +69,17 @@ def rescale_curve(data, min_value: float = 0, max_value: float = 100):
     return data
 
 
-def interpolate_log_by_depth(log_data: np.array, depth_step: float = None, depth_start: float = None, depth_stop: float = None, depth_to: np.array = None) -> np.array:
+def interpolate_log_by_depth(log_data: np.array,
+                             depth_step: float = None,
+                             depth_start: float = None,
+                             depth_stop: float = None,
+                             depth_to: np.array = None) -> np.array:
     """
-    This method interpolates log to bring it to a new depth. Specify either depth_to only or depth_step plus optional depth_start and depth_stop
-    It will keep missing values inside data interval and cut out all nan values before the first not nan and after the last not nan values
+    This method interpolates log to bring it to a new depth.
+    Specify either depth_to only or depth_step plus optional depth_start and depth_stop.
+    It will keep missing values inside data interval and cut out
+    all nan values before the first not nan and after the last not nan values.
+
     :param log_data: np.array - log data in shape ((md, val), (md, val),...)
     :param depth_step: float - new reference depth step
     :param depth_start: float - first depth of the new reference
@@ -77,6 +87,7 @@ def interpolate_log_by_depth(log_data: np.array, depth_step: float = None, depth
     :param depth_to: np.array - new reference
     :return np.array with resampled data in shape ((md, val), (md, val),...)
     """
+
     non_null_values = log_data[~np.isnan(log_data[:, 1])]
     if depth_to is None:
         assert depth_step is not None, ValueError('Either depth_to or depth_step is mandatory')
@@ -123,11 +134,11 @@ class LogResolutionNode(EngineNode):
 
     @staticmethod
     def validate(log: BasicLog):
-        '''
+        """
         Validate input data
         :param log:
         :return:
-        '''
+        """
         if not 'raw' in log.meta.tags:
             raise TypeError('Not raw data')
         if 'main_depth' in log.meta.tags:
@@ -135,22 +146,30 @@ class LogResolutionNode(EngineNode):
         assert abs(log.meta.basic_statistics['min_depth'] - log.meta.basic_statistics['max_depth']) > 50, 'Log is too short'
 
     @classmethod
-    def calculate_for_log(cls, wellname, datasetnames, logs):
+    def run_for_item(cls, **kwargs):
+        wellname = kwargs['wellname']
+        datasetnames = kwargs['datasetnames']
+        lognames = kwargs['lognames']
+
         w = Well(wellname)
-        datasetnames = w.datasets if datasetnames is None else datasetnames
+        if datasetnames is None:
+            datasetnames = w.datasets
 
         # get all data from specified well and datasets
         for dataset_name in datasetnames:
             d = WellDataset(w, dataset_name)
-            log_names = d.log_list if logs is None else logs
-            for log_name in log_names:
+
+            loop_lognames = d.log_list if lognames is None else lognames
+
+            for log_name in loop_lognames:
                 log = BasicLog(d.id, log_name)
                 log_resolution = get_log_resolution(log.values, log.meta)
                 log.meta.log_resolution = {'value': log_resolution}
+                cls.write_history(log=log)
                 log.save()
 
     @classmethod
-    def run(cls):
+    def run(cls, **kwargs):
         p = Project()
         well_names = p.list_wells()
         tasks = []
@@ -162,28 +181,71 @@ class LogResolutionNode(EngineNode):
                 dataset = WellDataset(well, dataset_name)
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
+
+                    error_message = (f'Cannot calculate resolution on'
+                                      '{well.name}-{dataset.name}-{log.name}. {repr(exc)}')
                     try:
                         cls.validate(log)
                     except TypeError as exc:
-                        cls.logger.debug(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        cls.logger.debug(error_message)
                         continue
                     except Exception as exc:
-                        cls.logger.info(f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        cls.logger.info(error_message)
                         log.meta.add_tags('no_resolution', 'bad_quality')
                         log.save()
                         continue
 
-                    # cls.calculate_for_log(well_name, [dataset_name, ], [log.name, ])
-                    result = celery_app.send_task('tasks.async_log_resolution', (well_name, [dataset_name, ], [log.name, ]))
+                    result = celery_app.send_task('tasks.async_log_resolution',
+                                                  (well_name, [dataset_name, ], [log.name, ]))
                     tasks.append(result)
 
         wait_till_completes(tasks)
 
+    @classmethod
+    def write_history(cls, **kwargs):
+        kwargs['log'].meta.append_history({ 'node': cls.name(),
+                                            'node_version': cls.version(),
+                                            'timestamp': datetime.now().isoformat(),
+                                            'parent_logs': [],
+                                            'parameters': {}
+                                          })
+
 
 class BasicStatisticsNode(EngineNode):
     """
-    Engine node that calculates log resolution
+    Engine node that calculates log basic statistics.
     """
+
+    @classmethod
+    def version(cls):
+        return 0
+
+    @classmethod
+    def run_for_item(cls, **kwargs):
+        """
+        Calculates basic log statics for all given lognames
+        in the given well and dataset.
+        """
+        wellname = kwargs['wellname']
+        datasetnames = kwargs['datasetnames']
+        lognames = kwargs['lognames']
+
+        w = Well(wellname)
+        if datasetnames is None:
+            datasetnames = w.datasets
+
+        # get all data from specified well and datasets
+        for datasetname in datasetnames:
+            d = WellDataset(w, datasetname)
+
+            loop_lognames = d.log_list if lognames is None else lognames
+
+            for log_name in loop_lognames:
+                log = BasicLog(d.id, log_name)
+                log.meta.update({'basic_statistics': get_basic_curve_statistics(log.values)})
+                cls.write_history(log=log)
+                log.save()
+
 
     @classmethod
     def run(cls):
@@ -195,6 +257,17 @@ class BasicStatisticsNode(EngineNode):
             for dataset_name in well.datasets:
                 dataset = WellDataset(well, dataset_name)
                 for log_name in dataset.log_list:
-                    result = celery_app.send_task('tasks.async_get_basic_log_stats', (well_name, [dataset_name, ], [log_name, ]))
+                    result = celery_app.send_task('tasks.async_get_basic_log_stats',
+                                                  (well_name, [dataset_name, ], [log_name, ]))
                     tasks.append(result)
         wait_till_completes(tasks)
+
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        kwargs['log'].meta.append_history({ 'node': cls.name(),
+                                            'node_version': cls.version(),
+                                            'timestamp': datetime.now().isoformat(),
+                                            'parent_logs': [],
+                                            'parameters': {}
+                                          })

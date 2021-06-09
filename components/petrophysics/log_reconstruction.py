@@ -10,7 +10,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 from components.importexport.FamilyProperties import FamilyProperties
 from settings import LOGGING_LEVEL
 

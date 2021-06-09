@@ -58,16 +58,23 @@ class CurveObject(TabletObject):
 
     def minMax(self):
         if hasattr(self._log.meta, 'display'):
-            min_ = self._log.meta.display.get('min', None) if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
-            max_ = self._log.meta.display.get('max', None) if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
-            return min_, max_
-        elif FamilyProperties.exists(self._log.meta.family):
+            min_ = self._log.meta.display.get('min') if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
+            max_ = self._log.meta.display.get('max') if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
+        elif FamilyProperties().exists(self._log.meta.family):
             fam = FamilyProperties()[self._log.meta.family]
             min_ = fam['min'] if fam.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
             max_ = fam['max'] if fam.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
-            return min_, max_
         else:
-            return self._log.meta.basic_statistics['min_value'], self._log.meta.basic_statistics['max_value']
+            min_ = self._log.meta.basic_statistics['min_value']
+            max_ = self._log.meta.basic_statistics['max_value']
+
+        if math.isclose(min_, max_):
+            magnitude = round(math.log(max(1, abs(max_)), 10))
+            dx = 10. ** magnitude * 0.5
+            min_ -= dx
+            max_ += dx
+
+        return (min_, max_)
 
     def computeArrayTransform(self):
         ## TODO: TEMPORARY, until I implement min max in DB
@@ -90,7 +97,7 @@ class CurveObject(TabletObject):
         if hasattr(self._log.meta, 'display'):
             r, g, b = self._log._meta.display.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
-        elif FamilyProperties.exists(self._log.meta.family):
+        elif FamilyProperties().exists(self._log.meta.family):
             fam = FamilyProperties()[self._log.meta.family]
             r, g, b = fam.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
@@ -125,18 +132,13 @@ class CurveObject(TabletObject):
         return array
 
     def arrayRect(self) -> QRectF:
-
         if not self._arrayRect:
             array = self.array()
             mi, ma = self.minMax()
-            min_ = (mi, np.nanmin(array[:, 0]))
-            max_ = (ma, np.nanmax(array[:, 0]))
 
-            if math.isclose(min_[0], max_[0]):
-                magnitude = round(math.log(max(1, abs(max_[0])), 10))
-                dx = 10. ** magnitude * 0.5
-                min_[0] = min_[0] - dx
-                max_[0] = max_[0] + dx
+            depths = array[:, 0]
+            min_ = [mi, np.nanmin(depths)]
+            max_ = [ma, np.nanmax(depths)]
 
             self._arrayRect = QRectF(QPointF(*min_), QPointF(*max_))
 

@@ -9,11 +9,12 @@ import numpy as np
 from scipy.optimize import lsq_linear
 
 from celery_conf import app as celery_app, wait_till_completes
+
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 from components.importexport.FamilyProperties import FamilyProperties 
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags

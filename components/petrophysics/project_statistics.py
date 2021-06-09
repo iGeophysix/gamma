@@ -3,7 +3,7 @@ from collections import defaultdict
 import numpy as np
 
 from components.domain.Project import Project
-from components.engine_node import EngineNode
+from components.engine.engine_node import EngineNode
 
 
 class ProjectStatisticsNode(EngineNode):
