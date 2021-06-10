@@ -1,9 +1,6 @@
-import json
 import logging
-import os
 import pickle
 import re
-import time
 import copy
 from typing import Optional, Iterable, Union
 import dataclasses
@@ -16,7 +13,7 @@ from components.domain.Well import Well
 from components.engine.engine_node import EngineNode
 from components.importexport.UnitsSystem import UnitsSystem
 
-GARBAGE_TOKENS = {'DL', 'RT', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
+GARBAGE_TOKENS = {'DL', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
 MAX_RELIABILITY_EXACT_MATCHING = 1
 MAX_RELIABILITY_PATTERN_MATCHING = 0.8
@@ -141,9 +138,8 @@ class FamilyAssigner:
 
     def __init__(self):
         '''
-        Loads Energystics family assigning rules.
+        Loads family assigning rules.
         '''
-
         self.units = UnitsSystem()
         s = RedisStorage()
         self.db = pickle.loads(s.object_get(self.TABLE_NAME))

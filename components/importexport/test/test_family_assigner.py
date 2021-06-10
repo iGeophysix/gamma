@@ -24,22 +24,24 @@ class TestFamilyAssignment(unittest.TestCase):
                          ('СП', None),
                          ('ПС', None),
                          ('RHOC_1', 'g/cm3'),
-                         ('RHOC_2', 'ohm.m')]
+                         ('RHOC_2', 'ohm.m'),
+                         ('RT_DK', 'ohmm')]
 
     def test_one_by_one(self):
         result = ['Gamma Ray',
-                 'Spontaneous Potential',
-                 'Relative Bearing',
-                 'Outside Diameter',
-                 'Neutron Porosity',
-                 'Z Acceleration',
-                 'Borehole Azimuth',
-                 'Caliper',
-                 'Gradient 045',
-                 'Spontaneous Potential',
-                 'Spontaneous Potential',
-                 'Bulk Density Correction',
-                 'Resistivity']
+                  'Spontaneous Potential',
+                  'Relative Bearing',
+                  'Outside Diameter',
+                  'Neutron Porosity',
+                  'Z Acceleration',
+                  'Borehole Azimuth',
+                  'Caliper',
+                  'Gradient 045',
+                  'Spontaneous Potential',
+                  'Spontaneous Potential',
+                  'Bulk Density Correction',
+                  'Resistivity',
+                  'Formation Resistivity']
 
         for n, mnemonic_unit in enumerate(self.log_list):
             mnemonic, unit = mnemonic_unit
@@ -60,7 +62,9 @@ class TestFamilyAssignment(unittest.TestCase):
                   'Spontaneous Potential',
                   'Spontaneous Potential',
                   'Bulk Density Correction',
-                  'Resistivity']
+                  'Resistivity',
+                  'Formation Resistivity']
+
         res = self.fa.assign_families(self.log_list)
         for mnemonic_unit, right_family in zip(self.log_list, result):
             mnemonic = mnemonic_unit[0]
