@@ -34,9 +34,9 @@ class TestWell(unittest.TestCase):
         s = RedisStorage()
         w1 = Well('well1', new=True)
 
-        info = w1.info
+        info = w1.meta
         info['uwi'] = '1324267832'
-        w1.info = info
+        w1.meta = info
 
         wells_in_storage = s.list_wells()
         true_result = {'name': 'well1', 'datasets': [], 'meta': {'uwi': '1324267832'}}

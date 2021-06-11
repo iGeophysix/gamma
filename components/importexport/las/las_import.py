@@ -85,6 +85,6 @@ def import_to_db(filename: str = None,
     well_info = las_structure.well_info()
     well_dataset.info = well_info
     if created_new_well:
-        well.info = well_info
+        well.meta = well_info
 
     return well_info

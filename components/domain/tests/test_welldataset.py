@@ -109,7 +109,7 @@ class TestWellDatasetRedis(unittest.TestCase):
         }
         wellname = "15/9-13 Sleipner East Appr"
         well = Well(wellname)
-        self.assertEqual(true_info, well.info)
+        self.assertEqual(true_info, well.meta)
         well.delete()
 
     def test_set_las_header(self):

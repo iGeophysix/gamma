@@ -84,4 +84,4 @@ def import_well_heads_csv(raw_data: TextIO,
         data_row = {head[0]: {'value': guess_type(value), 'units': head[1]} for head, value in zip(header.items(), data)}
         well = Well(str(data_row['__wellname__']['value']), new=True)
         del data_row['__wellname__']
-        well.update_info(info=data_row)
+        well.update_meta(info=data_row)

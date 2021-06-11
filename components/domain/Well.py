@@ -44,7 +44,7 @@ class Well:
         return self._name
 
     @property
-    def info(self) -> dict:
+    def meta(self) -> dict:
         """
         Returns well meta information
         :return: dict
@@ -52,8 +52,8 @@ class Well:
         _s = RedisStorage()
         return _s.get_well_info(self._name)
 
-    @info.setter
-    def info(self, info):
+    @meta.setter
+    def meta(self, info):
         """
         Sets new meta information.
         :param info: Complete dictionary with the new information
@@ -61,9 +61,9 @@ class Well:
         _storage = RedisStorage()
         _storage.set_well_info(self._name, info)
 
-    def update_info(self, info):
+    def update_meta(self, info):
         '''
-        Update well info
+        Update well meta
         :param info:
         :return:
         '''

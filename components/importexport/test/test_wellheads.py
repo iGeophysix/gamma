@@ -22,8 +22,8 @@ class TestWellHeadsImport(TestCase):
             import_well_heads_csv(f, header, delimiter=';')
 
         well = Well('4735')
-        self.assertEqual(13514.02, well.info['X']['value'])
-        self.assertEqual('m', well.info['X']['units'])
+        self.assertEqual(13514.02, well.meta['X']['value'])
+        self.assertEqual('m', well.meta['X']['units'])
 
     def test_import_well_heads_csv_no_units(self):
         """
@@ -34,5 +34,5 @@ class TestWellHeadsImport(TestCase):
             header = well_heads_csv_header(f, units_row=None, delimiter=';')
             import_well_heads_csv(f, header, delimiter=';')
             well = Well('4735')
-            self.assertEqual(13514.02, well.info['X']['value'])
-            self.assertEqual('', well.info['X']['units'])
+            self.assertEqual(13514.02, well.meta['X']['value'])
+            self.assertEqual('', well.meta['X']['units'])
