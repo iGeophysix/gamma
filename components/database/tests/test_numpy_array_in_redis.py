@@ -81,3 +81,5 @@ class TestArrayInRedis(unittest.TestCase):
 
         self.assertEqual(m["a"].all(), m2["a"].all())
         self.assertEqual(m["b"].all(), m2["b"].all())
+
+        self._s.connection().delete("m")

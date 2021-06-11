@@ -9,6 +9,7 @@ import numpy as np
 from scipy.optimize import lsq_linear
 
 from celery_conf import app as celery_app, wait_till_completes
+from components.database.RedisStorage import RedisStorage
 
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
@@ -19,12 +20,13 @@ from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
 from components.petrophysics.curve_operations import interpolate_log_by_depth
+from components.petrophysics.data.src.export_fluid_mineral_constants import FLUID_MINERAL_TABLE
 
 logging.basicConfig()
 logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
-FLUID_MINERAL_TABLE = os.path.join(os.path.dirname(__file__), 'data', 'FluidMineralConstants.json')
+
 
 
 class VolumetricModel():
@@ -33,8 +35,8 @@ class VolumetricModel():
     '''
 
     def __init__(self):
-        with open(FLUID_MINERAL_TABLE, 'r') as f:
-            comp = json.load(f)
+        s = RedisStorage()
+        comp = json.loads(s.object_get(FLUID_MINERAL_TABLE))
         self.FAMILY_UNITS = {family: unit for family, unit in comp['Units'].items() if not family.startswith('_')}  # units of data table, excluding system columns
         del comp['Units']  # except "Units" item all others are model components
         self._COMPONENTS = comp
