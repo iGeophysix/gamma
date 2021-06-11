@@ -14,27 +14,6 @@ QUANTILES = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]
 QUANTILES_TO_TIE = (5, 95)
 
 
-def log_normalization(w_wd_log: list[tuple[str, str, str]]) -> [dict, dict]:
-    """
-    STANDALONE Interface - Will be depricated
-    This function normalizes logs from multiple wells and datasets
-    Algorithm description is here: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/a/Normalization-of-Logs-3eTSZ54Vos2Q
-    :param w_wd_log: list of tuples with well name, dataset name and log name as string
-    :return: dict with normalized data and dict with metadata
-    """
-    warnings.warn("Do not use log_normalization method. This method will be deprecated in future releases. Use LogNormalizationNode.", DeprecationWarning)
-    logs = {}
-    # gather all data
-    for w, wd, log in w_wd_log:
-        well = Well(w)
-        dataset = WellDataset(well, wd)
-        logs.update({(w, wd, log): BasicLog(dataset.id, log)})
-
-    results = _normalize_logs(logs)
-
-    return results
-
-
 def _normalize_logs(logs: dict[tuple, BasicLog]) -> dict[tuple, BasicLog]:
     # define quantiles in each log
     for key, log in logs.items():
@@ -53,9 +32,11 @@ def _normalize_logs(logs: dict[tuple, BasicLog]) -> dict[tuple, BasicLog]:
         """
         This internal function averages histograms and returns quantile values
         """
-        range_min = min([logs[_log].meta["basic_statistics"]["min_value"] for _log in _ranked_logs])
-        range_max = max([logs[_log].meta["basic_statistics"]["max_value"] for _log in _ranked_logs])
-        histograms = [np.histogram(logs[_log].values[:, 1], bins=50, range=(range_min, range_max)) for _log in _ranked_logs]
+        range_min = min([_logs[_log].meta["basic_statistics"]["min_value"] for _log in _ranked_logs])
+        range_max = max([_logs[_log].meta["basic_statistics"]["max_value"] for _log in _ranked_logs])
+
+        histograms = [np.histogram(_logs[_log].values[:, 1], bins=50, range=(range_min, range_max)) for _log in _ranked_logs]
+
         mean_histogram = np.mean([h[0] for h in histograms], axis=0)
         cs = np.cumsum(mean_histogram) / np.sum(mean_histogram) * 100
         return {q: histograms[0][1][len(cs[cs <= q])] for q in quantiles}
