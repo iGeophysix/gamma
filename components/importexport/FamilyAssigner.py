@@ -1,9 +1,10 @@
+import copy
+import dataclasses
 import logging
 import pickle
 import re
 import copy
 from typing import Optional, Iterable, Union
-import dataclasses
 
 from celery_conf import app as celery_app, wait_till_completes
 from components.database.RedisStorage import RedisStorage
@@ -286,8 +287,6 @@ class FamilyAssignerNode(EngineNode):
         p = Project()
         tasks = []
         for well_name in p.list_wells():
-            well = Well(well_name)
-            for dataset_name in well.datasets:
-                tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name, [dataset_name, ],)))
+            tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name,)))
 
         wait_till_completes(tasks)

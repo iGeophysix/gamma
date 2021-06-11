@@ -53,6 +53,7 @@ class RedisStorage:
             self.delete_well(wellname)
         for markerset in self.list_markersets():
             self.delete_markerset_by_name(markerset)
+        self.object_delete('project')
 
     # PROJECT
     def get_project_meta(self) -> dict:

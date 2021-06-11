@@ -61,6 +61,17 @@ class Well:
         _storage = RedisStorage()
         _storage.set_well_info(self._name, info)
 
+    def update_info(self, info):
+        '''
+        Update well info
+        :param info:
+        :return:
+        '''
+        _storage = RedisStorage()
+        current_info = _storage.get_well_info(self._name)
+        current_info |= info
+        _storage.set_well_info(self._name, current_info)
+
     @property
     def datasets(self):
         """

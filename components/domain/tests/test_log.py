@@ -11,7 +11,6 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.importexport import las
-from components.importexport.las import import_to_db
 from components.importexport.markers_importexport import import_markers_csv
 from settings import BASE_DIR
 

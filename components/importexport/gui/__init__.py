@@ -1,6 +1,5 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
-import gzip
 import logging
 import multiprocessing as mp
 import os
@@ -14,6 +13,7 @@ from PySide2.QtWidgets import QMenu, QFileDialog, QProgressDialog
 from celery_conf import app as celery_app, check_task_completed
 from components import ComponentGuiConstructor
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
+from components.importexport.well_heads import well_heads_csv_header, import_well_heads_csv
 from components.mainwindow.gui import GeoMainWindow
 
 gamma_logger = logging.getLogger('gamma_logger')
@@ -31,9 +31,11 @@ class ImportExportGui(ComponentGuiConstructor):
 
     def toolBarActions(self):
         menu = QMenu("Import Export")
-        import_action = menu.addAction("Import")
+        import_action = menu.addAction("Import LAS files")
+        import_wellheads_action = menu.addAction("Import Wellheads")
 
         import_action.triggered.connect(self._showImportWidget)
+        import_wellheads_action.triggered.connect(self._showImportWellHeadsWidget)
 
         return menu
 
@@ -60,7 +62,7 @@ class ImportExportGui(ComponentGuiConstructor):
         # Parallel Process-based parsing
         async_results = []
         for file in files:
-            async_results.append(compress_and_send_for_parsing(file)) # TODO: make it parallel
+            async_results.append(compress_and_send_for_parsing(file))  # TODO: make it parallel
 
         # for (i, result) in enumerate(pool.imap_unordered(compress_and_send_for_parsing, files)):
         #     progress.setValue(i)
@@ -82,6 +84,19 @@ class ImportExportGui(ComponentGuiConstructor):
         # run engine after import completes
         gamma_logger.info("Sending task to engine")
         celery.current_app.send_task('tasks.async_run_workflow', ())
+
+        DbEventDispatcherSingleton().wellsAdded.emit()
+
+    def _showImportWellHeadsWidget(self):
+        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
+        files, _ = QFileDialog.getOpenFileName(GeoMainWindow(),
+                                               'Select one file to import',
+                                               root_directory,
+                                               'CSV Files (*.csv)')
+
+        with open(files, 'r') as f:
+            header = well_heads_csv_header(f, delimiter=';')
+            import_well_heads_csv(f, header, delimiter=';')
 
         DbEventDispatcherSingleton().wellsAdded.emit()
 

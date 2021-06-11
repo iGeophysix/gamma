@@ -2,16 +2,16 @@ import time
 from typing import Iterable, Optional
 
 from components.database.tasks import *
-
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine import Engine
+from components.engine.workflow import Workflow
 from components.importexport import las
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.importexport.las import import_to_db
 from components.importexport.las_importexport import LasExportNode
-from components.petrophysics.best_log_detection import AlgorithmFailure, BestLogDetectionNode
+from components.petrophysics.best_log_detection import BestLogDetectionNode
 from components.petrophysics.curve_operations import (BasicStatisticsNode,
                                                       rescale_curve,
                                                       LogResolutionNode)
@@ -28,8 +28,9 @@ from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 
 @app.task
 def async_run_workflow(workflow_id: str = None):
-    workflow = Engine()
-    workflow.start()
+    workflow = Workflow(workflow_id if workflow_id is not None else 'default')
+    engine = Engine()
+    engine.start(workflow)
 
 
 @app.task
@@ -140,6 +141,8 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
 
         for log in log_list:
             l = BasicLog(wd.id, log)
+            if not 'raw' in l.meta.tags:
+                continue
             result = fa.assign_family(l.name, l.meta.units)
             if result is not None:
                 l.meta.family = result.family
@@ -203,7 +206,6 @@ def async_calculate_shale_volume(well_name: str,
                                  gr_matrix: float = None,
                                  gr_shale: float = None,
                                  output_log_name: str = 'VSH_GR'):
-
     if algorithm == 'ShaleVolumeLarionovOlderRockNode':
         node = ShaleVolumeLarionovOlderRockNode()
     elif algorithm == 'ShaleVolumeLarionovTertiaryRockNode':

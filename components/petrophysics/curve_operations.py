@@ -2,12 +2,10 @@ import logging
 import warnings
 from datetime import datetime
 
-from datetime import datetime
-from scipy import signal
 import numpy as np
+from scipy import signal
 
 from celery_conf import app as celery_app, wait_till_completes
-
 from components.domain.Log import BasicLog, BasicLogMeta
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -182,14 +180,14 @@ class LogResolutionNode(EngineNode):
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
 
-                    error_message = (f'Cannot calculate resolution on'
-                                      '{well.name}-{dataset.name}-{log.name}. {repr(exc)}')
                     try:
                         cls.validate(log)
                     except TypeError as exc:
+                        error_message = (f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
                         cls.logger.debug(error_message)
                         continue
                     except Exception as exc:
+                        error_message = (f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
                         cls.logger.info(error_message)
                         log.meta.add_tags('no_resolution', 'bad_quality')
                         log.save()
@@ -203,12 +201,12 @@ class LogResolutionNode(EngineNode):
 
     @classmethod
     def write_history(cls, **kwargs):
-        kwargs['log'].meta.append_history({ 'node': cls.name(),
-                                            'node_version': cls.version(),
-                                            'timestamp': datetime.now().isoformat(),
-                                            'parent_logs': [],
-                                            'parameters': {}
-                                          })
+        kwargs['log'].meta.append_history({'node': cls.name(),
+                                           'node_version': cls.version(),
+                                           'timestamp': datetime.now().isoformat(),
+                                           'parent_logs': [],
+                                           'parameters': {}
+                                           })
 
 
 class BasicStatisticsNode(EngineNode):
@@ -246,7 +244,6 @@ class BasicStatisticsNode(EngineNode):
                 cls.write_history(log=log)
                 log.save()
 
-
     @classmethod
     def run(cls):
         p = Project()
@@ -262,12 +259,11 @@ class BasicStatisticsNode(EngineNode):
                     tasks.append(result)
         wait_till_completes(tasks)
 
-
     @classmethod
     def write_history(cls, **kwargs):
-        kwargs['log'].meta.append_history({ 'node': cls.name(),
-                                            'node_version': cls.version(),
-                                            'timestamp': datetime.now().isoformat(),
-                                            'parent_logs': [],
-                                            'parameters': {}
-                                          })
+        kwargs['log'].meta.append_history({'node': cls.name(),
+                                           'node_version': cls.version(),
+                                           'timestamp': datetime.now().isoformat(),
+                                           'parent_logs': [],
+                                           'parameters': {}
+                                           })
