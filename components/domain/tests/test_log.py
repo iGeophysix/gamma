@@ -242,6 +242,7 @@ class TestLog(unittest.TestCase):
         welllog.meta.delete_tags("tag2", "tag3")
         welllog.save()
         self.assertEqual([], welllog.meta.tags)
+        dataset.delete_log(welllog.name)
 
     def test_hashing_works_correctly(self):
         f = 'small_file.las'
