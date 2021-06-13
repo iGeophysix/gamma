@@ -13,6 +13,7 @@ from PySide2.QtWidgets import QMenu, QFileDialog, QProgressDialog
 from celery_conf import app as celery_app, check_task_completed
 from components import ComponentGuiConstructor
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
+from components.importexport.markers_importexport import import_markers_csv
 from components.importexport.well_heads import well_heads_csv_header, import_well_heads_csv
 from components.mainwindow.gui import GeoMainWindow
 
@@ -33,9 +34,11 @@ class ImportExportGui(ComponentGuiConstructor):
         menu = QMenu("Import Export")
         import_action = menu.addAction("Import LAS files")
         import_wellheads_action = menu.addAction("Import Wellheads")
+        import_markers_action = menu.addAction("Import Markers")
 
         import_action.triggered.connect(self._showImportWidget)
         import_wellheads_action.triggered.connect(self._showImportWellHeadsWidget)
+        import_markers_action.triggered.connect(self._showImportMarkersWidget)
 
         return menu
 
@@ -97,6 +100,18 @@ class ImportExportGui(ComponentGuiConstructor):
         with open(files, 'r') as f:
             header = well_heads_csv_header(f, delimiter=';')
             import_well_heads_csv(f, header, delimiter=';')
+
+        DbEventDispatcherSingleton().wellsAdded.emit()
+
+    def _showImportMarkersWidget(self):
+        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
+        files, _ = QFileDialog.getOpenFileName(GeoMainWindow(),
+                                               'Select one file to import',
+                                               root_directory,
+                                               'CSV Files (*.csv)')
+
+        with open(files, 'r') as f:
+            import_markers_csv(f)
 
         DbEventDispatcherSingleton().wellsAdded.emit()
 
