@@ -230,11 +230,11 @@ class BestLogDetectionNode(EngineNode):
                     if len(logs_paths) == 2:
                         # logs amount in the run is not enough to choose the best one
                         # get additional logs from nearest runs
-                        other_runs = [other_run for other_run in runs if other_run != run]
+                        other_runs = [other_run for other_run in run_family_logs if other_run != run]
                         nearest_runs = sorted(other_runs, key=lambda other_run: intervals_similarity(run, other_run), reverse=True)
                         additional_logs_paths = []
                         for additional_run in nearest_runs:
-                            additional_logs_paths += [(log.dataset_id, log._id) for log in runs[additional_run][family]]
+                            additional_logs_paths += [(log.dataset_id, log._id) for log in run_family_logs[additional_run][family]]
                             if len(logs_paths) + len(additional_logs_paths) > 2:
                                 break   # that's enough
                     tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths, additional_logs_paths)))
