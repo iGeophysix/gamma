@@ -4,6 +4,7 @@ import logging
 import os
 from collections.abc import Iterable
 from typing import Union, Optional
+from datetime import datetime
 
 import numpy as np
 from scipy.optimize import lsq_linear
@@ -157,7 +158,10 @@ def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> list[BasicLog]:
     res_logs = []
     for log in logs:
         int_log = copy.copy(log)
-        int_log.values = interpolate_log_by_depth(log.values, depth_start=min_depth, depth_stop=max_depth, depth_step=step)
+        int_log.values = interpolate_log_by_depth(log.values,
+                                                  depth_start=min_depth,
+                                                  depth_stop=max_depth,
+                                                  depth_step=step)
         res_logs.append(int_log)
     return res_logs
 
@@ -191,79 +195,124 @@ class VolumetricModelSolverNode(EngineNode):
                 raise TypeError('all model component names must be str')
 
     @classmethod
-    def run(cls, model_components: Iterable[str]) -> None:
+    def run(cls, **kwargs) -> None:
         '''
         Volumetric model solver
         Creates set of V[COMPONENT] logs - volume of a component and VMISFIT log - Model Fit Error
         :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
+
+        model_components = kwargs['model_components']
+
         cls.validate_input(model_components)
 
         tasks = []
         for well_name in Project().list_wells():
-            tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, model_components)))
+            tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model',
+                                              (well_name, model_components)))
 
         wait_till_completes(tasks)
 
-    @staticmethod
-    def calculate_for_well(well_name, model_components):
+
+    @classmethod
+    def run_for_item(cls, **kwargs):
+        '''
+        Runs Volumetrics Model for a given well
+        '''
+
+        well_name = kwargs['well_name']
+        model_components = kwargs['model_components']
+
         vm = VolumetricModel()
+
         # pick input logs
-        logs = []
+        input_logs = []
         for family in vm.supported_log_families():
             log = family_best_log(well_name, family, vm.FAMILY_UNITS[family])
             if log is not None:
-                logs.append(log)
-        if logs:
-            log_list = ', '.join(f'{log.name} [{log.meta.family}]' for log in logs)
+                input_logs.append(log)
+        if input_logs:
+            log_list = ', '.join(f'{log.name} [{log.meta.family}]' for log in input_logs)
             logger.info(f'input logs in well {well_name}: {log_list}')
         else:
             logger.warning(f'well {well_name} has no logs suitable for calculation')
             return
-        # bring all logs' values to a common reference
-        logs = interpolate_to_common_reference(logs)
+
+        input_logs = interpolate_to_common_reference(input_logs)
+
         # convert logs' units
-        log_data = {log.meta.family: log.convert_units(vm.FAMILY_UNITS[log.meta.family])[:, 1] for log in logs}
+        log_data = {}
+        for log in input_logs:
+            family_units = vm.FAMILY_UNITS[log.meta.family]
+            log_data[log.meta.family] = log.convert_units(family_units)[:,1]
 
         # run solver
         res = vm.inverse(log_data, model_components)
 
         workflow = 'VolumetricModelling'
-        dataset = logs[0].dataset_id
+        dataset = input_logs[0].dataset_id
 
         family_properties = FamilyProperties()
 
         # save components' volumes
         for component_name, data in res['COMPONENT_VOLUME'].items():
             component_family = vm.component_family(component_name)
-            log = BasicLog(dataset_id=dataset,
-                           log_id=family_properties[component_family].get('mnemonic', component_family))
+            log_id = family_properties[component_family].get('mnemonic', component_family)
+            log = BasicLog(dataset_id=dataset, log_id=log_id)
             log.meta.family = component_family
-            log.values = np.vstack((logs[0].values[:, 0], data)).T
+            log.values = np.vstack((input_logs[0].values[:, 0], data)).T
             log.meta.units = 'v/v'
-            log.meta.update({'workflow': workflow, 'method': 'Deterministic Computation', 'display_priority': 1})
+            log.meta.update({'workflow': workflow,
+                             'method': 'Deterministic Computation',
+                             'display_priority': 1})
+
+            cls.write_history(log=log,
+                              input_logs=input_logs)
             log.save()
+
         # save forward modeled logs
         for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
-            input_log_family = logs[n].meta.family
-            log = BasicLog(dataset_id=dataset,
-                           log_id=family_properties[input_log_family].get('mnemonic', input_log_family) + '_FM')
+            input_log_family = input_logs[n].meta.family
+            log_id = family_properties[input_log_family].get('mnemonic', input_log_family) + '_FM'
+            log = BasicLog(dataset_id=dataset, log_id=log_id)
             log.meta.family = input_log_family
-            log.values = np.vstack((logs[0].values[:, 0], data)).T
-            log.meta.units = logs[n].meta.units
+            log.values = np.vstack((input_logs[0].values[:, 0], data)).T
+            log.meta.units = input_logs[n].meta.units
             log.meta.add_tags('reconstructed')
-            log.meta.update({'workflow': workflow, 'method': 'Forward Modelling', 'display_priority': 2})
+            log.meta.update({'workflow': workflow,
+                             'method': 'Forward Modelling',
+                             'display_priority': 2})
+            cls.write_history(log=log,
+                              input_logs=input_logs)
             log.save()
         # save misfit
         log = BasicLog(dataset_id=dataset, log_id='VMISFIT')
         log.meta.family = 'Model Fit Error'
-        log.values = np.vstack((logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
+        log.values = np.vstack((input_logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
         log.meta.units = 'unitless'
-        log.meta.update({'workflow': workflow, 'method': 'Deterministic Computation', 'display_priority': 2})
+        log.meta.update({'workflow': workflow,
+                         'method': 'Deterministic Computation',
+                         'display_priority': 2})
+        cls.write_history(log=log,
+                          input_logs=input_logs)
         log.save()
 
 
-def family_best_log(well_name: str, log_family: Union[str, Iterable[str]], unit: str) -> Optional[BasicLog]:
+    @classmethod
+    def write_history(cls, **kwargs):
+        log = kwargs['log']
+        input_logs = kwargs['input_logs']
+
+        log.meta.append_history({'node': cls.name(),
+                                 'node_version': cls.version(),
+                                 'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+                                 'parameters': {}
+                                })
+
+
+def family_best_log(well_name: str,
+                    log_family: Union[str, Iterable[str]],
+                    unit: str) -> Optional[BasicLog]:
     '''
     Finds the best log version of the specific family(ies)
     :param well_name: well to search into
@@ -280,8 +329,13 @@ def family_best_log(well_name: str, log_family: Union[str, Iterable[str]], unit:
         best_log_score = float('-inf')
         for log_id in dataset.log_list:
             log = BasicLog(dataset.id, log_id)
-            if hasattr(log.meta, 'family') and log.meta.family in wanted_families \
-                    and 'reconstructed' not in log.meta.tags and us.convertable_units(log.meta.units, unit):  # all reconstructed logs are excluded for now
+
+           # all reconstructed logs are excluded for now
+            if 'family' in log.meta and \
+               log.meta.family in wanted_families and \
+               'reconstructed' not in log.meta.tags and \
+               us.convertable_units(log.meta.units, unit):
+
                 log_score = score_log_tags(log.meta.tags)
                 if log_score > best_log_score:
                     best_log_score = log_score

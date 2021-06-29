@@ -187,8 +187,8 @@ def async_detect_best_log(log_paths: tuple[tuple[str, str]],
 
 @app.task
 def async_calculate_volumetric_model(well_name, model_components):
-    vm = VolumetricModelSolverNode()
-    vm.calculate_for_well(well_name, model_components)
+    VolumetricModelSolverNode.run_for_item(well_name=well_name,
+                                           model_components=model_components)
 
 
 @app.task
@@ -196,8 +196,10 @@ def async_calculate_porosity_from_density(well_name,
                                           rhob_matrix: float = None,
                                           rhob_fluid: float = None,
                                           output_log_name: str = 'VSH_GR'):
-    vm = PorosityFromDensityNode()
-    vm.calculate_for_well(well_name, rhob_matrix, rhob_fluid, output_log_name)
+    PorosityFromDensityNode.run_for_item(well_name=well_name,
+                                         rhob_matrix=rhob_matrix,
+                                         rhob_fluid=rhob_fluid,
+                                         output_log_name=output_log_name)
 
 
 @app.task

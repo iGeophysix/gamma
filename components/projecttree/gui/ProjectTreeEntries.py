@@ -10,7 +10,7 @@ from datetime import datetime
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset
+from components.domain.WellDataset import WellDataset, get_dataset_by_id
 from components.mainwindow.gui import GeoMainWindow
 from components.projecttree.gui.ProjectTreeEntry import ProjectTreeEntry, ProjectEntryEnum
 from components.importexport.las.las_export import create_las_file
@@ -225,15 +225,15 @@ class WellDatasetEntry(ProjectTreeEntry):
         self._well = well
         self._dataset = WellDataset(self._well, dataset_name)
 
-        self._loadCurves()
+        self._loadLogs()
 
 
-    def _loadCurves(self):
+    def _loadLogs(self):
         for curve_name in self._dataset.log_list:
-            self.entries.append(CurveEntry(model=self._model,
-                                           parent=self,
-                                           dataset=self._dataset,
-                                           curve_name=curve_name))
+            self.entries.append(LogEntry(model=self._model,
+                                         parent=self,
+                                         dataset=self._dataset,
+                                         curve_name=curve_name))
 
         self.entries.sort(key=lambda e : e.data(Qt.DisplayRole))
 
@@ -286,7 +286,13 @@ class WellDatasetEntry(ProjectTreeEntry):
         las.write(file, version=2)
 
 
-class CurveEntry(ProjectTreeEntry):
+class LogEntry(ProjectTreeEntry):
+    '''
+    Fetches Log information from database and provides it
+    to QAbstractItemModel.
+    LogEntries are stored as children of DatasetEntries.
+    LogEntries could have children representing source curves.
+    '''
     def __init__(self, model, parent, dataset, curve_name: str):
         ProjectTreeEntry.__init__(self, model, parent)
 
@@ -304,6 +310,10 @@ class CurveEntry(ProjectTreeEntry):
                                           parent=self,
                                           meta=meta,
                                           meta_key=m))
+
+        self.entries.append(SourceLogManagerEntry(model=self._model,
+                                                  parent=self,
+                                                  log=self._basic_log))
 
     def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
         if role == Qt.DisplayRole:
@@ -337,6 +347,104 @@ class CurveEntry(ProjectTreeEntry):
             # return ff
 
         return None
+
+
+
+class SourceLogManagerEntry(ProjectTreeEntry):
+    def __init__(self, model, parent, log):
+        ProjectTreeEntry.__init__(self, model, parent)
+
+        self._basic_log = log
+
+        self._loadSourceCurves()
+
+
+    def _loadSourceCurves(self):
+        history = self._basic_log.meta.history
+
+        for h in history:
+            # h[0] is a datetime, h[1] is a history entry
+            if 'parent_logs' in h[1]:
+                parent_logs = h[1]['parent_logs']
+                for pl in parent_logs:
+                    self.entries.append(SourceLogEntry(model=self._model,
+                                                       parent=self,
+                                                       dataset_id=pl[0],
+                                                       log_id=pl[1]))
+
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
+        if role == Qt.DisplayRole:
+            return self._getDisplayRole(column)
+        elif role == Qt.DecorationRole:
+            return self._getDecorationRole(column)
+        elif role == Qt.ToolTipRole:
+            return self._getToolTipRole(column)
+
+        return None
+
+    def _getDisplayRole(self, column):
+        if column == ProjectEntryEnum.NAME.value:
+            return "Source Curves"
+        elif column == ProjectEntryEnum.VALUE.value:
+            return None
+
+        return None
+
+    def _getDecorationRole(self, column):
+        # if column == ProjectEntryEnum.NAME.value:
+            # return QIcon.fromTheme('appointment-new')
+
+        return None
+
+    def _getToolTipRole(self, column):
+        return None
+
+
+
+class SourceLogEntry(ProjectTreeEntry):
+    def __init__(self, model, parent, dataset_id, log_id):
+        ProjectTreeEntry.__init__(self, model, parent)
+
+        self._basic_log = BasicLog(dataset_id, log_id)
+
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
+        if role == Qt.DisplayRole:
+            return self._getDisplayRole(column)
+        elif role == Qt.DecorationRole:
+            return self._getDecorationRole(column)
+        elif role == Qt.ToolTipRole:
+            return self._getToolTipRole(column)
+
+        return None
+
+    def data(self, role=Qt.DisplayRole, column=ProjectEntryEnum.NAME.value):
+        if role == Qt.DisplayRole:
+            return self._getDisplayRole(column)
+        elif role == Qt.DecorationRole:
+            return self._getDecorationRole(column)
+        elif role == Qt.ToolTipRole:
+            return self._getToolTipRole(column)
+
+    def _getDecorationRole(self, column):
+        # if column == ProjectEntryEnum.NAME.value:
+            # return QIcon.fromTheme('appointment-new')
+
+        return None
+
+    def _getToolTipRole(self, column):
+        return None
+
+    def _getDisplayRole(self, column):
+        if column == ProjectEntryEnum.NAME.value:
+            dataset = get_dataset_by_id(self._basic_log.dataset_id)
+            return f'{self._basic_log.name}\t({dataset.name})'
+
+        return None
+
+    def flags(self):
+        return ProjectTreeEntry.flags(self) | Qt.ItemIsDragEnabled
+
+
 
 
 class MetaEntry(ProjectTreeEntry):

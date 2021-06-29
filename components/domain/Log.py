@@ -341,6 +341,9 @@ class BasicLogMeta:
     def __getitem__(self, item):
         return self.__getattribute__(item)
 
+    def __contains__(self, item):
+        return hasattr(self, item)
+
     def update(self, other):
         self.__ior__(other)
 
@@ -351,8 +354,9 @@ class BasicLogMeta:
         for tag in args:
             self.tags.remove(tag)
 
-    def append_history(self, text):
-        self.history.append((datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), text))
+    def append_history(self, history):
+        # self.history.append((datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"), history))
+        self.history.append((datetime.now().isoformat(), history))
 
     def load(self):
         _s = Storage()

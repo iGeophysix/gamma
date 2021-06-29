@@ -6,7 +6,7 @@ from PySide2.QtCore import Qt
 from PySide2.QtGui import QIcon, QPalette
 
 from components.projecttree.gui.ProjectTreeEntry import ProjectEntryEnum
-from components.projecttree.gui.ProjectTreeEntries import WellEntry, WellDatasetEntry, CurveEntry
+from components.projecttree.gui.ProjectTreeEntries import WellEntry, WellDatasetEntry, LogEntry
 # from components.projecttree.TabletEntries import TabletTemplateManagerEntry
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 
@@ -111,13 +111,13 @@ class ProjectTreeModel(QAbstractItemModel):
             if isinstance(index.internalPointer(), WellEntry):
                 wellEntry = index.internalPointer()
                 for datasetEntry in wellEntry.entries:
-                    for curveEntry in datasetEntry.entries:
-                        data.append((wellEntry.data(), datasetEntry.data(), curveEntry.data()))
-            if isinstance(index.internalPointer(), CurveEntry):
-                curveEntry = index.internalPointer()
-                datasetEntry = curveEntry.parent()
+                    for logEntry in datasetEntry.entries:
+                        data.append((wellEntry.data(), datasetEntry.data(), logEntry.data()))
+            if isinstance(index.internalPointer(), LogEntry):
+                logEntry = index.internalPointer()
+                datasetEntry = logEntry.parent()
                 wellEntry = datasetEntry.parent()
-                data.append((wellEntry.data(), datasetEntry.data(), curveEntry.data()))
+                data.append((wellEntry.data(), datasetEntry.data(), logEntry.data()))
 
         data_rebuilt = {}
 

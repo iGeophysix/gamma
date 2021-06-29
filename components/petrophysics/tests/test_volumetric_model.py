@@ -62,7 +62,7 @@ class TestVolumetricModel(unittest.TestCase):
         module = VolumetricModelSolverNode()
         model_components = list(self.res.keys())
 
-        module.run(model_components)
+        module.run(model_components=model_components)
 
         for component in model_components:
             log_name = self.res_component_logs[component]

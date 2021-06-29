@@ -128,9 +128,9 @@ class TabletViewBody(TabletView):
                                          Qt.NoModifier)
 
                 self.mousePressEvent(pressEvent)
-            elif event.type() == QEvent.MouseButtonRelease:
-                # # disable drag mode if dragging is finished
-                self.setDragMode(QGraphicsView.NoDrag)
+        elif event.type() == QEvent.MouseButtonRelease:
+            # # disable drag mode if dragging is finished
+            self.setDragMode(QGraphicsView.NoDrag)
 
             return False
         else:
