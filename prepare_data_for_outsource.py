@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+"""
+Use this script to export a package for out sourcers
+It will create a folder above current folder with name gamma_outsource_<current_date>.
+e.g. if today is 28 of June 2021, then the folder will be gamma_outsource_06-28-2021
+
+Put las files into folder:
+./gamma_outsource_<current_date>/data_for_outsource/las
+
+then archive the whole folder and send it to the developer.
+"""
 
 from datetime import datetime
 
@@ -41,8 +51,9 @@ files_to_copy = [
     "./components/importexport/__init__.py",
     "./components/importexport/las",
     "./components/importexport/UnitsSystem.py",
+    "./components/importexport/rules/src/export_units_system.py",
+    "./components/importexport/rules/src/Units.xlsx",
     "./utilities.py",
-    "./requirements.txt",
     "./data_for_outsource",
     "./import_data_for_outsource.py",
     ]
@@ -74,6 +85,14 @@ services:
     container_name: gamma_redis
     ports:
       - "6379:6379"
+  importer:
+    build:
+      context: .
+      dockerfile: ./data_for_outsource/Dockerfile
+    container_name: gamma_import_data
+    depends_on:
+      - redis
+    command: [python, import_data_for_outsource.py]
 """
 
 with open(os.path.join(path_to_outsource_dir, "docker-compose.yml"), 'w') as f: f.write(docker_compose_content)
@@ -84,21 +103,18 @@ readme_content = \
 1. Setup docker and docker-compose
 2. Build and run auxiliary services
    ```bash
-   docker-compose up --build
+   docker-compose up --build -d
    ```
-3. Credentials to be configured via env vars (see settings.py)
-4. create venv
-    ```bash
-    python3 -m virtualenv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    ```
-5. Run data import
-    ```bash
-    python import_data_for_outsource.py
-    ```
-
-6. You are now ready to access the data in a Redis db with credentials in `settings.py`
+3. See how data is loading to the database
+   ```bash
+   docker logs -f gamma_import_data
+   ```
+   
+4. If you see at the end
+   ```
+   Done building indices
+   ```
+   means data was imported successfully.
 """
 
 

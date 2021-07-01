@@ -1,0 +1,7 @@
+pandas
+redis
+chardet
+h5py
+lasio
+scipy
+openpyxl

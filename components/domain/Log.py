@@ -11,7 +11,7 @@ from scipy.interpolate import interp1d
 
 from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
-from utilities import safe_run
+from utilities import safe_run, dict_replace_value, my_timer
 
 
 class BasicLog:
@@ -103,6 +103,26 @@ class BasicLog:
             self._fetch()
         return self._values
 
+    @staticmethod
+    def __remove_nans(values):
+        """
+        Removes rows with missing values from the top and bottom till the first non-null value
+        :param values:
+        :return:
+        """
+        for i, val in enumerate(values[:, 1]):
+            if not np.isnan(val):
+                values = values[i:, :]
+                break
+
+        for i, val in enumerate(reversed(values[:, 1])):
+            if not np.isnan(val):
+                bound = -i if i else None
+                values = values[:bound, :]
+                break
+
+        return values
+
     @values.setter
     def values(self, values: np.array) -> None:
         """
@@ -112,8 +132,9 @@ class BasicLog:
         """
         if not self.validate(values):
             raise ValueError("Data is not passing validation")
-        self._values = values
+        self._values = self.__remove_nans(copy.deepcopy(values))
         self._changes['values'] = True
+        self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
         if self._values is None:
             self._fetch()
 
@@ -370,7 +391,9 @@ class BasicLogMeta:
         _s.update_logs(self.dataset_id, meta={self.log_id: self.asdict()})
 
     def asdict(self):
-        return {key: self.__getattribute__(key) for key in dir(self) if not key.startswith('_') and not callable(self.__getattribute__(key))}
+        out = {key: self.__getattribute__(key) for key in dir(self) if not key.startswith('_') and not callable(self.__getattribute__(key))}
+        out = dict_replace_value(out, np.nan, None)
+        return out
 
 
 class MarkersLog(BasicLog):
