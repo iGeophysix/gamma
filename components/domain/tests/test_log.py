@@ -84,23 +84,8 @@ class TestLog(unittest.TestCase):
 
         true_answer = {'DRHO': np.nan,
                        'NPHI': np.nan,
-                       'FORCE_2020_LITHOFACIES_CONFIDENCE': np.nan,
-                       'PEF': np.nan,
-                       'FORCE_2020_LITHOFACIES_LITHOLOGY': np.nan,
-                       'CALI': np.nan,
-                       'y_loc': 6421723.0,
-                       'ROP': np.nan,
-                       'RSHA': 1.4654846191,
-                       'DTC': np.nan,
-                       'RDEP': 1.0439596176,
-                       'RHOB': np.nan,
-                       'DEPTH_MD': 200.14439392,
                        'BS': 17.5,
                        'DTS': np.nan,
-                       'ROPA': np.nan,
-                       'GR': 9.0210666656,
-                       'RMED': 1.7675967216,
-                       'z_loc': -156.1439972,
                        'x_loc': 444904.03125}
 
         for log_name in true_answer.keys():
@@ -152,7 +137,7 @@ class TestLog(unittest.TestCase):
 
         self.assertEqual(len(dataset.log_list), 21 + log_count)
         d = BasicLog(dataset.id, 'LOG_1')
-        self.assertEqual(len(d), 84)
+        self.assertEqual(75, len(d), 'Log length must be 75')
 
     def test_logs_list(self):
         f = 'small_file.las'
@@ -259,9 +244,9 @@ class TestLog(unittest.TestCase):
         log.save()
 
         true_values = {
-            "data_hash": "43b6e247100f1688023b4e915ad852d0",
-            "meta_hash": "a9bbbe27c7043ab26b44dde3b7e7af9c",
-            "full_hash": "43b6e247100f1688023b4e915ad852d0a9bbbe27c7043ab26b44dde3b7e7af9c"
+            "data_hash": "d63d76516e4cc5e8396e6eb6af1539ca",
+            "meta_hash": "5a91322449dc9eaadcb510733c9d8637",
+            "full_hash": "d63d76516e4cc5e8396e6eb6af1539ca5a91322449dc9eaadcb510733c9d8637"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

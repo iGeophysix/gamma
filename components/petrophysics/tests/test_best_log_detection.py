@@ -53,8 +53,8 @@ class TestBestLogDetection(unittest.TestCase):
             l.meta = values
             l.save()
 
-        self.assertEqual('GK_D4417_D', best_log, msg='Best log in this dataset is GK_D4417_D')
-        log1 = BasicLog(self.wd.id, 'GK_D4417_D')
+        self.assertEqual('GK_D4412_D', best_log, msg='Best log in this dataset is GK_D4412_D')
+        log1 = BasicLog(self.wd.id, 'GK_D4412_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
         self.assertEqual(True, log1.meta.best_log_detection['is_best'],
                          msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
@@ -64,7 +64,7 @@ class TestBestLogDetection(unittest.TestCase):
     def test_best_log_detection_engine_node_works_correctly(self):
         BestLogDetectionNode.run()
 
-        log1 = BasicLog(self.wd.id, 'GK_D4417_D')
+        log1 = BasicLog(self.wd.id, 'GK_D4412_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
 
         self.assertEqual(True, log1.meta.best_log_detection['is_best'],

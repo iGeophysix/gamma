@@ -39,7 +39,7 @@ class ProjectStatisticsNode(EngineNode):
             good_logs = [log for log in logs if cls.validate(log)]
             stats_by_family[family] = {
                 'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
-                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] for log in good_logs]),
+                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] if log.meta.basic_statistics['gmean'] is not None else np.nan for log in good_logs]),
                 'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
                 'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
                 'number_of_logs': len(good_logs)

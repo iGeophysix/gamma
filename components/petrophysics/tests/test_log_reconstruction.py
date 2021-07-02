@@ -65,7 +65,12 @@ class TestLogReconstructionNode(TestCase):
 
             misfit = BasicLog(ds.id, 'RHOB_SYNTH_MISFIT')
             # interp true values
-            true_rhob_values_interp = interp1d(true_rhob.values[:, 0], true_rhob.values[:, 1])(synth_rhob.values[:, 0])
+            true_rhob_values_interp = interp1d(true_rhob.values[:, 0],
+                                               true_rhob.values[:, 1],
+                                               bounds_error=False,
+                                               fill_value="extrapolate",
+                                               assume_sorted=True,
+                                               )(synth_rhob.values[:, 0])
             misfit.values = np.vstack((synth_rhob.values[:, 0], synth_rhob.values[:, 1] - true_rhob_values_interp)).T
             misfit.meta.family = 'Synthetic Bulk Density Misfit'
             misfit.meta.units = ''

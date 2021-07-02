@@ -11,7 +11,7 @@ from scipy.interpolate import interp1d
 
 from components.database.RedisStorage import RedisStorage as Storage
 from components.importexport.UnitsSystem import UnitsSystem
-from utilities import safe_run, dict_replace_value, my_timer
+from utilities import safe_run, dict_replace_value
 
 
 class BasicLog:
@@ -111,17 +111,17 @@ class BasicLog:
         :return:
         """
         for i, val in enumerate(values[:, 1]):
-            if not np.isnan(val):
+            if val == val:  # check if is nan
                 values = values[i:, :]
                 break
 
         for i, val in enumerate(reversed(values[:, 1])):
-            if not np.isnan(val):
+            if val == val:
                 bound = -i if i else None
                 values = values[:bound, :]
                 break
 
-        return values
+        return values if values.size else np.array((0, np.nan))
 
     @values.setter
     def values(self, values: np.array) -> None:

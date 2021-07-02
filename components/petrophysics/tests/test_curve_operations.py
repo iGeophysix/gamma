@@ -59,18 +59,17 @@ class TestBasicStatisticsNode(TestCase):
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
     def test_run(self):
-        true_value = {
-                         "min_depth": 2650.700005,
-                         "max_depth": 2760.800116,
-                         "min_value": 3.69,
-                         "max_value": 10.17982,
-                         "depth_span": 110.10011099999974,
-                         "avg_step": 0.1000001368263472,
-                         "const_step": False,
-                         "mean": 6.299877084392014,
-                         "gmean": 6.193844100405169,
-                         "stdev": 1.155632528972132
-                     }
+        true_value = {'avg_step': 0.10000010081743846,
+                      'const_step': True,
+                      'depth_span': 110.10011099999974,
+                      'gmean': 6.193844100405169,
+                      'max_depth': 2760.800116,
+                      'max_value': 10.17982,
+                      'mean': 6.299877084392014,
+                      'min_depth': 2650.700005,
+                      'min_value': 3.69,
+                      'stdev': 1.155632528972132
+                      }
 
         node = BasicStatisticsNode()
         node.run()
