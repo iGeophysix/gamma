@@ -14,8 +14,9 @@ for root, dirnames, filenames in os.walk(data_path):
     l = len(filenames)
     for i, filename in enumerate(filenames):
         print(f"{i + 1}/{l}")
-        filename = os.path.join(root, filename)
-        las.import_to_db(filename)
+        if filename.endswith('.las'):
+            filename = os.path.join(root, filename)
+            las.import_to_db(filename)
     print("Import done.")
 
 # build indices
