@@ -161,8 +161,8 @@ class TestLog(unittest.TestCase):
         las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
                          well=well,
                          well_dataset=dataset)
-
         log = BasicLog(dataset.id, "GR")
+        log.meta.append_history(f'Loaded from {f}')
         self.assertEqual(f'Loaded from {f}', log.meta.history[0][1])
 
     def test_append_log_meta(self):
@@ -245,8 +245,8 @@ class TestLog(unittest.TestCase):
 
         true_values = {
             "data_hash": "d63d76516e4cc5e8396e6eb6af1539ca",
-            "meta_hash": "5a91322449dc9eaadcb510733c9d8637",
-            "full_hash": "d63d76516e4cc5e8396e6eb6af1539ca5a91322449dc9eaadcb510733c9d8637"
+            "meta_hash": "3912de32b46959c4942796800233d777",
+            "full_hash": "d63d76516e4cc5e8396e6eb6af1539ca3912de32b46959c4942796800233d777"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

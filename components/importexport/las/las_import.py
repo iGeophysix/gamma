@@ -61,6 +61,10 @@ def import_to_db(filename: str = None,
         datasetname = os.path.basename(las_structure.filename)
         well_dataset = WellDataset(well, datasetname, new=True)
 
+    well_dataset_info = well_dataset.info
+    well_dataset_info['source'] = filename
+    well_dataset.info = well_dataset_info
+
     raw_curves = las_structure.data
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
     md_values = raw_curves[md_key]
@@ -75,7 +79,7 @@ def import_to_db(filename: str = None,
         this_log.meta = las_structure.logs_info()[log]
         this_log.meta.depth_reference = md_key
         this_log.save()
-        this_log.meta.append_history(f"Loaded from {las_structure.filename}")
+        this_log.meta.source = las_structure.filename
         this_log.meta.add_tags('raw')
         if log == md_key:
             this_log.meta.add_tags('main_depth')
