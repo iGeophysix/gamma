@@ -12,6 +12,7 @@ from components.importexport.rules.src.export_family_assigner_rules import build
 from components.importexport.rules.src.export_units_system import build_unit_system
 from components.mainwindow.gui import GeoMainWindow
 from components.petrophysics.data.src.export_fluid_mineral_constants import build_fluid_mineral_constants
+from components.petrophysics.data.src.best_log_tags_assessment import build_best_log_tags_assessment
 from settings import BASE_DIR
 
 gamma_logger = logging.getLogger("gamma_logger")
@@ -32,6 +33,8 @@ class DomainGui(ComponentGuiConstructor):
     def _load_common_data(self):
         gamma_logger.info("Loading Family Properties")
         FamilyProperties.load()
+        gamma_logger.info("Loading Best Log Tags Assessment")
+        build_best_log_tags_assessment()
         gamma_logger.info("Loading Family Assigner")
         build_family_assigner()
         gamma_logger.info("Loading Fluid Mineral Contants")

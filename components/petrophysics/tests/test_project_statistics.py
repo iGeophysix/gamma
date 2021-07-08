@@ -35,7 +35,6 @@ class TestProjectStatisticsNode(TestCase):
 
         p = Project()
         stats_by_family = p.meta['basic_statistics']
-        self.assertEqual(16, len(stats_by_family))
 
         gr_stats = {'mean': 108.6400,
                     'gmean': 99.636,

@@ -145,8 +145,14 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
                 continue
             result = fa.assign_family(l.name, l.meta.units)
             if result is not None:
+                if 'tags' in result.optional_properties:
+                    l.meta.add_tags(*result.optional_properties.pop('tags'))
                 l.meta.family = result.family
-                l.meta.family_assigner = {'reliability': result.reliability, 'unit_class': result.dimension, 'logging_company': result.company, 'logging_tool': result.tool}
+                l.meta.family_assigner = {
+                    'reliability': result.reliability,
+                    'unit_class': result.dimension,
+                    'logging_company': result.company} \
+                    | result.optional_properties
             else:
                 l.meta.family = l.meta.family_assigner = None
             l.save()
@@ -174,14 +180,17 @@ def async_splice_logs(wellname: str,
 
 
 @app.task
-def async_detect_best_log(log_paths: tuple[tuple[str, str]],
+def async_detect_best_log(log_type: str,
+                          log_paths: tuple[tuple[str, str]],
                           additional_logs_paths: Optional[tuple[tuple[str, str]]]) -> None:
     '''
     Celery task to run best log detection from BestLogDetectionNode
+    :param log_type: 'general' for all logs and 'resistivity' for resistivity logs
     :param log_paths: list of (dataset_id, log_id) - best log candidates
     :param additional_logs_paths: list of (dataset_id, log_id) - additional logs to make statistics represenatative
     '''
-    BestLogDetectionNode.run_for_item(log_paths=log_paths,
+    BestLogDetectionNode.run_for_item(log_type=log_type,
+                                      log_paths=log_paths,
                                       additional_logs_paths=additional_logs_paths)
 
 

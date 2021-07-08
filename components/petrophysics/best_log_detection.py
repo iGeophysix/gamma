@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Iterable, Dict, Tuple
+from typing import Any, Iterable, Dict, Tuple, Optional
 from datetime import datetime
 
 import logging
@@ -10,50 +10,18 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode
-
-LOG_TAG_ASSESSMENT = {
-    'average': -5,
-    'azimuthal': -2,
-    'bad_quality': -5,
-    'best': 3,
-    'calibrated': 2,
-    'compensated': 1,
-    'computed': -5,
-    'conventional': 1,
-    'corrected': 1,
-    'delayed': -1,
-    'enhanced': 1,
-    'filtered': -1,
-    'focused': 2,
-    'high resolution': 2,
-    'horizontal': -1,
-    'image': -5,
-    'memory': 2,
-    'natural': 0,
-    'normalized': 1,
-    'ratio': -4,
-    'raw': 0,
-    'real-time': -2,
-    'reconstructed': -4,
-    'synthetic': -4,
-    'smoothed': -3,
-    'station log': -5,
-    'theoretical': -5,
-    'transmitted': 0,
-    'true': 2,
-    'uncorrected': -1,
-    'vertical': 0
-}
+from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 
 
-def score_log_tags(tags: Iterable[str]) -> int:
+def score_log_tags(tags: Iterable[str], tags_rank: dict[str, int]) -> int:
     '''
     Calculates log usefulness by log tags
     :param tags: set of log tags
+    :param tags_rank: {tag: score}
     :return: log usefulness score
     '''
     tags = set(map(str.lower, tags))  # remove duplicates, case-insensitive
-    rank = sum(LOG_TAG_ASSESSMENT.get(tag, 0) for tag in tags)
+    rank = sum(tags_rank.get(tag, 0) for tag in tags)
     return rank
 
 
@@ -91,7 +59,7 @@ def get_best_log_for_run_and_family(datasets: Iterable[WellDataset],
     return best_log, new_logs_meta
 
 
-def rank_logs(logs_meta: Dict[BasicLog, dict], additional_logs_meta: Dict[BasicLog, dict] = None) -> Tuple[BasicLog, dict]:
+def rank_logs(logs_meta: Dict[Any, dict], additional_logs_meta: Dict[Any, dict] = None) -> Tuple[Any, dict]:
     '''
     Updates logs' meta with ranking
     :param logs_meta: ranking logs' meta
@@ -121,24 +89,83 @@ def rank_logs(logs_meta: Dict[BasicLog, dict], additional_logs_meta: Dict[BasicL
 
     average_depth_correction = average_depth_correction if average_depth_correction != 0 else average_depth_correction + 1e-16
 
-    best_score = np.inf
-    best_log = None
     new_logs_meta = {log_id: {} for log_id in logs_meta.keys()}
     for log_id, log_meta in logs_meta.items():
         sum_deltas = sum(abs((log_meta[category][metric] - averages[(category, metric)]) / averages[(category, metric)]) for category, metric in averages.keys())
         depth_correction = abs((log_meta['basic_statistics']['max_depth'] - log_meta['basic_statistics']['min_depth']) / average_depth_correction)
         result = sum_deltas / depth_correction
-        if result < best_score:
-            best_log = log_id
-            best_score = result
         new_logs_meta[log_id].update({'best_log_detection': {'value': result}})
-    if best_log is None:
-        raise AlgorithmFailure('No logs were defined as best')
     # define ranking
-    ranking = sorted(new_logs_meta.items(), key=lambda v: v[1]['best_log_detection']['value'])
+    ranking = sorted(new_logs_meta.items(), key=lambda v: (v[1]['best_log_detection']['value'], str(v[0])))
     for i, meta in enumerate(ranking):
         new_logs_meta[meta[0]]['best_log_detection'].update({'rank': i + 1, 'is_best': i == 0})
+    best_log = ranking[0][0]
     return best_log, new_logs_meta
+
+
+def best_rt(rt_candidates: list[BasicLog]) -> Optional[BasicLog]:
+    '''
+    Returns the best resistivity log
+    :param rt_candidates: best resistivity log candidates
+    :return: best log or None
+    '''
+    RESISTIVITY_LOGS_ASSESSMENT = read_best_log_tags_assessment()['Formation Resistivity']
+    best_logs = rt_candidates
+
+    if len(best_logs) > 1:
+        # round 1: log family
+        wrong_family_rank = len(RESISTIVITY_LOGS_ASSESSMENT['family'])
+        family_rank = [RESISTIVITY_LOGS_ASSESSMENT['family'].index(log.meta.family) if log.meta.family in RESISTIVITY_LOGS_ASSESSMENT['family'] else wrong_family_rank
+                       for log in best_logs]
+        best_rank = min(family_rank)
+        best_logs = [log for log, rank in zip(best_logs, family_rank) if rank == best_rank and rank != wrong_family_rank]
+
+    if len(best_logs) > 1:
+        # round 2: logging service
+        source_rank = {src: n for n, src in enumerate(RESISTIVITY_LOGS_ASSESSMENT['logging service'])}
+        no_source_rank = len(RESISTIVITY_LOGS_ASSESSMENT['logging service'])
+        source_ranked = [source_rank.get(log.meta.family_assigner.get('logging_service'), no_source_rank) for log in best_logs]
+        best_rank = min(source_ranked)
+        best_logs = [log for log, rank in zip(best_logs, source_ranked) if rank == best_rank]
+
+    if len(best_logs) > 1:
+        # round 3: true tag
+        true_ranked = [int('true' in log.meta.tags) for log in best_logs]
+        best_rank = max(true_ranked)
+        best_logs = [log for log, rank in zip(best_logs, true_ranked) if rank == best_rank]
+
+    if len(best_logs) > 1:
+        # round 4: DOI value
+        DOI_ranked = [log.meta.family_assigner.get('DOI', 0) for log in best_logs]
+        best_rank = max(DOI_ranked)
+        best_logs = [log for log, rank in zip(best_logs, DOI_ranked) if rank == best_rank]
+
+    if len(best_logs) > 1:
+        # round 5: DOI tag
+        for tag in RESISTIVITY_LOGS_ASSESSMENT['investigation']:
+            filtered_best_logs = [log for log in best_logs if tag in log.meta.tags]
+            if filtered_best_logs:
+                best_logs = filtered_best_logs
+                break
+
+    if len(best_logs) > 1:
+        # round 6: vertical_resolution value
+        vres_ranked = [log.meta.family_assigner.get('vertical_resolution', np.inf) for log in best_logs]
+        best_rank = min(vres_ranked)
+        best_logs = [log for log, rank in zip(best_logs, vres_ranked) if rank == best_rank]
+
+    if len(best_logs) > 1:
+        # round 7: frequency value
+        frequency_ranked = [log.meta.family_assigner.get('frequency', 0) for log in best_logs]
+        best_rank = max(frequency_ranked)
+        best_logs = [log for log, rank in zip(best_logs, frequency_ranked) if rank == best_rank]
+
+    if len(best_logs) > 1:
+        # round 8: general tag assesment
+        tags_rank = {log: score_log_tags(log.meta.tags, RESISTIVITY_LOGS_ASSESSMENT['description tags']) for log in best_logs}
+        best_logs.sort(key=tags_rank.__getitem__, reverse=True)
+
+    return best_logs[0] if best_logs else None
 
 
 def intervals_overlap(r1: tuple[float, float], r2: tuple[float, float]) -> float:
@@ -185,28 +212,34 @@ class BestLogDetectionNode(EngineNode):
 
     @classmethod
     def run_for_item(cls, **kwargs):
-        log_paths = kwargs['log_paths']
-        additional_logs_paths = kwargs['additional_logs_paths']
+        logs = [BasicLog(log[0], log[1]) for log in kwargs['log_paths']]
+        log_type = kwargs['log_type']
 
-        logs = {log: BasicLog(log[0], log[1]) for log in log_paths}
-        logs_meta = {log: log.meta for log in logs.values()}
-        if additional_logs_paths is not None:
-            logs = {log: BasicLog(log[0], log[1]) for log in additional_logs_paths}
-            additional_logs_meta = {log: log.meta for log in logs.values()}
-        else:
-            additional_logs_meta = None
+        if log_type == 'general':
+            logs_meta = {log: log.meta for log in logs}
+            additional_logs_paths = kwargs['additional_logs_paths']
+            if additional_logs_paths is not None:
+                additional_logs = [BasicLog(log[0], log[1]) for log in additional_logs_paths]
+                additional_logs_meta = {log: log.meta for log in additional_logs}
+            else:
+                additional_logs_meta = None
 
-        try:
-            _, new_meta = rank_logs(logs_meta, additional_logs_meta)
-        except AlgorithmFailure:
-            BestLogDetectionNode.logger.info(f'No best log in {logs_meta.values()}')
-            return
+            try:
+                _, new_meta = rank_logs(logs_meta, additional_logs_meta)
+            except AlgorithmFailure:
+                BestLogDetectionNode.logger.info(f'No best log in {logs_meta.values()}')
+                return
 
-        for log, values in new_meta.items():
-            log.meta.update(values)
-            log.meta.add_tags('processing')
-            log.save()
+            for log, values in new_meta.items():
+                log.meta.update(values)
+                log.meta.add_tags('processing')
+                log.save()
 
+        elif log_type == 'resistivity':
+            best_log = best_rt(logs)
+            if best_log is not None:
+                best_log.meta.add_tags('best_rt', 'processing')
+                best_log.save()
 
     @classmethod
     def run(cls, **kwargs):
@@ -214,33 +247,39 @@ class BestLogDetectionNode(EngineNode):
         tree = p.tree_oop()
         tasks = []
         for well, datasets in tree.items():
-            run_family_logs = defaultdict(lambda: defaultdict(list))
+            run_family_logs_paths = defaultdict(lambda: defaultdict(list))
+            run_logs_paths = defaultdict(list)
             for dataset, logs in datasets.items():
                 if dataset.name == 'LQC':
                     continue
                 # gather run_family_logs in dataset
                 for log in logs:
                     if cls.validate(log):
-                        run_family_logs[(log.meta.run['top'], log.meta.run['bottom'])][log.meta.family].append(log)
+                        run = (log.meta.run['top'], log.meta.run['bottom'])
+                        log_path = (log.dataset_id, log._id)
+                        run_family_logs_paths[run][log.meta.family].append(log_path)
+                        run_logs_paths[run].append(log_path)
 
-            for run, families in run_family_logs.items():
-                for family, logs in families.items():
-                    logs_paths = [(log.dataset_id, log._id) for log in logs]
+            for run, families in run_family_logs_paths.items():
+                for family, logs_paths in families.items():
                     additional_logs_paths = None
                     if len(logs_paths) == 2:
                         # logs amount in the run is not enough to choose the best one
                         # get additional logs from nearest runs
-                        other_runs = [other_run for other_run in run_family_logs if other_run != run]
+                        other_runs = [other_run for other_run in run_family_logs_paths if other_run != run]
                         nearest_runs = sorted(other_runs, key=lambda other_run: intervals_similarity(run, other_run), reverse=True)
                         additional_logs_paths = []
                         for additional_run in nearest_runs:
-                            additional_logs_paths += [(log.dataset_id, log._id) for log in run_family_logs[additional_run][family]]
+                            additional_logs_paths += run_family_logs_paths[additional_run][family]
                             if len(logs_paths) + len(additional_logs_paths) > 2:
                                 break   # that's enough
-                    tasks.append(celery_app.send_task('tasks.async_detect_best_log', (logs_paths, additional_logs_paths)))
+                    tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('general', logs_paths, additional_logs_paths)))
+
+                # resistivity logs processing
+                rt_candidates = run_logs_paths[run]
+                tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('resistivity', rt_candidates, None)))
 
         wait_till_completes(tasks)
-
 
     @classmethod
     def write_history(cls, **kwargs):

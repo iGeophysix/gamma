@@ -6,11 +6,13 @@ from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.rules.src.export_family_assigner_rules import build_family_assigner
 from components.importexport.rules.src.export_units_system import build_unit_system
 from components.petrophysics.data.src.export_fluid_mineral_constants import build_fluid_mineral_constants
+from components.petrophysics.data.src.best_log_tags_assessment import build_best_log_tags_assessment
 from settings import BASE_DIR
 
 
 def load_common_data():
     FamilyProperties.load()
+    build_best_log_tags_assessment()
     build_family_assigner()
     build_unit_system()
     build_fluid_mineral_constants()

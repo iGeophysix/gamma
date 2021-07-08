@@ -17,17 +17,16 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode
-from components.importexport.FamilyProperties import FamilyProperties 
+from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
+from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 from components.petrophysics.curve_operations import interpolate_log_by_depth
 from components.petrophysics.data.src.export_fluid_mineral_constants import FLUID_MINERAL_TABLE
 
 logging.basicConfig()
 logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
-
-
 
 
 class VolumetricModel():
@@ -321,6 +320,7 @@ def family_best_log(well_name: str,
     :return: best log or None
     '''
     us = UnitsSystem()
+    LOG_TAG_ASSESSMENT = read_best_log_tags_assessment()['General log tags']
     best_log = None
     well = Well(well_name)
     dataset = WellDataset(well, 'LQC')
@@ -329,14 +329,10 @@ def family_best_log(well_name: str,
         best_log_score = float('-inf')
         for log_id in dataset.log_list:
             log = BasicLog(dataset.id, log_id)
-
-           # all reconstructed logs are excluded for now
-            if 'family' in log.meta and \
-               log.meta.family in wanted_families and \
-               'reconstructed' not in log.meta.tags and \
-               us.convertable_units(log.meta.units, unit):
-
-                log_score = score_log_tags(log.meta.tags)
+            if hasattr(log.meta, 'family') and log.meta.family in wanted_families \
+                    and 'reconstructed' not in log.meta.tags \
+                    and us.convertable_units(log.meta.units, unit):  # all reconstructed logs are excluded for now
+                log_score = score_log_tags(log.meta.tags, LOG_TAG_ASSESSMENT)
                 if log_score > best_log_score:
                     best_log_score = log_score
                     best_log = log

@@ -57,9 +57,9 @@ class NLPParser:
         if ng:
             self.db.append((ng, data))
 
-    def match(self, mnemonic: str) -> tuple:
+    def match(self, mnemonic: str) -> list:
         '''
-        Return [list of possible mnemonc's data variants], match rank.
+        Returns list of possible mnemonc's data variants with rank: [(match_rank, mnemonc data), ...]
         '''
         best_rank = 0
         best_variants = []
@@ -68,13 +68,13 @@ class NLPParser:
             # search
             for ng_ref, data in self.db:
                 match_rank = len(ng.intersection(ng_ref)) / len(ng.union(ng_ref))  # rank is (number of matched N-grams) / (all N-grams)
-                if match_rank > 0:
+                if match_rank > best_rank / 2:
+                    best_variants.append((match_rank, data))
                     if match_rank > best_rank:
                         best_rank = match_rank
-                        best_variants = [data]
-                    elif match_rank == best_rank:
-                        best_variants.append(data)
-        return best_variants, best_rank
+        best_variants.sort(reverse=True)
+        # 100 best variants max that have match_rank > best_rank / 2
+        return [best_variants[n] for n in range(min(100, len(best_variants))) if best_variants[n][0] > best_rank / 2]
 
 
 class FamilyAssigner:
@@ -102,7 +102,7 @@ class FamilyAssigner:
         family: str
         dimension: str
         company: str
-        tool: str
+        optional_properties: dict
 
         @staticmethod
         def _compare(a, b) -> int:
@@ -130,11 +130,25 @@ class FamilyAssigner:
             a_values = dataclasses.astuple(self)
             b_values = dataclasses.astuple(other)
             for a, b in zip(a_values, b_values):
-                dif = self._compare(a, b)
-                if dif < 0:
-                    return True
-                elif dif > 0:
-                    return False
+                if isinstance(a, dict) and isinstance(b, dict):  # for optional_properties field
+                    all_keys = set(a.keys()) | set(b.keys())
+                    if 'tool' in all_keys:
+                        all_keys.remove('tool')
+                        all_keys = ['tool'] + sorted(all_keys)  # sorts by tool first
+                    else:
+                        all_keys = sorted(all_keys)
+                    for key in all_keys:
+                        dif = self._compare(a.get(key), b.get(key))
+                        if dif == 0:
+                            continue
+                        else:
+                            return dif < 0
+                else:
+                    dif = self._compare(a, b)
+                    if dif == 0:
+                        continue
+                    else:
+                        return dif < 0
             return False
 
     def __init__(self):
@@ -145,15 +159,14 @@ class FamilyAssigner:
         s = RedisStorage()
         self.db = pickle.loads(s.object_get(self.TABLE_NAME))
 
-    def _nlp_assign_family(self, mnemonic: str, company: str = None) -> Optional[MnemonicInfo]:
+    def _nlp_assign_family(self, mnemonic: str, company: str = None) -> Optional[Iterable[tuple[float, MnemonicInfo]]]:
         '''
         Get family using NLP.
         '''
         company_result = {}
         for cc in [company] if company is not None else self.db:
             db = self.db[cc]
-            family_infos, rank = db.nlpp.match(mnemonic)
-            company_result[cc] = [(fi, rank) for fi in family_infos] if family_infos else None
+            company_result[cc] = db.nlpp.match(mnemonic)
         if company_result:
             if company is not None:
                 return company_result[company]
@@ -195,7 +208,7 @@ class FamilyAssigner:
                 # NLP
                 nlp_res = self._nlp_assign_family(mnemonic, cc)
                 if nlp_res is not None:
-                    for family_info, reliability in nlp_res:
+                    for reliability, family_info in nlp_res:
                         res = copy.copy(family_info)
                         res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING  # decrease maximum NLP confidence
                         results.append(res)
@@ -220,8 +233,8 @@ class FamilyAssigner:
                 already_have.reliability = min(1, already_have.reliability + mnemonic_info.reliability / len(results))
                 if already_have.company != mnemonic_info.company:
                     already_have.company = None  # no particular source company
-                if already_have.tool != mnemonic_info.tool:
-                    already_have.tool = None  # no particular source tool
+                if 'tool' in already_have.optional_properties and already_have.optional_properties['tool'] != mnemonic_info.optional_properties.get('tool'):
+                    del already_have.optional_properties['tool']  # no particular logging tool
             else:
                 uniq_family_results.append(mnemonic_info)  # just add the variant
 

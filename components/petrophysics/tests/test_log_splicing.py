@@ -46,8 +46,6 @@ class TestLogSplicing(unittest.TestCase):
         # define log resolution
         async_log_resolution(self.w.name, datasetnames=[filename, ])
 
-
-
     def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
@@ -65,9 +63,8 @@ class TestLogSplicing(unittest.TestCase):
 
         return true_meta
 
-
     def test_log_splicing_works_correctly(self):
-        async_splice_logs(wellname='609', output_dataset_name='Spliced')
+        async_splice_logs(wellname='609', tags=['processing'], output_dataset_name='Spliced')
         wd = WellDataset(self.w, 'Spliced')
         log = BasicLog(wd.id, 'GR')
 

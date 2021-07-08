@@ -16,17 +16,6 @@ from components.importexport.UnitsSystem import UnitConversionError
 
 from settings import DEFAULT_LQC_NAME
 
-LOG_FAMILY_PRIORITY = [
-    'Gamma Ray',
-    'Bulk Density',
-    'Density',
-    'Neutron Porosity',
-    'Resistivity',
-    'Formation Resistivity',
-    'Compressional Slowness',
-    'Neutron Porosity',
-]
-
 logger = logging.getLogger('LogSplicingNode')
 
 
@@ -39,52 +28,57 @@ def splice_logs(well: Well,
     :param well: Well object to process
     :param dataset_names: Optional. List of str with dataset names. If None then uses all datasets
     :param log_names: Optional. List of str with logs names. Logs must present in all datasets. If None then uses all logs in all datasets
+    :param tags: tags that must be in logs to process the logs (one of)
     :return: dict with log data and log meta
     """
-    if dataset_names is None:
-        dataset_names = well.datasets
-    logs = {}
-    for dataset_name in dataset_names:
+    FAMILY_PROPERTIES = FamilyProperties()
+
+    logs = []
+    families_to_splice = {'Formation Resistivity'}  # persistent family for special splicing procedure
+    for dataset_name in (dataset_names if dataset_names is not None else well.datasets):
         wd = WellDataset(well, dataset_name)
-        logs_in_dataset = wd.log_list if log_names is None else log_names
-
-        logs.update({(dataset_name, log_name): BasicLog(wd.id, log_name) for log_name in logs_in_dataset})
-
-    if tags is not None:
-        logs = {log_id: log for log_id, log in logs.items() if any(tag in log.meta.tags for tag in tags)}
+        for log_name in (log_names if log_names is not None else wd.log_list):
+            log = BasicLog(wd.id, log_name)
+            log_tags = set(log.meta.tags)
+            if tags is None or log_tags.intersection(tags):  # any of tags must be present
+                splice_family = FAMILY_PROPERTIES[log.meta.family].get('splice', False)
+                if splice_family:
+                    families_to_splice.add(log.meta.family)
+                if splice_family or 'best_rt' in log_tags:  # add any family best_rt logs also
+                    logs.append(log)
 
     # here and after each log family must be spliced by families and then runs
     results_data = {}
     results_meta = {}
 
+    for family in families_to_splice:
+        family_meta = FAMILY_PROPERTIES[family]
 
-    for family, family_meta in FamilyProperties().items():
-        if not family_meta.get('splice', False):
+        # input logs filter
+        if family == 'Formation Resistivity':
+            suitable_log = lambda log: 'best_rt' in log.meta.tags
+        else:
+            suitable_log = lambda log: log.meta.family == family
+
+        logs_to_splice = [log for log in logs if suitable_log(log)]
+        if not logs_to_splice:
             continue
 
-        log_belongs_to_family = lambda log, family: hasattr(log.meta, 'family') and \
-                                                    log.meta['family'] == family
-
-        # select log_names of defined family
-        logs_in_family = [l for l in logs.values() if log_belongs_to_family(l, family)]
-
-        # if no log_names in of this family - skip
-        if not logs_in_family:
-            continue
         # splice log_names
-        target_units = family_meta.get('unit', None)
+        target_units = family_meta['unit']
         try:
-            spliced = splice_logs_in_family(logs_in_family, target_units=target_units)
+            spliced = splice_logs_in_family(logs_to_splice, target_units=target_units)
         except AttributeError as exc:
             logger.warning(str(exc) + f" Well {well.name}. Family: {family}")
             continue
+
         # define meta information
         meta = {}
-        meta['AutoSpliced'] = {'Intervals': len(logs_in_family), 'Uncertainty': 0.5}
+        meta['AutoSpliced'] = {'Intervals': len(logs_to_splice), 'Uncertainty': 0.5}
         meta['family'] = family
         meta['units'] = target_units
-        results_data.update({family_meta.get('mnemonic', family): spliced})  # Log name will be defined here
-        results_meta.update({family_meta.get('mnemonic', family): meta})  # log name will be defined here
+        results_data.update({family_meta['mnemonic']: spliced})  # Log name will be defined here
+        results_meta.update({family_meta['mnemonic']: meta})  # log name will be defined here
 
     return results_data, results_meta
 
@@ -174,8 +168,6 @@ class SpliceLogsNode(EngineNode):
         :param async_job: run via Celery or in this process
         :return:
         """
-
-
         p = Project()
         if async_job:
             tasks = []

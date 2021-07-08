@@ -1,6 +1,5 @@
 # Log family properties database
-# Manually run this script to update JSON file
-# Import FAMILY_PROPERTIES from this script to get access to family properties
+# Manually run this script to update FamilyProperties in Redis
 
 import itertools
 import os

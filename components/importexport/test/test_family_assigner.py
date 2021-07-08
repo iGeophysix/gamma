@@ -31,12 +31,12 @@ class TestFamilyAssignment(unittest.TestCase):
         result = ['Gamma Ray',
                   'Spontaneous Potential',
                   'Relative Bearing',
-                  'Outside Diameter',
+                  'Nom Borehole Diameter',
                   'Neutron Porosity',
                   'Z Acceleration',
                   'Borehole Azimuth',
                   'Caliper',
-                  'Gradient 045',
+                  'Resistivity',
                   'Spontaneous Potential',
                   'Spontaneous Potential',
                   'Bulk Density Correction',
@@ -47,7 +47,7 @@ class TestFamilyAssignment(unittest.TestCase):
             mnemonic, unit = mnemonic_unit
             res = self.fa.assign_family(mnemonic, unit, one_best=True)
             self.assertIsNotNone(res)
-            self.assertEqual(res.family, result[n])
+            self.assertEqual(res.family, result[n], f'{mnemonic} failed')
 
     def test_batch(self):
         result = ['Gamma Ray',
@@ -56,9 +56,9 @@ class TestFamilyAssignment(unittest.TestCase):
                   'Nom Borehole Diameter',
                   'Neutron Porosity',
                   'Z Acceleration',
-                  'Azimuth',
+                  'Borehole Azimuth',
                   'Caliper',
-                  'Gradient 045',
+                  'Resistivity',
                   'Spontaneous Potential',
                   'Spontaneous Potential',
                   'Bulk Density Correction',
@@ -70,7 +70,7 @@ class TestFamilyAssignment(unittest.TestCase):
             mnemonic = mnemonic_unit[0]
             mnem_res = res[mnemonic]
             self.assertIsNotNone(mnem_res)
-            self.assertEqual(mnem_res.family, right_family)
+            self.assertEqual(mnem_res.family, right_family, f'{mnemonic} failed')
 
 
 class TestFamilyAssignerNode(unittest.TestCase):
