@@ -1,4 +1,5 @@
 import pickle
+from typing import Tuple, Union, Iterable
 
 import numpy as np
 
@@ -21,6 +22,7 @@ class UnitsSystem:
         self._unit_dim = unit_system['_unit_dim']  # unit -> dimension
         self._dim_base_unit = unit_system['_dim_base_unit']  # dimension -> base unit
         self._ci_unit_unit = unit_system['_ci_unit_unit']  # lower_case_unit -> unit. Search for case-insensitive units
+        self._unit_renaming = unit_system['_unit_renaming']  # list of (input_unit: re.Pattern, rename_to_unit: str)
 
     def unit_dimension(self, unit: str):
         '''
@@ -67,7 +69,7 @@ class UnitsSystem:
         '''
         return self.convertable_units(unit1, unit2) and self._unit_kb(unit1) == self._unit_kb(unit2)  # same base unit, equal k and b
 
-    def _unit_kb(self, unit: str) -> (float, float):
+    def _unit_kb(self, unit: str) -> Tuple[float, float]:
         '''
         Get scale coefficient k and additive constant b for the unit.
         '''
@@ -75,7 +77,7 @@ class UnitsSystem:
         unit_info = self._db[self.unit_dimension(unit)][unit]
         return unit_info['k'], unit_info.get('b', 0)
 
-    def convert(self, data, unit_from: str, unit_to: str):
+    def convert(self, data: Union[np.number, np.ndarray], unit_from: str, unit_to: str) -> Union[np.number, np.ndarray]:
         '''
         Perform unit conversion of the data array or single value.
         Array mode is preferable for batch conversion.
@@ -88,3 +90,12 @@ class UnitsSystem:
             k1, b1 = self._unit_kb(unit_from)
             k2, b2 = self._unit_kb(unit_to)
             return ((data - b1) / k1) * k2 + b2
+
+    def fix_naming(self, unit: str) -> str:
+        '''
+        Make unit naming standard.
+        '''
+        for re_unit, rename_to in self._unit_renaming:
+            if re_unit.fullmatch(unit):
+                return rename_to
+        return unit

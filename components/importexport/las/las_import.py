@@ -69,24 +69,37 @@ def import_to_db(filename: str = None,
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
     md_values = raw_curves[md_key]
 
-    # convert depth reference to default depth units
     unit_converter = UnitsSystem()
-    md_values = unit_converter.convert(md_values, las_structure.logs_info()[md_key]['units'], DEFAULT_DEPTH_UNITS)
+
+    def fix_unit_naming(las_section_meta):
+        'Fix non-standard units naming'
+        for meta in las_section_meta.values():
+            units = meta.get('units')
+            if units is not None:
+                meta['units'] = unit_converter.fix_naming(units)
+
+    logs_info = las_structure.logs_info()
+    fix_unit_naming(logs_info)
+
+    # convert depth reference to default depth units
+    md_values = unit_converter.convert(md_values, logs_info[md_key]['units'], DEFAULT_DEPTH_UNITS)
 
     for log, values in raw_curves.items():
         this_log = BasicLog(dataset_id=well_dataset.id, log_id=log)
         this_log.values = np.array(tuple(zip(md_values, values)))
-        this_log.meta = las_structure.logs_info()[log]
+        this_log.meta = logs_info[log]
         this_log.meta.depth_reference = md_key
         this_log.save()
         this_log.meta.source = las_structure.filename
         this_log.meta.add_tags('raw')
         if log == md_key:
             this_log.meta.add_tags('main_depth')
+            this_log.meta.units = DEFAULT_DEPTH_UNITS
         this_log.save()
 
     # write meta-information about this well
     well_info = las_structure.well_info()
+    fix_unit_naming(well_info)
     well_dataset.info = well_info
     if created_new_well:
         well.meta = well_info

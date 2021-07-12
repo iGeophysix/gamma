@@ -50,3 +50,7 @@ class TestUnitSystem(unittest.TestCase):
         self.assertAlmostEqual(self.units.convert(float(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
         self.assertAlmostEqual(self.units.convert(int(temp_degC_np[0]), 'degC', 'degF'), temp_degF_np[0])
         self.assertTrue(np.isnan(self.units.convert(np.nan, 'm', 'mm')))
+
+    def test_fix_units_naming(self):
+        self.assertEqual(self.units.fix_naming('MV'), 'mV')
+        self.assertEqual(self.units.fix_naming('F'), 'ft')

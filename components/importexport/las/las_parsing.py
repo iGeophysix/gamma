@@ -59,7 +59,7 @@ class LasStructure():
         self.additional_well_entries = {}
 
     def well_info(self):
-        return self.required_well_entries | self.additional_well_entries
+        return {k: v._asdict() for k, v in (self.required_well_entries | self.additional_well_entries).items()}
 
     def logs_info(self):
         # md_key = list(self.data.keys())[0]

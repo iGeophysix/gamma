@@ -1,11 +1,33 @@
 import os
 import pickle
+import re
+from typing import Pattern
 
 import pandas
 
 from components.database.RedisStorage import RedisStorage
 
 SOURCE_UNITS_TABLE = os.path.join(os.path.dirname(__file__), 'Units.xlsx')
+
+
+def readUnitRenaming() -> list[Pattern, str]:
+    '''
+    Reads unit renaming rules from Excel
+    '''
+    cols = ['Input Unit', 'Case-sensitive', 'Rename to']
+    with open(SOURCE_UNITS_TABLE, 'rb') as f:
+        df = pandas.read_excel(f, 'Renaming', header=0, usecols=cols)
+
+    renamingRules = []
+    for r in range(len(df.index)):
+        ci = df['Case-sensitive'][r].strip() != 'Yes'
+        raw_unit = df['Input Unit'][r].strip()  # re pattern
+        rename_to_unit = df['Rename to'][r].strip()
+        # compile and add rule
+        flags = re.IGNORECASE if ci else 0
+        re_raw_unit = re.compile(raw_unit, flags)
+        renamingRules.append((re_raw_unit, rename_to_unit))
+    return renamingRules
 
 
 def build_unit_system():
@@ -78,7 +100,8 @@ def build_unit_system():
         '_db': units,
         '_unit_dim': _unit_dim,
         '_dim_base_unit': _dim_base_unit,
-        '_ci_unit_unit': _ci_unit_unit
+        '_ci_unit_unit': _ci_unit_unit,
+        '_unit_renaming': readUnitRenaming()
     }
 
     s = RedisStorage()

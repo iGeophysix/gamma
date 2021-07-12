@@ -58,54 +58,54 @@ class TestWellDatasetRedis(unittest.TestCase):
 
         las.import_to_db(filename=os.path.join(self.path_to_test_data, f))
         true_info = {
-            "WELL": [
-                "15/9-13 Sleipner East Appr",
-                "WELL"
-            ],
-            "COMP": [
-                "",
-                "COMPANY"
-            ],
-            "SRVC": [
-                "",
-                "SERVICE COMPANY"
-            ],
-            "FLD": [
-                "",
-                "FIELD"
-            ],
-            "LOC": [
-                "",
-                "LOCATION"
-            ],
-            "DATE": [
-                "2020-08-09 20:01:10   : Log Export Date {yyyy-MM-dd HH:mm",
-                "ss}"
-            ],
-            "CTRY": [
-                "",
-                ""
-            ],
-            "STAT": [
-                "",
-                ""
-            ],
-            "CNTY": [
-                "",
-                ""
-            ],
-            "PROV": [
-                "",
-                "PROVINCE"
-            ],
-            "API": [
-                "",
-                "API NUMBER"
-            ],
-            "UWI": [
-                "15/9-13",
-                "UNIQUE WELL ID"
-            ]
+            'WELL': {
+                'value': '15/9-13 Sleipner East Appr',
+                'description': 'WELL'
+            },
+            'COMP': {
+                'value': '',
+                'description': 'COMPANY'
+            },
+            'SRVC': {
+                'value': '',
+                'description': 'SERVICE COMPANY'
+            },
+            'FLD': {
+                'value': '',
+                'description': 'FIELD'
+            },
+            'LOC': {
+                'value': '',
+                'description': 'LOCATION'
+            },
+            'DATE': {
+                'value': '2020-08-09 20:01:10   : Log Export Date {yyyy-MM-dd HH:mm',
+                'description': 'ss}'
+            },
+            'CTRY': {
+                'value': '',
+                'description': ''
+            },
+            'STAT': {
+                'value': '',
+                'description': ''
+            },
+            'CNTY': {
+                'value': '',
+                'description': ''
+            },
+            'PROV': {
+                'value': '',
+                'description': 'PROVINCE'
+            },
+            'API': {
+                'value': '',
+                'description': 'API NUMBER'
+            },
+            'UWI': {
+                'value': '15/9-13',
+                'description': 'UNIQUE WELL ID'
+            }
         }
         wellname = "15/9-13 Sleipner East Appr"
         well = Well(wellname)
