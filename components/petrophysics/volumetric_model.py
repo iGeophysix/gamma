@@ -1,7 +1,7 @@
 import copy
 import json
 import logging
-from typing import List, Union, Optional, Iterable, Tuple
+from typing import List, Union, Optional, Iterable, Tuple, Set
 
 import numpy as np
 from scipy.optimize import lsq_linear
@@ -24,6 +24,17 @@ logging.basicConfig()
 logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
+MODEL_COMPONENT_SET = {
+    'terrigenous': (
+        ('Quartz', 'Shale'),
+        ('Quartz', 'Illite', 'Kaolinite', 'Montmorillonite')
+    ),
+    'carbonate': (
+        ('Calcite', 'Dolomite'),
+        ('Calcite', 'Dolomite', 'Anhydrite')
+    )
+}
+
 
 class VolumetricModel:
     '''
@@ -37,13 +48,13 @@ class VolumetricModel:
         del comp['Units']  # except "Units" item all others are model components
         self._COMPONENTS = comp
 
-    def all_minerals(self) -> Iterable[str]:
+    def all_minerals(self) -> Set[str]:
         '''
         All known minerals
         '''
         return set(component for component, info in self._COMPONENTS.items() if not info['_fluid'])
 
-    def all_fluids(self) -> Iterable[str]:
+    def all_fluids(self) -> Set[str]:
         '''
         All known fluids
         '''
@@ -169,14 +180,8 @@ class VolumetricModelSolverNode(EngineNode):
     class Meta:
         name = 'Volumetric model solver'
         input = [
-            # at least one log is required. How to state?
-            {'type': BasicLog, 'meta': {'log_family': 'Gamma Ray'}, 'optional': True},
-            {'type': BasicLog, 'meta': {'log_family': 'Bulk Density'}, 'optional': True},
-            {'type': BasicLog, 'meta': {'log_family': 'Neutron Porosity'}, 'optional': True}
         ]
         output = [
-            {'type': BasicLog, 'id': 'VMISFIT', 'meta': {'log_family': 'Model Fit Error', 'method': 'Volumetric model solver'}}
-            # plus dynamic set of output logs based on input model_components. How to define?
         ]
 
     @classmethod
@@ -185,16 +190,17 @@ class VolumetricModelSolverNode(EngineNode):
         Validate inputs
         :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
-        for component in model_components:
-            if not isinstance(component, str):
-                raise TypeError('all model component names must be str')
+        vm = VolumetricModel()
+        unknown_components = set(model_components).difference(vm.all_fluids() | vm.all_minerals())
+        if unknown_components:
+            raise ValueError(f'"model_components" contains unknown names: {unknown_components}')
 
     @classmethod
     def run(cls, **kwargs) -> None:
         '''
         Volumetric model solver
         Creates set of V[COMPONENT] logs - volume of a component and VMISFIT log - Model Fit Error
-        :param model_components: list of model component names inversion is performed for (see FluidMineralConstants.json)
+        :param model_components: optional list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
 
         model_components = kwargs['model_components']
@@ -273,11 +279,27 @@ class VolumetricModelSolverNode(EngineNode):
             log_data[log.meta.family] = log.convert_units(family_units)[:, 1]
 
         # run solver
-        res = vm.inverse(log_data, model_components)
+        if model_components is not None:
+            # predefined component set
+            res = vm.inverse(log_data, model_components)
+        else:
+            # find the best component set
+            componet_set_res = []
+            for _, component_sets in MODEL_COMPONENT_SET.items():
+                for component_set in component_sets:
+                    if len(component_set) <= len(input_logs) + 1:  # always true for first component_set
+                        selected_componet_set = component_set
+                    else:
+                        break
+                res = vm.inverse(log_data, selected_componet_set)
+                componet_set_res.append((selected_componet_set, res))
+            componet_set_res.sort(key=lambda componet_set_res: np.nanmean(componet_set_res[1]['MISFIT']['TOTAL']))
+            best_componet_set, res = componet_set_res[0]
+            logger.info(f'best component set is {best_componet_set}')
 
+        # save results
         workflow = 'VolumetricModelling'
         dataset = input_logs[0].dataset_id
-
         family_properties = FamilyProperties()
 
         # save components' volumes
@@ -311,9 +333,12 @@ class VolumetricModelSolverNode(EngineNode):
             cls.write_history(log=log,
                               input_logs=input_logs)
             log.save()
+
         # save misfit
-        log = BasicLog(dataset_id=dataset, log_id='VMISFIT')
-        log.meta.family = 'Model Fit Error'
+        log_family = 'Model Fit Error'
+        log_id = family_properties[log_family]['mnemonic']
+        log = BasicLog(dataset_id=dataset, log_id=log_id)
+        log.meta.family = log_family
         log.values = np.vstack((input_logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
         log.meta.units = 'unitless'
         log.meta.update({'workflow': workflow,
@@ -328,11 +353,12 @@ class VolumetricModelSolverNode(EngineNode):
         log = kwargs['log']
         input_logs = kwargs['input_logs']
 
-        log.meta.append_history({'node': cls.name(),
-                                 'node_version': cls.version(),
-                                 'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
-                                 'parameters': {}
-                                 })
+        log.meta.append_history({
+            'node': cls.name(),
+            'node_version': cls.version(),
+            'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+            'parameters': {}
+        })
 
 
 def family_best_log(well_name: str,
