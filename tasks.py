@@ -93,7 +93,7 @@ def async_read_las(wellname: str = None, datasetname: str = None, filename: str 
         dataset = WellDataset(well, datasetname)
         import_to_db(filename=filename, well=well, well_dataset=dataset)
     elif las_data is not None:
-        las_structure = las.parse(filename=filename, data=las_data)
+        las_structure = las.parse(filename=filename.replace('\\', '/'), data=las_data)  # replace makes path cross-platform
         well = Well(wellname) if wellname is not None else None
         dataset = WellDataset(well, datasetname) if datasetname is not None else None
         import_to_db(las_structure=las_structure, well=well, well_dataset=dataset)
