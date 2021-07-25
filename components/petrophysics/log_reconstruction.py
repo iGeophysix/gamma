@@ -1,4 +1,5 @@
 import logging
+import time
 from collections import defaultdict
 
 import numpy as np
@@ -178,7 +179,14 @@ class LogReconstructionNode(EngineNode):
         cls.logger.info(f'Created synthetic {log_family_to_predict} in well {well_name}')
 
     @classmethod
-    def run(cls, log_families_to_train, log_families_to_predict, model_kwargs=None, percent_of_wells_to_train=0.2, async_job=False):
+    def run(cls, **kwargs):
+
+        log_families_to_train = kwargs.get('log_families_to_train')
+        log_families_to_predict = kwargs.get('log_families_to_predict')
+        model_kwargs = kwargs.get('model_kwargs', None)
+        percent_of_wells_to_train = kwargs.get('percent_of_wells_to_train', 0.2)
+        async_job = kwargs.get('async_job', False)
+
         p = Project()
         well_names = list(p.list_wells().keys())
 
@@ -198,7 +206,14 @@ class LogReconstructionNode(EngineNode):
                 for well_name in well_names:
                     tasks.append(
                         celery_conf.app.send_task('tasks.async_log_reconstruction', (model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)))
-                celery_conf.wait_till_completes(tasks)
+
+                engine_progress = kwargs['engine_progress']
+                while True:
+                    progress = celery_conf.track_progress(tasks)
+                    engine_progress.update(cls.name(), progress)
+                    if progress['completion'] == 1:
+                        break
+                    time.sleep(0.1)
 
 
 if __name__ == '__main__':

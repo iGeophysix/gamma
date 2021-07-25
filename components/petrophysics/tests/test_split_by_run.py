@@ -5,6 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import EngineProgress
 from components.importexport.las import import_to_db
 from components.petrophysics.run_detection import RunDetectionNode
 from settings import BASE_DIR
@@ -40,7 +41,8 @@ class TestSplitByRun(unittest.TestCase):
 
     def test_split_by_runs_engine_node(self):
 
-        RunDetectionNode.run()
+        engine_progress = EngineProgress('test')
+        RunDetectionNode.run(engine_progress=engine_progress)
 
         w = Well('622')
         d = WellDataset(w, 'Well622_ULN_Combined')

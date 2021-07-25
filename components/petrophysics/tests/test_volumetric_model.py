@@ -2,6 +2,8 @@ import os
 import unittest
 
 import numpy as np
+
+from components.engine.engine import EngineProgress
 from settings import BASE_DIR
 
 from components.database.RedisStorage import RedisStorage
@@ -62,7 +64,8 @@ class TestVolumetricModel(unittest.TestCase):
         module = VolumetricModelSolverNode()
         model_components = list(self.res.keys())
 
-        module.run(model_components=model_components)
+        engine_progress = EngineProgress('test')
+        module.run(model_components=model_components, engine_progress=engine_progress)
 
         for component in model_components:
             log_name = self.res_component_logs[component]

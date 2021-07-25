@@ -1,4 +1,5 @@
 import logging
+import time
 
 import numpy as np
 
@@ -27,6 +28,10 @@ class ShaleVolume(EngineNode):
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
 
     @classmethod
     def validate_input(cls, log: BasicLog, gr_matrix: float, gr_shale: float, name: str) -> None:
@@ -89,14 +94,20 @@ class ShaleVolume(EngineNode):
             output.save()
 
     @classmethod
-    def run(cls, gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR'):
+    def run(cls, **kwargs):
+
+        gr_matrix = kwargs.get('gr_matrix', None)
+        gr_shale = kwargs.get('gr_shale', None)
+        output_log_name = kwargs.get('output_log_name', 'VSH_GR')
+
         p = Project()
         well_names = p.list_wells()
         tasks = []
         for well_name in well_names:
             tasks.append(celery_conf.app.send_task('tasks.async_calculate_shale_volume', (well_name, cls.__name__, gr_matrix, gr_shale, output_log_name)))
 
-        celery_conf.wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
 
 class ShaleVolumeLinearMethodNode(ShaleVolume):

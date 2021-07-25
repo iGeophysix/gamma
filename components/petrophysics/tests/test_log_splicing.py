@@ -5,6 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import EngineProgress
 from components.petrophysics.log_splicing import SpliceLogsNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution, async_splice_logs
@@ -74,8 +75,8 @@ class TestLogSplicing(unittest.TestCase):
             self.assertEqual(val, log.meta[key])
 
     def test_log_splicing_engine_node_works_correctly(self):
-
-        SpliceLogsNode.run(output_dataset_name='LQC2')
+        engine_progress = EngineProgress('test')
+        SpliceLogsNode.run(output_dataset_name='LQC2', engine_progress=engine_progress)
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')

@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
+import logging
+import time
+from abc import ABC
 from typing import Any
 
-import logging
-
+import celery_conf
 from settings import LOGGING_LEVEL
 
 
@@ -51,3 +52,18 @@ class EngineNode(ABC):
                        ]
         """
         pass
+
+    @classmethod
+    def track_progress(cls, engine_progress, tasks):
+        """
+        Tracks progress in EngineProgress object (observer)
+        :param engine_progress: observer
+        :param tasks: Celery tasks list
+        :return:
+        """
+        while True:
+            progress = celery_conf.track_progress(tasks)
+            engine_progress.update(cls.name(), progress)
+            if progress['completion'] == 1:
+                break
+            time.sleep(0.1)

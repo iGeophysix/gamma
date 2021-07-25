@@ -20,7 +20,7 @@ class ProjectStatisticsNode(EngineNode):
         return True
 
     @classmethod
-    def run(cls):
+    def run(cls, **kwargs):
         p = Project()
         tree = p.tree_oop()
 
@@ -35,15 +35,17 @@ class ProjectStatisticsNode(EngineNode):
 
         stats_by_family = defaultdict(dict)
         for family, logs in logs_by_families.items():
-
-            good_logs = [log for log in logs if cls.validate(log)]
-            stats_by_family[family] = {
-                'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
-                'gmean': np.nanmean([log.meta.basic_statistics['gmean'] if log.meta.basic_statistics['gmean'] is not None else np.nan for log in good_logs]),
-                'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
-                'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
-                'number_of_logs': len(good_logs)
-            }
+            try:
+                good_logs = [log for log in logs if cls.validate(log)]
+                stats_by_family[family] = {
+                    'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
+                    'gmean': np.nanmean([log.meta.basic_statistics['gmean'] if log.meta.basic_statistics['gmean'] is not None else np.nan for log in good_logs]),
+                    'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
+                    'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
+                    'number_of_logs': len(good_logs)
+                }
+            except:
+                stats_by_family[family] = {}
 
         p.update_meta({'basic_statistics': stats_by_family})
 

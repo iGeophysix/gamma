@@ -32,7 +32,7 @@ class TestEngine(unittest.TestCase):
     def test_engine_runs_with_no_exceptions(self):
         workflow = Workflow('test_workflow')
         engine = Engine()
-        engine.start(workflow=workflow)
+        engine.start(task_id='test', workflow=workflow)
 
     def test_engine_running_in_celery(self):
         async_run_workflow.delay('test_workflow')

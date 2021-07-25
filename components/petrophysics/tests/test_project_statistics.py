@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
+from components.engine.engine import EngineProgress
 from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las import import_to_db
 from components.petrophysics.project_statistics import ProjectStatisticsNode
@@ -28,10 +29,12 @@ class TestProjectStatisticsNode(TestCase):
             async_get_basic_log_stats(well_name)
             async_log_resolution(well_name)
 
-        FamilyAssignerNode.run()
+        engine_progress = EngineProgress('test')
+        FamilyAssignerNode.run(engine_progress=engine_progress)
 
     def test_node_works(self):
-        ProjectStatisticsNode.run()
+        engine_progress = EngineProgress('test')
+        ProjectStatisticsNode.run(engine_progress=engine_progress)
 
         p = Project()
         stats_by_family = p.meta['basic_statistics']

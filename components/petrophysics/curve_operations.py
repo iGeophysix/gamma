@@ -1,10 +1,12 @@
 import logging
+import time
 import warnings
 from datetime import datetime
 
 import numpy as np
 from scipy import signal
 
+import celery_conf
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog, BasicLogMeta
 from components.domain.Project import Project
@@ -168,6 +170,7 @@ class LogResolutionNode(EngineNode):
 
     @classmethod
     def run(cls, **kwargs):
+
         p = Project()
         well_names = p.list_wells()
         tasks = []
@@ -197,7 +200,9 @@ class LogResolutionNode(EngineNode):
                                                   (well_name, [dataset_name, ], [log.name, ]))
                     tasks.append(result)
 
-        wait_till_completes(tasks)
+        # wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

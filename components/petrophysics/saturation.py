@@ -1,4 +1,5 @@
 import logging
+import time
 
 import numpy as np
 
@@ -98,7 +99,7 @@ class SaturationArchieNode(EngineNode):
         return log
 
     @classmethod
-    def run(cls, a: float = 1, m: float = 2, n: float = 2, rw: float = 0.03, output_log_name: str = 'SW_AR', async_job: bool = True):
+    def run(cls, **kwargs):
         """
         :param a: tortuousity exponent (unitless)
         :param m: cementation exponent (unitless)
@@ -108,6 +109,13 @@ class SaturationArchieNode(EngineNode):
         :param async_job: default True
         :return:
         """
+        a = kwargs.get('a', 1)
+        m = kwargs.get('m', 2)
+        n = kwargs.get('n', 2)
+        rw = kwargs.get('rw', 0.03)
+        output_log_name = kwargs.get('output_log_name', 'SW_AR')
+        async_job = kwargs.get('async_job', True)
+
         p = Project()
         well_names = p.list_wells()
 
@@ -116,7 +124,13 @@ class SaturationArchieNode(EngineNode):
                 celery_conf.app.send_task('tasks.async_saturation_archie', (well_name, a, m, n, rw, output_log_name))
                 for well_name in well_names
             ]
-            celery_conf.wait_till_completes(tasks)
+            engine_progress = kwargs['engine_progress']
+            while True:
+                progress = celery_conf.track_progress(tasks)
+                engine_progress.update(cls.name(), progress)
+                if progress['completion'] == 1:
+                    break
+                time.sleep(0.1)
         else:
             for well_name in well_names:
                 cls.calculate_for_item(well_name, a, m, n, rw, output_log_name)

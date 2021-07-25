@@ -1,12 +1,11 @@
 import os
 import unittest
 
-import numpy as np
-
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import EngineProgress
 from components.petrophysics.curve_operations import LogResolutionNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
@@ -69,7 +68,8 @@ class TestLogResolutionNode(unittest.TestCase):
 
     def test_run(self):
         node = LogResolutionNode()
-        node.run()
+        engine_progress = EngineProgress('test')
+        node.run(engine_progress=engine_progress)
 
         l = BasicLog(self.wd.id, "GK_D0400_D")
         resolution = l.meta['log_resolution']['value']

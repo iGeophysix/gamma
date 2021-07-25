@@ -1,9 +1,11 @@
+import time
 from collections import Counter
 
 from datetime import datetime
 from sklearn.cluster import KMeans
 import numpy as np
 
+import celery_conf
 from celery_conf import app as celery_app, wait_till_completes
 
 from components.domain.Log import BasicLog
@@ -94,20 +96,18 @@ class RunDetectionNode(EngineNode):
         :param depth_tolerance:
         :return:
         """
-        depth_tolerance = kwargs['depth_tolerance'] if ('depth_tolerance' in kwargs) else 50.0;
+        depth_tolerance = kwargs['depth_tolerance'] if ('depth_tolerance' in kwargs) else 50.0
         async_job = kwargs['async_job'] if ('async_job' in kwargs) else True
 
         p = Project()
         tasks = []
-        if not async_job:
-            for well_name in p.list_wells():
-                detect_runs_in_well(Well(well_name), depth_tolerance)
-        else:
-            for well_name in p.list_wells():
-                result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
-                tasks.append(result)
 
-            wait_till_completes(tasks)
+        for well_name in p.list_wells():
+            result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
+            tasks.append(result)
+
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

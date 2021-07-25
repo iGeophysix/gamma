@@ -1,9 +1,11 @@
 import datetime
 import os
+import time
 from typing import Iterable
 
 import boto3
 
+import celery_conf
 from celery_conf import wait_till_completes, app as celery_app
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -42,6 +44,14 @@ class LasExportNode(EngineNode):
     )
 
     @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 0
+
+    @classmethod
     def export_well_dataset(cls, destination: str, wellname, datasetname: str = 'LQC', logs: Iterable[str] = None):
         """
         Method to assemble a las file in one well and one dataset to push it to public bucket in S3
@@ -61,29 +71,33 @@ class LasExportNode(EngineNode):
         cls.s3.upload_file(f'{wellname}_{datasetname}.las', 'public', f'{destination}/{wellname}_{datasetname}.las')
         os.remove(f'{wellname}_{datasetname}.las')
 
-    def run(self, destination: str = None, async_job: bool = True):
+    @classmethod
+    def run(cls, **kwargs):
         """
         :param destination: Name of output folder in public bucket of S3.
         """
+        destination = kwargs.get('destination', None)
+        async_job = kwargs.get('async_job', True)
         p = Project()
         if destination is None:
             destination = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         else:
             # clear destination folder
-            response = self.s3.list_objects(Bucket='public', Prefix=f'{destination}')
+            response = cls.s3.list_objects(Bucket='public', Prefix=f'{destination}')
             if 'Contents' in response.keys():
                 keys = [k['Key'] for k in response['Contents']]
                 for key in keys:
-                    self.s3.delete_object(Bucket='public', Key=key)
+                    cls.s3.delete_object(Bucket='public', Key=key)
         if async_job:
             tasks = []
             for well_name in p.list_wells():
                 tasks.append(celery_app.send_task('tasks.async_export_well_to_s3', kwargs={'destination': destination, 'wellname': well_name,
                                                                                            'datasetname': 'LQC', 'logs': None}))
-            wait_till_completes(tasks)
+            engine_progress = kwargs['engine_progress']
+            cls.track_progress(engine_progress, tasks)
         else:
             for well_name in p.list_wells():
-                self.export_well_dataset(destination, well_name, datasetname='LQC', logs=None)
+                cls.export_well_dataset(destination, well_name, datasetname='LQC', logs=None)
 
 
 if __name__ == '__main__':

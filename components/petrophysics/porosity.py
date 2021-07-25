@@ -1,4 +1,5 @@
 import logging
+import time
 
 import numpy  as np
 
@@ -8,7 +9,6 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode
-from components.petrophysics.curve_operations import get_basic_curve_statistics
 
 
 class PorosityFromDensityNode(EngineNode):
@@ -96,7 +96,8 @@ class PorosityFromDensityNode(EngineNode):
         for well_name in well_names:
             celery_conf.app.send_task('tasks.async_calculate_porosity_from_density', (well_name, rhob_matrix, rhob_fluid, output_log_name))
 
-        celery_conf.wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
     @classmethod
     def write_history(cls, **kwargs):
@@ -108,4 +109,4 @@ class PorosityFromDensityNode(EngineNode):
                                  'node_version': cls.version(),
                                  'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
                                  'parameters': parameters
-                                })
+                                 })

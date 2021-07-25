@@ -7,6 +7,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import EngineProgress
 from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las
@@ -36,7 +37,8 @@ class TestShaleVolume(unittest.TestCase):
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
         module = ShaleVolumeLinearMethodNode()
-        module.run(q5, q95)
+        engine_progress = EngineProgress('test')
+        module.run(gr_matrix=q5, gr_shale=q95, engine_progress=engine_progress)
 
         vsh_gr = BasicLog(self.output_wd.id, "VSH_GR_LM")
         true_vsh = BasicLog(self.wd.id, "VSH_GR_linear")
@@ -49,7 +51,8 @@ class TestShaleVolume(unittest.TestCase):
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
         module = ShaleVolumeLarionovOlderRockNode()
-        module.run(q5, q95)
+        engine_progress = EngineProgress('test')
+        module.run(gr_matrix=q5, gr_shale=q95, engine_progress=engine_progress)
 
         vsh_gr = BasicLog(self.output_wd.id, "VSH_GR_LOR")
 
@@ -63,7 +66,8 @@ class TestShaleVolume(unittest.TestCase):
         q5 = np.quantile(gk.non_null_values[:, 1], 0.05)
         q95 = np.quantile(gk.non_null_values[:, 1], 0.95)
         module = ShaleVolumeLarionovTertiaryRockNode()
-        module.run(q5, q95)
+        engine_progress = EngineProgress('test')
+        module.run(gr_matrix=q5, gr_shale=q95, engine_progress=engine_progress)
 
         vsh_gr = BasicLog(self.output_wd.id, "VSH_GR_LTR")
         true_vsh = BasicLog(self.wd.id, "VSH_GR_LarTert")

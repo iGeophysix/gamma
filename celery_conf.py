@@ -44,3 +44,27 @@ def wait_till_completes(results: Iterable[AsyncResult]) -> None:
     while not all(map(check_task_completed, results)):
         time.sleep(0.1)
         continue
+
+
+def track_progress(tasks: Iterable[AsyncResult]) -> dict:
+    """
+    Returns percentage of completed jobs
+    :param tasks:
+    :return:
+    """
+    total = len(tasks)
+    success = sum([t.status == 'SUCCESS' for t in tasks])
+    failed = sum([t.status == 'FAILURE' for t in tasks])
+    revoked = sum([t.status == 'REVOKED' for t in tasks])
+    pending = total - success - failed - revoked
+
+    completion = (1 - pending / total) if total > 0 else 1
+
+    return {
+        'total': total,
+        'success': success,
+        'failed': failed,
+        'revoked': revoked,
+        'pending': pending,
+        'completion': completion
+    }

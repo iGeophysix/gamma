@@ -1,11 +1,12 @@
 import logging
+import time
 
 import numpy as np
 import pandas as pd
 import scipy.interpolate
 
-from celery_conf import app as celery_app, wait_till_completes
-
+import celery_conf
+from celery_conf import app as celery_app
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -13,7 +14,6 @@ from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode
 from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitConversionError
-
 from settings import DEFAULT_LQC_NAME
 
 logger = logging.getLogger('LogSplicingNode')
@@ -161,30 +161,40 @@ class SpliceLogsNode(EngineNode):
             log.save()
 
     @classmethod
-    def run(cls, output_dataset_name: str = "LQC", async_job: bool = True):
+    def run(cls, **kwargs):
         """
         Run log splicing calculations
         :param output_dataset_name:
         :param async_job: run via Celery or in this process
         :return:
         """
+        output_dataset_name = kwargs.get('output_dataset_name', "LQC")
+        async_job = kwargs.get('async_job', True)
         p = Project()
         if async_job:
             tasks = []
 
             for well_name in p.list_wells():
-                params = { 'wellname': well_name,
-                           'tags': ['processing', ],
-                           'output_dataset_name': output_dataset_name
-                         }
+                params = {'wellname': well_name,
+                          'tags': ['processing', ],
+                          'output_dataset_name': output_dataset_name
+                          }
                 tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs=params))
-            wait_till_completes(tasks)
+
+            engine_progress = kwargs['engine_progress']
+            while True:
+                progress = celery_conf.track_progress(tasks)
+                engine_progress.update(cls.name(), progress)
+                if progress['completion'] == 1:
+                    break
+                time.sleep(0.1)
+
         else:
             for well_name in p.list_wells():
-                params = { 'wellname': well_name,
-                           'tags': ['processing', ],
-                           'output_dataset_name': output_dataset_name
-                         }
+                params = {'wellname': well_name,
+                          'tags': ['processing', ],
+                          'output_dataset_name': output_dataset_name
+                          }
                 cls.calculate_for_well(**params)
 
 

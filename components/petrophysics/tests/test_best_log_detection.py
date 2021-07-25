@@ -6,6 +6,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
+from components.engine.engine import EngineProgress
 from components.petrophysics.best_log_detection import (get_best_log_for_run_and_family,
                                                         BestLogDetectionNode,
                                                         score_log_tags,
@@ -66,7 +67,8 @@ class TestBestLogDetection(unittest.TestCase):
                          msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
 
     def test_best_log_detection_engine_node_works_correctly(self):
-        BestLogDetectionNode.run()
+        engine_progress = EngineProgress('test')
+        BestLogDetectionNode.run(engine_progress=engine_progress)
 
         log1 = BasicLog(self.wd.id, 'GK_D4412_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')

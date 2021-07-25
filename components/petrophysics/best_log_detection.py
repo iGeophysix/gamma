@@ -1,3 +1,4 @@
+import time
 from collections import defaultdict
 from typing import Any, Iterable, Dict, Tuple, Optional
 from datetime import datetime
@@ -5,6 +6,7 @@ from datetime import datetime
 import logging
 import numpy as np
 
+import celery_conf
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
@@ -279,7 +281,8 @@ class BestLogDetectionNode(EngineNode):
                 rt_candidates = run_logs_paths[run]
                 tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('resistivity', rt_candidates, None)))
 
-        wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

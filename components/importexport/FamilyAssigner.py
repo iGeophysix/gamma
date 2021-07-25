@@ -3,14 +3,14 @@ import dataclasses
 import logging
 import pickle
 import re
-import copy
+import time
 from typing import Optional, Iterable, Union
 
-from celery_conf import app as celery_app, wait_till_completes
+import celery_conf
+from celery_conf import app as celery_app
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
-from components.domain.Well import Well
 from components.engine.engine_node import EngineNode
 from components.importexport.UnitsSystem import UnitsSystem
 
@@ -275,6 +275,10 @@ class FamilyAssignerNode(EngineNode):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
     class Meta:
         name = 'Family Assigner'
         input = {
@@ -293,7 +297,7 @@ class FamilyAssignerNode(EngineNode):
         assert isinstance(log, BasicLog), "log must be instance of BasicLog class"
 
     @classmethod
-    def run(cls):
+    def run(cls, **kwargs):
         """
         Run calculations
         """
@@ -302,4 +306,7 @@ class FamilyAssignerNode(EngineNode):
         for well_name in p.list_wells():
             tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name,)))
 
-        wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
+
+

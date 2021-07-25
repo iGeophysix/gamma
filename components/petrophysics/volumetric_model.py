@@ -2,6 +2,7 @@ import copy
 import json
 import logging
 import os
+import time
 from collections.abc import Iterable
 from typing import Union, Optional
 from datetime import datetime
@@ -9,6 +10,7 @@ from datetime import datetime
 import numpy as np
 from scipy.optimize import lsq_linear
 
+import celery_conf
 from celery_conf import app as celery_app, wait_till_completes
 from components.database.RedisStorage import RedisStorage
 
@@ -210,7 +212,8 @@ class VolumetricModelSolverNode(EngineNode):
             tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model',
                                               (well_name, model_components)))
 
-        wait_till_completes(tasks)
+        engine_progress = kwargs['engine_progress']
+        cls.track_progress(engine_progress, tasks)
 
 
     @classmethod

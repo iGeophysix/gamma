@@ -63,7 +63,7 @@ def async_run_workflow(workflow_id: str = None):
 
         workflow = Workflow(workflow_id if workflow_id is not None else 'default')
         engine = Engine()
-        result.update(engine.start(workflow))
+        result.update(engine.start(task_id, workflow))
 
         app.send_task('components.database.RedisStorage.build_log_meta_fields_index', ())
         app.send_task('components.database.RedisStorage.build_dataset_meta_fields_index', ())
