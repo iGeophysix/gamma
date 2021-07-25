@@ -29,7 +29,7 @@ class TestLogResolution(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
         # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+        async_log_resolution(dataset_id=wd.id, log_id='GK')
 
         l = BasicLog(wd.id, "GK")
         resolution = l.meta['log_resolution']['value']
@@ -45,7 +45,7 @@ class TestLogResolution(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
         # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+        async_log_resolution(dataset_id=wd.id, log_id='AZIM')
 
         l = BasicLog(wd.id, 'AZIM')
         resolution = l.meta.log_resolution['value']
@@ -64,7 +64,6 @@ class TestLogResolutionNode(unittest.TestCase):
         filename = '616_ULN_ResolutionTest.las'
         self.wd = WellDataset(self.w, filename, new=True)
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
 
     def test_run(self):
         node = LogResolutionNode()

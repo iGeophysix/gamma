@@ -192,11 +192,11 @@ class BasicLog:
         self._changes['meta'] = True
 
     @staticmethod
-    def md5(text):
+    def md5(text) -> str:
         return str(hashlib.md5(text).hexdigest())
 
     @property
-    def full_hash(self):
+    def full_hash(self) -> str:
         """
         Get hash value of the log data and meta
         :return: str
@@ -206,7 +206,7 @@ class BasicLog:
         return self.meta.full_hash
 
     @property
-    def data_hash(self):
+    def data_hash(self) -> str:
         """
         Get hash value of the log data
         :return: str
@@ -216,7 +216,7 @@ class BasicLog:
         return self.meta.data_hash
 
     @property
-    def meta_hash(self):
+    def meta_hash(self) -> str:
         """
         Get hash value of the log meta
         :return: str

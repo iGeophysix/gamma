@@ -6,6 +6,7 @@ from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine import EngineProgress
+from components.petrophysics.curve_operations import LogResolutionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution, async_splice_logs
@@ -27,8 +28,6 @@ class TestLogSplicing(unittest.TestCase):
                        datasetname=filename,
                        filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
-        # calculating basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
 
         # adding more metadata
         meta = {
@@ -45,7 +44,8 @@ class TestLogSplicing(unittest.TestCase):
             l.save()
 
         # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+        engine_progress = EngineProgress('test')
+        LogResolutionNode().run(engine_progress=engine_progress)
 
     def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},

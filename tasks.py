@@ -145,20 +145,16 @@ def async_get_basic_log_stats(wellname: str,
 
 
 @app.task
-def async_log_resolution(wellname: str,
-                         datasetnames: Optional[list[str]] = None,
-                         lognames: Optional[list[str]] = None) -> None:
+def async_log_resolution(dataset_id: str,
+                         log_id: str) -> None:
     """
     This procedure calculates log resolution.
     Algorithm: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/a/Log-Resolution-Evaluation-ZYfMr18R4U2
     Returns nothing. All results are stored in each log meta info.
-    :param wellname: well name as string
-    :param datasetnames: list of dataset names to process. If None then use all datasets for the well
-    :param lognames: list of logs names to process. If None then use all logs for the dataset
+    :param dataset_id: Dataset id to process.
+    :param log_id: Log id  to process.
     """
-    LogResolutionNode.run_for_item(wellname=wellname,
-                                   datasetnames=datasetnames,
-                                   lognames=lognames)
+    LogResolutionNode.run_for_item(dataset_id=dataset_id, log_id=log_id)
 
 
 @app.task

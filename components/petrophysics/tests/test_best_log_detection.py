@@ -1,5 +1,6 @@
 import os
 import unittest
+
 import numpy as np
 
 from components.database.RedisStorage import RedisStorage
@@ -12,9 +13,7 @@ from components.petrophysics.best_log_detection import (get_best_log_for_run_and
                                                         score_log_tags,
                                                         best_rt)
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
-
 from settings import BASE_DIR
-
 from tasks import (async_read_las,
                    async_log_resolution)
 
@@ -42,12 +41,10 @@ class TestBestLogDetection(unittest.TestCase):
             log = BasicLog(self.wd.id, log_id)
             log.meta.update({'family': 'Gamma Ray', 'run': {'value': '56_(2650_2800)', 'top': 2650, 'bottom': 2800}})
             log.save()
-
-        # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+            async_log_resolution(dataset_id=self.wd.id, log_id=log_id)
 
     def test_best_log_detection_works_correct(self):
-        best_log, new_meta = get_best_log_for_run_and_family(datasets=[self.wd,],
+        best_log, new_meta = get_best_log_for_run_and_family(datasets=[self.wd, ],
                                                              family='Gamma Ray',
                                                              run_name='56_(2650_2800)')
 

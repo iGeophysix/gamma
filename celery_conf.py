@@ -46,25 +46,27 @@ def wait_till_completes(results: Iterable[AsyncResult]) -> None:
         continue
 
 
-def track_progress(tasks: Iterable[AsyncResult]) -> dict:
+def track_progress(tasks: Iterable[AsyncResult], cached=0) -> dict:
     """
     Returns percentage of completed jobs
     :param tasks:
+    :param cached: number of tasks cached
     :return:
     """
-    total = len(tasks)
+    total = len(tasks) + cached
     success = sum([t.status == 'SUCCESS' for t in tasks])
     failed = sum([t.status == 'FAILURE' for t in tasks])
     revoked = sum([t.status == 'REVOKED' for t in tasks])
-    pending = total - success - failed - revoked
+    pending = total - cached - success - failed - revoked
 
-    completion = (1 - pending / total) if total > 0 else 1
+    completion = (1 - pending / (total-cached)) if (total-cached) else 1
 
     return {
         'total': total,
+        'cached': cached,
         'success': success,
         'failed': failed,
         'revoked': revoked,
         'pending': pending,
-        'completion': completion
+        'completion': completion,
     }
