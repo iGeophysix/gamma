@@ -1,6 +1,12 @@
+import datetime
+import logging
 import time
 from typing import Iterable, Optional
 
+from billiard.exceptions import SoftTimeLimitExceeded
+from celery.exceptions import TaskRevokedError
+
+from components.database.RedisStorage import RedisStorage
 from components.database.tasks import *
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
@@ -25,12 +31,58 @@ from components.petrophysics.shale_volume import (ShaleVolumeLarionovOlderRockNo
                                                   ShaleVolumeLinearMethodNode)
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
 
+logger = logging.getLogger('CELERY_MASTER')
+
 
 @app.task
 def async_run_workflow(workflow_id: str = None):
-    workflow = Workflow(workflow_id if workflow_id is not None else 'default')
-    engine = Engine()
-    engine.start(workflow)
+    s = RedisStorage()
+    task_id = async_run_workflow.request.id
+    start_time = datetime.datetime.now()
+    result = {
+        "finished": False,
+        "status_text": '',
+        "nodes": [],
+        "steps": {
+            'completed': 0,
+            'total': 0
+        }
+    }
+
+    try:
+        while True:
+            lock = s.redlock.lock("engine_lock", 1000 * 60 * 5)
+            if lock:
+                s.table_key_set('engine', task_id, start_time.isoformat())
+                break
+            else:
+                for engine_task_id in s.table_keys('engine'):
+                    logger.info(f'Current Task_id: {task_id} terminating Engine calculation of task_id: {engine_task_id}')
+                    app.control.revoke(engine_task_id, terminate=True, signal='SIGUSR1')
+                time.sleep(0.1)
+
+        workflow = Workflow(workflow_id if workflow_id is not None else 'default')
+        engine = Engine()
+        result.update(engine.start(workflow))
+
+        app.send_task('components.database.RedisStorage.build_log_meta_fields_index', ())
+        app.send_task('components.database.RedisStorage.build_dataset_meta_fields_index', ())
+        app.send_task('components.database.RedisStorage.build_well_meta_fields_index', ())
+
+    except SoftTimeLimitExceeded:
+        result['status_text'] = f"The task {task_id} was revoked or breached soft time limit"
+        logger.info(result['status_text'])
+    except TaskRevokedError:
+        result['status_text'] = f"The task {task_id} was revoked"
+        logger.warning(result['status_text'])
+    except Exception as exc:
+        result['status_text'] = repr(exc)
+        logger.error(result['status_text'])
+    finally:
+        if s.table_key_exists('engine', task_id):
+            s.table_key_delete('engine', task_id)
+        s.redlock.unlock(lock)
+    return result
 
 
 @app.task
@@ -149,10 +201,10 @@ def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognam
                     l.meta.add_tags(*result.optional_properties.pop('tags'))
                 l.meta.family = result.family
                 l.meta.family_assigner = {
-                    'reliability': result.reliability,
-                    'unit_class': result.dimension,
-                    'logging_company': result.company} \
-                    | result.optional_properties
+                                             'reliability': result.reliability,
+                                             'unit_class': result.dimension,
+                                             'logging_company': result.company} \
+                                         | result.optional_properties
             else:
                 l.meta.family = l.meta.family_assigner = None
             l.save()

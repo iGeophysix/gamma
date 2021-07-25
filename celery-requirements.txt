@@ -1,5 +1,5 @@
 pandas==1.2.3
-celery==5.0.5
+celery==5.1.2
 redis==3.5.3
 chardet==4.0.0
 scipy==1.6.1
@@ -9,3 +9,4 @@ h5py==3.2.1
 lasio==0.27
 catboost==0.25.1
 boto3==1.16.63
+redlock-py

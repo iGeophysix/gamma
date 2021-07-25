@@ -120,6 +120,9 @@ class Workflow:
             'steps': steps,
         }
 
+    def __len__(self):
+        return len(self.steps)
+
     def __getitem__(self, item):
         return self.steps[item] if item is not None else None
 

@@ -8,6 +8,7 @@ from typing import Any
 
 import h5py
 import redis
+from redlock import Redlock
 
 from settings import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, DEFAULT_MARKERS_NAME
 
@@ -33,6 +34,15 @@ class RedisStorage:
                         port=REDIS_PORT,
                         db=REDIS_DB,
                         password=REDIS_PASSWORD)
+
+    redlock = Redlock([
+        {
+            "host": REDIS_HOST,
+            "port": REDIS_PORT,
+            "db": REDIS_DB,
+            "password": REDIS_PASSWORD
+        }
+    ])
 
     def __init__(self):
         pass
@@ -92,14 +102,14 @@ class RedisStorage:
         """
         return self.connection().get(key)
 
-    def object_set(self, key: str, value: bytes) -> None:
+    def object_set(self, key: str, value: bytes, ttl: int = None) -> None:
         """
         Set object value
         :param key: object name
         :param value: object value as string
         :return:
         """
-        self.connection().set(key, value)
+        self.connection().set(key, value, ex=ttl)
 
     def object_delete(self, key) -> None:
         """
@@ -110,7 +120,6 @@ class RedisStorage:
         self.connection().delete(key)
 
     # COMMON META (FamilyProperties, Units,...)
-
 
     def table_exists(self, table_name) -> bool:
         """

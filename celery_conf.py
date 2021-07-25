@@ -1,10 +1,12 @@
 import os
+import time
 from typing import Iterable
 
 from celery import Celery
 from celery.result import AsyncResult
 
 # CELERY CONFIG
+
 QUEUE_HOST = os.environ.get('CELERY_REDIS_HOST', '127.0.0.1')
 QUEUE_PORT = os.environ.get('CELERY_REDIS_PORT', 6379)
 QUEUE_DB = os.environ.get('CELERY_QUEUE_DB', 0)
@@ -31,7 +33,7 @@ def get_pending_tasks():
 
 
 def check_task_completed(asyncresult: AsyncResult) -> bool:
-    return asyncresult.status in ['SUCCESS', 'FAILURE']
+    return asyncresult.status in ('SUCCESS', 'FAILURE')
 
 
 def check_task_successful(asyncresult: AsyncResult) -> bool:
@@ -40,4 +42,5 @@ def check_task_successful(asyncresult: AsyncResult) -> bool:
 
 def wait_till_completes(results: Iterable[AsyncResult]) -> None:
     while not all(map(check_task_completed, results)):
+        time.sleep(0.1)
         continue

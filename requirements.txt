@@ -10,3 +10,4 @@ h5py==3.2.1
 lasio==0.27
 boto3==1.16.63
 catboost==0.25.1
+redlock-py
