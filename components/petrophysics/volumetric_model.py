@@ -2,6 +2,7 @@ import copy
 import json
 import logging
 from typing import List, Union, Optional, Iterable, Tuple, Set
+from collections import defaultdict
 
 import numpy as np
 from scipy.optimize import lsq_linear
@@ -24,16 +25,22 @@ logging.basicConfig()
 logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
-MODEL_COMPONENT_SET = {
-    'terrigenous': (
-        ('Quartz', 'Shale'),
-        ('Quartz', 'Illite', 'Kaolinite', 'Montmorillonite')
-    ),
-    'carbonate': (
-        ('Calcite', 'Dolomite'),
-        ('Calcite', 'Dolomite', 'Anhydrite')
-    )
-}
+MODEL_COMPONENT_SET = [
+    {
+        'core': ('Quartz', 'Shale'),
+        'extra': ('Calcite', 'Coal')
+    },
+    {
+        'core': ('Quartz', 'Illite', 'K-Feldspar'),
+        'extra': ('Calcite', 'Coal')
+    },
+    {
+        'core': ('Calcite', 'Dolomite')
+    },
+    {
+        'core': ('Calcite', 'Dolomite', 'Anhydrite')
+    }
+]
 
 
 class VolumetricModel:
@@ -107,7 +114,7 @@ class VolumetricModel:
         equation_system_coefficients.append([1] * len(components))  # component coefficients in equation for summ of all component volumes
 
         log_len = len(next(iter(logs.values())))  # dataset length
-        component_volume = {component: np.full(log_len, np.nan) for component in components}
+        component_volume = {component: np.full(log_len, 0.) for component in components}
         synthetic_logs = {log_name: np.full(log_len, np.nan) for log_name in logs}  # synthetic input logs modeled using resulting volumetric model
         misfit = {res_log: np.full(log_len, np.nan) for res_log in equation_system_resulting_logs + ['TOTAL']}  # misfit for every input log + total misfit
 
@@ -184,6 +191,9 @@ class VolumetricModelSolverNode(EngineNode):
         output = [
         ]
 
+    class NotEnoughImputLogsError(Exception):
+        pass
+
     @classmethod
     def validate_input(cls, model_components: Iterable[str]) -> None:
         '''
@@ -256,6 +266,7 @@ class VolumetricModelSolverNode(EngineNode):
         model_components = kwargs['model_components']
 
         vm = VolumetricModel()
+        family_properties = FamilyProperties()
 
         # pick input logs
         input_logs = []
@@ -279,36 +290,94 @@ class VolumetricModelSolverNode(EngineNode):
             log_data[log.meta.family] = log.convert_units(family_units)[:, 1]
 
         # run solver
+        base_res = []  # [(avg_misfit, model_components, resuls), ..]
         if model_components is not None:
             # predefined component set
             res = vm.inverse(log_data, model_components)
+            avg_misfit = np.nanmean(res['MISFIT']['TOTAL'])
+            if not np.isnan(avg_misfit):
+                base_res.append((avg_misfit, model_components, res))
         else:
             # find the best component set
-            componet_set_res = []
-            for _, component_sets in MODEL_COMPONENT_SET.items():
-                for component_set in component_sets:
-                    if len(component_set) <= len(input_logs) + 1:  # always true for first component_set
-                        selected_componet_set = component_set
-                    else:
-                        break
-                res = vm.inverse(log_data, selected_componet_set)
-                componet_set_res.append((selected_componet_set, res))
-            componet_set_res.sort(key=lambda componet_set_res: np.nanmean(componet_set_res[1]['MISFIT']['TOTAL']))
-            best_componet_set, res = componet_set_res[0]
-            logger.info(f'best component set is {best_componet_set}')
+            max_component_amount = len(input_logs) + 1
+            for component_set in MODEL_COMPONENT_SET:
+                core_components = component_set['core']
+                if len(core_components) > max_component_amount:
+                    continue
+                res = vm.inverse(log_data, core_components)
+                avg_misfit = np.nanmean(res['MISFIT']['TOTAL'])
+                if not np.isnan(avg_misfit):
+                    base_res.append((avg_misfit, component_set, res))
+            if not base_res:
+                raise cls.NotEnoughImputLogsError(f'well {well_name} has not enough input logs: {input_logs}')
+            base_res.sort()
+            # del base_res[1:]  # drop all base variants except the best
+            best_base_misfit, best_base_componet_set, res = base_res[0]
+            logger.info(f'well {well_name} best base component set is {best_base_componet_set["core"]} with misfit {best_base_misfit}')
+
+            # calculate additional variants with extra components
+            extra_res = []  # [(avg_misfit, model_components, resuls), ..]
+            if 'extra' in best_base_componet_set:
+                core_components = best_base_componet_set['core']
+                for extra_component in best_base_componet_set['extra']:
+                    extended_componet_set = (*core_components, extra_component)
+                    if len(extended_componet_set) > max_component_amount:
+                        continue
+                    res = vm.inverse(log_data, extended_componet_set)
+                    avg_misfit = np.nanmean(res['MISFIT']['TOTAL'])
+                    if not np.isnan(avg_misfit):
+                        extra_res.append((avg_misfit, extended_componet_set, res))
+                extra_res.sort()
+
+        # combine final model
+        log_len = len(input_logs[0])
+        final_res = {
+            'COMPONENT_VOLUME': defaultdict(lambda: np.full(log_len, 0.)),
+            'MISFIT': defaultdict(lambda: np.full(log_len, np.nan)),
+            'FORWARD_MODELED_LOG': defaultdict(lambda: np.full(log_len, np.nan))
+        }
+        all_res = (base_res[0], *extra_res)  # one best base + its derivatives
+        best_variant_log = [np.nan] * log_len
+        for row in range(log_len):
+            variant_misfits = [var[2]['MISFIT']['TOTAL'][row] for var in all_res]
+            best_variant = sorted((mf, n) for n, mf in enumerate(variant_misfits) if not np.isnan(mf))[0][1]
+            best_variant_log[row] = best_variant
+            src_res = all_res[best_variant][2]
+            for category, logs in src_res.items():
+                for log_name, log_values in logs.items():
+                    final_res[category][log_name][row] = log_values[row]
 
         # save results
+        for n, (_, _, res) in enumerate(base_res):
+            cls.save_results(vm, family_properties, input_logs, res, str(n))
+        for n, (_, _, res) in enumerate(extra_res):
+            cls.save_results(vm, family_properties, input_logs, res, '0' + str(n + 1))
+        cls.save_results(vm, family_properties, input_logs, final_res, 'fin')
+
+        log = BasicLog(dataset_id=input_logs[0].dataset_id, log_id='fin_SRC_VARIANT')
+        log.values = np.vstack((input_logs[0].values[:, 0], best_variant_log)).T
+        log.meta.family = 'Variant Number'
+        log.meta.units = 'unitless'
+        log.save()
+
+    @classmethod
+    def save_results(cls, vm: VolumetricModel, family_properties: FamilyProperties, input_logs: list, result: dict, version_name: str = '') -> None:
+        '''
+        Save results to output logs
+        '''
         workflow = 'VolumetricModelling'
         dataset = input_logs[0].dataset_id
-        family_properties = FamilyProperties()
+        log_reference = input_logs[0].values[:, 0]
+        if version_name:
+            version_name += '_'
 
         # save components' volumes
-        for component_name, data in res['COMPONENT_VOLUME'].items():
+        for component_name, data in result['COMPONENT_VOLUME'].items():
             component_family = vm.component_family(component_name)
-            log_id = family_properties[component_family].get('mnemonic', component_family)
-            log = BasicLog(dataset_id=dataset, log_id=log_id)
+            log_name = version_name + family_properties[component_family].get('mnemonic', component_family)
+            log = BasicLog(dataset_id=dataset, log_id=log_name)
             log.meta.family = component_family
-            log.values = np.vstack((input_logs[0].values[:, 0], data)).T
+            log.values = np.vstack((log_reference, data)).T
             log.meta.units = 'v/v'
             log.meta.update({'workflow': workflow,
                              'method': 'Deterministic Computation',
@@ -319,12 +388,12 @@ class VolumetricModelSolverNode(EngineNode):
             log.save()
 
         # save forward modeled logs
-        for n, data in enumerate(res['FORWARD_MODELED_LOG'].values()):
+        for n, data in enumerate(result['FORWARD_MODELED_LOG'].values()):
             input_log_family = input_logs[n].meta.family
-            log_id = family_properties[input_log_family].get('mnemonic', input_log_family) + '_FM'
-            log = BasicLog(dataset_id=dataset, log_id=log_id)
+            log_name = version_name + family_properties[input_log_family].get('mnemonic', input_log_family) + '_FM'
+            log = BasicLog(dataset_id=dataset, log_id=log_name)
             log.meta.family = input_log_family
-            log.values = np.vstack((input_logs[0].values[:, 0], data)).T
+            log.values = np.vstack((log_reference, data)).T
             log.meta.units = input_logs[n].meta.units
             log.meta.add_tags('reconstructed')
             log.meta.update({'workflow': workflow,
@@ -336,10 +405,10 @@ class VolumetricModelSolverNode(EngineNode):
 
         # save misfit
         log_family = 'Model Fit Error'
-        log_id = family_properties[log_family]['mnemonic']
-        log = BasicLog(dataset_id=dataset, log_id=log_id)
+        log_name = version_name + family_properties[log_family]['mnemonic']
+        log = BasicLog(dataset_id=dataset, log_id=log_name)
         log.meta.family = log_family
-        log.values = np.vstack((input_logs[0].values[:, 0], res['MISFIT']['TOTAL'])).T
+        log.values = np.vstack((log_reference, result['MISFIT']['TOTAL'])).T
         log.meta.units = 'unitless'
         log.meta.update({'workflow': workflow,
                          'method': 'Deterministic Computation',
