@@ -5,11 +5,10 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
 from components.importexport.las import import_to_db
 from components.petrophysics.run_detection import RunDetectionNode
 from settings import BASE_DIR
-from tasks import async_split_by_runs, async_get_basic_log_stats
+from tasks import async_split_by_runs
 
 PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
@@ -28,7 +27,6 @@ class TestSplitByRun(unittest.TestCase):
             dataset_name = file
             dataset = WellDataset(well, dataset_name, True)
             import_to_db(f, well=well, well_dataset=dataset)
-        async_get_basic_log_stats(wellname, datasets)
 
     def test_split_by_runs(self):
         wellname = '622'
@@ -40,9 +38,7 @@ class TestSplitByRun(unittest.TestCase):
         self.assertEqual(l.meta.run['value'], '13_(2657.1-2720.3)')
 
     def test_split_by_runs_engine_node(self):
-
-        engine_progress = EngineProgress('test')
-        RunDetectionNode().run(engine_progress=engine_progress)
+        RunDetectionNode().run()
 
         w = Well('622')
         d = WellDataset(w, 'Well622_ULN_Combined')

@@ -141,11 +141,15 @@ class EngineNodeCache:
 
 class EngineProgress:
     def __init__(self):
-        self._nodes = {}
+        self._s = RedisStorage()
+        if self._s.object_exists('engine_runs'):
+            self._nodes = json.loads(self._s.object_get('engine_runs'))
+        else:
+            self._nodes = {}
 
     def save(self):
-        s = RedisStorage()
-        s.object_set('engine_runs', json.dumps(self._nodes).encode())
+        '''Save updates to observer'''
+        self._s.object_set('engine_runs', json.dumps(self._nodes).encode())
 
     def update(self, node_name, node_status):
         '''
@@ -155,4 +159,9 @@ class EngineProgress:
         :return:
         '''
         self._nodes[node_name] = node_status
+        self.save()
+
+    def clear(self):
+        """Clear results"""
+        self._nodes = {}
         self.save()

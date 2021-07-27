@@ -22,6 +22,7 @@ class Engine:
             }
         }
         engine_progress = EngineProgress()
+        engine_progress.clear()
         try:
             self.logger.info(f"Starting calculation of workflow {workflow.name} ({len(workflow)} steps)")
             for step in workflow:
@@ -30,7 +31,6 @@ class Engine:
                 result['nodes'].append(
                     {'node': step['node'].name()}
                 )
-                step['parameters']['engine_progress'] = engine_progress
                 my_timer(node.run)(**step['parameters'])
                 self.logger.info(f'Finished {step}')
                 result['steps']['completed'] += 1
