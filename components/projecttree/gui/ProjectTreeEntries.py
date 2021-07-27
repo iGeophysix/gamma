@@ -9,8 +9,8 @@ from datetime import datetime
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
-from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset, get_dataset_by_id
+from components.domain.Well import Well, get_dataset_by_id
+from components.domain.WellDataset import WellDataset
 from components.mainwindow.gui import GeoMainWindow
 from components.projecttree.gui.ProjectTreeEntry import ProjectTreeEntry, ProjectEntryEnum
 from components.importexport.las.las_export import create_las_file

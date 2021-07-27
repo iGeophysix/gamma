@@ -78,7 +78,7 @@ class TestLog(unittest.TestCase):
         well = Well(wellname, new=True)
         dataset = WellDataset(well, dataset_name, new=True)
 
-        dataset.info = las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
+        dataset.meta = las.import_to_db(filename=os.path.join(self.path_to_test_data, f),
                                         well=well,
                                         well_dataset=dataset)
 

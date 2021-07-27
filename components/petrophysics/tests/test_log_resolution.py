@@ -5,7 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
+from components.engine.engine_node import EngineProgress
 from components.petrophysics.curve_operations import LogResolutionNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
@@ -66,9 +66,7 @@ class TestLogResolutionNode(unittest.TestCase):
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
     def test_run(self):
-        node = LogResolutionNode()
-        engine_progress = EngineProgress('test')
-        node.run(engine_progress=engine_progress)
+        LogResolutionNode().run()
 
         l = BasicLog(self.wd.id, "GK_D0400_D")
         resolution = l.meta['log_resolution']['value']

@@ -106,8 +106,7 @@ class ShaleVolume(EngineNode):
         for well_name in well_names:
             tasks.append(celery_conf.app.send_task('tasks.async_calculate_shale_volume', (well_name, cls.__name__, gr_matrix, gr_shale, output_log_name)))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cls.track_progress(tasks)
 
 
 class ShaleVolumeLinearMethodNode(ShaleVolume):

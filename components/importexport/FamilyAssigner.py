@@ -306,7 +306,6 @@ class FamilyAssignerNode(EngineNode):
         for well_name in p.list_wells():
             tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name,)))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cls.track_progress(tasks)
 
 

@@ -187,9 +187,7 @@ class BasicLog:
         if type(meta_info) == BasicLogMeta:
             self._meta = meta_info
         else:
-            self._meta = BasicLogMeta(self.dataset_id, self._id)
             self._meta.__ior__(meta_info)
-        self.update_hashes()
         self._changes['meta'] = True
 
     @staticmethod
@@ -202,7 +200,7 @@ class BasicLog:
         Get hash value of the log data and meta
         :return: str
         """
-        return self._meta.full_hash
+        return self._meta.data_hash + self._meta.meta_hash
 
     @property
     def data_hash(self) -> str:
@@ -226,10 +224,7 @@ class BasicLog:
         :return:
         """
         data_as_string = self.values.tobytes() if self.values is not None else b'MissingValue'
-
-        data_hash = self.md5(data_as_string)
-        self._meta.data_hash = data_hash
-        self._meta.full_hash = data_hash + self._meta.meta_hash
+        self._meta.data_hash = self.md5(data_as_string)
 
     def _fetch(self):
         _s = Storage()
@@ -275,7 +270,7 @@ class BasicLog:
             self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
             _s.update_logs(self.dataset_id, data={self._id: self._values})
             self._changes['values'] = False
-
+        # self.update_hashes()
         self._meta.save()
 
     @staticmethod
@@ -331,6 +326,7 @@ class BasicLogMeta:
     tags: list
     history: list
     units: str
+    data_hash: str
     type: str = 'BasicLog'
     depth_reference: str = 'MD'
 

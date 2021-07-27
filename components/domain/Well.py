@@ -1,4 +1,7 @@
+import hashlib
+
 from components.database.RedisStorage import RedisStorage
+from components.domain.WellDataset import WellDataset
 
 
 class Well:
@@ -72,6 +75,15 @@ class Well:
         current_info |= info
         _storage.set_well_info(self._name, current_info)
 
+    def md5(self):
+        dataset_hashes = []
+        for ds_name in self.datasets:
+            ds = WellDataset(self, ds_name)
+            dataset_hashes.append(ds.md5())
+
+        md5 = hashlib.md5(str((tuple(sorted(dataset_hashes)), self.meta)).encode()).hexdigest()
+        return md5
+
     @property
     def datasets(self):
         """
@@ -98,3 +110,15 @@ def get_well_by_id(well_id: str) -> Well:
     _s = RedisStorage()
     wellname = _s.get_well_name_by_id(well_id)
     return Well(wellname)
+
+
+def get_dataset_by_id(dataset_id: str) -> WellDataset:
+    """
+    Get Well Dataset by dataset id
+    :param dataset_id: str
+    :return: WellDataset object
+    """
+    s = RedisStorage()
+    dataset_meta = s.get_dataset_info(dataset_id)
+    well = Well(dataset_meta['well_name'])
+    return WellDataset(well, dataset_meta['name'])

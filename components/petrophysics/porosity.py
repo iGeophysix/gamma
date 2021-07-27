@@ -96,8 +96,7 @@ class PorosityFromDensityNode(EngineNode):
         for well_name in well_names:
             celery_conf.app.send_task('tasks.async_calculate_porosity_from_density', (well_name, rhob_matrix, rhob_fluid, output_log_name))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cls.track_progress(tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

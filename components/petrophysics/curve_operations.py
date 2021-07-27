@@ -225,8 +225,7 @@ class LogResolutionNode(EngineNode):
         self.cache.set(hashes)
         self.logger.info(f'Node: {self.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
 
-        engine_progress = kwargs['engine_progress']
-        self.track_progress(engine_progress, tasks, cached=cache_hits)
+        self.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):

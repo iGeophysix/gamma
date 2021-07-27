@@ -281,8 +281,7 @@ class BestLogDetectionNode(EngineNode):
                 rt_candidates = run_logs_paths[run]
                 tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('resistivity', rt_candidates, None)))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cls.track_progress(tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

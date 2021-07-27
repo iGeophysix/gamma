@@ -61,9 +61,9 @@ def import_to_db(filename: str = None,
         datasetname = os.path.basename(las_structure.filename)
         well_dataset = WellDataset(well, datasetname, new=True)
 
-    well_dataset_info = well_dataset.info
+    well_dataset_info = well_dataset.meta
     well_dataset_info['source'] = filename
-    well_dataset.info = well_dataset_info
+    well_dataset.meta = well_dataset_info
 
     raw_curves = las_structure.data
     md_key = list(raw_curves.keys())[0]  # TODO: Is it always #0?
@@ -99,7 +99,7 @@ def import_to_db(filename: str = None,
     # write meta-information about this well
     well_info = las_structure.well_info()
     fix_unit_naming(well_info)
-    well_dataset.info = well_info
+    well_dataset.meta = well_info
     if created_new_well:
         well.meta = well_info
 

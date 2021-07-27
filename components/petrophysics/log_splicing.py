@@ -1,11 +1,9 @@
 import logging
-import time
 
 import numpy as np
 import pandas as pd
 import scipy.interpolate
 
-import celery_conf
 from celery_conf import app as celery_app
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
@@ -180,14 +178,7 @@ class SpliceLogsNode(EngineNode):
                           'output_dataset_name': output_dataset_name
                           }
                 tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs=params))
-
-            engine_progress = kwargs['engine_progress']
-            while True:
-                progress = celery_conf.track_progress(tasks)
-                engine_progress.update(cls.name(), progress)
-                if progress['completion'] == 1:
-                    break
-                time.sleep(0.1)
+            cls.track_progress(tasks)
 
         else:
             for well_name in p.list_wells():

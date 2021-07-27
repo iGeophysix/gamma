@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 from abc import ABC
@@ -20,17 +21,24 @@ class EngineNode(ABC):
         return cls.__name__
 
     @classmethod
-    # @abstractmethod
     def version(cls):
         pass
 
     @classmethod
-    # @abstractmethod
     def run_for_item(cls, **kwargs):
         pass
 
     @classmethod
-    # @abstractmethod
+    def item_hash(cls, *args) -> tuple[str, bool]:
+        """Get item hash to use in cache
+        :return item_value: hash value of the item
+        :return valid: if hash is still valid for the object
+        """
+        item_value = ''
+        valid = False
+        return item_value, valid
+
+    @classmethod
     def run(cls, **kwargs) -> Any:
         """
         Run calculations
@@ -54,14 +62,14 @@ class EngineNode(ABC):
         pass
 
     @classmethod
-    def track_progress(cls, engine_progress, tasks, cached=0):
+    def track_progress(cls, tasks, cached=0):
         """
         Tracks progress in EngineProgress object (observer)
         :param engine_progress: observer
         :param tasks: Celery tasks list
         :return:
         """
-
+        engine_progress = EngineProgress()
         while True:
             progress = celery_conf.track_progress(tasks, cached)
             engine_progress.update(cls.name(), progress)
@@ -129,3 +137,22 @@ class EngineNodeCache:
     def version(self):
         """Get Node version"""
         return self._cache['version']
+
+
+class EngineProgress:
+    def __init__(self):
+        self._nodes = {}
+
+    def save(self):
+        s = RedisStorage()
+        s.object_set('engine_runs', json.dumps(self._nodes).encode())
+
+    def update(self, node_name, node_status):
+        '''
+        Update nodes status
+        :param node_name:
+        :param node_status:
+        :return:
+        '''
+        self._nodes[node_name] = node_status
+        self.save()

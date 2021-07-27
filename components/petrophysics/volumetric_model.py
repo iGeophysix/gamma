@@ -211,8 +211,7 @@ class VolumetricModelSolverNode(EngineNode):
             tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model',
                                               (well_name, model_components)))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cls.track_progress(tasks)
 
 
     @classmethod
