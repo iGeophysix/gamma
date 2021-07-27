@@ -1,4 +1,5 @@
 import os
+import time
 import unittest
 
 from components.database.RedisStorage import RedisStorage
@@ -76,7 +77,7 @@ class TestLogSplicing(unittest.TestCase):
 
     def test_log_splicing_engine_node_works_correctly(self):
         engine_progress = EngineProgress('test')
-        SpliceLogsNode.run(output_dataset_name='LQC2', engine_progress=engine_progress)
+        SpliceLogsNode().run(output_dataset_name='LQC2', engine_progress=engine_progress)
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')

@@ -73,4 +73,4 @@ class TestLogResolutionNode(unittest.TestCase):
         l = BasicLog(self.wd.id, "GK_D0400_D")
         resolution = l.meta['log_resolution']['value']
 
-        self.assertAlmostEqual(0.511, resolution, delta=0.001)
+        self.assertAlmostEqual(0.51, resolution, delta=0.001)

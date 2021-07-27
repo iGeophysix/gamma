@@ -42,7 +42,7 @@ class TestSplitByRun(unittest.TestCase):
     def test_split_by_runs_engine_node(self):
 
         engine_progress = EngineProgress('test')
-        RunDetectionNode.run(engine_progress=engine_progress)
+        RunDetectionNode().run(engine_progress=engine_progress)
 
         w = Well('622')
         d = WellDataset(w, 'Well622_ULN_Combined')

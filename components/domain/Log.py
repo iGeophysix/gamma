@@ -99,7 +99,8 @@ class BasicLog:
         Get log values
         :return: np.array with log values
         """
-        if self._values is None:
+        s = Storage()
+        if self._values is None and s.check_log_values_exists(self.dataset_id, self._id):
             self._fetch()
         return self._values
 
@@ -132,11 +133,10 @@ class BasicLog:
         """
         if not self.validate(values):
             raise ValueError("Data is not passing validation")
-        self._values = values  # self.__remove_nans(copy.deepcopy(values))
+        self._values = copy.deepcopy(values)
         self._changes['values'] = True
         self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
-        if self._values is None:
-            self._fetch()
+        self.update_hashes()
 
     def convert_units(self, units_to: str) -> np.array:
         """
@@ -189,6 +189,7 @@ class BasicLog:
         else:
             self._meta = BasicLogMeta(self.dataset_id, self._id)
             self._meta.__ior__(meta_info)
+        self.update_hashes()
         self._changes['meta'] = True
 
     @staticmethod
@@ -201,9 +202,7 @@ class BasicLog:
         Get hash value of the log data and meta
         :return: str
         """
-        if not hasattr(self.meta, "full_hash"):
-            self.update_hashes()
-        return self.meta.full_hash
+        return self._meta.full_hash
 
     @property
     def data_hash(self) -> str:
@@ -211,9 +210,7 @@ class BasicLog:
         Get hash value of the log data
         :return: str
         """
-        if not hasattr(self.meta, "data_hash"):
-            self.update_hashes()
-        return self.meta.data_hash
+        return self._meta.data_hash
 
     @property
     def meta_hash(self) -> str:
@@ -221,23 +218,18 @@ class BasicLog:
         Get hash value of the log meta
         :return: str
         """
-        if not hasattr(self.meta, "meta_hash"):
-            self.update_hashes()
-        return self.meta.meta_hash
+        return self._meta.meta_hash
 
     def update_hashes(self):
         """
         Update hash values for data and meta info of the log
         :return:
         """
-        data_as_string = self.values.tobytes()
-        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "history"]
-        meta = {key: value for key, value in self.meta.asdict().items() if key not in excluded_meta_fields}
+        data_as_string = self.values.tobytes() if self.values is not None else b'MissingValue'
+
         data_hash = self.md5(data_as_string)
-        meta_hash = self.md5(json.dumps(meta).encode())
-        self.meta.data_hash = data_hash
-        self.meta.meta_hash = meta_hash
-        self.meta.full_hash = data_hash + meta_hash
+        self._meta.data_hash = data_hash
+        self._meta.full_hash = data_hash + self._meta.meta_hash
 
     def _fetch(self):
         _s = Storage()
@@ -395,6 +387,20 @@ class BasicLogMeta:
         out = dict_replace_value(out, np.nan, None)
         return out
 
+    def md5(self):
+        excluded_meta_fields = ["data_hash", "meta_hash", "full_hash", "history"]
+        meta = {key: self[key] for key in dir(self) if key not in excluded_meta_fields and not key.startswith('__') and not callable(self.__getattribute__(key))}
+        meta_hash = hashlib.md5(json.dumps(meta).encode()).hexdigest()
+        return meta_hash
+
+    @property
+    def meta_hash(self):
+        return self.md5()
+
+    # this method is required to avoid problems on loading
+    @meta_hash.setter
+    def meta_hash(self, val):
+        pass
 
 class MarkersLog(BasicLog):
 

@@ -25,8 +25,8 @@ class TestLog(unittest.TestCase):
 
     def test_create_two_logs(self):
 
-        data = {"GR": np.array(((10, 1.0), (20, 2.0))),
-                "PS": np.array(((10, 3.0), (20, 4.0)))}
+        data = {"GR": np.array(((10.0, 1.0), (20.0, 2.0))),
+                "PS": np.array(((10.0, 3.0), (20.0, 4.0)))}
         meta = {"GR": {"units": "gAPI", "code": "", "description": "GR"},
                 "PS": {"units": "mV", "code": "", "description": "PS"}}
         log1 = BasicLog(self.dataset.id, log_id="GR")
@@ -137,7 +137,7 @@ class TestLog(unittest.TestCase):
 
         self.assertEqual(len(dataset.log_list), 21 + log_count)
         d = BasicLog(dataset.id, 'LOG_1')
-        self.assertEqual(84, len(d), 'Log length must be 75')
+        self.assertEqual(84, len(d), 'Log length must be 84')
 
     def test_logs_list(self):
         f = 'small_file.las'
@@ -189,7 +189,7 @@ class TestLog(unittest.TestCase):
         welllog = BasicLog(dataset.id, "log")
         welllog.name = "log"
         welllog.meta.units = "cm"
-        welllog.values = np.array([(10, 10), (20, 20)])
+        welllog.values = np.array([(10.0, 10), (20.0, 20)])
 
         vals_in_m = welllog.convert_units('km')
         self.assertListEqual([10 ** -4, 2 * 10 ** -4], list(vals_in_m[:, 1]))
@@ -199,9 +199,10 @@ class TestLog(unittest.TestCase):
         self.assertListEqual([10000, 20000], list(vals_in_m[:, 1]))
 
     def test_adding_removing_tags(self):
-        well = Well('tags')
-        dataset = WellDataset(well, "test")
+        well = Well('tags', new=True)
+        dataset = WellDataset(well, "test", new=True)
         welllog = BasicLog(dataset.id, "log")
+        # welllog.save()
         # no tags in the log - empty list
         self.assertEqual(list(), welllog.meta.tags)
         self.assertEqual(list, type(welllog.meta.tags))

@@ -43,6 +43,9 @@ class TestBestLogDetection(unittest.TestCase):
             log.save()
             async_log_resolution(dataset_id=self.wd.id, log_id=log_id)
 
+        self.wd.delete_log('GK_D4417_D')
+
+
     def test_best_log_detection_works_correct(self):
         best_log, new_meta = get_best_log_for_run_and_family(datasets=[self.wd, ],
                                                              family='Gamma Ray',
@@ -58,22 +61,18 @@ class TestBestLogDetection(unittest.TestCase):
         self.assertEqual('GK_D4417_D', best_log, msg='Best log in this dataset is GK_D4417_D')
         log1 = BasicLog(self.wd.id, 'GK_D4417_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
-        self.assertEqual(True, log1.meta.best_log_detection['is_best'],
-                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
-        self.assertEqual(False, log2.meta.best_log_detection['is_best'],
-                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
+        self.assertEqual(True, log1.meta.best_log_detection['is_best'], msg='GK_D4412_D is the best log')
+        self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='GK_D1800_D is not the best log')
 
     def test_best_log_detection_engine_node_works_correctly(self):
         engine_progress = EngineProgress('test')
-        BestLogDetectionNode.run(engine_progress=engine_progress)
+        BestLogDetectionNode().run(engine_progress=engine_progress)
 
         log1 = BasicLog(self.wd.id, 'GK_D4417_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
 
-        self.assertEqual(True, log1.meta.best_log_detection['is_best'],
-                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals True')
-        self.assertEqual(False, log2.meta.best_log_detection['is_best'],
-                         msg='Record in metadata of log should be BestLog_AutoCalculated and equals False')
+        self.assertEqual(True, log1.meta.best_log_detection['is_best'], msg='GK_D4412_D is the best log')
+        self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='GK_D1800_D is not the best log')
 
     def test_score_log_tags(self):
         LOG_TAG_ASSESSMENT = read_best_log_tags_assessment()['General log tags']
