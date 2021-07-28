@@ -14,7 +14,7 @@ from components.domain.WellDataset import WellDataset
 from components.engine.engine import Engine
 from components.engine.workflow import Workflow
 from components.importexport import las
-from components.importexport.FamilyAssigner import FamilyAssigner
+from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las import import_to_db
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
@@ -170,40 +170,13 @@ def async_split_by_runs(wellname: str, depth_tolerance: float = 50) -> None:
 
 
 @app.task
-def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognames: list[str] = None) -> None:
+def async_recognize_family(wellname: str) -> None:
     """
     Recognize log family in well datasets
     :param wellname:
-    :param datasetnames:
     :return:
     """
-    fa = FamilyAssigner()
-    w = Well(wellname)
-    if datasetnames is None:
-        datasetnames = [ds for ds in w.datasets if ds != 'LQC']
-
-    for datasetname in datasetnames:
-        wd = WellDataset(w, datasetname)
-
-        log_list = wd.log_list if lognames is None else lognames
-
-        for log in log_list:
-            l = BasicLog(wd.id, log)
-            if not 'raw' in l.meta.tags:
-                continue
-            result = fa.assign_family(l.name, l.meta.units)
-            if result is not None:
-                if 'tags' in result.optional_properties:
-                    l.meta.add_tags(*result.optional_properties.pop('tags'))
-                l.meta.family = result.family
-                l.meta.family_assigner = {
-                                             'reliability': result.reliability,
-                                             'unit_class': result.dimension,
-                                             'logging_company': result.company} \
-                                         | result.optional_properties
-            else:
-                l.meta.family = l.meta.family_assigner = None
-            l.save()
+    FamilyAssignerNode.run_for_item(wellname=wellname)
 
 
 @app.task

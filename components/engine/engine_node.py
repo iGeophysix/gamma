@@ -65,8 +65,8 @@ class EngineNode(ABC):
     def track_progress(cls, tasks, cached=0):
         """
         Tracks progress in EngineProgress object (observer)
-        :param engine_progress: observer
         :param tasks: Celery tasks list
+        :param cached: number of cached tasks
         :return:
         """
         engine_progress = EngineProgress()
