@@ -2,7 +2,7 @@
 env | grep MINIO
 ls -asl
 
-minio server /data &
+minio server /data  --console-address ":9001" &
 
 ./mc config host rm local
 ./mc config host add --quiet --api s3v4 local http://$MINIO_HOST:$MINIO_PORT $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD
