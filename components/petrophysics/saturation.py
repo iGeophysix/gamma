@@ -124,13 +124,9 @@ class SaturationArchieNode(EngineNode):
                 celery_conf.app.send_task('tasks.async_saturation_archie', (well_name, a, m, n, rw, output_log_name))
                 for well_name in well_names
             ]
-            engine_progress = kwargs['engine_progress']
-            while True:
-                progress = celery_conf.track_progress(tasks)
-                engine_progress.update(cls.name(), progress)
-                if progress['completion'] == 1:
-                    break
-                time.sleep(0.1)
+
+            cache_hits = 0
+            cls.track_progress(tasks, cached=cache_hits)
         else:
             for well_name in well_names:
                 cls.calculate_for_item(well_name, a, m, n, rw, output_log_name)
