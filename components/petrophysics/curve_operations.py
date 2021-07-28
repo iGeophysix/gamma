@@ -131,9 +131,6 @@ class LogResolutionNode(EngineNode):
     logger = logging.getLogger(__name__)
     logger.setLevel(LOGGING_LEVEL)
 
-    def __init__(self):
-        self.cache = EngineNodeCache(self)
-
     @classmethod
     def name(cls):
         """Return node name"""
@@ -179,7 +176,8 @@ class LogResolutionNode(EngineNode):
 
         return log.data_hash, hasattr(log.meta, 'log_resolution')
 
-    def run(self, **kwargs):
+    @classmethod
+    def run(cls, **kwargs):
         """
         Run Log resolution node
         :param kwargs:
@@ -190,6 +188,7 @@ class LogResolutionNode(EngineNode):
         tasks = []
         hashes = []
         cache_hits = 0
+        cache = EngineNodeCache(cls)
         for well_name in well_names:
             well = Well(well_name)
             for dataset_name in well.datasets:
@@ -199,21 +198,21 @@ class LogResolutionNode(EngineNode):
                 dataset = WellDataset(well, dataset_name)
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
-                    item_hash, valid = self.item_hash(log)
-                    if valid and item_hash in self.cache:
+                    item_hash, valid = cls.item_hash(log)
+                    if valid and item_hash in cache:
                         hashes.append(item_hash)
                         cache_hits += 1
                         continue
 
                     try:
-                        self.validate(log)
+                        cls.validate(log)
                     except TypeError as exc:
                         error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
-                        self.logger.debug(error_message)
+                        cls.logger.debug(error_message)
                         continue
                     except Exception as exc:
                         error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
-                        self.logger.info(error_message)
+                        cls.logger.info(error_message)
                         log.meta.add_tags('no_resolution', 'bad_quality')
                         log.save()
                         continue
@@ -222,10 +221,10 @@ class LogResolutionNode(EngineNode):
                     tasks.append(result)
                     hashes.append(item_hash)
 
-        self.cache.set(hashes)
-        self.logger.info(f'Node: {self.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
 
-        self.track_progress(tasks, cached=cache_hits)
+        cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):
