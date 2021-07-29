@@ -1,17 +1,18 @@
-import time
+import hashlib
+import json
+import logging
 from collections import defaultdict
 from typing import Any, Iterable, Dict, List, Tuple, Optional
 from datetime import datetime
+from typing import Any, Iterable, Dict, Tuple, Optional
 
-import logging
 import numpy as np
 
-import celery_conf
-from celery_conf import app as celery_app, wait_till_completes
+from celery_conf import app as celery_app
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 
 
@@ -78,7 +79,7 @@ def rank_logs(logs_meta: Dict[Any, dict], additional_logs_meta: Dict[Any, dict] 
             val = np.median(metric_data)
         else:
             # it's impossible to choose the best one from two logs. Involve overall project statistics
-            log_family = next(iter(logs_meta.values()))['family']   # ranking logs' family
+            log_family = next(iter(logs_meta.values()))['family']  # ranking logs' family
             project_stat = Project().meta['basic_statistics'][log_family]
             if project_stat['number_of_logs'] > 2:
                 val = project_stat[metric if category == 'basic_statistics' else category]
@@ -194,7 +195,6 @@ def intervals_similarity(run: Tuple[float, float], other_run: Tuple[float, float
 
 
 class BestLogDetectionNode(EngineNode):
-
     logger = logging.getLogger("BestLogDetectionNode")
     logger.setLevel(logging.INFO)
 
@@ -203,6 +203,7 @@ class BestLogDetectionNode(EngineNode):
         return 'raw' in log.meta.tags \
                and 'bad_quality' not in log.meta.tags \
                and hasattr(log.meta, 'family') \
+               and log.meta.family != 'Measured Depth' \
                and hasattr(log.meta, 'basic_statistics') \
                and hasattr(log.meta, 'log_resolution') \
                and hasattr(log.meta, 'run') \
@@ -235,19 +236,41 @@ class BestLogDetectionNode(EngineNode):
             for log, values in new_meta.items():
                 log.meta.update(values)
                 log.meta.add_tags('processing')
+                cls.write_history(log=log, input_logs=logs, parameters={'log_type': log_type})
                 log.save()
 
         elif log_type == 'resistivity':
             best_log = best_rt(logs)
             if best_log is not None:
                 best_log.meta.add_tags('best_rt', 'processing')
+                cls.write_history(log=best_log, input_logs=logs, parameters={'log_type': log_type})
                 best_log.save()
+
+    @classmethod
+    def item_hash(cls, *args) -> tuple[str, bool]:
+        logs_paths, additional_logs_paths = args
+        log_hashes = []
+        valid = True
+        for log_path in logs_paths:
+            log = BasicLog(log_path[0], log_path[1])
+            necessary_meta = {k: log.meta[k] for k in ['basic_statistics', 'name', 'description', 'units', ]}
+            log_hashes.append(hashlib.md5(json.dumps(necessary_meta).encode()).hexdigest())
+            if not 'processing' in log.meta.tags:
+                valid = False
+        log_hashes = sorted(log_hashes)
+        final_hash = hashlib.md5(json.dumps(log_hashes).encode()).hexdigest()
+        return final_hash, valid
 
     @classmethod
     def run(cls, **kwargs):
         p = Project()
         tree = p.tree_oop()
+
         tasks = []
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
+
         for well, datasets in tree.items():
             run_family_logs_paths = defaultdict(lambda: defaultdict(list))
             run_logs_paths = defaultdict(list)
@@ -274,20 +297,40 @@ class BestLogDetectionNode(EngineNode):
                         for additional_run in nearest_runs:
                             additional_logs_paths += run_family_logs_paths[additional_run][family]
                             if len(logs_paths) + len(additional_logs_paths) > 2:
-                                break   # that's enough
+                                break  # that's enough
+
+                    item_hash, valid = cls.item_hash(logs_paths, additional_logs_paths)
+                    hashes.append(item_hash)
+                    if valid and item_hash in cache:
+                        cache_hits += 1
+                        continue
+
                     tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('general', logs_paths, additional_logs_paths)))
 
                 # resistivity logs processing
                 rt_candidates = run_logs_paths[run]
+
+                item_hash, valid = cls.item_hash(rt_candidates, None)
+                hashes.append(item_hash)
+                if valid and item_hash in cache:
+                    cache_hits += 1
+                    continue
+
                 tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('resistivity', rt_candidates, None)))
 
-        cls.track_progress(tasks)
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):
-        kwargs['log'].meta.append_history({ 'node': cls.name(),
-                                            'node_version': cls.version(),
-                                            'timestamp': datetime.now().isoformat(),
-                                            'parent_logs': [],
-                                            'parameters': {}
-                                          })
+        log = kwargs['log']
+        input_logs = kwargs['input_logs']
+        parameters = kwargs['parameters']
+
+        log.meta.append_history({'node': cls.name(),
+                                 'node_version': cls.version(),
+                                 'timestamp': datetime.now().isoformat(),
+                                 'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+                                 'parameters': parameters
+                                 })

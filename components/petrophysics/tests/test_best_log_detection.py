@@ -65,7 +65,8 @@ class TestBestLogDetection(unittest.TestCase):
         self.assertEqual(False, log2.meta.best_log_detection['is_best'], msg='GK_D1800_D is not the best log')
 
     def test_best_log_detection_engine_node_works_correctly(self):
-        BestLogDetectionNode().run()
+        BestLogDetectionNode.run()
+        BestLogDetectionNode.run()
 
         log1 = BasicLog(self.wd.id, 'GK_D4417_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')
