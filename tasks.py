@@ -267,9 +267,8 @@ def async_export_well_to_s3(destination: str,
 
 
 @app.task
-def async_log_reconstruction(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units):
-    node = LogReconstructionNode()
-    node.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)
+def async_log_reconstruction(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
+    LogReconstructionNode.run_for_item(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
 
 
 @app.task

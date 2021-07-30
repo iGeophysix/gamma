@@ -53,9 +53,9 @@ class TestLogReconstructionNode(TestCase):
                 'learning_rate': 0.1,
                 'loss_function': 'MAPE',
                 'allow_writing_files': False,
-                'logging_level': 'Silent'
+                "logging_level": "Silent"
             },
-            async_job=False
+            async_job=True
         )
 
         for well_name in well_names_to_predict:
@@ -65,6 +65,7 @@ class TestLogReconstructionNode(TestCase):
             synth_rhob = BasicLog(ds.id, 'RHOB_SYNTH')
 
             misfit = BasicLog(ds.id, 'RHOB_SYNTH_MISFIT')
+
             # interp true values
             true_rhob_values_interp = interp1d(true_rhob.values[:, 0],
                                                true_rhob.values[:, 1],

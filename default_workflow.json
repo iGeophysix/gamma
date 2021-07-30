@@ -1,140 +1,136 @@
 [
-    {
-        "node": "LogResolutionNode",
-        "parameters": {}
-    },
-    {
-        "node": "RunDetectionNode",
-        "parameters": {}
-    },
-    {
-        "node": "FamilyAssignerNode",
-        "parameters": {}
-    },
-    {
-        "node": "ProjectStatisticsNode",
-        "parameters": {}
-    },
-    {
-        "node": "BestLogDetectionNode",
-        "parameters": {}
-    },
-    {
-        "node": "SpliceLogsNode",
-        "parameters": {}
-    },
-    {
-        "node": "ShaleVolumeLinearMethodNode",
-        "parameters": {
-            "gr_matrix": null,
-            "gr_shale": null,
-            "output_log_name": "VSH_GR_LM"
-        }
-    },
-    {
-        "node": "ShaleVolumeLarionovOlderRockNode",
-        "parameters": {
-            "gr_matrix": null,
-            "gr_shale": null,
-            "output_log_name": "VSH_GR_LOR"
-        }
-    },
-    {
-        "node": "ShaleVolumeLarionovTertiaryRockNode",
-        "parameters": {
-            "gr_matrix": null,
-            "gr_shale": null,
-            "output_log_name": "VSH_GR_LTR"
-        }
-    },
-    {
-        "node": "PorosityFromDensityNode",
-        "parameters": {
-            "rhob_matrix": null,
-            "rhob_fluid": null,
-            "output_log_name": "PHIT_D"
-        }
-    },
-    {
-        "node": "SaturationArchieNode",
-        "parameters": {}
-    },
-    {
-        "node": "LogReconstructionNode",
-        "parameters": {
-            "log_families_to_train": [
-                "Gamma Ray",
-                "Neutron Porosity"
-            ],
-            "log_families_to_predict": [
-                "Bulk Density"
-            ],
-            "model_kwargs": {
-                "iterations": 50,
-                "depth": 12,
-                "learning_rate": 0.1,
-                "loss_function": "MAPE",
-                "allow_writing_files": false,
-                "logging_level": "Silent"
-            }
-        }
-    },
-    {
-        "node": "LogReconstructionNode",
-        "parameters": {
-            "log_families_to_train": [
-                "Bulk Density",
-                "Neutron Porosity"
-            ],
-            "log_families_to_predict": [
-                "Gamma Ray"
-            ],
-            "model_kwargs": {
-                "iterations": 50,
-                "depth": 12,
-                "learning_rate": 0.1,
-                "loss_function": "MAPE",
-                "allow_writing_files": false,
-                "logging_level": "Silent"
-            }
-        }
-    },
-    {
-        "node": "LogReconstructionNode",
-        "parameters": {
-            "log_families_to_train": [
-                "Gamma Ray",
-                "Bulk Density"
-            ],
-            "log_families_to_predict": [
-                "Neutron Porosity"
-            ],
-            "model_kwargs": {
-                "iterations": 50,
-                "depth": 12,
-                "learning_rate": 0.1,
-                "loss_function": "MAPE",
-                "allow_writing_files": false,
-                "logging_level": "Silent"
-            }
-        }
-    },
-    {
-        "node": "VolumetricModelSolverNode",
-        "parameters": {
-            "model_components": [
-                "Shale",
-                "Quartz",
-                "Calcite",
-                "UWater"
-            ]
-        }
-    },
-    {
-        "node": "LasExportNode",
-        "parameters": {
-            "destination": "LQC"
-        }
+  {
+    "node": "LogResolutionNode",
+    "parameters": {}
+  },
+  {
+    "node": "RunDetectionNode",
+    "parameters": {}
+  },
+  {
+    "node": "FamilyAssignerNode",
+    "parameters": {}
+  },
+  {
+    "node": "ProjectStatisticsNode",
+    "parameters": {}
+  },
+  {
+    "node": "BestLogDetectionNode",
+    "parameters": {}
+  },
+  {
+    "node": "SpliceLogsNode",
+    "parameters": {}
+  },
+  {
+    "node": "ShaleVolumeLinearMethodNode",
+    "parameters": {
+      "gr_matrix": null,
+      "gr_shale": null,
+      "output_log_name": "VSH_GR_LM"
     }
+  },
+  {
+    "node": "ShaleVolumeLarionovOlderRockNode",
+    "parameters": {
+      "gr_matrix": null,
+      "gr_shale": null,
+      "output_log_name": "VSH_GR_LOR"
+    }
+  },
+  {
+    "node": "ShaleVolumeLarionovTertiaryRockNode",
+    "parameters": {
+      "gr_matrix": null,
+      "gr_shale": null,
+      "output_log_name": "VSH_GR_LTR"
+    }
+  },
+  {
+    "node": "PorosityFromDensityNode",
+    "parameters": {
+      "rhob_matrix": null,
+      "rhob_fluid": null,
+      "output_log_name": "PHIT_D"
+    }
+  },
+  {
+    "node": "SaturationArchieNode",
+    "parameters": {}
+  },
+  {
+    "node": "LogReconstructionNode",
+    "parameters": {
+      "Neutron Porosity": {
+        "log_families_to_train": [
+          "Gamma Ray",
+          "Bulk Density"
+        ],
+        "log_families_to_predict": [
+          "Neutron Porosity"
+        ],
+        "model_kwargs": {
+          "iterations": 50,
+          "depth": 12,
+          "learning_rate": 0.1,
+          "loss_function": "MAPE",
+          "allow_writing_files": false,
+          "logging_level": "Silent"
+        }
+      },
+      "Gamma Ray": {
+        "log_families_to_train": [
+          "Bulk Density",
+          "Neutron Porosity"
+        ],
+        "log_families_to_predict": [
+          "Gamma Ray"
+        ],
+        "model_kwargs": {
+          "iterations": 50,
+          "depth": 12,
+          "learning_rate": 0.1,
+          "loss_function": "MAPE",
+          "allow_writing_files": false,
+          "logging_level": "Silent"
+        }
+      },
+      "Bulk Density": {
+        "log_families_to_train": [
+          "Gamma Ray",
+          "Neutron Porosity"
+        ],
+        "log_families_to_predict": [
+          "Bulk Density"
+        ],
+        "model_kwargs": {
+          "iterations": 50,
+          "depth": 12,
+          "learning_rate": 0.1,
+          "loss_function": "MAPE",
+          "allow_writing_files": false,
+          "logging_level": "Silent"
+        }
+      }
+    }
+  },
+  {
+    "node": "VolumetricModelSolverNode",
+    "parameters": {
+      "model_components": [
+        "Shale",
+        "Quartz",
+        "Calcite",
+        "UWater"
+      ]
+    }
+  },
+  {
+    "node": "LasExportNode",
+    "parameters": {
+      "destination": "LQC"
+    }
+  }
 ]
 
