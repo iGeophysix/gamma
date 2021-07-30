@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 import time
@@ -27,6 +28,11 @@ class EngineNode(ABC):
     @classmethod
     def run_for_item(cls, **kwargs):
         pass
+
+    @staticmethod
+    def item_md5(item) -> str:
+        """Get item md5 as string"""
+        return hashlib.md5(json.dumps(item).encode()).hexdigest()
 
     @classmethod
     def item_hash(cls, *args) -> tuple[str, bool]:
