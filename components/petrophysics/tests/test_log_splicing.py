@@ -5,7 +5,6 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.petrophysics.curve_operations import LogResolutionNode
 from components.petrophysics.log_splicing import SpliceLogsNode
 from settings import BASE_DIR
 from tasks import async_read_las, async_splice_logs
@@ -41,9 +40,6 @@ class TestLogSplicing(unittest.TestCase):
             l.meta = values
             l.save()
 
-        # define log resolution
-        LogResolutionNode().run()
-
     def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
                      'family': 'Gamma Ray',
@@ -72,7 +68,8 @@ class TestLogSplicing(unittest.TestCase):
             self.assertEqual(val, log.meta[key])
 
     def test_log_splicing_engine_node_works_correctly(self):
-        SpliceLogsNode().run(output_dataset_name='LQC2')
+        SpliceLogsNode.run(output_dataset_name='LQC2')
+        SpliceLogsNode.run(output_dataset_name='LQC2')
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')

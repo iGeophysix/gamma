@@ -193,11 +193,11 @@ def async_splice_logs(wellname: str,
     :param logs: Logs' names as list of string. If None then uses all logs available in datasets
     :param output_dataset_name: Name of output dataset
     """
-    SpliceLogsNode.calculate_for_well(wellname,
-                                      datasetnames,
-                                      logs,
-                                      tags,
-                                      output_dataset_name)
+    SpliceLogsNode.run_for_item(wellname=wellname,
+                                datasetnames=datasetnames,
+                                logs=logs,
+                                tags=tags,
+                                output_dataset_name=output_dataset_name)
 
 
 @app.task

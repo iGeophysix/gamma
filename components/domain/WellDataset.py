@@ -126,7 +126,10 @@ class WellDataset:
                         k = key[:-4]
                         if logs_meta[log][k] <= value:
                             to_delete.append(log)
-
+                    elif key.endswith('__in'):
+                        k = key[:-4]
+                        if not logs_meta[log][k] in value:
+                            to_delete.append(log)
                     else:
                         if logs_meta[log][key] != value:
                             to_delete.append(log)
