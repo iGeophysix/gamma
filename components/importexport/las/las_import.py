@@ -89,7 +89,6 @@ def import_to_db(filename: str = None,
         this_log.values = np.array(tuple(zip(md_values, values)))
         this_log.meta = logs_info[log]
         this_log.meta.depth_reference = md_key
-        this_log.save()
         this_log.meta.source = las_structure.filename
         this_log.meta.add_tags('raw')
         if log == md_key:

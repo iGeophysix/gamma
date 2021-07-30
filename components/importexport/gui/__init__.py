@@ -46,11 +46,12 @@ class ImportExportGui(ComponentGuiConstructor):
         pass
 
     def _showImportWidget(self):
-        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
         files, _ = QFileDialog.getOpenFileNames(GeoMainWindow(),
-                                                'Select one or mor files to import',
-                                                root_directory,
+                                                'Select one or more files to import',
+                                                None,
                                                 'LAS Files (*.las)')
+        if not files:
+            return
 
         start = time.time()
 
@@ -91,11 +92,12 @@ class ImportExportGui(ComponentGuiConstructor):
         DbEventDispatcherSingleton().wellsAdded.emit()
 
     def _showImportWellHeadsWidget(self):
-        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
         files, _ = QFileDialog.getOpenFileName(GeoMainWindow(),
                                                'Select one file to import',
-                                               root_directory,
+                                               None,
                                                'CSV Files (*.csv)')
+        if not files:
+            return
 
         with open(files, 'r') as f:
             header = well_heads_csv_header(f, delimiter=';')
@@ -104,11 +106,12 @@ class ImportExportGui(ComponentGuiConstructor):
         DbEventDispatcherSingleton().wellsAdded.emit()
 
     def _showImportMarkersWidget(self):
-        root_directory = os.path.dirname(sys.modules['__main__'].__file__)
         files, _ = QFileDialog.getOpenFileName(GeoMainWindow(),
                                                'Select one file to import',
-                                               root_directory,
+                                               None,
                                                'CSV Files (*.csv)')
+        if not files:
+            return
 
         with open(files, 'r') as f:
             import_markers_csv(f)
