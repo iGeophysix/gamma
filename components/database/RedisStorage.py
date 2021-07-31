@@ -63,7 +63,8 @@ class RedisStorage:
             self.delete_well(wellname)
         for markerset in self.list_markersets():
             self.delete_markerset_by_name(markerset)
-        self.object_delete('project')
+        for obj in ['project', 'engine_runs', WELL_META_FIELDS_INDEX, DATASET_META_FIELDS_INDEX, LOG_META_FIELDS_INDEX]:
+            self.object_delete(obj)
 
     # PROJECT
     def get_project_meta(self) -> dict:
@@ -364,7 +365,7 @@ class RedisStorage:
             while True:
                 try:
                     pipe.watch(f'wells:{well_id}')
-                    pipe.watch(f'datasets:{dataset_id}')
+                    pipe.watch(f'datasets')
                     wellinfo = json.loads(pipe.hget('wells', well_id))
                     if 'datasets' not in wellinfo:
                         wellinfo['datasets'] = []
@@ -447,6 +448,8 @@ class RedisStorage:
             while True:
                 try:
                     pipe.watch(f'datasets:{dataset_id}')
+                    pipe.watch(f'{dataset_id}')
+                    pipe.watch(f'{dataset_id}_meta')
                     pipe.watch(f'wells:{well_id}')
                     pipe.multi()
                     pipe.delete(dataset_id)
