@@ -132,7 +132,7 @@ class BasicLog:
         """
         if not self.validate(values):
             raise ValueError("Data is not passing validation")
-        self._values = self.__remove_nans(copy.deepcopy(values))
+        self._values = values  # self.__remove_nans(copy.deepcopy(values))
         self._changes['values'] = True
         self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
         if self._values is None:

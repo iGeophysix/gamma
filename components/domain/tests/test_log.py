@@ -137,7 +137,7 @@ class TestLog(unittest.TestCase):
 
         self.assertEqual(len(dataset.log_list), 21 + log_count)
         d = BasicLog(dataset.id, 'LOG_1')
-        self.assertEqual(75, len(d), 'Log length must be 75')
+        self.assertEqual(84, len(d), 'Log length must be 75')
 
     def test_logs_list(self):
         f = 'small_file.las'
@@ -244,9 +244,9 @@ class TestLog(unittest.TestCase):
         log.save()
 
         true_values = {
-            "data_hash": "d63d76516e4cc5e8396e6eb6af1539ca",
-            "meta_hash": "3912de32b46959c4942796800233d777",
-            "full_hash": "d63d76516e4cc5e8396e6eb6af1539ca3912de32b46959c4942796800233d777"
+            "data_hash": "43b6e247100f1688023b4e915ad852d0",
+            "meta_hash": "75e2790b7bd95272c1b34efb0270ba0a",
+            "full_hash": "43b6e247100f1688023b4e915ad852d075e2790b7bd95272c1b34efb0270ba0a"
         }
         test_log = BasicLog(dataset.id, "GR")
         self.assertEqual(true_values['data_hash'], test_log.data_hash)

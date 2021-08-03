@@ -74,7 +74,8 @@
                 "depth": 12,
                 "learning_rate": 0.1,
                 "loss_function": "MAPE",
-                "allow_writing_files": false
+                "allow_writing_files": false,
+                "logging_level": "Silent"
             }
         }
     },
@@ -93,7 +94,8 @@
                 "depth": 12,
                 "learning_rate": 0.1,
                 "loss_function": "MAPE",
-                "allow_writing_files": false
+                "allow_writing_files": false,
+                "logging_level": "Silent"
             }
         }
     },
@@ -112,7 +114,8 @@
                 "depth": 12,
                 "learning_rate": 0.1,
                 "loss_function": "MAPE",
-                "allow_writing_files": false
+                "allow_writing_files": false,
+                "logging_level": "Silent"
             }
         }
     },

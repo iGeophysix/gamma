@@ -37,7 +37,7 @@ def get_basic_curve_statistics(log_data: np.array) -> dict:
     log_gmean = geo_mean(non_null_values[:, 1])
     stdev = np.std(non_null_values[:, 1])
     derivative = np.diff(log_data[:, 0])
-    const_step = bool(abs(derivative.min() - derivative.max()) < 0.00001)
+    const_step = bool(abs(derivative.min() - derivative.max()) < 0.001)
     avg_step = derivative.mean()
     new_meta = {"min_depth": min_depth,
                 "max_depth": max_depth,

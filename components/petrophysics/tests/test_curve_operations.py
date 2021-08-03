@@ -59,7 +59,7 @@ class TestBasicStatisticsNode(TestCase):
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
     def test_run(self):
-        true_value = {'avg_step': 0.10000010081743846,
+        true_value = {'avg_step': 0.1000001368263472,
                       'const_step': True,
                       'depth_span': 110.10011099999974,
                       'gmean': 6.193844100405169,
