@@ -1,0 +1,4 @@
+redis>=3.5.3
+h5py>=2.9.0
+redlock-py>=1.0.8
+dataclasses>=0.8
