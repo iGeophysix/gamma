@@ -2,6 +2,7 @@ import logging
 
 from components.database.RedisStorage import RedisStorage
 from components.domain.Well import Well
+from typing import List
 
 logging.basicConfig()
 debug = logging.getLogger("welldataset")
@@ -95,7 +96,7 @@ class WellDataset:
         self._s.set_dataset_info(self.id, info)
 
     @property
-    def log_list(self) -> list[str]:
+    def log_list(self) -> List[str]:
         """
         Get full log list
         :return:

@@ -4,7 +4,7 @@ import json
 import logging
 import sys
 from collections import defaultdict
-from typing import Any
+from typing import Any, List
 
 import h5py
 import redis
@@ -255,7 +255,7 @@ class RedisStorage:
             self.delete_dataset(wellname, dataset)
         self.connection().hdel('wells', self._get_well_id(wellname))
 
-    def get_datasets(self, wellname: str) -> list[str]:
+    def get_datasets(self, wellname: str) -> List[str]:
         """
         Returns list of dataset names in the well
         :param wellname: well name as string
@@ -396,7 +396,7 @@ class RedisStorage:
         """
         return json.loads(self.connection().hget('datasets', dataset_id))['name']
 
-    def get_dataset_logs(self, dataset_id: str) -> list[str]:
+    def get_dataset_logs(self, dataset_id: str) -> List[str]:
         """
         Get list of logs in the dataset
         :param dataset_id: dataset log_id as string
@@ -516,7 +516,7 @@ class RedisStorage:
             return slice(out, depth, depth)
 
     def get_logs_data(self, dataset_id: str,
-                      logs: list[str] = None,
+                      logs: List[str] = None,
                       depth: float = None,
                       depth__gt: float = None,
                       depth__lt: float = None):  # -> dict[np.array]:
@@ -614,7 +614,7 @@ class RedisStorage:
         self.connection().hdel(dataset_id, log_name)
         self.connection().hdel(f"{dataset_id}_meta", log_name)
 
-    def log_history(self, dataset_id: str, log: str) -> list[Any]:
+    def log_history(self, dataset_id: str, log: str) -> List[Any]:
         """
         Returns log history as list of events.
         If history key is not found returns empty list.
