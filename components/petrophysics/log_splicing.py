@@ -184,15 +184,19 @@ class SpliceLogsNode(EngineNode):
             ds = WellDataset(well, ds_name)
             for log_id in ds.log_list:
                 log = BasicLog(ds.id, log_id)
-                if 'processing' in log.meta.tags:
+                if 'processing' in log.meta.tags and FamilyProperties()[log.meta.family]['splice']:
                     log_hashes.append(log.meta.data_hash)
                     log_families.add(log.meta.family)
         item_hash = cls.item_md5((wellname, tuple(sorted(log_hashes)), output_dataset_name))
 
         lqc_ds = WellDataset(well, output_dataset_name)
-        logs = lqc_ds.get_log_list(family__in=log_families)
+        valid_logs = []
+        for log_id in lqc_ds.get_log_list(family__in=log_families):
+            log = BasicLog(lqc_ds.id, log_id)
+            if 'spliced' in log.meta.tags:
+                valid_logs.append(log)
 
-        valid = len(logs) == len(list(log_families))
+        valid = len(valid_logs) == len(list(log_families))
 
         return item_hash, valid
 
