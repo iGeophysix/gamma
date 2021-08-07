@@ -256,12 +256,10 @@ class LogReconstructionNode(EngineNode):
                     cache_hits += 1
                     continue
 
-                # tasks.append(celery_conf.app.send_task('tasks.async_log_reconstruction',
-                #                                        (well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
-                #                                        )
-                #              )
-
-                cls.run_for_item(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+                tasks.append(celery_conf.app.send_task('tasks.async_log_reconstruction',
+                                                       (well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+                                                       )
+                             )
 
         cache.set(hashes)
         cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
