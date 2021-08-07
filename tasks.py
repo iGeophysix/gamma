@@ -274,4 +274,4 @@ def async_log_reconstruction(well_names, log_families_to_train, log_family_to_pr
 @app.task
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
     node = SaturationArchieNode()
-    node.calculate_for_item(well_name, a, m, n, rw, output_log_name)
+    node.run_for_item(well_name, a, m, n, rw, output_log_name)

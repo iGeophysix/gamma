@@ -1,5 +1,4 @@
 import logging
-import time
 
 import numpy as np
 
@@ -8,7 +7,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.FamilyProperties import FamilyProperties
 
 
@@ -21,7 +20,15 @@ class SaturationArchieNode(EngineNode):
     logger.setLevel(logging.INFO)
 
     @classmethod
-    def calculate_for_item(cls, well_name: str, a: float, m: float, n: float, rw: float, output_log_name: str = 'SW_AR') -> None:
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
+
+    @classmethod
+    def run_for_item(cls, well_name: str, a: float, m: float, n: float, rw: float, output_log_name: str = 'SW_AR') -> None:
         """
         Function to calculate Saturation via Archie method in a well
         :param well_name: name of well to process
@@ -99,6 +106,24 @@ class SaturationArchieNode(EngineNode):
         return log
 
     @classmethod
+    def item_hash(cls, well_name, a, m, n, rw, output_log_name) -> tuple[str, bool]:
+        """Get current item hash"""
+        well = Well(well_name)
+        dataset = WellDataset(well, 'LQC')
+        log_hashes = []
+
+        for log_name in dataset.get_log_list(family='Total Porosity'):
+            log = BasicLog(dataset.id, log_name)
+            if 'spliced' in log.meta.tags:
+                log_hashes.append(log.data_hash)
+
+        item_hash = cls.item_md5((well_name, sorted(log_hashes), a, m, n, rw, output_log_name))
+
+        valid = BasicLog(dataset.id, output_log_name).exists()
+
+        return item_hash, valid
+
+    @classmethod
     def run(cls, **kwargs):
         """
         :param a: tortuousity exponent (unitless)
@@ -120,13 +145,24 @@ class SaturationArchieNode(EngineNode):
         well_names = p.list_wells()
 
         if async_job:
-            tasks = [
-                celery_conf.app.send_task('tasks.async_saturation_archie', (well_name, a, m, n, rw, output_log_name))
-                for well_name in well_names
-            ]
-
+            tasks = []
+            hashes = []
             cache_hits = 0
+            cache = EngineNodeCache(cls)
+
+            for well_name in well_names:
+
+                item_hash, item_hash_is_valid = cls.item_hash(well_name, a, m, n, rw, output_log_name)
+                hashes.append(item_hash)
+                if item_hash_is_valid and item_hash in cache:
+                    cache_hits += 1
+                    continue
+                tasks.append(celery_conf.app.send_task('tasks.async_saturation_archie', (well_name, a, m, n, rw, output_log_name)))
+
+            cache.set(hashes)
+            cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
             cls.track_progress(tasks, cached=cache_hits)
+
         else:
             for well_name in well_names:
-                cls.calculate_for_item(well_name, a, m, n, rw, output_log_name)
+                cls.run_for_item(well_name, a, m, n, rw, output_log_name)

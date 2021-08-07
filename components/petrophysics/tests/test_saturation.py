@@ -35,7 +35,7 @@ class TestSaturationArchieNode(unittest.TestCase):
 
     def test_saturation_archie_works_correctly(self):
         node = SaturationArchieNode()
-        node.run(async_job=False)
+        node.run(async_job=True)
 
         # compare with true results
         true_sw_ar = BasicLog(self.wd.id, 'SW_AR_TRUE')
