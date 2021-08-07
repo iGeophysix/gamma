@@ -1,5 +1,4 @@
 import logging
-import time
 
 import numpy as np
 
@@ -8,7 +7,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 
 logging.basicConfig()
 
@@ -32,6 +31,10 @@ class ShaleVolume(EngineNode):
     @classmethod
     def name(cls):
         return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
 
     @classmethod
     def validate_input(cls, log: BasicLog, gr_matrix: float, gr_shale: float, name: str) -> None:
@@ -68,20 +71,22 @@ class ShaleVolume(EngineNode):
         raise Exception("You are using abstract class instead of")
 
     @classmethod
-    def calculate_for_well(cls, well_name: str, gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR') -> None:
+    def run_for_item(cls, well_name: str, gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR') -> None:
         """
         Function to calculate Shale Volume (VSH) via Linear method
+        :param well_name: well name to process
         :param gr_matrix: float, Gamma Ray value at matrix
         :param gr_shale: float, Gamma Ray value at shale
+        :param output_log_name: name of output log
         """
 
         well = Well(well_name)
         dataset = WellDataset(well, 'LQC')
 
-        for log_name in dataset.log_list:
+        for log_name in dataset.get_log_list(family='Gamma Ray'):
             log = BasicLog(dataset.id, log_name)
 
-            if not hasattr(log.meta, 'family') or log.meta.family != 'Gamma Ray':
+            if 'spliced' in log.meta.tags:
                 continue
 
             if gr_matrix is None:
@@ -91,11 +96,29 @@ class ShaleVolume(EngineNode):
 
             output = cls._calculate(log, gr_matrix, gr_shale, output_log_name)
             output.dataset_id = dataset.id
+            cls.write_history(log=output, input_logs=(log,), gr_matrix=gr_matrix, gr_shale=gr_shale)
             output.save()
 
     @classmethod
-    def run(cls, **kwargs):
+    def item_hash(cls, well_name, gr_matrix, gr_shale, output_log_name) -> tuple[str, bool]:
+        """Get current item hash"""
+        well = Well(well_name)
+        dataset = WellDataset(well, 'LQC')
+        log_hashes = []
+        for log_name in dataset.get_log_list(family='Gamma Ray'):
+            log = BasicLog(dataset.id, log_name)
+            if 'spliced' in log.meta.tags:
+                log_hashes.append(log.data_hash)
 
+        item_hash = cls.item_md5((well_name, sorted(log_hashes), gr_matrix, gr_shale, output_log_name))
+
+        valid = BasicLog(dataset.id, output_log_name).exists()
+
+        return item_hash, valid
+
+    @classmethod
+    def run(cls, **kwargs):
+        """Run shale volume calculation for well"""
         gr_matrix = kwargs.get('gr_matrix', None)
         gr_shale = kwargs.get('gr_shale', None)
         output_log_name = kwargs.get('output_log_name', 'VSH_GR')
@@ -103,10 +126,37 @@ class ShaleVolume(EngineNode):
         p = Project()
         well_names = p.list_wells()
         tasks = []
+
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
+
         for well_name in well_names:
+
+            item_hash, item_hash_is_valid = cls.item_hash(well_name, gr_matrix, gr_shale, output_log_name)
+            hashes.append(item_hash)
+            if item_hash_is_valid and item_hash in cache:
+                cache_hits += 1
+                continue
+
             tasks.append(celery_conf.app.send_task('tasks.async_calculate_shale_volume', (well_name, cls.__name__, gr_matrix, gr_shale, output_log_name)))
 
-        cls.track_progress(tasks)
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        log = kwargs['log']
+        input_logs = kwargs['input_logs']
+        gr_matrix = kwargs.get('gr_matrix', None)
+        gr_shale = kwargs.get('gr_shale', None)
+
+        log.meta.append_history({'node': cls.name(),
+                                 'node_version': cls.version(),
+                                 'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+                                 'parameters': {'gr_matrix': gr_matrix, 'gr_shale': gr_shale, }
+                                 })
 
 
 class ShaleVolumeLinearMethodNode(ShaleVolume):
@@ -133,6 +183,14 @@ class ShaleVolumeLinearMethodNode(ShaleVolume):
                 "method": "Linear method based on Gamma Ray logs",
             }
         }
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
 
     @classmethod
     def _calculate(cls, log: BasicLog, gr_matrix: float, gr_shale: float, name: str) -> BasicLog:
@@ -174,6 +232,14 @@ class ShaleVolumeLarionovOlderRockNode(ShaleVolume):
                 "method": "Larionov older rock method based on Gamma Ray logs",
             }
         }
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
 
     @classmethod
     def _calculate(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:
@@ -224,6 +290,10 @@ class ShaleVolumeLarionovTertiaryRockNode(ShaleVolume):
                 "method": "Larionov Tertiary Rock based on Gamma Ray logs",
             }
         }
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
 
     @classmethod
     def _calculate(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:

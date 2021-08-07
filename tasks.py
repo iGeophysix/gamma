@@ -247,7 +247,7 @@ def async_calculate_shale_volume(well_name: str,
     else:
         raise ValueError(f"Unknown kind of algorithm: {algorithm}."
                          f"Acceptable values: 'ShaleVolumeLinearMethodNode', 'ShaleVolumeLarionovTertiaryRockNode', 'ShaleVolumeLarionovOlderRockNode'.")
-    node.calculate_for_well(well_name, gr_matrix, gr_shale, output_log_name)
+    node.run_for_item(well_name, gr_matrix, gr_shale, output_log_name)
 
 
 @app.task
