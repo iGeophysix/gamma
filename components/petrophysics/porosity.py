@@ -19,6 +19,14 @@ class PorosityFromDensityNode(EngineNode):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
+
     @staticmethod
     def linear_method(log, rhob_matrix: float, rhob_fluid: float, output_log_name: str) -> BasicLog:
         """
@@ -44,7 +52,7 @@ class PorosityFromDensityNode(EngineNode):
         phit_d.meta.log_id = output_log_id
         phit_d.meta.family = 'Porosity'
         phit_d.meta.method = 'Linear method from density'
-        phit_d.meta.units = '%'
+        phit_d.meta.units = 'v/v'
 
         return phit_d
 
