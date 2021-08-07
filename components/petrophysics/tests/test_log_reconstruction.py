@@ -44,19 +44,28 @@ class TestLogReconstructionNode(TestCase):
     def test_run_for_well(self):
         node = LogReconstructionNode()
         well_names_to_predict = ["101", "201", "301", "401", "501", "601"]
-        node.run(
-            log_families_to_train=['Gamma Ray', 'Thermal Neutron Porosity', ],
-            log_families_to_predict=["Bulk Density"],
-            model_kwargs={
-                'iterations': 50,
-                'depth': 12,
-                'learning_rate': 0.1,
-                'loss_function': 'MAPE',
-                'allow_writing_files': False,
-                "logging_level": "Silent"
-            },
-            async_job=True
-        )
+
+        parameters = {
+            "2": {
+                "log_families_to_train": [
+                    "Gamma Ray",
+                    "Thermal Neutron Porosity"
+                ],
+                "log_families_to_predict": [
+                    "Bulk Density"
+                ],
+                "model_kwargs": {
+                    "iterations": 50,
+                    "depth": 12,
+                    "learning_rate": 0.1,
+                    "loss_function": "MAPE",
+                    "allow_writing_files": False,
+                    "logging_level": "Silent"
+                }
+            }
+        }
+
+        node.run(**parameters)
 
         for well_name in well_names_to_predict:
             well = Well(well_name)

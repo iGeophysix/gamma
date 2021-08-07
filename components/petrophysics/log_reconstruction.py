@@ -256,10 +256,13 @@ class LogReconstructionNode(EngineNode):
                     cache_hits += 1
                     continue
 
-                tasks.append(celery_conf.app.send_task('tasks.async_log_reconstruction',
-                                                       (well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
-                                                       )
-                             )
+                # tasks.append(celery_conf.app.send_task('tasks.async_log_reconstruction',
+                #                                        (well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+                #                                        )
+                #              )
+
+                cls.run_for_item(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+
         cache.set(hashes)
         cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
@@ -288,7 +291,7 @@ if __name__ == '__main__':
                 "Bulk Density"
             ],
             "log_families_to_predict": [
-                "Neutron Porosity"
+                "Thermal Neutron Porosity"
             ],
             "model_kwargs": {
                 "iterations": 50,
@@ -302,7 +305,7 @@ if __name__ == '__main__':
         "1": {
             "log_families_to_train": [
                 "Bulk Density",
-                "Neutron Porosity"
+                "Thermal Neutron Porosity"
             ],
             "log_families_to_predict": [
                 "Gamma Ray"
@@ -319,7 +322,7 @@ if __name__ == '__main__':
         "2": {
             "log_families_to_train": [
                 "Gamma Ray",
-                "Neutron Porosity"
+                "Thermal Neutron Porosity"
             ],
             "log_families_to_predict": [
                 "Bulk Density"
