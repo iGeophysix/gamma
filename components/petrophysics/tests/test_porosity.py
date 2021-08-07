@@ -26,6 +26,9 @@ class TestShaleVolume(unittest.TestCase):
         async_read_las(wellname=self.w.name, datasetname='LQC', filename=test_data)
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
+        rhob = BasicLog(self.wd.id, "RHOB")
+        rhob.meta.family = 'Bulk Density'
+        rhob.meta.save()
 
     def test_porosity_linear_works_correctly(self):
         gk = BasicLog(self.wd.id, "RHOB")
@@ -39,3 +42,7 @@ class TestShaleVolume(unittest.TestCase):
         true_phit_d = BasicLog(self.wd.id, "PHIT_D_TRUE")
         diff = abs(phit_d.values[:, 1] - true_phit_d[:, 1])
         self.assertAlmostEqual(0.0, np.nanmax(diff, ), 4)
+
+    def test_node_works_correctly(self):
+        PorosityFromDensityNode.run()
+        PorosityFromDensityNode.run()
