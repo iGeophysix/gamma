@@ -1,28 +1,25 @@
 import copy
 import json
 import logging
-import os
-import time
-from typing import Union, Optional, Iterable, List
-from datetime import datetime
+from collections.abc import Iterable
+from typing import List
+from typing import Union, Optional
 
 import numpy as np
 from scipy.optimize import lsq_linear
 
-import celery_conf
-from celery_conf import app as celery_app, wait_till_completes
+from celery_conf import app as celery_app
 from components.database.RedisStorage import RedisStorage
-
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
-from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 from components.petrophysics.curve_operations import interpolate_log_by_depth
+from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 from components.petrophysics.data.src.export_fluid_mineral_constants import FLUID_MINERAL_TABLE
 
 logging.basicConfig()
@@ -204,15 +201,46 @@ class VolumetricModelSolverNode(EngineNode):
 
         model_components = kwargs['model_components']
 
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
+
         cls.validate_input(model_components)
 
         tasks = []
         for well_name in Project().list_wells():
+
+            item_hash, item_hash_is_valid = cls.item_hash(well_name, model_components)
+            hashes.append(item_hash)
+            if item_hash_is_valid and item_hash in cache:
+                cache_hits += 1
+                continue
+
             tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model',
                                               (well_name, model_components)))
 
-        cls.track_progress(tasks)
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
 
+    @classmethod
+    def item_hash(cls, well_name, model_parameters) -> tuple[str, bool]:
+        """Get current item hash"""
+        vm = VolumetricModel()
+
+        # pick input logs
+        input_logs_hashes = []
+        for family in vm.supported_log_families():
+            log = family_best_log(well_name, family, vm.FAMILY_UNITS[family])
+            if log is not None:
+                input_logs_hashes.append(log.data_hash)
+        item_hash = cls.item_md5((well_name, sorted(input_logs_hashes), model_parameters))
+
+        well = Well(well_name)
+        lqc_ds = WellDataset(well, 'LQC')
+        valid = BasicLog(lqc_ds.id, 'VMISFIT').exists()
+
+        return item_hash, valid
 
     @classmethod
     def run_for_item(cls, **kwargs):
@@ -244,7 +272,7 @@ class VolumetricModelSolverNode(EngineNode):
         log_data = {}
         for log in input_logs:
             family_units = vm.FAMILY_UNITS[log.meta.family]
-            log_data[log.meta.family] = log.convert_units(family_units)[:,1]
+            log_data[log.meta.family] = log.convert_units(family_units)[:, 1]
 
         # run solver
         res = vm.inverse(log_data, model_components)
@@ -297,7 +325,6 @@ class VolumetricModelSolverNode(EngineNode):
                           input_logs=input_logs)
         log.save()
 
-
     @classmethod
     def write_history(cls, **kwargs):
         log = kwargs['log']
@@ -307,7 +334,7 @@ class VolumetricModelSolverNode(EngineNode):
                                  'node_version': cls.version(),
                                  'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
                                  'parameters': {}
-                                })
+                                 })
 
 
 def family_best_log(well_name: str,
