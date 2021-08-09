@@ -3,6 +3,7 @@
 
 import itertools
 import os
+from typing import Tuple
 
 import openpyxl as xl
 
@@ -27,7 +28,7 @@ def capitalize(s: str):
     return ' '.join(map(str.capitalize, s.split(' ')))
 
 
-def read_cell_background_color(header, row_data) -> tuple[int]:
+def read_cell_background_color(header, row_data) -> Tuple[int]:
     '''
     TODO: Add comment
     '''

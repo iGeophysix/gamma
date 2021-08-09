@@ -3,8 +3,7 @@ import json
 import logging
 import os
 import time
-from collections.abc import Iterable
-from typing import Union, Optional
+from typing import Union, Optional, Iterable, List
 from datetime import datetime
 
 import numpy as np
@@ -142,7 +141,7 @@ class VolumetricModel():
         return res
 
 
-def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> list[BasicLog]:
+def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> List[BasicLog]:
     '''
     Interpolates set of logs to a common depths
     :param logs: list of input logs

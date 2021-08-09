@@ -1,6 +1,6 @@
 import time
 from collections import defaultdict
-from typing import Any, Iterable, Dict, Tuple, Optional
+from typing import Any, Iterable, Dict, List, Tuple, Optional
 from datetime import datetime
 
 import logging
@@ -15,7 +15,7 @@ from components.engine.engine_node import EngineNode
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 
 
-def score_log_tags(tags: Iterable[str], tags_rank: dict[str, int]) -> int:
+def score_log_tags(tags: Iterable[str], tags_rank: Dict[str, int]) -> int:
     '''
     Calculates log usefulness by log tags
     :param tags: set of log tags
@@ -33,7 +33,7 @@ class AlgorithmFailure(Exception):
 
 def get_best_log_for_run_and_family(datasets: Iterable[WellDataset],
                                     family: str,
-                                    run_name: str) -> tuple[str, dict]:
+                                    run_name: str) -> Tuple[str, dict]:
     """
     This method defines best in family log in a dataset withing one run
     :param datasets: list of WellDataset objects to process
@@ -105,7 +105,7 @@ def rank_logs(logs_meta: Dict[Any, dict], additional_logs_meta: Dict[Any, dict] 
     return best_log, new_logs_meta
 
 
-def best_rt(rt_candidates: list[BasicLog]) -> Optional[BasicLog]:
+def best_rt(rt_candidates: List[BasicLog]) -> Optional[BasicLog]:
     '''
     Returns the best resistivity log
     :param rt_candidates: best resistivity log candidates
@@ -170,7 +170,7 @@ def best_rt(rt_candidates: list[BasicLog]) -> Optional[BasicLog]:
     return best_logs[0] if best_logs else None
 
 
-def intervals_overlap(r1: tuple[float, float], r2: tuple[float, float]) -> float:
+def intervals_overlap(r1: Tuple[float, float], r2: Tuple[float, float]) -> float:
     '''
     Intervals overlap size
     :param r1, r2: (top, bottom) of interval
@@ -179,7 +179,7 @@ def intervals_overlap(r1: tuple[float, float], r2: tuple[float, float]) -> float
     return min(r1[1], r2[1]) - max(r1[0], r2[0])
 
 
-def intervals_similarity(run: tuple[float, float], other_run: tuple[float, float]) -> float:
+def intervals_similarity(run: Tuple[float, float], other_run: Tuple[float, float]) -> float:
     '''
     Estimates expected statistical similarity of two intervals
     :param run: reference interval (top, bottom)
