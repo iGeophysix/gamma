@@ -90,6 +90,7 @@ class PorosityFromDensityNode(EngineNode):
                               input_logs=(log,),
                               parameters=kwargs)
             output.save()
+            break
 
     @classmethod
     def item_hash(cls, well_name, rhob_matrix, rhob_fluid, output_log_name) -> tuple[str, bool]:
