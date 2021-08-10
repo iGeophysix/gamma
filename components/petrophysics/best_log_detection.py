@@ -2,9 +2,8 @@ import hashlib
 import json
 import logging
 from collections import defaultdict
-from typing import Any, Iterable, Dict, List, Tuple, Optional
 from datetime import datetime
-from typing import Any, Iterable, Dict, Tuple, Optional
+from typing import Any, Iterable, Dict, Tuple, Optional, List
 
 import numpy as np
 
@@ -251,12 +250,16 @@ class BestLogDetectionNode(EngineNode):
         logs_paths, additional_logs_paths = args
         log_hashes = []
         valid = True
-        for log_path in logs_paths:
+
+        log_paths = logs_paths if additional_logs_paths is None else logs_paths + additional_logs_paths
+
+        for log_path in log_paths:
             log = BasicLog(log_path[0], log_path[1])
             necessary_meta = {k: log.meta[k] for k in ['basic_statistics', 'name', 'description', 'units', ]}
             log_hashes.append(hashlib.md5(json.dumps(necessary_meta).encode()).hexdigest())
             if not 'processing' in log.meta.tags:
                 valid = False
+
         log_hashes = sorted(log_hashes)
         final_hash = hashlib.md5(json.dumps(log_hashes).encode()).hexdigest()
         return final_hash, valid

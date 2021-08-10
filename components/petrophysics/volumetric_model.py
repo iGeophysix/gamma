@@ -2,8 +2,7 @@ import copy
 import json
 import logging
 from collections.abc import Iterable
-from typing import List
-from typing import Union, Optional
+from typing import List, Union, Optional
 
 import numpy as np
 from scipy.optimize import lsq_linear
@@ -27,7 +26,7 @@ logger = logging.getLogger('volumetric model')
 logger.setLevel(logging.DEBUG)
 
 
-class VolumetricModel():
+class VolumetricModel:
     '''
     Solver of volumetric mineral and fluid components model.
     '''

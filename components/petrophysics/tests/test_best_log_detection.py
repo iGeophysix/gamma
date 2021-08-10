@@ -63,7 +63,6 @@ class TestBestLogDetection(unittest.TestCase):
 
     def test_best_log_detection_engine_node_works_correctly(self):
         BestLogDetectionNode.run()
-        BestLogDetectionNode.run()
 
         log1 = BasicLog(self.wd.id, 'GK_D4412_D')
         log2 = BasicLog(self.wd.id, 'GK_D1800_D')

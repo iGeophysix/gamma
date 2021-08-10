@@ -45,4 +45,3 @@ class TestShaleVolume(unittest.TestCase):
 
     def test_node_works_correctly(self):
         PorosityFromDensityNode.run()
-        PorosityFromDensityNode.run()
