@@ -291,6 +291,7 @@ class VolumetricModelSolverNode(EngineNode):
 
         # run solver
         base_res = []  # [(avg_misfit, model_components, resuls), ..]
+        extra_res = []  # [(avg_misfit, model_components, resuls), ..]
         if model_components is not None:
             # predefined component set
             res = vm.inverse(log_data, model_components)
@@ -316,18 +317,17 @@ class VolumetricModelSolverNode(EngineNode):
             logger.info(f'well {well_name} best base component set is {best_base_componet_set["core"]} with misfit {best_base_misfit}')
 
             # calculate additional variants with extra components
-            extra_res = []  # [(avg_misfit, model_components, resuls), ..]
-            if 'extra' in best_base_componet_set:
-                core_components = best_base_componet_set['core']
-                for extra_component in best_base_componet_set['extra']:
-                    extended_componet_set = (*core_components, extra_component)
-                    if len(extended_componet_set) > max_component_amount:
-                        continue
-                    res = vm.inverse(log_data, extended_componet_set)
-                    avg_misfit = np.nanmean(res['MISFIT']['TOTAL'])
-                    if not np.isnan(avg_misfit):
-                        extra_res.append((avg_misfit, extended_componet_set, res))
-                extra_res.sort()
+            # if 'extra' in best_base_componet_set:
+            #     core_components = best_base_componet_set['core']
+            #     for extra_component in best_base_componet_set['extra']:
+            #         extended_componet_set = (*core_components, extra_component)
+            #         if len(extended_componet_set) > max_component_amount:
+            #             continue
+            #         res = vm.inverse(log_data, extended_componet_set)
+            #         avg_misfit = np.nanmean(res['MISFIT']['TOTAL'])
+            #         if not np.isnan(avg_misfit):
+            #             extra_res.append((avg_misfit, extended_componet_set, res))
+            #     extra_res.sort()
 
         # combine final model
         log_len = len(input_logs[0])
@@ -350,11 +350,11 @@ class VolumetricModelSolverNode(EngineNode):
         # save results
         for n, (_, _, res) in enumerate(base_res):
             cls.save_results(vm, family_properties, input_logs, res, str(n))
-        for n, (_, _, res) in enumerate(extra_res):
-            cls.save_results(vm, family_properties, input_logs, res, '0' + str(n + 1))
-        cls.save_results(vm, family_properties, input_logs, final_res, 'fin')
+        # for n, (_, _, res) in enumerate(extra_res):
+        #     cls.save_results(vm, family_properties, input_logs, res, '0' + str(n + 1))
+        cls.save_results(vm, family_properties, input_logs, final_res)
 
-        log = BasicLog(dataset_id=input_logs[0].dataset_id, log_id='fin_SRC_VARIANT')
+        log = BasicLog(dataset_id=input_logs[0].dataset_id, log_id='SRC_VARIANT')
         log.values = np.vstack((input_logs[0].values[:, 0], best_variant_log)).T
         log.meta.family = 'Variant Number'
         log.meta.units = 'unitless'
