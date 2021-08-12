@@ -173,6 +173,7 @@ class SpliceLogsNode(EngineNode):
         :return valid: if hash is still valid for the object
         """
         wellname = args[0]['wellname']
+        tags = args[0]['tags']
         output_dataset_name = args[0]['output_dataset_name']
 
         log_hashes = []
@@ -184,7 +185,7 @@ class SpliceLogsNode(EngineNode):
             ds = WellDataset(well, ds_name)
             for log_id in ds.log_list:
                 log = BasicLog(ds.id, log_id)
-                if 'processing' in log.meta.tags and FamilyProperties()[log.meta.family]['splice']:
+                if any(tag in log.meta.tags for tag in tags) and FamilyProperties()[log.meta.family]['splice']:
                     log_hashes.append(log.meta.data_hash)
                     log_families.add(log.meta.family)
         item_hash = cls.item_md5((wellname, tuple(sorted(log_hashes)), output_dataset_name))
