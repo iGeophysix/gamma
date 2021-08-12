@@ -5,10 +5,9 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
 from components.petrophysics.log_splicing import SpliceLogsNode
 from settings import BASE_DIR
-from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution, async_splice_logs
+from tasks import async_read_las, async_splice_logs
 
 PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 
@@ -27,9 +26,6 @@ class TestLogSplicing(unittest.TestCase):
                        datasetname=filename,
                        filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
-        # calculating basic stats
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
-
         # adding more metadata
         meta = {
             'GK_D2258_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '70_(2450_2600)'}, 'tags': ['processing', ]},
@@ -43,9 +39,6 @@ class TestLogSplicing(unittest.TestCase):
             l = BasicLog(self.wd.id, log_id)
             l.meta = values
             l.save()
-
-        # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
 
     def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
@@ -75,8 +68,8 @@ class TestLogSplicing(unittest.TestCase):
             self.assertEqual(val, log.meta[key])
 
     def test_log_splicing_engine_node_works_correctly(self):
-        engine_progress = EngineProgress('test')
-        SpliceLogsNode.run(output_dataset_name='LQC2', engine_progress=engine_progress)
+        SpliceLogsNode.run(output_dataset_name='LQC2')
+        SpliceLogsNode.run(output_dataset_name='LQC2')
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')

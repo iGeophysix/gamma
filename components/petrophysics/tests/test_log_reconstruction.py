@@ -44,19 +44,28 @@ class TestLogReconstructionNode(TestCase):
     def test_run_for_well(self):
         node = LogReconstructionNode()
         well_names_to_predict = ["101", "201", "301", "401", "501", "601"]
-        node.run(
-            log_families_to_train=['Gamma Ray', 'Thermal Neutron Porosity', ],
-            log_families_to_predict=["Bulk Density"],
-            model_kwargs={
-                'iterations': 50,
-                'depth': 12,
-                'learning_rate': 0.1,
-                'loss_function': 'MAPE',
-                'allow_writing_files': False,
-                'logging_level': 'Silent'
-            },
-            async_job=False
-        )
+
+        parameters = {
+            "2": {
+                "log_families_to_train": [
+                    "Gamma Ray",
+                    "Thermal Neutron Porosity"
+                ],
+                "log_families_to_predict": [
+                    "Bulk Density"
+                ],
+                "model_kwargs": {
+                    "iterations": 50,
+                    "depth": 12,
+                    "learning_rate": 0.1,
+                    "loss_function": "MAPE",
+                    "allow_writing_files": False,
+                    "logging_level": "Silent"
+                }
+            }
+        }
+
+        node.run(**parameters)
 
         for well_name in well_names_to_predict:
             well = Well(well_name)
@@ -65,6 +74,7 @@ class TestLogReconstructionNode(TestCase):
             synth_rhob = BasicLog(ds.id, 'RHOB_SYNTH')
 
             misfit = BasicLog(ds.id, 'RHOB_SYNTH_MISFIT')
+
             # interp true values
             true_rhob_values_interp = interp1d(true_rhob.values[:, 0],
                                                true_rhob.values[:, 1],

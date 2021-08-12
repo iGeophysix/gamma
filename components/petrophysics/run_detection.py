@@ -1,18 +1,17 @@
-import time
+import hashlib
+import json
 from collections import Counter
-
 from datetime import datetime
-from sklearn.cluster import KMeans
+
 import numpy as np
+from sklearn.cluster import KMeans
 
-import celery_conf
-from celery_conf import app as celery_app, wait_till_completes
-
+from celery_conf import app as celery_app
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 
 
 def _define_clusters(depth_tolerance, features):
@@ -20,7 +19,7 @@ def _define_clusters(depth_tolerance, features):
     for clusters_number in range(1, len(features) + 1):
         kmns = KMeans(clusters_number, n_init=20)
         run_ids = kmns.fit_predict(features)
-        if kmns.inertia_  / len(features) < depth_tolerance ** 2:
+        if kmns.inertia_ / len(features) < depth_tolerance ** 2:
             # for debug only
             # print("\n".join(f"{m}\t{v}" for m,v in kmns.cluster_centers_))
             break
@@ -32,6 +31,13 @@ class RunDetectionNode(EngineNode):
     """
     Engine node that detects runs in all wells
     """
+
+    def __init__(self):
+        self.cache = EngineNodeCache(self)
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
 
     @classmethod
     def version(cls):
@@ -90,33 +96,60 @@ class RunDetectionNode(EngineNode):
             log.save()
 
     @classmethod
-    def run(cls, **kwargs):
+    def item_hash(cls, well_name: str) -> tuple[str, bool]:
+        """Get item hash to use in cache"""
+        w = Well(well_name)
+        log_hashes = []
+        valid = True
+        for ds_id in w.datasets:
+            if ds_id == 'LQC':
+                continue
+
+            ds = WellDataset(w, ds_id)
+            for log_id in ds.log_list:
+                log = BasicLog(ds.id, log_id)
+                log_hashes.append(log.data_hash)
+                if not hasattr(log.meta, 'run'):
+                    valid = False
+
+        log_hashes = sorted(log_hashes)
+        well_hash = hashlib.md5(json.dumps(log_hashes).encode()).hexdigest()
+        return well_hash, valid
+
+    def run(self, **kwargs):
         """
         Detect pseudo-runs in each well
         :param depth_tolerance:
         :return:
         """
         depth_tolerance = kwargs['depth_tolerance'] if ('depth_tolerance' in kwargs) else 50.0
-        async_job = kwargs['async_job'] if ('async_job' in kwargs) else True
 
         p = Project()
         tasks = []
+        hashes = []
+        cache_hits = 0
 
         for well_name in p.list_wells():
+            item_hash, valid = self.item_hash(well_name)
+            if valid and item_hash in self.cache:
+                hashes.append(item_hash)
+                cache_hits += 1
+                continue
+
             result = celery_app.send_task('tasks.async_split_by_runs', (well_name, depth_tolerance))
             tasks.append(result)
+            hashes.append(item_hash)
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        self.cache.set(hashes)
+        self.logger.info(f'Node: {self.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+
+        self.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):
-        kwargs['log'].meta.append_history({ 'node': cls.name(),
-                                            'node_version': cls.version(),
-                                            'timestamp': datetime.now().isoformat(),
-                                            'parent_logs': [],
-                                            'parameters': {}
-                                          })
-
-if __name__ == '__main__':
-    RunDetectionNode.run(async_job=False)
+        kwargs['log'].meta.append_history({'node': cls.name(),
+                                           'node_version': cls.version(),
+                                           'timestamp': datetime.now().isoformat(),
+                                           'parent_logs': [],
+                                           'parameters': {}
+                                           })

@@ -8,7 +8,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 
 
 class PorosityFromDensityNode(EngineNode):
@@ -18,6 +18,14 @@ class PorosityFromDensityNode(EngineNode):
 
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return 1
 
     @staticmethod
     def linear_method(log, rhob_matrix: float, rhob_fluid: float, output_log_name: str) -> BasicLog:
@@ -44,7 +52,7 @@ class PorosityFromDensityNode(EngineNode):
         phit_d.meta.log_id = output_log_id
         phit_d.meta.family = 'Porosity'
         phit_d.meta.method = 'Linear method from density'
-        phit_d.meta.units = '%'
+        phit_d.meta.units = 'v/v'
 
         return phit_d
 
@@ -82,22 +90,52 @@ class PorosityFromDensityNode(EngineNode):
                               input_logs=(log,),
                               parameters=kwargs)
             output.save()
+            break
+
+    @classmethod
+    def item_hash(cls, well_name, rhob_matrix, rhob_fluid, output_log_name) -> tuple[str, bool]:
+        """Get current item hash"""
+        well = Well(well_name)
+        dataset = WellDataset(well, 'LQC')
+        log_hashes = []
+
+        for log_name in dataset.get_log_list(family__in=['Density', 'Bulk Density']):
+            log = BasicLog(dataset.id, log_name)
+            if 'spliced' in log.meta.tags:
+                log_hashes.append(log.data_hash)
+
+        item_hash = cls.item_md5((well_name, sorted(log_hashes), rhob_matrix, rhob_fluid, output_log_name))
+
+        valid = BasicLog(dataset.id, output_log_name).exists()
+
+        return item_hash, valid
 
     @classmethod
     def run(cls, **kwargs):
 
         rhob_matrix = kwargs.get('rhob_matrix', None)
-        rhob_fluid = kwargs.get('rhob_matrix', None)
+        rhob_fluid = kwargs.get('rhob_fluid', None)
         output_log_name = kwargs.get('output_log_name', 'PHIT_D')
 
         p = Project()
         well_names = p.list_wells()
         tasks = []
-        for well_name in well_names:
-            celery_conf.app.send_task('tasks.async_calculate_porosity_from_density', (well_name, rhob_matrix, rhob_fluid, output_log_name))
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        for well_name in well_names:
+
+            item_hash, item_hash_is_valid = cls.item_hash(well_name, rhob_matrix, rhob_fluid, output_log_name)
+            hashes.append(item_hash)
+            if item_hash_is_valid and item_hash in cache:
+                cache_hits += 1
+                continue
+            tasks.append(celery_conf.app.send_task('tasks.async_calculate_porosity_from_density', (well_name, rhob_matrix, rhob_fluid, output_log_name)))
+
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):

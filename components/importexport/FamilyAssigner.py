@@ -1,21 +1,24 @@
 import copy
 import dataclasses
+import hashlib
+import json
 import logging
 import pickle
 import re
-import time
 from typing import Optional, Iterable, Union
 
-import celery_conf
 from celery_conf import app as celery_app
 from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
-from components.engine.engine_node import EngineNode
+from components.domain.Well import Well
+from components.domain.WellDataset import WellDataset
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.UnitsSystem import UnitsSystem
 
 GARBAGE_TOKENS = {'DL', 'SL', 'SIG', 'RAW', 'BP', 'ALT', 'ECO', 'DH', 'NORM'}
 
+EXCLUDED_DATASETS = ['LQC', 'Survey']
 MAX_RELIABILITY_EXACT_MATCHING = 1
 MAX_RELIABILITY_PATTERN_MATCHING = 0.8
 MAX_RELIABILITY_NLP_MATCHING = 0.7
@@ -279,6 +282,10 @@ class FamilyAssignerNode(EngineNode):
     def name(cls):
         return cls.__name__
 
+    @classmethod
+    def version(cls):
+        return 1
+
     class Meta:
         name = 'Family Assigner'
         input = {
@@ -297,16 +304,78 @@ class FamilyAssignerNode(EngineNode):
         assert isinstance(log, BasicLog), "log must be instance of BasicLog class"
 
     @classmethod
+    def run_for_item(cls, **kwargs):
+        """
+        Recognize log family in well datasets
+        :param wellname:
+        :return:
+        """
+        wellname = kwargs['wellname']
+        fa = FamilyAssigner()
+        w = Well(wellname)
+        datasetnames = [ds for ds in w.datasets if ds not in EXCLUDED_DATASETS]
+
+        for datasetname in datasetnames:
+            wd = WellDataset(w, datasetname)
+            log_list = wd.log_list
+            for log in log_list:
+                l = BasicLog(wd.id, log)
+                if not 'raw' in l.meta.tags:
+                    continue
+                result = fa.assign_family(l.name, l.meta.units)
+                if result is not None:
+                    if 'tags' in result.optional_properties:
+                        l.meta.add_tags(*result.optional_properties.pop('tags'))
+                    l.meta.family = result.family
+                    l.meta.family_assigner = {
+                                                 'reliability': result.reliability,
+                                                 'unit_class': result.dimension,
+                                                 'logging_company': result.company} \
+                                             | result.optional_properties
+                else:
+                    l.meta.family = l.meta.family_assigner = None
+                l.save()
+
+    @classmethod
+    def item_hash(cls, well_name) -> tuple[str, bool]:
+        """Get item hash to use in cache"""
+        w = Well(well_name)
+        log_hashes = []
+        valid = True
+        for ds_id in w.datasets:
+            if ds_id in EXCLUDED_DATASETS:
+                continue
+
+            ds = WellDataset(w, ds_id)
+            for log_id in ds.log_list:
+                log = BasicLog(ds.id, log_id)
+                necessary_meta = {k: log.meta[k] for k in ['name', 'description', 'units', ]}
+                log_hashes.append(hashlib.md5(json.dumps(necessary_meta).encode()).hexdigest())
+                if not hasattr(log.meta, 'family'):
+                    valid = False
+
+        log_hashes = sorted(log_hashes)
+        well_hash = hashlib.md5(json.dumps(log_hashes).encode()).hexdigest()
+        return well_hash, valid
+
+    @classmethod
     def run(cls, **kwargs):
         """
         Run calculations
         """
         p = Project()
         tasks = []
+        cache = EngineNodeCache(cls)
+        hashes = []
+        cache_hits = 0
         for well_name in p.list_wells():
+            item_hash, valid = cls.item_hash(well_name)
+            hashes.append(item_hash)
+            if valid and item_hash in cache:
+                cache_hits += 1
+                continue
             tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name,)))
 
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
-
-
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)

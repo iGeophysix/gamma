@@ -1,7 +1,8 @@
+import hashlib
 import logging
 
 from components.database.RedisStorage import RedisStorage
-from components.domain.Well import Well
+from components.domain.Log import BasicLog
 from typing import List
 
 logging.basicConfig()
@@ -14,7 +15,7 @@ class WellDataset:
     Class to process manipulations with datasets and its logs
     """
 
-    def __init__(self, well: Well, name: str, new=False) -> None:
+    def __init__(self, well, name: str, new=False) -> None:
         """
         Initialize Dataset object
         :param well: Well - object itself, not wellname
@@ -78,15 +79,15 @@ class WellDataset:
         return RedisStorage()._get_dataset_id(self._well, self._name)
 
     @property
-    def info(self) -> dict:
+    def meta(self) -> dict:
         """
         Get dataset meta information
         :return: dict
         """
         return self._s.get_dataset_info(dataset_id=self.id)['meta']
 
-    @info.setter
-    def info(self, info: dict) -> None:
+    @meta.setter
+    def meta(self, info: dict) -> None:
         """
         Set meta info in the dataset. Completly rewrites previous contents.
         You should always send whole contents, not only updated parts
@@ -125,7 +126,10 @@ class WellDataset:
                         k = key[:-4]
                         if logs_meta[log][k] <= value:
                             to_delete.append(log)
-
+                    elif key.endswith('__in'):
+                        k = key[:-4]
+                        if not logs_meta[log][k] in value:
+                            to_delete.append(log)
                     else:
                         if logs_meta[log][key] != value:
                             to_delete.append(log)
@@ -142,14 +146,10 @@ class WellDataset:
         logging.info(f"Deleted log {name} in dataset {self._name} in well {self._well}")
         self._s.delete_log(self.id, log_name=name)
 
-
-def get_dataset_by_id(dataset_id: str) -> WellDataset:
-    """
-    Get Well Dataset by dataset id
-    :param dataset_id: str
-    :return: WellDataset object
-    """
-    s = RedisStorage()
-    dataset_meta = s.get_dataset_info(dataset_id)
-    well = Well(dataset_meta['well_name'])
-    return WellDataset(well, dataset_meta['name'])
+    def md5(self):
+        log_hashes = []
+        for log_id in self.log_list:
+            log = BasicLog(self.id, log_id)
+            log_hashes.append(log.data_hash)
+        md5 = hashlib.md5(str((tuple(sorted(log_hashes)), self.meta)).encode()).hexdigest()
+        return md5

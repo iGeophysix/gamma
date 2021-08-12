@@ -6,8 +6,8 @@ import numpy as np
 
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
-from components.domain.Well import Well
-from components.domain.WellDataset import WellDataset, get_dataset_by_id
+from components.domain.Well import Well, get_dataset_by_id
+from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode
 
 QUANTILES = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]

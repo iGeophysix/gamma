@@ -5,7 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
+from components.engine.engine_node import EngineProgress
 from components.importexport.FamilyAssigner import FamilyAssigner, FamilyAssignerNode
 from components.importexport.las import import_to_db
 
@@ -88,8 +88,8 @@ class TestFamilyAssignerNode(unittest.TestCase):
         log.meta.family = None  # deleting data
         log.save()
 
-        engine_progress = EngineProgress('test')
-        FamilyAssignerNode.run(engine_progress=engine_progress)
+        FamilyAssignerNode.run()
+        FamilyAssignerNode.run()
         log_in_db = BasicLog(self.dataset.id, log_id='SP')
         self.assertEqual('Spontaneous Potential', log_in_db.meta.family,
                          'Log family in storage is empty')

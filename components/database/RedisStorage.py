@@ -474,7 +474,10 @@ class RedisStorage:
         self.connection().hset(dataset_id, log_name, '{}')
 
     def check_log_exists(self, dataset_id: str, log_name: str) -> bool:
-        return self.connection().hexists(f'{dataset_id}_data', log_name) or self.connection().hexists(f'{dataset_id}_meta', log_name)
+        return self.connection().hexists(f'{dataset_id}', log_name) or self.connection().hexists(f'{dataset_id}_meta', log_name)
+
+    def check_log_values_exists(self, dataset_id: str, log_name: str) -> bool:
+        return self.connection().hexists(f'{dataset_id}', log_name)
 
     def get_log_data(self, dataset_id: str,
                      logname: str,

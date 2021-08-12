@@ -24,10 +24,10 @@ class TestWellDatasetRedis(unittest.TestCase):
     def test_change_dataset_info(self):
         well = Well('well2', new=True)
         dataset = WellDataset(well, "one", new=True)
-        info = dataset.info
+        info = dataset.meta
         info['extra_data'] = 'toto'
-        dataset.info = info
-        self.assertEqual(dataset.info['extra_data'], 'toto')
+        dataset.meta = info
+        self.assertEqual(dataset.meta['extra_data'], 'toto')
 
     def test_create_and_delete_datasets(self):
         f = 'small_file.las'
@@ -158,8 +158,8 @@ class TestWellDatasetRedis(unittest.TestCase):
             "Version": {"VERS": {"unit": "", "descr": "", "value": 2.0, "mnemonic": "VERS", "original_mnemonic": "VERS"},
                         "WRAP": {"unit": "", "descr": "", "value": "NO", "mnemonic": "WRAP", "original_mnemonic": "WRAP"}},
             "Parameter": {}}
-        dataset.info = true_info
-        self.assertEqual(true_info, dataset.info)
+        dataset.meta = true_info
+        self.assertEqual(true_info, dataset.meta)
         well.delete()
 
     def test_logs_list(self):

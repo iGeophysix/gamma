@@ -14,7 +14,7 @@ from components.domain.WellDataset import WellDataset
 from components.engine.engine import Engine
 from components.engine.workflow import Workflow
 from components.importexport import las
-from components.importexport.FamilyAssigner import FamilyAssigner
+from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las import import_to_db
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
@@ -145,20 +145,16 @@ def async_get_basic_log_stats(wellname: str,
 
 
 @app.task
-def async_log_resolution(wellname: str,
-                         datasetnames: Optional[list[str]] = None,
-                         lognames: Optional[list[str]] = None) -> None:
+def async_log_resolution(dataset_id: str,
+                         log_id: str) -> None:
     """
     This procedure calculates log resolution.
     Algorithm: https://gammalog.jetbrains.space/p/gr/documents/Petrophysics/a/Log-Resolution-Evaluation-ZYfMr18R4U2
     Returns nothing. All results are stored in each log meta info.
-    :param wellname: well name as string
-    :param datasetnames: list of dataset names to process. If None then use all datasets for the well
-    :param lognames: list of logs names to process. If None then use all logs for the dataset
+    :param dataset_id: Dataset id to process.
+    :param log_id: Log id  to process.
     """
-    LogResolutionNode.run_for_item(wellname=wellname,
-                                   datasetnames=datasetnames,
-                                   lognames=lognames)
+    LogResolutionNode.run_for_item(dataset_id=dataset_id, log_id=log_id)
 
 
 @app.task
@@ -174,40 +170,13 @@ def async_split_by_runs(wellname: str, depth_tolerance: float = 50) -> None:
 
 
 @app.task
-def async_recognize_family(wellname: str, datasetnames: list[str] = None, lognames: list[str] = None) -> None:
+def async_recognize_family(wellname: str) -> None:
     """
     Recognize log family in well datasets
     :param wellname:
-    :param datasetnames:
     :return:
     """
-    fa = FamilyAssigner()
-    w = Well(wellname)
-    if datasetnames is None:
-        datasetnames = [ds for ds in w.datasets if ds != 'LQC']
-
-    for datasetname in datasetnames:
-        wd = WellDataset(w, datasetname)
-
-        log_list = wd.log_list if lognames is None else lognames
-
-        for log in log_list:
-            l = BasicLog(wd.id, log)
-            if not 'raw' in l.meta.tags:
-                continue
-            result = fa.assign_family(l.name, l.meta.units)
-            if result is not None:
-                if 'tags' in result.optional_properties:
-                    l.meta.add_tags(*result.optional_properties.pop('tags'))
-                l.meta.family = result.family
-                l.meta.family_assigner = {
-                                             'reliability': result.reliability,
-                                             'unit_class': result.dimension,
-                                             'logging_company': result.company} \
-                                         | result.optional_properties
-            else:
-                l.meta.family = l.meta.family_assigner = None
-            l.save()
+    FamilyAssignerNode.run_for_item(wellname=wellname)
 
 
 @app.task
@@ -224,11 +193,11 @@ def async_splice_logs(wellname: str,
     :param logs: Logs' names as list of string. If None then uses all logs available in datasets
     :param output_dataset_name: Name of output dataset
     """
-    SpliceLogsNode.calculate_for_well(wellname,
-                                      datasetnames,
-                                      logs,
-                                      tags,
-                                      output_dataset_name)
+    SpliceLogsNode.run_for_item(wellname=wellname,
+                                datasetnames=datasetnames,
+                                logs=logs,
+                                tags=tags,
+                                output_dataset_name=output_dataset_name)
 
 
 @app.task
@@ -278,7 +247,7 @@ def async_calculate_shale_volume(well_name: str,
     else:
         raise ValueError(f"Unknown kind of algorithm: {algorithm}."
                          f"Acceptable values: 'ShaleVolumeLinearMethodNode', 'ShaleVolumeLarionovTertiaryRockNode', 'ShaleVolumeLarionovOlderRockNode'.")
-    node.calculate_for_well(well_name, gr_matrix, gr_shale, output_log_name)
+    node.run_for_item(well_name, gr_matrix, gr_shale, output_log_name)
 
 
 @app.task
@@ -298,12 +267,11 @@ def async_export_well_to_s3(destination: str,
 
 
 @app.task
-def async_log_reconstruction(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units):
-    node = LogReconstructionNode()
-    node.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)
+def async_log_reconstruction(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
+    LogReconstructionNode.run_for_item(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
 
 
 @app.task
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
     node = SaturationArchieNode()
-    node.calculate_for_item(well_name, a, m, n, rw, output_log_name)
+    node.run_for_item(well_name, a, m, n, rw, output_log_name)

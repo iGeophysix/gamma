@@ -5,7 +5,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
+from components.engine.engine_node import EngineProgress
 from components.petrophysics.curve_operations import LogResolutionNode
 from settings import BASE_DIR
 from tasks import async_get_basic_log_stats, async_read_las, async_log_resolution
@@ -29,7 +29,7 @@ class TestLogResolution(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
         # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+        async_log_resolution(dataset_id=wd.id, log_id='GK')
 
         l = BasicLog(wd.id, "GK")
         resolution = l.meta['log_resolution']['value']
@@ -45,7 +45,7 @@ class TestLogResolution(unittest.TestCase):
         # getting basic stats
         async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
         # define log resolution
-        async_log_resolution(self.w.name, datasetnames=[filename, ])
+        async_log_resolution(dataset_id=wd.id, log_id='AZIM')
 
         l = BasicLog(wd.id, 'AZIM')
         resolution = l.meta.log_resolution['value']
@@ -64,14 +64,11 @@ class TestLogResolutionNode(unittest.TestCase):
         filename = '616_ULN_ResolutionTest.las'
         self.wd = WellDataset(self.w, filename, new=True)
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
-        async_get_basic_log_stats(self.w.name, datasetnames=[filename, ])
 
     def test_run(self):
-        node = LogResolutionNode()
-        engine_progress = EngineProgress('test')
-        node.run(engine_progress=engine_progress)
+        LogResolutionNode().run()
 
         l = BasicLog(self.wd.id, "GK_D0400_D")
         resolution = l.meta['log_resolution']['value']
 
-        self.assertAlmostEqual(0.511, resolution, delta=0.001)
+        self.assertAlmostEqual(0.51, resolution, delta=0.001)

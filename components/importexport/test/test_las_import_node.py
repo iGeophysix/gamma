@@ -7,7 +7,7 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine import EngineProgress
+from components.engine.engine_node import EngineProgress
 from components.importexport.las_importexport import LasImportNode, LasExportNode
 from settings import BASE_DIR
 from tasks import async_read_las, async_get_basic_log_stats
@@ -59,9 +59,8 @@ class TestLasExportNode(unittest.TestCase):
         async_get_basic_log_stats(self.w.name, datasetnames=['LQC', ])
 
     def test_export_node_works_correctly(self):
-        engine_progress = EngineProgress('test')
         node = LasExportNode()
-        node.run(destination='TestExport', engine_progress=engine_progress)
+        node.run(destination='TestExport')
 
         s3 = LasExportNode.s3
 

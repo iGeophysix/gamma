@@ -1,6 +1,6 @@
 import logging
-import time
 from collections import defaultdict
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -11,7 +11,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.FamilyProperties import FamilyProperties
 from settings import LOGGING_LEVEL
 
@@ -21,11 +21,15 @@ class LogReconstructionNode(EngineNode):
     This EngineNodes restores missing logs in wells basing on ML algorithms trained on other wells in the project
     '''
 
-    class Meta:
-        name = 'LogReconstructionNode'
-        version = 1
+    @classmethod
+    def name(cls):
+        return cls.__name__
 
-    logger = logging.getLogger(Meta.name)
+    @classmethod
+    def version(cls):
+        return 1
+
+    logger = logging.getLogger(__name__)
     logger.setLevel(LOGGING_LEVEL)
 
     @classmethod
@@ -142,90 +146,193 @@ class LogReconstructionNode(EngineNode):
         df = pd.DataFrame(interp_logs).dropna()
         return df
 
+    @staticmethod
+    def _valid_log(log, log_families_to_train) -> bool:
+        return hasattr(log.meta, 'family') and \
+               log.meta.family in log_families_to_train \
+               and 'reconstructed' not in log.meta.tags
+
+    @staticmethod
+    def _predicted_log(log, log_family_to_predict) -> bool:
+        return hasattr(log.meta, 'family') and \
+               log.meta.family in log_family_to_predict \
+               and 'reconstructed' in log.meta.tags
+
     @classmethod
-    def calculate_for_well(cls, model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units=None):
+    def run_for_item(cls, well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
+        """Run log reconstruction for family"""
+        # train
+        model, log_to_predict_units = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+        if model is None:
+            raise ValueError("Cannot train model on this data")
 
-        # predict
-        well = Well(well_name)
-        well_dataset = WellDataset(well, 'LQC')
-        input_logs = []
-        required_log_families = list(log_families_to_train)
-        for log_id in well_dataset.log_list:
-            log = BasicLog(well_dataset.id, log_id)
-            if hasattr(log.meta, 'family') and \
-                    log.meta.family in log_families_to_train \
-                    and 'reconstructed' not in log.meta.tags:
-                input_logs.append(log)
-                required_log_families.remove(log.meta.family)
+        for well_name in well_names:
+            # predict
+            well = Well(well_name)
+            well_dataset = WellDataset(well, 'LQC')
+            input_logs = []
+            required_log_families = list(log_families_to_train)
+            for log_id in well_dataset.log_list:
+                log = BasicLog(well_dataset.id, log_id)
+                if cls._valid_log(log, log_families_to_train):
+                    input_logs.append(log)
+                    required_log_families.remove(log.meta.family)
 
-        if required_log_families:
-            cls.logger.info(f"Well {well_name} misses log of families {required_log_families} to predict {log_family_to_predict}")
-            return
+            if required_log_families:
+                cls.logger.info(f"Well {well_name} misses log of families {required_log_families} to predict {log_family_to_predict}")
+                return
 
-        if not input_logs:
-            cls.logger.info(f"Well {well_name} misses log of families {log_families_to_train} to predict {log_family_to_predict}")
-            return
+            if not input_logs:
+                cls.logger.info(f"Well {well_name} misses log of families {log_families_to_train} to predict {log_family_to_predict}")
+                return
 
-        family_meta = FamilyProperties()[log_family_to_predict]
+            family_meta = FamilyProperties()[log_family_to_predict]
 
-        new_log = BasicLog(well_dataset.id, f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH")
+            new_log = BasicLog(well_dataset.id, f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH")
 
-        new_log.values = cls._predict(model, input_logs)
-        new_log.meta.family = log_family_to_predict
-        new_log.meta.name = f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH"
-        new_log.meta.units = log_to_predict_units
-        new_log.meta.add_tags('reconstructed')
-        new_log.save()
-        cls.logger.info(f'Created synthetic {log_family_to_predict} in well {well_name}')
+            new_log.values = cls._predict(model, input_logs)
+            new_log.meta.family = log_family_to_predict
+            new_log.meta.name = f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH"
+            new_log.meta.units = log_to_predict_units
+            new_log.meta.add_tags('reconstructed')
+            cls.write_history(log=new_log, input_logs=input_logs, parameters={"algorithm": "Catboost model"})
+            new_log.save()
+            cls.logger.debug(f'Created synthetic {log_family_to_predict} in well {well_name}')
+
+    @classmethod
+    def item_hash(cls, *args) -> tuple[str, bool]:
+        """Get item hash"""
+        well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs = args
+        log_hashes = []
+        valid = True
+        for well_name in well_names:
+            well = Well(well_name)
+            well_dataset = WellDataset(well, 'LQC')
+            well_already_has_predicted_log = False
+            for log_id in well_dataset.log_list:
+                log = BasicLog(well_dataset.id, log_id)
+                if cls._valid_log(log, log_families_to_train):
+                    log_hashes.append(log.meta.data_hash)
+                if cls._predicted_log(log, log_family_to_predict):
+                    well_already_has_predicted_log = True
+            valid = valid and well_already_has_predicted_log
+
+        item_hash_input = {
+            "log_hashes": tuple(sorted(log_hashes)),
+            "log_families_to_train": log_families_to_train,
+            "log_family_to_predict": log_family_to_predict,
+            "percent_of_wells_to_train": percent_of_wells_to_train,
+            "model_kwargs": model_kwargs
+        }
+        out_hash = cls.item_md5(item_hash_input)
+
+        return out_hash, valid
 
     @classmethod
     def run(cls, **kwargs):
+        """Launch node calculation"""
 
-        log_families_to_train = kwargs.get('log_families_to_train')
-        log_families_to_predict = kwargs.get('log_families_to_predict')
-        model_kwargs = kwargs.get('model_kwargs', None)
-        percent_of_wells_to_train = kwargs.get('percent_of_wells_to_train', 0.2)
-        async_job = kwargs.get('async_job', False)
+        cases_to_predict = kwargs.values()
 
         p = Project()
         well_names = list(p.list_wells().keys())
 
         # create ML model
+        tasks = []
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
+        for case_to_predict in cases_to_predict:
+            log_families_to_train = case_to_predict.get('log_families_to_train')
+            log_families_to_predict = case_to_predict.get('log_families_to_predict')
+            model_kwargs = case_to_predict.get('model_kwargs', None)
+            percent_of_wells_to_train = case_to_predict.get('percent_of_wells_to_train', 0.2)
 
-        for log_family_to_predict in log_families_to_predict:
-            # get wells having log families to train and predict in LQC
+            for log_family_to_predict in log_families_to_predict:
+                # get wells having log families to train and predict in LQC
+                item_hash, item_hash_is_valid = cls.item_hash(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+                hashes.append(item_hash)
+                if item_hash_is_valid and item_hash in cache:
+                    cache_hits += 1
+                    continue
 
-            model, log_to_predict_units = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
-            if model is None:
-                continue
-            if not async_job:
-                for well_name in well_names:
-                    cls.calculate_for_well(model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)
-            else:
-                tasks = []
-                for well_name in well_names:
-                    tasks.append(
-                        celery_conf.app.send_task('tasks.async_log_reconstruction', (model, well_name, log_families_to_train, log_family_to_predict, log_to_predict_units)))
+                tasks.append(celery_conf.app.send_task('tasks.async_log_reconstruction',
+                                                       (well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+                                                       )
+                             )
 
-                engine_progress = kwargs['engine_progress']
-                while True:
-                    progress = celery_conf.track_progress(tasks)
-                    engine_progress.update(cls.name(), progress)
-                    if progress['completion'] == 1:
-                        break
-                    time.sleep(0.1)
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        """write history to the log"""
+        log = kwargs['log']
+        input_logs = kwargs['input_logs']
+        parameters = kwargs['parameters']
+
+        log.meta.append_history({'node': cls.name(),
+                                 'node_version': cls.version(),
+                                 'timestamp': datetime.now().isoformat(),
+                                 'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+                                 'parameters': parameters
+                                 })
 
 
 if __name__ == '__main__':
     node = LogReconstructionNode()
-    node.run(**{
-        'log_families_to_train': ['Gamma Ray', 'Neutron Porosity', ],
-        'log_families_to_predict': ["Bulk Density", ],
-        'model_kwargs': {
-            'iterations': 50,
-            'depth': 12,
-            'learning_rate': 0.1,
-            'loss_function': 'MAPE',
+    parameters = {
+        "0": {
+            "log_families_to_train": [
+                "Gamma Ray",
+                "Bulk Density"
+            ],
+            "log_families_to_predict": [
+                "Thermal Neutron Porosity"
+            ],
+            "model_kwargs": {
+                "iterations": 50,
+                "depth": 12,
+                "learning_rate": 0.1,
+                "loss_function": "MAPE",
+                "allow_writing_files": False,
+                "logging_level": "Silent"
+            }
         },
-        'async_job': False,
-    }, )
+        "1": {
+            "log_families_to_train": [
+                "Bulk Density",
+                "Thermal Neutron Porosity"
+            ],
+            "log_families_to_predict": [
+                "Gamma Ray"
+            ],
+            "model_kwargs": {
+                "iterations": 50,
+                "depth": 12,
+                "learning_rate": 0.1,
+                "loss_function": "MAPE",
+                "allow_writing_files": False,
+                "logging_level": "Silent"
+            }
+        },
+        "2": {
+            "log_families_to_train": [
+                "Gamma Ray",
+                "Thermal Neutron Porosity"
+            ],
+            "log_families_to_predict": [
+                "Bulk Density"
+            ],
+            "model_kwargs": {
+                "iterations": 50,
+                "depth": 12,
+                "learning_rate": 0.1,
+                "loss_function": "MAPE",
+                "allow_writing_files": False,
+                "logging_level": "Silent"
+            }
+        }
+    }
+    node.run(**parameters)

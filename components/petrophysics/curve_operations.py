@@ -1,18 +1,17 @@
 import logging
-import time
 import warnings
 from datetime import datetime
 
 import numpy as np
 from scipy import signal
 
-import celery_conf
 from celery_conf import app as celery_app, wait_till_completes
 from components.domain.Log import BasicLog, BasicLogMeta
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
+from settings import LOGGING_LEVEL
 
 
 def geo_mean(iterable):
@@ -129,8 +128,18 @@ class LogResolutionNode(EngineNode):
     """
     Engine node that calculates log resolution
     """
-    logger = logging.getLogger("LogResolutionNode")
-    logger.setLevel(logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(LOGGING_LEVEL)
+
+    @classmethod
+    def name(cls):
+        """Return node name"""
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        """Return node version"""
+        return 1
 
     @staticmethod
     def validate(log: BasicLog):
@@ -147,65 +156,79 @@ class LogResolutionNode(EngineNode):
 
     @classmethod
     def run_for_item(cls, **kwargs):
-        wellname = kwargs['wellname']
-        datasetnames = kwargs['datasetnames']
-        lognames = kwargs['lognames']
+        """
+        Calculate Log Resolution for each log
+        :param kwargs: dataset_id, log_id
+        :return:
+        """
+        dataset_id = kwargs['dataset_id']
+        log_id = kwargs['log_id']
 
-        w = Well(wellname)
-        if datasetnames is None:
-            datasetnames = w.datasets
+        log = BasicLog(dataset_id, log_id)
+        log_resolution = get_log_resolution(log.values, log.meta)
+        log.meta.log_resolution = {'value': log_resolution}
+        cls.write_history(log=log)
+        log.save()
 
-        # get all data from specified well and datasets
-        for dataset_name in datasetnames:
-            d = WellDataset(w, dataset_name)
+    @classmethod
+    def item_hash(cls, log: BasicLog) -> tuple[str, bool]:
+        """Get item hash to use in cache"""
 
-            loop_lognames = d.log_list if lognames is None else lognames
-
-            for log_name in loop_lognames:
-                log = BasicLog(d.id, log_name)
-                log_resolution = get_log_resolution(log.values, log.meta)
-                log.meta.log_resolution = {'value': log_resolution}
-                cls.write_history(log=log)
-                log.save()
+        return log.data_hash, hasattr(log.meta, 'log_resolution')
 
     @classmethod
     def run(cls, **kwargs):
-
+        """
+        Run Log resolution node
+        :param kwargs:
+        :return:
+        """
         p = Project()
         well_names = p.list_wells()
         tasks = []
+        hashes = []
+        cache_hits = 0
+        cache = EngineNodeCache(cls)
         for well_name in well_names:
             well = Well(well_name)
             for dataset_name in well.datasets:
                 if dataset_name == 'LQC':
                     continue
+
                 dataset = WellDataset(well, dataset_name)
                 for log_id in dataset.log_list:
                     log = BasicLog(dataset.id, log_id)
+                    item_hash, valid = cls.item_hash(log)
+                    if valid and item_hash in cache:
+                        hashes.append(item_hash)
+                        cache_hits += 1
+                        continue
 
                     try:
                         cls.validate(log)
                     except TypeError as exc:
-                        error_message = (f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
                         cls.logger.debug(error_message)
                         continue
                     except Exception as exc:
-                        error_message = (f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}')
+                        error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
                         cls.logger.info(error_message)
                         log.meta.add_tags('no_resolution', 'bad_quality')
                         log.save()
                         continue
 
-                    result = celery_app.send_task('tasks.async_log_resolution',
-                                                  (well_name, [dataset_name, ], [log.name, ]))
+                    result = celery_app.send_task('tasks.async_log_resolution', (dataset.id, log_id,))
                     tasks.append(result)
+                    hashes.append(item_hash)
 
-        # wait_till_completes(tasks)
-        engine_progress = kwargs['engine_progress']
-        cls.track_progress(engine_progress, tasks)
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+
+        cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):
+        """Write node history in logs' meta """
         kwargs['log'].meta.append_history({'node': cls.name(),
                                            'node_version': cls.version(),
                                            'timestamp': datetime.now().isoformat(),
