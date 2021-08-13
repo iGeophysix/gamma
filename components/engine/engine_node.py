@@ -3,7 +3,7 @@ import json
 import logging
 import time
 from abc import ABC
-from typing import Any
+from typing import Any, Tuple
 
 import celery_conf
 from components.database.RedisStorage import RedisStorage
@@ -35,7 +35,7 @@ class EngineNode(ABC):
         return hashlib.md5(json.dumps(item).encode()).hexdigest()
 
     @classmethod
-    def item_hash(cls, *args) -> tuple[str, bool]:
+    def item_hash(cls, *args) -> Tuple[str, bool]:
         """Get item hash to use in cache
         :return item_value: hash value of the item
         :return valid: if hash is still valid for the object

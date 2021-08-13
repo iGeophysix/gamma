@@ -1,8 +1,7 @@
 import copy
 import json
 import logging
-from collections.abc import Iterable
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Iterable, Tuple
 
 import numpy as np
 from scipy.optimize import lsq_linear
@@ -223,7 +222,7 @@ class VolumetricModelSolverNode(EngineNode):
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
-    def item_hash(cls, well_name, model_parameters) -> tuple[str, bool]:
+    def item_hash(cls, well_name, model_parameters) -> Tuple[str, bool]:
         """Get current item hash"""
         vm = VolumetricModel()
 

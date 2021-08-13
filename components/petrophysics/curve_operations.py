@@ -1,6 +1,7 @@
 import logging
 import warnings
 from datetime import datetime
+from typing import Tuple
 
 import numpy as np
 from scipy import signal
@@ -171,7 +172,7 @@ class LogResolutionNode(EngineNode):
         log.save()
 
     @classmethod
-    def item_hash(cls, log: BasicLog) -> tuple[str, bool]:
+    def item_hash(cls, log: BasicLog) -> Tuple[str, bool]:
         """Get item hash to use in cache"""
 
         return log.data_hash, hasattr(log.meta, 'log_resolution')

@@ -246,7 +246,7 @@ class BestLogDetectionNode(EngineNode):
                 best_log.save()
 
     @classmethod
-    def item_hash(cls, *args) -> tuple[str, bool]:
+    def item_hash(cls, *args) -> Tuple[str, bool]:
         logs_paths, additional_logs_paths = args
         log_hashes = []
         valid = True

@@ -1,5 +1,27 @@
-# -*- coding: utf-8 -*-
-from __future__ import division
+from math import *
+from TechlogMath import *
+from operator import *
+import sys
+if sys.version_info[0]==3:
+    from six.moves import range
+
+PI     = 3.14159265358979323846
+PIO2   = 1.57079632679489661923
+PIO4   = 7.85398163397448309616E-1
+SQRT2  = 1.41421356237309504880
+SQRTH  = 7.07106781186547524401E-1
+E      = exp(1)
+LN2    = log(2)
+LN10   = log(10)
+LOG2E  = 1.4426950408889634073599
+LOG10E = 1.0 / LN10
+MissingValue = -9999
+def iif(condition, trueResult=MissingValue, falseResult=MissingValue):
+	if condition:
+		return trueResult
+	else:
+		return falseResult
+
 #Declarations
 #The dictionary of parameters v2.0
 #name,bname,type,family,measurement,unit,value,mode,description,group,min,max,list,enable,iscombocheckbox,isused
@@ -15,8 +37,26 @@ except NameError:
 #Mode:In
 #Description:
 #isFolderPath:True
-GAMMA_PROJECT_PATH = u"C:\\Users\\dIcEmAN\\Docker\\petrotool"
+GAMMA_PROJECT_PATH = "C:\\Users\\dIcEmAN\\Docker\\petrotool"
 parameterDict.update({'GAMMA_PROJECT_PATH' : Parameter(name='GAMMA_PROJECT_PATH',bname='',type='Folder',family='',measurement='',unit='',value='C:\\Users\\dIcEmAN\\Docker\\petrotool',mode='In',description='',group='',min='',max='',list='',enable='True',iscombocheckbox='False',isused='True')})
+
+__doc__ = """Import entire Gamma project to the current Techlog project."""
+__author__ = """Anton O"""
+__date__ = """2021-08-09"""
+__version__ = """1.0"""
+__pyVersion__ = """3"""
+__group__ = """"""
+__suffix__ = """"""
+__prefix__ = """"""
+__applyMode__ = """0"""
+__awiEngine__ = """v1"""
+__layoutTemplateMode__ = """"""
+__includeMissingValues__ = """True"""
+__keepPreviouslyComputedValues__ = """True"""
+__areInputDisplayed__ = """True"""
+__useMultiWellLayout__ = """True"""
+__idForHelp__ = """"""
+__executionGranularity__ = """full"""
 #DeclarationsEnd
 import sys
 
@@ -64,7 +104,6 @@ for well in p.list_wells():
 			if 'main_depth' in log.meta.tags:
 				continue
 			ref, g_log_data = log.values.T
-			g_log_data[np.isnan(g_log_data)] = MissingValue
 			if dataset == DEFAULT_MARKERS_NAME and log.meta.type == 'MarkersLog':
 				zonation_dataset = newDatasetName(well, var)
 				db.datasetCreate(well, zonation_dataset, 'DEPTH', 'Measured Depth', DEFAULT_DEPTH_UNITS, list(ref))
@@ -72,7 +111,7 @@ for well in p.list_wells():
 				family = 'Zone Name'
 				ms = MarkersSet(var)
 				index_name = {v: k for k, v in ms.markers.items()}
-				zone_name = list(map(lambda marker_index: index_name[marker_index], g_log_data))
+				zone_name = list(map(index_name.__getitem__, g_log_data))
 				db.variableSave(well, zonation_dataset, 'Zone Name', 'Zone Name', 'unitless', zone_name)
 				for prop, value in log.meta.asdict().items():
 					db.variablePropertyChange(well, zonation_dataset, 'Zone Name', prop, str(value))
@@ -83,7 +122,7 @@ for well in p.list_wells():
 			t_dataset = newDatasetName(well, dataset)
 			ref = list(logs[0].values[:, 0])
 			db.datasetCreate(well, t_dataset, 'DEPTH', 'Measured Depth', DEFAULT_DEPTH_UNITS, ref)
-			for prop, value in ds.info.items():
+			for prop, value in ds.meta.items():
 				if isinstance(value, dict) and 'value' in value:
 					db.datasetPropertyChange(well, t_dataset, prop, value['value'], value.get('units', ''), value.get('description', ''))
 				else:
@@ -97,19 +136,4 @@ for well in p.list_wells():
 				for prop, value in log.meta.asdict().items():
 					db.variablePropertyChange(well, t_dataset, log.name, prop, str(value))
 
-__doc__ = """Import entire Gamma project to the current Techlog project."""
-__author__ = """Anton O"""
-__date__ = """2021-08-09"""
-__version__ = """1.0"""
 __pyVersion__ = """3"""
-__group__ = """"""
-__suffix__ = """"""
-__prefix__ = """"""
-__applyMode__ = """0"""
-__layoutTemplateMode__ = """"""
-__includeMissingValues__ = """True"""
-__keepPreviouslyComputedValues__ = """True"""
-__areInputDisplayed__ = """True"""
-__useMultiWellLayout__ = """True"""
-__idForHelp__ = """"""
-__executionGranularity__ = """full"""
