@@ -99,15 +99,20 @@ class VolumetricModel:
         # 1 = Vcomponent1 + ... + VcomponentN
         equation_system_coefficients = []
         equation_system_resulting_logs = []
+        log_scale = []
         for log_name in logs:
+            log_data = logs[log_name]
+            ss = ScaleShifter(log_data, 1)
+            logs[log_name] = ss.normalize(log_data)
+            log_scale.append(ss)
             coef = []  # coefficients of linear equation for the log
-            empty_coef = True
+            all_coef_empty = True
             for component in components:
                 log_response = self._COMPONENTS[component].get(log_name, 0)
                 if log_response != 0:
-                    empty_coef = False
-                coef.append(log_response)
-            if not empty_coef:
+                    all_coef_empty = False
+                coef.append(ss.normalize(log_response))
+            if not all_coef_empty:
                 equation_system_coefficients.append(coef)
                 equation_system_resulting_logs.append(log_name)
         # the last equation Vcomponent1 + ... + VcomponentN = 1
@@ -119,7 +124,6 @@ class VolumetricModel:
         misfit = {res_log: np.full(log_len, np.nan) for res_log in equation_system_resulting_logs + ['TOTAL']}  # misfit for every input log + total misfit
 
         if len(equation_system_coefficients) > 1:  # if there is at least one input log equation
-            std = {log_name: np.nanstd(data) for log_name, data in logs.items()}
             for row in range(log_len):
                 equation_system_results = [logs[log][row] for log in equation_system_resulting_logs] + [1]  # result for every equation in the system
                 # remove equations for absent logs
@@ -144,11 +148,11 @@ class VolumetricModel:
                     misfit_total = 0
                     for n, res_log in enumerate(esrl_clear):
                         # log forward modeling
-                        synthetic_logs[res_log][row] = np.sum(np.array(esc_clear[n]) * opt.x)
-                        # misfit calculation
-                        mf = abs(opt.fun[n] / std[res_log]) if std[res_log] != 0 else 0  # (model log response - actual log response) / log std
-                        misfit[res_log][row] = mf  # misfit per model log
-                        misfit_total += mf
+                        log_value = np.sum(np.array(esc_clear[n]) * opt.x)
+                        synthetic_logs[res_log][row] = log_scale[n].restore(log_value)
+                        # misfit
+                        misfit[res_log][row] = opt.fun[n]  # misfit per model log
+                        misfit_total += opt.fun[n]
                     misfit['TOTAL'][row] = misfit_total  # overall model misfit at the row
         res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
         return res
@@ -177,6 +181,31 @@ def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> List[BasicLog]:
                                                   depth_step=step)
         res_logs.append(int_log)
     return res_logs
+
+
+class ScaleShifter():
+    '''
+    Transforms log data to standard limits and back
+    '''
+    def __init__(self, values: np.ndarray, weight: float):
+        '''
+        :param values: log values
+        :param weight: log weight (target range maximum)
+        '''
+        self.init_limits = np.nanpercentile(values, (5, 95))
+        self.target_limits = (0, weight)
+
+    def normalize(self, values: Union[float, np.ndarray]):
+        '''
+        Converts values to standard limits
+        '''
+        return (values - self.init_limits[0]) / (self.init_limits[1] - self.init_limits[0]) * (self.target_limits[1] - self.target_limits[0]) + self.target_limits[0]
+
+    def restore(self, values: Union[float, np.ndarray]):
+        '''
+        Undo normalization
+        '''
+        return (values - self.target_limits[0]) / (self.target_limits[1] - self.target_limits[0]) * (self.init_limits[1] - self.init_limits[0]) + self.init_limits[0]
 
 
 class VolumetricModelSolverNode(EngineNode):
