@@ -1,7 +1,8 @@
 import logging
 import warnings
 from datetime import datetime
-from typing import Tuple
+from typing import Tuple, List, Iterable
+import copy
 
 import numpy as np
 from scipy import signal
@@ -98,6 +99,31 @@ def interpolate_log_by_depth(log_data: np.array,
         depth_to = np.linspace(start=depth_start, stop=depth_stop, num=int((depth_stop - depth_start) / depth_step) + 1)
     new_values = np.interp(depth_to, log_data[:, 0], log_data[:, 1], left=np.nan, right=np.nan)
     return np.vstack((depth_to, new_values)).T
+
+
+def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> List[BasicLog]:
+    '''
+    Interpolates set of logs to a common depths
+    :param logs: list of input logs
+    :return: list of interpolated logs with a common reference
+    '''
+    # define smallest depth sampling rate
+    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
+
+    # define top and bottom of the common reference
+    min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
+    max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs])
+
+    # interpolate logs
+    res_logs = []
+    for log in logs:
+        int_log = copy.copy(log)
+        int_log.values = interpolate_log_by_depth(log.values,
+                                                  depth_start=min_depth,
+                                                  depth_stop=max_depth,
+                                                  depth_step=step)
+        res_logs.append(int_log)
+    return res_logs
 
 
 def get_log_resolution(log_data: np.array, log_meta: BasicLogMeta, window: float = 20) -> float:

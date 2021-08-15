@@ -1,4 +1,3 @@
-import copy
 import json
 import logging
 from typing import List, Union, Optional, Iterable, Tuple, Set
@@ -17,7 +16,7 @@ from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.FamilyProperties import FamilyProperties
 from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
-from components.petrophysics.curve_operations import interpolate_log_by_depth
+from components.petrophysics.curve_operations import interpolate_to_common_reference
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 from components.petrophysics.data.src.export_fluid_mineral_constants import FLUID_MINERAL_TABLE
 
@@ -156,31 +155,6 @@ class VolumetricModel:
                     misfit['TOTAL'][row] = misfit_total  # overall model misfit at the row
         res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
         return res
-
-
-def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> List[BasicLog]:
-    '''
-    Interpolates set of logs to a common depths
-    :param logs: list of input logs
-    :return: list of interpolated logs with a common reference
-    '''
-    # define smallest depth sampling rate
-    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
-
-    # define top and bottom of the common reference
-    min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
-    max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs])
-
-    # interpolate logs
-    res_logs = []
-    for log in logs:
-        int_log = copy.copy(log)
-        int_log.values = interpolate_log_by_depth(log.values,
-                                                  depth_start=min_depth,
-                                                  depth_stop=max_depth,
-                                                  depth_step=step)
-        res_logs.append(int_log)
-    return res_logs
 
 
 class ScaleShifter():
