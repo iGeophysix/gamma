@@ -216,13 +216,13 @@ class VolumetricModelSolverNode(EngineNode):
         :param model_components: optional list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
 
-        model_components = kwargs['model_components']
+        model_components = kwargs.get('model_components')
+        if model_components:
+            cls.validate_input(model_components)
 
         hashes = []
         cache_hits = 0
         cache = EngineNodeCache(cls)
-
-        cls.validate_input(model_components)
 
         tasks = []
         for well_name in Project().list_wells():
