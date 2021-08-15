@@ -61,11 +61,11 @@ class TestVolumetricModel(unittest.TestCase):
 
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
-        model_components = list(self.res.keys())
         expected_res = {'Shale': [0.73, 0.73, 0.71, 0.71, 0.69, 0.72],
                         'Quartz': [0.27, 0.27, 0, 0.24, 0.29, 0.24],
                         'Calcite': [0, 0, 0.29, 0.04, 0, 0],
                         'UWater': [0.0, 0.0, 0.0, 0.0, 0.02, 0.05]}
+        model_components = list(expected_res.keys())
 
         module.run(model_components=model_components)
 
