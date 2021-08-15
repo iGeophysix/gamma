@@ -6,7 +6,7 @@ from abc import ABC
 from typing import Any, Tuple
 
 import celery_conf
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, ENGINE_NODE_CACHE_TABLE_NAME, ENGINE_RUNS_TABLE_NAME
 from settings import LOGGING_LEVEL
 
 
@@ -87,8 +87,6 @@ class EngineNode(ABC):
 class EngineNodeCache:
     """Engine Node Cache to skip already calculated items"""
 
-    storage_table_name = 'engine_node_cache'
-
     def __init__(self, node):
         """
         Initialize EngineNodeCache object
@@ -102,8 +100,8 @@ class EngineNodeCache:
     def _load(self):
         """Loads cache from DB"""
         s = RedisStorage()
-        if s.table_key_exists(self.storage_table_name, self._name):
-            cache = s.table_key_get(self.storage_table_name, self._name)
+        if s.table_key_exists(ENGINE_NODE_CACHE_TABLE_NAME, self._name):
+            cache = s.table_key_get(ENGINE_NODE_CACHE_TABLE_NAME, self._name)
             # check that node cache version equals to current node version, else return empty cache
             if cache['version'] == self._version:
                 return cache
@@ -126,7 +124,7 @@ class EngineNodeCache:
     def save(self):
         """Save cache to storage"""
         s = RedisStorage()
-        s.table_key_set(self.storage_table_name, self._name, self._cache)
+        s.table_key_set(ENGINE_NODE_CACHE_TABLE_NAME, self._name, self._cache)
 
     def __contains__(self, item):
         return item in self._cache['items']
@@ -148,14 +146,14 @@ class EngineNodeCache:
 class EngineProgress:
     def __init__(self):
         self._s = RedisStorage()
-        if self._s.object_exists('engine_runs'):
-            self._nodes = json.loads(self._s.object_get('engine_runs'))
+        if self._s.object_exists(ENGINE_RUNS_TABLE_NAME):
+            self._nodes = json.loads(self._s.object_get(ENGINE_RUNS_TABLE_NAME))
         else:
             self._nodes = {}
 
     def save(self):
         '''Save updates to observer'''
-        self._s.object_set('engine_runs', json.dumps(self._nodes).encode())
+        self._s.object_set(ENGINE_RUNS_TABLE_NAME, json.dumps(self._nodes).encode())
 
     def update(self, node_name, node_status):
         '''

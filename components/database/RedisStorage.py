@@ -16,6 +16,9 @@ logger = logging.getLogger("storage")
 WELL_META_FIELDS_INDEX = 'well_meta_fields_index'
 DATASET_META_FIELDS_INDEX = 'dataset_meta_fields_index'
 LOG_META_FIELDS_INDEX = 'log_meta_fields_index'
+PROJECT_META_TABLE_NAME = 'project'
+ENGINE_RUNS_TABLE_NAME = 'engine_runs'
+ENGINE_NODE_CACHE_TABLE_NAME = 'engine_node_cache'
 
 BLOCKING_TIMEOUT = 5
 
@@ -63,7 +66,7 @@ class RedisStorage:
             self.delete_well(wellname)
         for markerset in self.list_markersets():
             self.delete_markerset_by_name(markerset)
-        for obj in ['project', 'engine_runs', WELL_META_FIELDS_INDEX, DATASET_META_FIELDS_INDEX, LOG_META_FIELDS_INDEX]:
+        for obj in [PROJECT_META_TABLE_NAME, ENGINE_RUNS_TABLE_NAME, WELL_META_FIELDS_INDEX, DATASET_META_FIELDS_INDEX, LOG_META_FIELDS_INDEX, ENGINE_NODE_CACHE_TABLE_NAME]:
             self.object_delete(obj)
 
     # PROJECT
@@ -72,7 +75,7 @@ class RedisStorage:
         Get current project meta
         :return:
         '''
-        project_meta = self.connection().get('project')
+        project_meta = self.connection().get(PROJECT_META_TABLE_NAME)
         if project_meta is not None:
             return json.loads(project_meta)
         else:
@@ -84,7 +87,7 @@ class RedisStorage:
         :param meta:
         :return:
         '''
-        self.connection().set('project', json.dumps(meta))
+        self.connection().set(PROJECT_META_TABLE_NAME, json.dumps(meta))
 
     # COMMON OBJECT (Pickle)
     def object_exists(self, key: str) -> bool:
