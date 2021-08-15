@@ -3,7 +3,6 @@ import unittest
 
 import numpy as np
 
-from components.engine.engine_node import EngineProgress
 from settings import BASE_DIR
 
 from components.database.RedisStorage import RedisStorage
@@ -34,11 +33,6 @@ class TestVolumetricModel(unittest.TestCase):
             log = BasicLog(self.wd.id, log_name)
             log.meta.family = family
             log.save()
-
-        self.res = {'Shale': [0.73, 0.73, 0.73, 0.75, 0.72, 0.25],
-                    'Quartz': [0.27, 0.03, 0.0, 0.0, 0.17, 0.25],
-                    'Calcite': [0.0, 0.24, 0.27, 0.25, 0.08, 0.25],
-                    'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
         self.res_component_logs = {'Shale': 'VSHAL',
                                    'Quartz': 'VQUAR',
                                    'Calcite': 'VCALC',
@@ -49,29 +43,35 @@ class TestVolumetricModel(unittest.TestCase):
         logs['Gamma Ray'] = [136.6626, 128.5703, 117.5259, 116.0188, 114.295, np.nan]
         logs['Bulk Density'] = [2.551201, 2.5553, 2.5773, 2.518501, np.nan, np.nan]
         logs['Neutron Porosity'] = [0.2839996, 0.2889999, 0.293, np.nan, np.nan, np.nan]
+        expected_res = {'Shale': [0.73, 0.73, 0.73, 0.75, 0.72, 0.25],
+                        'Quartz': [0.27, 0.03, 0.0, 0.0, 0.17, 0.25],
+                        'Calcite': [0.0, 0.24, 0.27, 0.25, 0.08, 0.25],
+                        'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
 
-        selected_components = self.res.keys()  # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
+        selected_components = expected_res.keys()  # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
         vm = VolumetricModel()
         model = vm.inverse(logs, selected_components)['COMPONENT_VOLUME']
 
         # summ of all model component volumes must be 1
-        for row in zip(*(values for component, values in model.items())):
+        for row in zip(*model.values()):
             self.assertAlmostEqual(sum(row), 1)
         # compare results with the reference
         for component in selected_components:
-            print(component, model[component])
-            self.assertListEqual(list(map(lambda v: round(v, 2), model[component])), self.res[component])
+            self.assertListEqual(list(map(lambda v: round(v, 2), model[component])), expected_res[component])
 
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
         model_components = list(self.res.keys())
+        expected_res = {'Shale': [0.73, 0.73, 0.71, 0.71, 0.69, 0.72],
+                        'Quartz': [0.27, 0.27, 0, 0.24, 0.29, 0.24],
+                        'Calcite': [0, 0, 0.29, 0.04, 0, 0],
+                        'UWater': [0.0, 0.0, 0.0, 0.0, 0.02, 0.05]}
 
-        module.run(model_components=model_components, )
+        module.run(model_components=model_components)
 
         for component in model_components:
             log_name = self.res_component_logs[component]
             log = BasicLog(self.wd.id, log_name)
             self.assertTrue(log.exists())
-            right_answ = self.res[component][:3]
-            print(component, log.values[:3, 1])
-            self.assertTrue(np.allclose(log.values[:3, 1], right_answ, atol=0.01))
+            right_answ = expected_res[component][:6]
+            self.assertTrue(np.allclose(log.values[:6, 1], right_answ, atol=0.01))
