@@ -26,18 +26,18 @@ logger.setLevel(logging.DEBUG)
 
 MODEL_COMPONENT_SET = [
     {
-        'core': ('Quartz', 'Shale'),
+        'core': ('UWater', 'Quartz', 'Shale'),
         'extra': ('Calcite', 'Coal')
     },
     {
-        'core': ('Quartz', 'Illite', 'K-Feldspar'),
+        'core': ('UWater', 'Quartz', 'Illite', 'K-Feldspar'),
         'extra': ('Calcite', 'Coal')
     },
     {
-        'core': ('Calcite', 'Dolomite')
+        'core': ('UWater', 'Calcite', 'Dolomite')
     },
     {
-        'core': ('Calcite', 'Dolomite', 'Anhydrite')
+        'core': ('UWater', 'Calcite', 'Dolomite', 'Anhydrite')
     }
 ]
 
@@ -99,10 +99,14 @@ class VolumetricModel:
         equation_system_coefficients = []
         equation_system_resulting_logs = []
         log_scale = []
+        family_properties = FamilyProperties()
         for log_name in logs:
-            log_data = logs[log_name]
-            ss = ScaleShifter(log_data, 1)
-            logs[log_name] = ss.normalize(log_data)
+            fp = family_properties[log_name]
+            nmin = fp.get('min')
+            nmax = fp.get('max')
+            assert None not in (nmin, nmax), f'Min and max limits must be defined for family {log_name}'
+            ss = ScaleShifter(nmin, nmax, 1)
+            logs[log_name] = ss.normalize(logs[log_name])
             log_scale.append(ss)
             coef = []  # coefficients of linear equation for the log
             all_coef_empty = True
@@ -161,18 +165,20 @@ class ScaleShifter():
     '''
     Transforms log data to standard limits and back
     '''
-    def __init__(self, values: np.ndarray, weight: float):
+    def __init__(self, init_min: float, init_max: float, weight: float):
         '''
-        :param values: log values
+        :param init_min, init_max: common log limits
         :param weight: log weight (target range maximum)
         '''
-        self.init_limits = np.nanpercentile(values, (5, 95))
+        self.init_limits = (init_min, init_max)
         self.target_limits = (0, weight)
 
     def normalize(self, values: Union[float, np.ndarray]):
         '''
         Converts values to standard limits
         '''
+        if isinstance(values, (list, tuple)):
+            values = np.array(values)
         return (values - self.init_limits[0]) / (self.init_limits[1] - self.init_limits[0]) * (self.target_limits[1] - self.target_limits[0]) + self.target_limits[0]
 
     def restore(self, values: Union[float, np.ndarray]):
