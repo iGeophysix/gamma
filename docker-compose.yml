@@ -16,7 +16,7 @@ services:
     container_name: gamma_celery
     depends_on:
       - redis
-    command: [celery, -A, tasks, worker, --loglevel=INFO, --concurrency=4]
+    command: [celery, -A, tasks, worker, --loglevel=INFO]
 
   flower:
     image: mher/flower
