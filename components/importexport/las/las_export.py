@@ -23,12 +23,13 @@ def create_las_file(well_name: str, paths_to_logs: Iterable[tuple[str, str]]) ->
 
     for log_data in logs.values():
         non_null_values = log_data.non_null_values
-        min_depth = min(min_depth, np.min(non_null_values[:, 0]))
-        max_depth = max(max_depth, np.max(non_null_values[:, 0]))
+        if non_null_values.size:
+            min_depth = min(min_depth, np.min(non_null_values[:, 0]))
+            max_depth = max(max_depth, np.max(non_null_values[:, 0]))
 
-        derivative = np.diff(log_data[:, 0])
-        avg_step = derivative.mean()
-        step = min(step, avg_step)
+            derivative = np.diff(log_data[:, 0])
+            avg_step = derivative.mean()
+            step = min(step, avg_step)
 
     new_reference = np.arange(min_depth, max_depth, step)
 
