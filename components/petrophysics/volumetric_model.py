@@ -319,7 +319,8 @@ class VolumetricModelSolverNode(EngineNode):
                 if not np.isnan(avg_misfit):
                     base_res.append((avg_misfit, component_set, res))
             if not base_res:
-                raise cls.NotEnoughImputLogsError(f'well {well_name} has not enough input logs: {input_logs}')
+                logger.error(f'well {well_name} has not enough input logs: {list(map(str, input_logs))}')
+                return
             base_res.sort()
             # del base_res[1:]  # drop all base variants except the best
             best_base_misfit, best_base_componet_set, res = base_res[0]

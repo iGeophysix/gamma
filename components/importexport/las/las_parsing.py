@@ -103,7 +103,7 @@ def parse(filename, data: bytearray = None, use_chardet=True) -> LasStructure:
 
         lines = f.readlines()
         lines = [l.strip() for l in lines]
-        lines = [l for l in lines if not l.startswith('#')]
+        lines = [l for l in lines if l and not l.startswith('#')]
 
         f.close()
 
@@ -320,7 +320,7 @@ def _parse_curve_information_section(i, lines, las_file):
 
     #  UWI .      UNIQUE WELL ID:326R000K116_F0W4832_
     #                     name .units   :value
-    re_log_info_entry = re.compile('(^[^ ]+ *)(\.[^ ]*)( .*)(:.*$)');
+    re_log_info_entry = re.compile('(^[^ ]+ *)(\.[^ ]*)( .*)(:.*$)')
 
     log_information_entries = {}
 

@@ -11,7 +11,6 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.petrophysics.volumetric_model import VolumetricModel, VolumetricModelSolverNode
 from tasks import async_read_las
-from utilities import my_timer
 
 PATH_TO_TEST_DATA = os.path.join(BASE_DIR, 'test_data', 'petrophysics')
 

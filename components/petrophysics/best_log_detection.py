@@ -201,7 +201,7 @@ class BestLogDetectionNode(EngineNode):
     def validate(log: BasicLog) -> bool:
         return 'raw' in log.meta.tags \
                and 'bad_quality' not in log.meta.tags \
-               and hasattr(log.meta, 'family') \
+               and hasattr(log.meta, 'family') and log.meta.family \
                and log.meta.family != 'Measured Depth' \
                and hasattr(log.meta, 'basic_statistics') \
                and hasattr(log.meta, 'log_resolution') \
