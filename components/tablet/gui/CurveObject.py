@@ -43,6 +43,8 @@ class CurveObject(TabletObject):
         self._head = CurveGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = CurveGraphicsObjectBody(parent.bodyGraphicsObject(), self)
 
+        self.FAMILY_PROPERTIES = FamilyProperties()
+
         self.computeArrayTransform()
 
     @property
@@ -60,13 +62,18 @@ class CurveObject(TabletObject):
         if hasattr(self._log.meta, 'display'):
             min_ = self._log.meta.display.get('min') if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
             max_ = self._log.meta.display.get('max') if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
-        elif FamilyProperties().exists(self._log.meta.family):
-            fam = FamilyProperties()[self._log.meta.family]
-            min_ = fam['min'] if fam.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
-            max_ = fam['max'] if fam.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
         else:
-            min_ = self._log.meta.basic_statistics['min_value']
-            max_ = self._log.meta.basic_statistics['max_value']
+            if self.FAMILY_PROPERTIES.exists(self._log.meta.family):
+                fam = self.FAMILY_PROPERTIES[self._log.meta.family]
+                min_ = fam.get('min')
+                if min_ is None:
+                    min_ = np.nanmin(self._log.values[:, 1])
+                max_ = fam.get('max')
+                if max_ is None:
+                    max_ = np.nanmax(self._log.values[:, 1])
+            else:
+                min_ = self._log.meta.basic_statistics['min_value']
+                max_ = self._log.meta.basic_statistics['max_value']
 
         if math.isclose(min_, max_):
             magnitude = round(math.log(max(1, abs(max_)), 10))
@@ -77,7 +84,7 @@ class CurveObject(TabletObject):
         return (min_, max_)
 
     def computeArrayTransform(self):
-        ## TODO: TEMPORARY, until I implement min max in DB
+        # TODO: TEMPORARY, until I implement min max in DB
         mi, ma = self.minMax()
 
         scale = self.parent().width() / (ma - mi)
@@ -97,8 +104,8 @@ class CurveObject(TabletObject):
         if hasattr(self._log.meta, 'display'):
             r, g, b = self._log._meta.display.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
-        elif FamilyProperties().exists(self._log.meta.family):
-            fam = FamilyProperties()[self._log.meta.family]
+        elif self.FAMILY_PROPERTIES.exists(self._log.meta.family):
+            fam = self.FAMILY_PROPERTIES[self._log.meta.family]
             r, g, b = fam.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
         elif not hasattr(self, "_color"):

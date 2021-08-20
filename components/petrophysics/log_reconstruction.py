@@ -166,6 +166,7 @@ class LogReconstructionNode(EngineNode):
         if model is None:
             raise ValueError("Cannot train model on this data")
 
+        FAMILY_PROPERTIES = FamilyProperties()
         for well_name in well_names:
             # predict
             well = Well(well_name)
@@ -186,7 +187,7 @@ class LogReconstructionNode(EngineNode):
                 cls.logger.info(f"Well {well_name} misses log of families {log_families_to_train} to predict {log_family_to_predict}")
                 return
 
-            family_meta = FamilyProperties()[log_family_to_predict]
+            family_meta = FAMILY_PROPERTIES[log_family_to_predict]
 
             new_log = BasicLog(well_dataset.id, f"{family_meta.get('mnemonic', log_family_to_predict)}_SYNTH")
 
