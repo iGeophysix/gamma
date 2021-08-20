@@ -40,10 +40,10 @@ class CurveObject(TabletObject):
 
         self._arrayRect = None
 
+        self.FAMILY_PROPERTIES = FamilyProperties()
+
         self._head = CurveGraphicsObjectHead(parent.headGraphicsObject(), self)
         self._body = CurveGraphicsObjectBody(parent.bodyGraphicsObject(), self)
-
-        self.FAMILY_PROPERTIES = FamilyProperties()
 
         self.computeArrayTransform()
 
