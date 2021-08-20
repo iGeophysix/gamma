@@ -205,10 +205,11 @@ class LogResolutionNode(EngineNode):
         log_id = kwargs['log_id']
 
         log = BasicLog(dataset_id, log_id)
-        log_resolution = get_log_resolution(log.values, log.meta)
-        log.meta.log_resolution = {'value': log_resolution}
-        cls.write_history(log=log)
-        log.save()
+        if not log.empty:
+            log_resolution = get_log_resolution(log.values, log.meta)
+            log.meta.log_resolution = {'value': log_resolution}
+            cls.write_history(log=log)
+            log.save()
 
     @classmethod
     def item_hash(cls, log: BasicLog) -> Tuple[str, bool]:
