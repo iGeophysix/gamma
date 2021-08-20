@@ -1,6 +1,7 @@
 import datetime
 import logging
 import time
+import traceback
 from typing import Iterable, Optional
 
 from billiard.exceptions import SoftTimeLimitExceeded
@@ -76,8 +77,8 @@ def async_run_workflow(workflow_id: str = None):
         result['status_text'] = f"The task {task_id} was revoked"
         logger.warning(result['status_text'])
     except Exception as exc:
-        result['status_text'] = repr(exc)
-        logger.error(result['status_text'])
+        result['status_text'] = traceback.format_exc()
+        logger.exception(exc)
     finally:
         if s.table_key_exists('engine', task_id):
             s.table_key_delete('engine', task_id)

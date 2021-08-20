@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 from components.engine.engine_node import EngineProgress
 from components.engine.workflow import Workflow
@@ -34,8 +35,8 @@ class Engine:
                 my_timer(node.run)(**step['parameters'])
                 self.logger.info(f'Finished {step}')
                 result['steps']['completed'] += 1
-        except Exception as exc:
-            result['status_text'] = repr(exc)
+        except Exception:
+            result['status_text'] = traceback.format_exc()
         else:
             result['finished'] = True
         return result
