@@ -99,9 +99,12 @@ class BasicLog:
         Get log values
         :return: np.array with log values
         """
-        s = Storage()
-        if self._values is None and s.check_log_values_exists(self.dataset_id, self._id):
-            self._fetch()
+        if self._values is None:
+            s = Storage()
+            if s.check_log_values_exists(self.dataset_id, self._id):
+                self._fetch()
+            else:
+                return np.empty((0, 2))
         return self._values
 
     @staticmethod
@@ -165,9 +168,7 @@ class BasicLog:
         Get all non-empty log values
         :return: np.array with log values
         """
-        if self._values is None:
-            self._fetch()
-        return self._values[~np.isnan(self._values[:, 1])]
+        return self.values[~np.isnan(self.values[:, 1])]
 
     @property
     def meta(self):
@@ -301,7 +302,7 @@ class BasicLog:
         stdev = safe_run(np.std)(non_null_values[:, 1])
         derivative = safe_run(np.diff)(log_data[:, 0])
         const_step = bool(abs(derivative.min() - derivative.max()) < 0.00001) if derivative is not None else None
-        avg_step = derivative.mean() if derivative is not None else None
+        avg_step = abs(derivative.mean()) if derivative is not None else None
         new_meta = {"min_depth": min_depth,
                     "max_depth": max_depth,
                     "min_value": min_value,
@@ -313,6 +314,14 @@ class BasicLog:
                     "gmean": log_gmean,
                     "stdev": stdev}
         return new_meta
+
+    @property
+    def empty(self) -> bool:
+        """
+        Check that log doesn't contain any real value
+        :return: bool
+        """
+        return np.isnan(self.values[:, 1]).all()
 
 
 @dataclass
@@ -397,6 +406,7 @@ class BasicLogMeta:
     @meta_hash.setter
     def meta_hash(self, val):
         pass
+
 
 class MarkersLog(BasicLog):
 

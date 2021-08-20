@@ -107,21 +107,34 @@ def interpolate_to_common_reference(logs: Iterable[BasicLog]) -> List[BasicLog]:
     :param logs: list of input logs
     :return: list of interpolated logs with a common reference
     '''
-    # define smallest depth sampling rate
-    step = np.min([log.meta['basic_statistics']['avg_step'] for log in logs])
+    step = np.inf
+    min_depth = np.inf
+    max_depth = -np.inf
 
-    # define top and bottom of the common reference
-    min_depth = np.min([log.meta['basic_statistics']['min_depth'] for log in logs])
-    max_depth = np.max([log.meta['basic_statistics']['max_depth'] for log in logs])
+    for log in logs:
+        if not log.empty:
+            bs = log.meta['basic_statistics']
+            # define smallest depth sampling rate
+            step = min(step, bs['avg_step'])
+            # define top and bottom of the common reference
+            min_depth = min(min_depth, bs['min_depth'])
+            max_depth = max(max_depth, bs['max_depth'])
+    all_empty = step == np.inf
 
-    # interpolate logs
+    # new common reference
+    if all_empty:
+        depth_to = np.empty(0)
+    else:
+        depth_to = np.linspace(start=min_depth, stop=max_depth, num=int((max_depth - min_depth) / step) + 1)
+
     res_logs = []
     for log in logs:
         int_log = copy.copy(log)
-        int_log.values = interpolate_log_by_depth(log.values,
-                                                  depth_start=min_depth,
-                                                  depth_stop=max_depth,
-                                                  depth_step=step)
+        if all_empty:
+            int_log.values = np.empty((0, 2))
+        else:
+            int_log.values = interpolate_log_by_depth(log.values,
+                                                      depth_to=depth_to)
         res_logs.append(int_log)
     return res_logs
 
@@ -175,7 +188,7 @@ class LogResolutionNode(EngineNode):
         :param log:
         :return:
         """
-        if not 'raw' in log.meta.tags:
+        if 'raw' not in log.meta.tags:
             raise TypeError('Not raw data')
         if 'main_depth' in log.meta.tags:
             raise TypeError('Depth data')
