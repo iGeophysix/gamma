@@ -1,12 +1,11 @@
 import datetime
 import os
-import time
+import re
 from typing import Iterable
 
 import boto3
 
-import celery_conf
-from celery_conf import wait_till_completes, app as celery_app
+from celery_conf import app as celery_app
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
@@ -67,9 +66,10 @@ class LasExportNode(EngineNode):
             raise KeyError(f'Not all specified logs were found in well {wellname} dataset {datasetname}: {logs_to_export}')
         paths = [(datasetname, logname) for logname in logs_to_export]
         las = create_las_file(well_name=wellname, paths_to_logs=paths)
-        las.write(f'{wellname}_{datasetname}.las', version=2)
-        cls.s3.upload_file(f'{wellname}_{datasetname}.las', 'public', f'{destination}/{wellname}_{datasetname}.las')
-        os.remove(f'{wellname}_{datasetname}.las')
+        filename = re.sub('[^-a-zA-Z0-9_.() ]+', '_', f'{wellname}_{datasetname}.las')
+        las.write(filename, version=2)
+        cls.s3.upload_file(filename, 'public', f'{destination}/{filename}')
+        os.remove(filename)
 
     @classmethod
     def run(cls, **kwargs):
