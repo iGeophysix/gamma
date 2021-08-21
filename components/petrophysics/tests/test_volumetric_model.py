@@ -42,9 +42,9 @@ class TestVolumetricModel(unittest.TestCase):
         logs['Gamma Ray'] = [136.6626, 128.5703, 117.5259, 116.0188, 114.295, np.nan]
         logs['Bulk Density'] = [2.551201, 2.5553, 2.5773, 2.518501, np.nan, np.nan]
         logs['Neutron Porosity'] = [0.2839996, 0.2889999, 0.293, np.nan, np.nan, np.nan]
-        expected_res = {'Shale': [0.77, 0.75, 0.72, 0.75, 0.72, 0.25],
-                        'Quartz': [0.23, 0.25, 0.05, 0.0, 0.17, 0.25],
-                        'Calcite': [0.0, 0.0, 0.23, 0.25, 0.08, 0.25],
+        expected_res = {'Shale': [0.74, 0.73, 0.71, 0.75, 0.72, 0.25],
+                        'Quartz': [0.26, 0.27, 0.0, 0.0, 0.17, 0.25],
+                        'Calcite': [0.0, 0.0, 0.29, 0.25, 0.08, 0.25],
                         'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.25]}
 
         selected_components = expected_res.keys()  # use VolumetricModel.all_minerals() and .all_fluids() to get complete list of possible components
@@ -60,10 +60,10 @@ class TestVolumetricModel(unittest.TestCase):
 
     def test_solver_engine_node(self):
         module = VolumetricModelSolverNode()
-        expected_res = {'Shale': [0.77, 0.75, 0.72, 0.71, 0.71, 0.72],
-                        'Quartz': [0.23, 0.25, 0.05, 0.25, 0.27, 0.23],
-                        'Calcite': [0.0, 0.0, 0.23, 0.03, 0.0, 0.0],
-                        'UWater': [0.0, 0.0, 0.0, 0.0, 0.02, 0.05]}
+        expected_res = {'Shale': [0.74, 0.73, 0.71, 0.71, 0.68, 0.71],
+                        'Quartz': [0.26, 0.27, 0.0, 0.24, 0.29, 0.24],
+                        'Calcite': [0.0, 0.0, 0.29, 0.04, 0.0, 0.0],
+                        'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.05]}
         model_components = list(expected_res.keys())
 
         module.run(model_components=model_components)

@@ -63,7 +63,7 @@ class CurveObject(TabletObject):
             min_ = self._log.meta.display.get('min') if self._log.meta.display.get('min', None) is not None else np.nanmin(self._log.values[:, 1])
             max_ = self._log.meta.display.get('max') if self._log.meta.display.get('max', None) is not None else np.nanmax(self._log.values[:, 1])
         else:
-            if self.FAMILY_PROPERTIES.exists(self._log.meta.family):
+            if hasattr(self._log.meta, "family") and self.FAMILY_PROPERTIES.exists(self._log.meta.family):
                 fam = self.FAMILY_PROPERTIES[self._log.meta.family]
                 min_ = fam.get('min')
                 if min_ is None:
@@ -104,7 +104,7 @@ class CurveObject(TabletObject):
         if hasattr(self._log.meta, 'display'):
             r, g, b = self._log._meta.display.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)
-        elif self.FAMILY_PROPERTIES.exists(self._log.meta.family):
+        elif hasattr(self._log.meta, "family") and self.FAMILY_PROPERTIES.exists(self._log.meta.family):
             fam = self.FAMILY_PROPERTIES[self._log.meta.family]
             r, g, b = fam.get('color', (0, 0, 0))
             self._color = QColor.fromRgb(r, g, b)

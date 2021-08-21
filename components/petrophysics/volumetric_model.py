@@ -50,8 +50,11 @@ class VolumetricModel:
     def __init__(self):
         s = RedisStorage()
         comp = json.loads(s.object_get(FLUID_MINERAL_TABLE))
-        self.FAMILY_UNITS = {family: unit for family, unit in comp['Units'].items() if not family.startswith('_')}  # units of data table, excluding system columns
-        del comp['Units']  # except "Units" item all others are model components
+        self.FAMILY_UNITS = {family: unit for family, unit in comp['_units'].items() if not family.startswith('_')}  # units of data table, excluding special non-component columns
+        self.LOG_WEIGHT = {family: weight for family, weight in comp['_weight'].items() if not family.startswith('_')}
+        for c in tuple(comp.keys()):
+            if c.startswith('_'):
+                del comp[c]  # remove special non-component rown
         self._COMPONENTS = comp
 
     def all_minerals(self) -> Set[str]:
@@ -100,30 +103,31 @@ class VolumetricModel:
         equation_system_resulting_logs = []
         log_scale = []
         family_properties = FamilyProperties()
-        for log_name in logs:
-            fp = family_properties[log_name]
+        for log_fam in logs:
+            fp = family_properties[log_fam]
             nmin = fp.get('min')
             nmax = fp.get('max')
-            assert None not in (nmin, nmax), f'Min and max limits must be defined for family {log_name}'
-            ss = ScaleShifter(nmin, nmax, 1)
-            logs[log_name] = ss.normalize(logs[log_name])
+            assert None not in (nmin, nmax), f'Min and max limits must be defined for family {log_fam}'
+            weight = self.LOG_WEIGHT.get(log_fam, 1)
+            ss = ScaleShifter(nmin, nmax, weight)
+            logs[log_fam] = ss.normalize(logs[log_fam])
             log_scale.append(ss)
             coef = []  # coefficients of linear equation for the log
             all_coef_empty = True
             for component in components:
-                log_response = self._COMPONENTS[component].get(log_name, 0)
+                log_response = self._COMPONENTS[component].get(log_fam, 0)
                 if log_response != 0:
                     all_coef_empty = False
                 coef.append(ss.normalize(log_response))
             if not all_coef_empty:
                 equation_system_coefficients.append(coef)
-                equation_system_resulting_logs.append(log_name)
+                equation_system_resulting_logs.append(log_fam)
         # the last equation Vcomponent1 + ... + VcomponentN = 1
         equation_system_coefficients.append([1] * len(components))  # component coefficients in equation for summ of all component volumes
 
         log_len = len(next(iter(logs.values())))  # dataset length
         component_volume = {component: np.full(log_len, 0.) for component in components}
-        synthetic_logs = {log_name: np.full(log_len, np.nan) for log_name in logs}  # synthetic input logs modeled using resulting volumetric model
+        synthetic_logs = {log_fam: np.full(log_len, np.nan) for log_fam in logs}  # synthetic input logs modeled using resulting volumetric model
         misfit = {res_log: np.full(log_len, np.nan) for res_log in equation_system_resulting_logs + ['TOTAL']}  # misfit for every input log + total misfit
 
         if len(equation_system_coefficients) > 1:  # if there is at least one input log equation
