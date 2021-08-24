@@ -1,6 +1,8 @@
+import os
+import json
 from dataclasses import dataclass
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, WORKFLOW_TABLE_NAME
 from components.importexport.FamilyAssigner import FamilyAssignerNode
 from components.importexport.las_importexport import LasExportNode
 from components.petrophysics.best_log_detection import BestLogDetectionNode
@@ -14,8 +16,9 @@ from components.petrophysics.run_detection import RunDetectionNode
 from components.petrophysics.saturation import SaturationArchieNode
 from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode
 from components.petrophysics.volumetric_model import VolumetricModelSolverNode
+from settings import BASE_DIR
 
-WORKFLOW_TABLE = 'workflows'
+DEFAULT_WORKFLOW_PATH = os.path.join(BASE_DIR, 'components', 'engine', 'default_workflow.json')
 
 NODES = {
     'LogResolutionNode': LogResolutionNode,
@@ -55,13 +58,13 @@ class Workflow:
         Check if workflow exists in DB
         :return:
         """
-        return self._s.table_key_exists(WORKFLOW_TABLE, self.name)
+        return self._s.table_key_exists(WORKFLOW_TABLE_NAME, self.name)
 
     def delete(self):
         """
         Delete workflow from DB
         """
-        self._s.table_key_delete(WORKFLOW_TABLE, self.name)
+        self._s.table_key_delete(WORKFLOW_TABLE_NAME, self.name)
 
     def validate(self, steps: list = None):
         """
@@ -91,7 +94,7 @@ class Workflow:
         Save workflow state to DB
         :return:
         """
-        self._s.table_key_set(WORKFLOW_TABLE, self.name, self.asdict())
+        self._s.table_key_set(WORKFLOW_TABLE_NAME, self.name, self.asdict())
 
     def _load(self):
         """
@@ -99,7 +102,7 @@ class Workflow:
         :return:
         """
         if self.exists():
-            steps = self._s.table_key_get(WORKFLOW_TABLE, self.name)['steps']
+            steps = self._s.table_key_get(WORKFLOW_TABLE_NAME, self.name)['steps']
             self.set_steps(steps)
         else:
             self.steps = []
@@ -137,3 +140,11 @@ class Workflow:
         """
         for step in self.steps:
             yield step
+
+
+def build_default_workflow():
+    with open(os.path.join(DEFAULT_WORKFLOW_PATH), 'r') as f:
+        s = json.load(f)
+    workflow = Workflow('default')
+    workflow.set_steps(s)
+    workflow.save()

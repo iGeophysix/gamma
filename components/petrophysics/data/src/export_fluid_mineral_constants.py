@@ -1,12 +1,10 @@
 import json
-
 import pandas
 import os
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, FLUID_MINERAL_TABLE_NAME
 
 SOURCE_FLUID_MINERAL_TABLE = os.path.join(os.path.dirname(__file__), 'FluidMineralConstants.xlsx')
-FLUID_MINERAL_TABLE = 'fluid_mineral_constants'
 
 
 def build_fluid_mineral_constants():
@@ -17,8 +15,7 @@ def build_fluid_mineral_constants():
 
     # export table as JSON
     s = RedisStorage()
-    s.object_delete(FLUID_MINERAL_TABLE)
-    s.object_set(FLUID_MINERAL_TABLE, json.dumps(df.to_dict(orient='index')))
+    s.object_set(FLUID_MINERAL_TABLE_NAME, json.dumps(df.to_dict(orient='index')))
 
 
 if __name__ == '__main__':

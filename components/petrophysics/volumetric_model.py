@@ -7,7 +7,7 @@ import numpy as np
 from scipy.optimize import lsq_linear
 
 from celery_conf import app as celery_app
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, FLUID_MINERAL_TABLE_NAME
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -18,7 +18,6 @@ from components.importexport.UnitsSystem import UnitsSystem
 from components.petrophysics.best_log_detection import score_log_tags
 from components.petrophysics.curve_operations import interpolate_to_common_reference
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
-from components.petrophysics.data.src.export_fluid_mineral_constants import FLUID_MINERAL_TABLE
 
 logging.basicConfig()
 logger = logging.getLogger('volumetric model')
@@ -49,7 +48,8 @@ class VolumetricModel:
 
     def __init__(self):
         s = RedisStorage()
-        comp = json.loads(s.object_get(FLUID_MINERAL_TABLE))
+        assert s.object_exists(FLUID_MINERAL_TABLE_NAME), 'Common data is absent'
+        comp = json.loads(s.object_get(FLUID_MINERAL_TABLE_NAME))
         self.FAMILY_UNITS = {family: unit for family, unit in comp['_units'].items() if not family.startswith('_')}  # units of data table, excluding special non-component columns
         self.LOG_WEIGHT = {family: weight for family, weight in comp['_weight'].items() if not family.startswith('_')}
         for c in tuple(comp.keys()):

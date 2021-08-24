@@ -7,7 +7,7 @@ from typing import Tuple
 
 import openpyxl as xl
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, FAMILY_PROPERTIES_TABLE_NAME
 from settings import BASE_DIR
 
 SOURCE_FAMSET_BOOK = os.path.join(BASE_DIR,
@@ -115,38 +115,34 @@ class FamilyProperties:
                 'thickness': int}
     }
     '''
-
-    _table_name = 'FamilyProperties'
-
     def __init__(self):
         self._s = RedisStorage()
+        assert self._s.object_exists(FAMILY_PROPERTIES_TABLE_NAME), 'Common data is absent'
 
-        if not self._s.table_exists(self._table_name):
-            self.load(SOURCE_FAMSET_BOOK)
-
-    @classmethod
-    def load(cls, src_path=SOURCE_FAMSET_BOOK, sheet='FamilyProperties'):
-        data = parse_excel_table(src_path, sheet)
-        RedisStorage().table_key_set(cls._table_name, mapping=data)
+    @staticmethod
+    def build_family_properties():
+        data = parse_excel_table(SOURCE_FAMSET_BOOK, 'FamilyProperties')
+        s = RedisStorage()
+        s.object_delete(FAMILY_PROPERTIES_TABLE_NAME)
+        s.table_key_set(FAMILY_PROPERTIES_TABLE_NAME, mapping=data)
 
     def exists(self, item) -> bool:
-        return self._s.table_key_exists(self._table_name, item)
+        return self._s.table_key_exists(FAMILY_PROPERTIES_TABLE_NAME, item)
 
     def __getitem__(self, item) -> dict:
-        if self._s.table_key_exists(self._table_name, item):
-            return self._s.table_key_get(self._table_name, item)
+        if self._s.table_key_exists(FAMILY_PROPERTIES_TABLE_NAME, item):
+            return self._s.table_key_get(FAMILY_PROPERTIES_TABLE_NAME, item)
         else:
             return {}
 
     def __setitem__(self, key, value):
-        self._s.table_key_set(self._table_name, key, value)
+        self._s.table_key_set(FAMILY_PROPERTIES_TABLE_NAME, key, value)
 
     def items(self):
-        for key in self._s.table_keys(self._table_name):
-            yield (key, self._s.table_key_get(self._table_name, key))
+        for key in self._s.table_keys(FAMILY_PROPERTIES_TABLE_NAME):
+            yield (key, self._s.table_key_get(FAMILY_PROPERTIES_TABLE_NAME, key))
 
 
 if __name__ == '__main__':
     # Export Excel sheet to JSON family properties file
-    node = FamilyProperties()
-    node.load(SOURCE_FAMSET_BOOK)
+    FamilyProperties.build_family_properties()

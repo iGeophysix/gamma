@@ -1,7 +1,7 @@
 # Copyright (C) 2019 by Dmitry Pinaev <dimitry.pinaev@gmail.com>
 # All rights reserved.
 import logging
-import multiprocessing as mp
+# import multiprocessing as mp
 import os
 import sys
 import time
@@ -10,7 +10,8 @@ import celery
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QMenu, QFileDialog, QProgressDialog
 
-from celery_conf import app as celery_app, check_task_completed
+from celery_conf import app as celery_app, wait_till_completes
+from components.database.RedisStorage import RedisStorage
 from components import ComponentGuiConstructor
 from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
 from components.importexport.markers_importexport import import_markers_csv
@@ -53,9 +54,14 @@ class ImportExportGui(ComponentGuiConstructor):
         if not files:
             return
 
+        s = RedisStorage()
+        if not s.common_data_loaded():
+            from load_common_data import load_common_data
+            load_common_data()
+
         start = time.time()
 
-        pool = mp.Pool(mp.cpu_count())
+        # pool = mp.Pool(mp.cpu_count())
 
         # gamma_logger.info('CPU Count: {}'.format(mp.cpu_count()))
         gamma_logger.info('Files: {}'.format(len(files)))
@@ -71,15 +77,14 @@ class ImportExportGui(ComponentGuiConstructor):
         # for (i, result) in enumerate(pool.imap_unordered(compress_and_send_for_parsing, files)):
         #     progress.setValue(i)
         #     async_results.append(result)
-        pool.close()
-        pool.join()
+        # pool.close()
+        # pool.join()
 
         progress.setValue(len(files))
 
         gamma_logger.info(f'Sent all files to queue: {time.time() - start}')
 
-        while not all(map(check_task_completed, async_results)):
-            continue
+        wait_till_completes(async_results)
 
         end = time.time()
         gamma_logger.info('Elapsed: {}'.format(end - start))
@@ -87,8 +92,8 @@ class ImportExportGui(ComponentGuiConstructor):
 
         # run engine after import completes
         gamma_logger.info("Sending task to engine")
-        celery.current_app.send_task('tasks.async_run_workflow', ())
-
+        workflow_task = celery.current_app.send_task('tasks.async_run_workflow', ())
+        # wait_till_completes((workflow_task, ))
         DbEventDispatcherSingleton().wellsAdded.emit()
 
     def _showImportWellHeadsWidget(self):
@@ -128,5 +133,5 @@ def initialize_component():
     mod.gui = gui
 
 
-if not 'unittest' in sys.modules.keys():
+if 'unittest' not in sys.modules.keys():
     initialize_component()

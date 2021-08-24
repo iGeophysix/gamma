@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 import pandas
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, FAMILY_ASSIGNER_TABLE_NAME
 from components.importexport.FamilyAssigner import FamilyAssigner
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 
@@ -18,7 +18,10 @@ def capitalize(s):
     return ' '.join(map(str.capitalize, s.split(' ')))
 
 
-def build_family_assigner():
+def parse_excel_table(src_path: str, sheet: str) -> dict:
+    '''
+    Generates family assigner rules from excel sheet
+    '''
     property_mapping = [
         # Excel column, Meta property, Data type
         ['Tags', 'tags', set],
@@ -30,8 +33,8 @@ def build_family_assigner():
     ]
     # read family assignment rules from Excel
     cols = ['Company Name', 'Curve Mnemonic', 'Alt Mnemonics', 'Family', 'Dimension', 'Curve Description'] + [prop[0] for prop in property_mapping]
-    with open(SOURCE_FAMASS_BOOK, 'rb') as f:
-        df = pandas.read_excel(f, 'Curves', header=0, usecols=cols)
+    with open(src_path, 'rb') as f:
+        df = pandas.read_excel(f, sheet, header=0, usecols=cols)
 
     # create search REs for tags
     description_tags_patterns = {}
@@ -105,9 +108,13 @@ def build_family_assigner():
                 else:
                     cdb.precise_match[mnemonic] = mnemonic_info
                 cdb.nlpp.learn(mnemonic, mnemonic_info)
+    return db
 
+
+def build_family_assigner():
+    db = parse_excel_table(SOURCE_FAMASS_BOOK, 'Curves')
     s = RedisStorage()
-    s.object_set(FamilyAssigner.TABLE_NAME, pickle.dumps(db))
+    s.object_set(FAMILY_ASSIGNER_TABLE_NAME, pickle.dumps(db))
 
 
 if __name__ == '__main__':

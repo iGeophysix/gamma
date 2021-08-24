@@ -13,11 +13,7 @@ class ProjectStatisticsNode(EngineNode):
 
     @staticmethod
     def validate(log):
-        if 'bad_quality' in log.meta.tags:
-            return False
-        if not hasattr(log.meta, 'log_resolution'):
-            return False
-        return True
+        return 'bad_quality' not in log.meta.tags and hasattr(log.meta, 'log_resolution') and hasattr(log.meta, 'basic_statistics')
 
     @classmethod
     def run(cls, **kwargs):
@@ -37,16 +33,16 @@ class ProjectStatisticsNode(EngineNode):
         for family, logs in logs_by_families.items():
             try:
                 good_logs = [log for log in logs if cls.validate(log)]
-                stats_by_family[family] = {
-                    'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
-                    'gmean': np.nanmean([log.meta.basic_statistics['gmean'] if log.meta.basic_statistics['gmean'] is not None else np.nan for log in good_logs]),
-                    'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
-                    'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
-                    'number_of_logs': len(good_logs)
-                }
-            except:
-                stats_by_family[family] = {}
-
+                if good_logs:
+                    stats_by_family[family] = {
+                        'mean': np.nanmean([log.meta.basic_statistics['mean'] for log in good_logs]),
+                        'gmean': np.nanmean([log.meta.basic_statistics['gmean'] if log.meta.basic_statistics['gmean'] is not None else np.nan for log in good_logs]),
+                        'stdev': np.nanmean([log.meta.basic_statistics['stdev'] for log in good_logs]),
+                        'log_resolution': np.nanmean([log.meta.log_resolution['value'] for log in good_logs]),
+                        'number_of_logs': len(good_logs)
+                    }
+            except Exception:
+                continue
         p.update_meta({'basic_statistics': stats_by_family})
 
 

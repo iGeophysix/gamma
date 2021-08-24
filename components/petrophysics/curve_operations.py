@@ -205,11 +205,11 @@ class LogResolutionNode(EngineNode):
         log_id = kwargs['log_id']
 
         log = BasicLog(dataset_id, log_id)
-        if not log.empty:
-            log_resolution = get_log_resolution(log.values, log.meta)
-            log.meta.log_resolution = {'value': log_resolution}
-            cls.write_history(log=log)
-            log.save()
+        # if not log.empty:
+        log_resolution = get_log_resolution(log.values, log.meta)
+        log.meta.log_resolution = {'value': log_resolution}
+        cls.write_history(log=log)
+        log.save()
 
     @classmethod
     def item_hash(cls, log: BasicLog) -> Tuple[str, bool]:
@@ -248,11 +248,11 @@ class LogResolutionNode(EngineNode):
                     try:
                         cls.validate(log)
                     except TypeError as exc:
-                        error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
+                        error_message = f'Cannot calculate resolution on {log}. {repr(exc)}'
                         cls.logger.debug(error_message)
                         continue
                     except Exception as exc:
-                        error_message = f'Cannot calculate resolution on {well.name}-{dataset.name}-{log.name}. {repr(exc)}'
+                        error_message = f'Cannot calculate resolution on {log}. {repr(exc)}'
                         cls.logger.info(error_message)
                         log.meta.add_tags('no_resolution', 'bad_quality')
                         log.save()

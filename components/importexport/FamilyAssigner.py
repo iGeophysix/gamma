@@ -8,7 +8,7 @@ import re
 from typing import Optional, Iterable, Union
 
 from celery_conf import app as celery_app
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, FAMILY_ASSIGNER_TABLE_NAME
 from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -84,8 +84,6 @@ class FamilyAssigner:
     '''
     Main family assigner class.
     '''
-    TABLE_NAME = "FamilyAssigner"
-
     class DataBase:
         '''
         Storage for company-specific rules.
@@ -158,9 +156,10 @@ class FamilyAssigner:
         '''
         Loads family assigning rules.
         '''
-        self.units = UnitsSystem()
         s = RedisStorage()
-        self.db = pickle.loads(s.object_get(self.TABLE_NAME))
+        assert s.object_exists(FAMILY_ASSIGNER_TABLE_NAME), 'Common data is absent'
+        self.db = pickle.loads(s.object_get(FAMILY_ASSIGNER_TABLE_NAME))
+        self.units = UnitsSystem()
 
     def _nlp_assign_family(self, mnemonic: str, company: str = None) -> Optional[Iterable[tuple[float, MnemonicInfo]]]:
         '''
@@ -196,7 +195,7 @@ class FamilyAssigner:
                 # exact matching
                 mnemonic_info = db.precise_match.get(mnemonic)
                 if mnemonic_info is not None:
-                    res = copy.copy(mnemonic_info)
+                    res = copy.deepcopy(mnemonic_info)
                     # reliability for a shortest 1-letter mnemonic is MAX_RANK_EXACT_MATCHING * 0.1, reliability for +INF-letter mnemonic is MAX_RANK_EXACT_MATCHING
                     res.reliability = MAX_RELIABILITY_EXACT_MATCHING * (1 - 0.9 / len(mnemonic) ** 2)
                     results.append(res)
@@ -204,7 +203,7 @@ class FamilyAssigner:
                 # pattern matching
                 for re_pattern in db.re_match:
                     if re_pattern.fullmatch(mnemonic):
-                        res = copy.copy(db.re_match[re_pattern])
+                        res = copy.deepcopy(db.re_match[re_pattern])
                         res.reliability = MAX_RELIABILITY_PATTERN_MATCHING
                         results.append(res)
 
@@ -212,7 +211,7 @@ class FamilyAssigner:
                 nlp_res = self._nlp_assign_family(mnemonic, cc)
                 if nlp_res is not None:
                     for reliability, family_info in nlp_res:
-                        res = copy.copy(family_info)
+                        res = copy.deepcopy(family_info)
                         res.reliability = reliability * MAX_RELIABILITY_NLP_MATCHING  # decrease maximum NLP confidence
                         results.append(res)
 
@@ -311,30 +310,31 @@ class FamilyAssignerNode(EngineNode):
         :return:
         """
         wellname = kwargs['wellname']
-        fa = FamilyAssigner()
         w = Well(wellname)
-        datasetnames = [ds for ds in w.datasets if ds not in EXCLUDED_DATASETS]
+        fa = FamilyAssigner()
 
-        for datasetname in datasetnames:
+        for datasetname in w.datasets:
+            if datasetname in EXCLUDED_DATASETS:
+                continue
             wd = WellDataset(w, datasetname)
-            log_list = wd.log_list
-            for log in log_list:
-                l = BasicLog(wd.id, log)
-                if not 'raw' in l.meta.tags:
+            for log_name in wd.log_list:
+                log = BasicLog(wd.id, log_name)
+                if 'raw' not in log.meta.tags:
                     continue
-                result = fa.assign_family(l.name, l.meta.units)
+                result = fa.assign_family(log.name, log.meta.units)
                 if result is not None:
                     if 'tags' in result.optional_properties:
-                        l.meta.add_tags(*result.optional_properties.pop('tags'))
-                    l.meta.family = result.family
-                    l.meta.family_assigner = {
-                                                 'reliability': result.reliability,
-                                                 'unit_class': result.dimension,
-                                                 'logging_company': result.company} \
-                                             | result.optional_properties
+                        op_tags = result.optional_properties.pop('tags')
+                        log.meta.add_tags(*op_tags)
+                    log.meta.family = result.family
+                    log.meta.family_assigner = {
+                        'reliability': result.reliability,
+                        'unit_class': result.dimension,
+                        'logging_company': result.company
+                    } | result.optional_properties
                 else:
-                    l.meta.family = l.meta.family_assigner = None
-                l.save()
+                    log.meta.family = log.meta.family_assigner = None
+                log.save()
 
     @classmethod
     def item_hash(cls, well_name) -> tuple[str, bool]:

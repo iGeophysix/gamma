@@ -5,10 +5,13 @@ import traceback
 from typing import Iterable, Optional
 
 from billiard.exceptions import SoftTimeLimitExceeded
+from celery_conf import app
 from celery.exceptions import TaskRevokedError
 
-from components.database.RedisStorage import RedisStorage
-from components.database.tasks import *
+from components.database.RedisStorage import (RedisStorage,
+                                              build_log_meta_fields_index,
+                                              build_well_meta_fields_index,
+                                              build_dataset_meta_fields_index)
 from components.domain.Log import BasicLog
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
@@ -89,17 +92,17 @@ def async_run_workflow(workflow_id: str = None):
 @app.task
 def async_read_las(wellname: str = None, datasetname: str = None, filename: str = None, las_data: str = None):
     start = time.time()
-    if filename is not None and las_data is None:
-        well = Well(wellname)
-        dataset = WellDataset(well, datasetname)
-        import_to_db(filename=filename, well=well, well_dataset=dataset)
-    elif las_data is not None:
-        las_structure = las.parse(filename=filename.replace('\\', '/'), data=las_data)  # replace makes path cross-platform
-        well = Well(wellname) if wellname is not None else None
-        dataset = WellDataset(well, datasetname) if datasetname is not None else None
-        import_to_db(las_structure=las_structure, well=well, well_dataset=dataset)
+
+    well = Well(wellname) if wellname else None
+    dataset = WellDataset(well, datasetname) if datasetname else None
+    filename = filename.replace('\\', '/')
+    if las_data:
+        las_structure = las.parse(filename=filename, data=las_data)  # replace makes path cross-platform
+        filename = None
     else:
-        raise Exception('Incorrect function call')
+        las_structure = None
+    import_to_db(well=well, well_dataset=dataset, filename=filename, las_structure=las_structure)
+
     end = time.time()
     return {'filename': filename, 'task_time': end - start}
 
@@ -276,3 +279,8 @@ def async_log_reconstruction(well_names, log_families_to_train, log_family_to_pr
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
     node = SaturationArchieNode()
     node.run_for_item(well_name, a, m, n, rw, output_log_name)
+
+
+build_log_meta_fields_index = app.task(build_log_meta_fields_index)
+build_dataset_meta_fields_index = app.task(build_dataset_meta_fields_index)
+build_well_meta_fields_index = app.task(build_well_meta_fields_index)

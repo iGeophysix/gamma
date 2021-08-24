@@ -5,17 +5,17 @@ from typing import Pattern
 
 import pandas
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, UNITS_SYSTEM_TABLE_NAME
 
 SOURCE_UNITS_TABLE = os.path.join(os.path.dirname(__file__), 'Units.xlsx')
 
 
-def readUnitRenaming() -> list[Pattern, str]:
+def readUnitRenaming(src_path: str) -> list[Pattern, str]:
     '''
     Reads unit renaming rules from Excel
     '''
     cols = ['Input Unit', 'Case-sensitive', 'Rename to']
-    with open(SOURCE_UNITS_TABLE, 'rb') as f:
+    with open(src_path, 'rb') as f:
         df = pandas.read_excel(f, 'Renaming', header=0, usecols=cols)
 
     renamingRules = []
@@ -30,10 +30,13 @@ def readUnitRenaming() -> list[Pattern, str]:
     return renamingRules
 
 
-def build_unit_system():
+def parse_excel_table(src_path: str) -> dict:
+    '''
+    Generates Unit Statem from excel sheet
+    '''
     # read Excel table
     cols = ['Dimension Name', 'BaseUnit', 'Unit', 'Scale', 'Offset', 'Drop']
-    with open(SOURCE_UNITS_TABLE, 'rb') as f:
+    with open(src_path, 'rb') as f:
         df = pandas.read_excel(f, 'Units', header=0, usecols=cols)
 
     # create units database
@@ -101,12 +104,16 @@ def build_unit_system():
         '_unit_dim': _unit_dim,
         '_dim_base_unit': _dim_base_unit,
         '_ci_unit_unit': _ci_unit_unit,
-        '_unit_renaming': readUnitRenaming()
+        '_unit_renaming': readUnitRenaming(src_path)
     }
+    return result
 
+
+def build_units_system():
+    db = parse_excel_table(SOURCE_UNITS_TABLE)
     s = RedisStorage()
-    s.object_set('UnitSystem', pickle.dumps(result))
+    s.object_set(UNITS_SYSTEM_TABLE_NAME, pickle.dumps(db))
 
 
 if __name__ == '__main__':
-    build_unit_system()
+    build_units_system()

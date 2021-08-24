@@ -3,7 +3,7 @@ from typing import Tuple, Union, Iterable
 
 import numpy as np
 
-from components.database.RedisStorage import RedisStorage
+from components.database.RedisStorage import RedisStorage, UNITS_SYSTEM_TABLE_NAME
 
 
 class UnitConversionError(Exception):
@@ -17,7 +17,8 @@ class UnitsSystem:
 
     def __init__(self):
         s = RedisStorage()
-        unit_system = pickle.loads(s.object_get('UnitSystem'))
+        assert s.object_exists(UNITS_SYSTEM_TABLE_NAME), 'Common data is absent'
+        unit_system = pickle.loads(s.object_get(UNITS_SYSTEM_TABLE_NAME))
         self._db = unit_system['_db']
         self._unit_dim = unit_system['_unit_dim']  # unit -> dimension
         self._dim_base_unit = unit_system['_dim_base_unit']  # dimension -> base unit

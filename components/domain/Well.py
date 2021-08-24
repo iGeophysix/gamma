@@ -108,7 +108,7 @@ def get_well_by_id(well_id: str) -> Well:
     :return: Well object
     """
     _s = RedisStorage()
-    wellname = _s.get_well_name_by_id(well_id)
+    wellname = _s.get_well_name(well_id)
     return Well(wellname)
 
 

@@ -31,8 +31,8 @@ class TestLogResolution(unittest.TestCase):
         # define log resolution
         async_log_resolution(dataset_id=wd.id, log_id='GK')
 
-        l = BasicLog(wd.id, "GK")
-        resolution = l.meta['log_resolution']['value']
+        log = BasicLog(wd.id, "GK")
+        resolution = log.meta['log_resolution']['value']
 
         self.assertAlmostEqual(0.5135, resolution, delta=0.001)
 
@@ -47,8 +47,8 @@ class TestLogResolution(unittest.TestCase):
         # define log resolution
         async_log_resolution(dataset_id=wd.id, log_id='AZIM')
 
-        l = BasicLog(wd.id, 'AZIM')
-        resolution = l.meta.log_resolution['value']
+        log = BasicLog(wd.id, 'AZIM')
+        resolution = log.meta.log_resolution['value']
 
         self.assertTrue(resolution is None)
 
@@ -68,7 +68,7 @@ class TestLogResolutionNode(unittest.TestCase):
     def test_run(self):
         LogResolutionNode().run()
 
-        l = BasicLog(self.wd.id, "GK_D0400_D")
-        resolution = l.meta['log_resolution']['value']
+        log = BasicLog(self.wd.id, "GK_D0400_D")
+        resolution = log.meta['log_resolution']['value']
 
         self.assertAlmostEqual(0.51, resolution, delta=0.001)

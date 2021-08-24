@@ -29,6 +29,12 @@ class WellDataset:
         if new and not self.exists:
             self.register()
 
+    def __str__(self) -> str:
+        """
+        Formatter of the dataset for print
+        """
+        return f'{self._well}.{self._name}'
+
     @property
     def exists(self) -> bool:
         """

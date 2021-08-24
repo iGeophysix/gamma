@@ -18,6 +18,7 @@ class BasicLog:
     """
     General class for all types of logs
     """
+    _s = Storage()
 
     def __init__(self, dataset_id: str = None, log_id: str = 'New Log'):
         """
@@ -33,14 +34,16 @@ class BasicLog:
         self.depth = None
         self.depth__gt = None
         self.depth__lt = None
-        self._changes = {"values": False, "meta": False}
+        self._changes = {"values": False, "meta": False}  # TODO: use self._changes["meta"] or drop it
 
     def __str__(self) -> str:
         """
         Formatter of the log when it is called in print
         :return:
         """
-        return self.name
+        well = self._s.get_dataset_well_name(self.dataset_id)
+        dataset = self._s.get_dataset_name(self.dataset_id)
+        return f'{well}.{dataset}.{self.name}'
 
     def __len__(self) -> int:
         """
@@ -61,8 +64,7 @@ class BasicLog:
         Check if the log is exists in the dataset
         :return: bool
         """
-        _s = Storage()
-        return _s.check_log_exists(self.dataset_id, self._id)
+        return self._s.check_log_exists(self.dataset_id, self._id)
 
     @property
     def name(self) -> str:
@@ -100,8 +102,7 @@ class BasicLog:
         :return: np.array with log values
         """
         if self._values is None:
-            s = Storage()
-            if s.check_log_values_exists(self.dataset_id, self._id):
+            if self._s.check_log_values_exists(self.dataset_id, self._id):
                 self._fetch()
             else:
                 return np.empty((0, 2))
@@ -115,12 +116,12 @@ class BasicLog:
         :return:
         """
         for i, val in enumerate(values[:, 1]):
-            if val == val:  # check if is nan
+            if np.isnan(val):
                 values = values[i:, :]
                 break
 
         for i, val in enumerate(reversed(values[:, 1])):
-            if val == val:
+            if np.isnan(val):
                 bound = -i if i else None
                 values = values[:bound, :]
                 break
@@ -228,9 +229,8 @@ class BasicLog:
         self._meta.data_hash = self.md5(data_as_string)
 
     def _fetch(self):
-        _s = Storage()
-        self._values = _s.get_log_data(self.dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
-        self._meta.__ior__(_s.get_log_meta(self.dataset_id, self._id))
+        self._values = self._s.get_log_data(self.dataset_id, self._id, depth=self.depth, depth__gt=self.depth__gt, depth__lt=self.depth__lt)
+        self._meta.__ior__(self._s.get_log_meta(self.dataset_id, self._id))
 
     def crop(self, depth=None, depth__gt=None, depth__lt=None, inplace=False):
         """
@@ -266,10 +266,9 @@ class BasicLog:
         Stores local changes of the log to the database
         :return:
         """
-        _s = Storage()
         if self._changes['values']:
             self._meta.basic_statistics = self.get_basic_curve_statistics(self._values)
-            _s.update_logs(self.dataset_id, data={self._id: self._values})
+            self._s.update_logs(self.dataset_id, data={self._id: self._values})
             self._changes['values'] = False
         # self.update_hashes()
         self._meta.save()
@@ -348,8 +347,8 @@ class BasicLogMeta:
         self.history = []
         self.units = ""
 
-        _s = Storage()
-        if _s.check_log_exists(self.dataset_id, self.log_id):
+        s = Storage()
+        if s.check_log_exists(self.dataset_id, self.log_id):
             self.load()
 
     def __ior__(self, other):
@@ -377,15 +376,15 @@ class BasicLogMeta:
         self.history.append((datetime.now().isoformat(), history))
 
     def load(self):
-        _s = Storage()
-        meta_items = _s.get_log_meta(self.dataset_id, self.log_id)
+        s = Storage()
+        meta_items = s.get_log_meta(self.dataset_id, self.log_id)
         for name, value in meta_items.items():
             name = name.replace(f"_{self.__class__.__name__}", "")
             self.__setattr__(name, value)
 
     def save(self):
-        _s = Storage()
-        _s.update_logs(self.dataset_id, meta={self.log_id: self.asdict()})
+        s = Storage()
+        s.update_logs(self.dataset_id, meta={self.log_id: self.asdict()})
 
     def asdict(self):
         out = {key: self.__getattribute__(key) for key in dir(self) if not key.startswith('_') and not callable(self.__getattribute__(key))}

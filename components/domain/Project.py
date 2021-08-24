@@ -46,11 +46,12 @@ class Project:
     def tree_oop() -> dict:
         """
         Returns all available object in a form of tree with logs as objects
+        {Well: {WellDataset: [BasicLog]}}
         """
         _s = RedisStorage()
         tree = {}
         wells = _s.list_wells()
-        for well, well_info in wells.items():
+        for well, _ in wells.items():
             w = Well(well)
             tree.update({w: {}})
             for dataset_name in w.datasets:

@@ -1,7 +1,6 @@
 import pickle
-from components.database.RedisStorage import RedisStorage
 
-LOG_ASSESSMENT_TABLE = 'log_assessment'
+from components.database.RedisStorage import RedisStorage, LOG_ASSESSMENT_TABLE_NAME
 
 LOG_ASSESSMENT = {
     'General log tags': {
@@ -105,7 +104,7 @@ def build_best_log_tags_assessment() -> None:
     Stores rules dictionary to db
     '''
     s = RedisStorage()
-    s.object_set(LOG_ASSESSMENT_TABLE, pickle.dumps(LOG_ASSESSMENT))
+    s.object_set(LOG_ASSESSMENT_TABLE_NAME, pickle.dumps(LOG_ASSESSMENT))
 
 
 def read_best_log_tags_assessment() -> dict:
@@ -113,9 +112,8 @@ def read_best_log_tags_assessment() -> dict:
     Reads rules dictionary from db
     '''
     s = RedisStorage()
-    if not s.object_exists(LOG_ASSESSMENT_TABLE):
-        build_best_log_tags_assessment()
-    return pickle.loads(s.object_get(LOG_ASSESSMENT_TABLE))
+    assert s.object_exists(LOG_ASSESSMENT_TABLE_NAME), 'Common data is absent'
+    return pickle.loads(s.object_get(LOG_ASSESSMENT_TABLE_NAME))
 
 
 if __name__ == '__main__':

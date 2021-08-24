@@ -59,7 +59,7 @@ def track_progress(tasks: Iterable[AsyncResult], cached=0) -> dict:
     revoked = sum([t.status == 'REVOKED' for t in tasks])
     pending = total - cached - success - failed - revoked
 
-    completion = (1 - pending / (total-cached)) if (total-cached) else 1
+    completion = (1 - pending / (total - cached)) if (total - cached) else 1
 
     return {
         'total': total,
