@@ -154,8 +154,9 @@ class VolumetricModel:
                         log_value = np.sum(np.array(esc_clear[n]) * opt.x)
                         synthetic_logs[res_log][row] = log_scale[n].restore(log_value)
                         # misfit
-                        misfit[res_log][row] = opt.fun[n]  # misfit per model log
-                        misfit_total += opt.fun[n]
+                        mf = np.abs(opt.fun[n])
+                        misfit[res_log][row] = mf  # misfit per model log
+                        misfit_total += mf
                     misfit['TOTAL'][row] = misfit_total  # overall model misfit at the row
         res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
         return res
@@ -163,36 +164,56 @@ class VolumetricModel:
 
 class VolumetricModelDefineModelNode(EngineNode):
     '''
-    Select project-wide VM model component set
+    Select project-wide best VM component set
     '''
 
     @classmethod
     def run(cls, **kwargs) -> None:
-        pass
+        cache = EngineNodeCache(cls)
+        hashes = []
+        CORE_MODELS = [model['core'] for model in MODEL_COMPONENT_SET]
+        CORE_MODELS_STR = [','.join(sorted(model)) for model in CORE_MODELS]
+        min_log_number = max(map(len, CORE_MODELS)) - 1
+        cache_hits = 0
+        tasks = []
+        reference_wells = []
+        for well_name in Project().list_wells():
+            input_logs = pick_input_logs(well_name)
+            if len(input_logs) >= min_log_number:
+                input_logs_hashes = [log.data_hash for log in input_logs]
+                item_hash = cls.item_md5((well_name, sorted(input_logs_hashes)))
+                hashes.append(item_hash)
+                well_meta = Well(well_name).meta
+                item_hash_is_valid = hasattr(well_meta, 'volumetric_model_misfit') and len(set(well_meta['volumetric_model_misfit'].keys()).intersection(CORE_MODELS_STR)) == len(CORE_MODELS_STR)
+                if item_hash_is_valid and item_hash in cache:
+                    cache_hits += 1
+                else:
+                    tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, None)))
+                reference_wells.append(well_name)
+                if len(reference_wells) == 5:  # representative number of wells
+                    break
+        cache.set(hashes)
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cls.track_progress(tasks, cached=cache_hits)
 
-    @classmethod
-    def item_hash(cls) -> Tuple[str, bool]:
-        """Get current item hash"""
-        Project().
+        model_misfit = defaultdict(list)
+        for well_name in reference_wells:
+            well_model_stats = Well(well_name).meta.get('volumetric_model_misfit', {})
+            for model, misfit in well_model_stats.items():
+                model_misfit[model].append(misfit)
+        misfit_model = [(np.nanmean(misfits), model) for model, misfits in model_misfit.items() if misfits]
+        best_model = sorted(misfit_model)[0][1]
+        Project().update_meta({'volumetric_model': best_model})  # update project-wide component set
 
-    @classmethod
-    def run_for_item(cls, **kwargs):
-        '''
-        Runs Volumetrics Model for a given well
-        '''
+    # @classmethod
+    # def item_hash(cls) -> Tuple[str, bool]:
+    #     """Get current item hash"""
+    #     pass
 
-    @classmethod
-    def write_history(cls, **kwargs):
-        # log = kwargs['log']
-        # input_logs = kwargs['input_logs']
-
-        # log.meta.append_history({
-        #     'node': cls.name(),
-        #     'node_version': cls.version(),
-        #     'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
-        #     'parameters': {}
-        # })
-        pass
+    # @classmethod
+    # def run_for_item(cls, **kwargs):
+    #     well_name = kwargs['well_name']
+    #     input_logs_id = kwargs['input_logs_id']
 
 
 class ScaleShifter():
@@ -255,8 +276,12 @@ class VolumetricModelSolverNode(EngineNode):
         Creates set of V[COMPONENT] logs - volume of a component and VMISFIT log - Model Fit Error
         :param model_components: optional list of model component names inversion is performed for (see FluidMineralConstants.json)
         '''
+        if 'model_components' in kwargs:
+            model_components = kwargs['model_components']
+        else:
+            p_meta_model = Project().meta.get('volumetric_model')
+            model_components = p_meta_model.split(',') if p_meta_model else None
 
-        model_components = kwargs.get('model_components')
         if model_components:
             cls.validate_input(model_components)
 
@@ -312,11 +337,7 @@ class VolumetricModelSolverNode(EngineNode):
         family_properties = FamilyProperties()
 
         # pick input logs
-        input_logs = []
-        for family in vm.supported_log_families():
-            log = family_best_log(well_name, family, vm.FAMILY_UNITS[family])
-            if log is not None:
-                input_logs.append(log)
+        input_logs = pick_input_logs(well_name)
         if input_logs:
             log_list = ', '.join(f'{log.name} [{log.meta.family}]' for log in input_logs)
             cls.logger.info(f'input logs in well {well_name}: {log_list}')
@@ -392,10 +413,11 @@ class VolumetricModelSolverNode(EngineNode):
                     final_res[category][log_name][row] = log_values[row]
 
         # save results
-        for n, (_, _, res) in enumerate(base_res):
-            cls.save_results(vm, family_properties, input_logs, res, str(n))
-        # for n, (_, _, res) in enumerate(extra_res):
-        #     cls.save_results(vm, family_properties, input_logs, res, '0' + str(n + 1))
+        if len(base_res) > 1:
+            for n, (_, _, res) in enumerate(base_res):
+                cls.save_results(vm, family_properties, input_logs, res, str(n))
+            # for n, (_, _, res) in enumerate(extra_res):
+            #     cls.save_results(vm, family_properties, input_logs, res, '0' + str(n + 1))
         cls.save_results(vm, family_properties, input_logs, final_res)
 
         log = BasicLog(dataset_id=input_logs[0].dataset_id, log_id='SRC_VARIANT')
@@ -403,6 +425,12 @@ class VolumetricModelSolverNode(EngineNode):
         log.meta.family = 'Variant Number'
         log.meta.units = 'unitless'
         log.save()
+
+        # save average misfit to the well meta
+        well = Well(well_name)
+        volumetric_model_misfit = well.meta['volumetric_model_misfit'] if hasattr(well.meta, 'volumetric_model_misfit') else {}
+        volumetric_model_misfit.update({','.join(sorted(model_components['core'] if isinstance(model_components, dict) else model_components)): avg_misfit for avg_misfit, model_components, _ in base_res})
+        well.update_meta({'volumetric_model_misfit': volumetric_model_misfit})
 
     @classmethod
     def save_results(cls, vm: VolumetricModel, family_properties: FamilyProperties, input_logs: list, result: dict, version_name: str = '') -> None:
@@ -502,3 +530,18 @@ def family_best_log(well_name: str,
                     best_log_score = log_score
                     best_log = log
     return best_log
+
+
+def pick_input_logs(well: str) -> List[BasicLog]:
+    '''
+    Find input logs for VM in a well
+    :param well_name: well to search into
+    :return: logs
+    '''
+    vm = VolumetricModel()
+    input_logs = []
+    for family in vm.supported_log_families():
+        log = family_best_log(well, family, vm.FAMILY_UNITS[family])
+        if log is not None:
+            input_logs.append(log)
+    return input_logs

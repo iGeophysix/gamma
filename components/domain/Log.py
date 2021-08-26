@@ -67,6 +67,13 @@ class BasicLog:
         return self._s.check_log_exists(self.dataset_id, self._id)
 
     @property
+    def id(self) -> str:
+        '''
+        Return ID
+        '''
+        return self._id
+
+    @property
     def name(self) -> str:
         """
         Returns log name from meta

@@ -15,7 +15,7 @@ from components.petrophysics.project_statistics import ProjectStatisticsNode
 from components.petrophysics.run_detection import RunDetectionNode
 from components.petrophysics.saturation import SaturationArchieNode
 from components.petrophysics.shale_volume import ShaleVolumeLinearMethodNode, ShaleVolumeLarionovOlderRockNode, ShaleVolumeLarionovTertiaryRockNode
-from components.petrophysics.volumetric_model import VolumetricModelSolverNode
+from components.petrophysics.volumetric_model import VolumetricModelSolverNode, VolumetricModelDefineModelNode
 from settings import BASE_DIR
 
 DEFAULT_WORKFLOW_PATH = os.path.join(BASE_DIR, 'components', 'engine', 'default_workflow.json')
@@ -28,6 +28,7 @@ NODES = {
     'LogNormalizationNode': LogNormalizationNode,
     'ProjectStatisticsNode': ProjectStatisticsNode,
     'SpliceLogsNode': SpliceLogsNode,
+    'VolumetricModelDefineModelNode': VolumetricModelDefineModelNode,
     'VolumetricModelSolverNode': VolumetricModelSolverNode,
     'ShaleVolumeLinearMethodNode': ShaleVolumeLinearMethodNode,
     'ShaleVolumeLarionovOlderRockNode': ShaleVolumeLarionovOlderRockNode,

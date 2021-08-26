@@ -116,6 +116,10 @@
     }
   },
   {
+    "node": "VolumetricModelDefineModelNode",
+    "parameters": {}
+  },
+  {
     "node": "VolumetricModelSolverNode",
     "parameters": {}
   },

@@ -33,7 +33,7 @@ from components.petrophysics.saturation import SaturationArchieNode
 from components.petrophysics.shale_volume import (ShaleVolumeLarionovOlderRockNode,
                                                   ShaleVolumeLarionovTertiaryRockNode,
                                                   ShaleVolumeLinearMethodNode)
-from components.petrophysics.volumetric_model import VolumetricModelSolverNode
+from components.petrophysics.volumetric_model import VolumetricModelSolverNode, VolumetricModelDefineModelNode
 
 logger = logging.getLogger('CELERY_MASTER')
 
@@ -217,6 +217,11 @@ def async_detect_best_log(log_type: str,
     BestLogDetectionNode.run_for_item(log_type=log_type,
                                       log_paths=log_paths,
                                       additional_logs_paths=additional_logs_paths)
+
+
+@app.task
+def async_define_volumetric_model(well_name: str, input_logs_id: Iterable[str]):
+    VolumetricModelDefineModelNode.run_for_item(well_name=well_name, input_logs_id=input_logs_id)
 
 
 @app.task
