@@ -1,5 +1,4 @@
 import json
-import logging
 from typing import List, Union, Optional, Iterable, Tuple, Set
 from collections import defaultdict
 
@@ -19,9 +18,6 @@ from components.petrophysics.best_log_detection import score_log_tags
 from components.petrophysics.curve_operations import interpolate_to_common_reference
 from components.petrophysics.data.src.best_log_tags_assessment import read_best_log_tags_assessment
 
-logging.basicConfig()
-logger = logging.getLogger('volumetric model')
-logger.setLevel(logging.DEBUG)
 
 MODEL_COMPONENT_SET = [
     {
@@ -93,7 +89,7 @@ class VolumetricModel:
         '''
         useless_logs = set(logs).difference_update(self.supported_log_families())
         if useless_logs:
-            logger.warning(f'the following logs are useless: {useless_logs}')
+            raise ValueError(f'the following logs are useless: {useless_logs}')
         # Equation system:
         # log1_response = component1_log1_response * Vcomponent1 + ... + componentN_log1_response * VcomponentN
         # ...
@@ -163,6 +159,40 @@ class VolumetricModel:
                     misfit['TOTAL'][row] = misfit_total  # overall model misfit at the row
         res = {'COMPONENT_VOLUME': component_volume, 'MISFIT': misfit, 'FORWARD_MODELED_LOG': synthetic_logs}
         return res
+
+
+class VolumetricModelDefineModelNode(EngineNode):
+    '''
+    Select project-wide VM model component set
+    '''
+
+    @classmethod
+    def run(cls, **kwargs) -> None:
+        pass
+
+    @classmethod
+    def item_hash(cls) -> Tuple[str, bool]:
+        """Get current item hash"""
+        Project().
+
+    @classmethod
+    def run_for_item(cls, **kwargs):
+        '''
+        Runs Volumetrics Model for a given well
+        '''
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        # log = kwargs['log']
+        # input_logs = kwargs['input_logs']
+
+        # log.meta.append_history({
+        #     'node': cls.name(),
+        #     'node_version': cls.version(),
+        #     'parent_logs': [(log.dataset_id, log.name) for log in input_logs],
+        #     'parameters': {}
+        # })
+        pass
 
 
 class ScaleShifter():
@@ -289,9 +319,9 @@ class VolumetricModelSolverNode(EngineNode):
                 input_logs.append(log)
         if input_logs:
             log_list = ', '.join(f'{log.name} [{log.meta.family}]' for log in input_logs)
-            logger.info(f'input logs in well {well_name}: {log_list}')
+            cls.logger.info(f'input logs in well {well_name}: {log_list}')
         else:
-            logger.warning(f'well {well_name} has no logs suitable for calculation')
+            cls.logger.warning(f'well {well_name} has no logs suitable for calculation')
             return
 
         input_logs = interpolate_to_common_reference(input_logs)
@@ -323,12 +353,12 @@ class VolumetricModelSolverNode(EngineNode):
                 if not np.isnan(avg_misfit):
                     base_res.append((avg_misfit, component_set, res))
             if not base_res:
-                logger.error(f'well {well_name} has not enough input logs: {list(map(str, input_logs))}')
+                cls.logger.error(f'well {well_name} has not enough input logs: {list(map(str, input_logs))}')
                 return
             base_res.sort()
             # del base_res[1:]  # drop all base variants except the best
             best_base_misfit, best_base_componet_set, res = base_res[0]
-            logger.info(f'well {well_name} best base component set is {best_base_componet_set["core"]} with misfit {best_base_misfit}')
+            cls.logger.info(f'well {well_name} best base component set is {best_base_componet_set["core"]} with misfit {best_base_misfit}')
 
             # calculate additional variants with extra components
             # if 'extra' in best_base_componet_set:
