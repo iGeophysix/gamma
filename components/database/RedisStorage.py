@@ -47,6 +47,7 @@ class RedisStorage:
                         port=REDIS_PORT,
                         db=REDIS_DB,
                         password=REDIS_PASSWORD)
+    _conn.config_set('notify-keyspace-events', 'K$g')  # https://redis.io/topics/notifications
 
     redlock = Redlock([
         {

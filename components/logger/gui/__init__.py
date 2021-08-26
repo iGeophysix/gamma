@@ -9,21 +9,26 @@ from components import ComponentGuiConstructor
 from components.logger.gui.widgets import QTextEditLogger
 from components.mainwindow.gui import GeoMainWindow
 
+from components.database.gui.DbEventDispatcherSingleton import DbEventDispatcherSingleton
+from components.database.EventMonitor import RedisEventMonitor
+
 
 class LoggerGui(ComponentGuiConstructor):
 
     def __init__(self):
+
+        gamma_logger = logging.getLogger('gamma_logger')
 
         log_capture_string = io.StringIO()
         ch = logging.StreamHandler(log_capture_string)
         ch.setLevel(logging.DEBUG)
         frm = logging.Formatter("%(asctime)s : %(message)s", "%H:%M:%S")
         ch.setFormatter(frm)
-
-        gamma_logger = logging.getLogger('gamma_logger')
         gamma_logger.addHandler(ch)
 
-        self.text_edit_logger = QTextEditLogger(gamma_logger, log_capture_string.getvalue())
+        self.text_edit_logger = QTextEditLogger(log_capture_string.getvalue())
+        self.text_edit_logger.setLevel(logging.INFO)
+        gamma_logger.addHandler(self.text_edit_logger)
 
     def toolBarActions(self):
         menu = QMenu("Logger")
@@ -34,16 +39,18 @@ class LoggerGui(ComponentGuiConstructor):
     def dockingWidget(self):
         return self.text_edit_logger.widget
 
-def initialize_component():
-    gui = LoggerGui()
 
+def initialize_component():
+    mod = sys.modules[__name__]
+
+    mod.rem = RedisEventMonitor()
+
+    gui = LoggerGui()
     GeoMainWindow().addMenu(gui.toolBarActions())
     GeoMainWindow().addDockindWidget(gui.dockingWidget(), Qt.RightDockWidgetArea)
     # Qt.BottomDockWidgetArea
-
-    mod = sys.modules[__name__]
     mod.gui = gui
 
 
-if not 'unittest' in sys.modules.keys():
+if 'unittest' not in sys.modules.keys():
     initialize_component()

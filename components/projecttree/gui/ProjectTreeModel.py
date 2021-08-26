@@ -155,6 +155,7 @@ class ProjectTreeModel(QAbstractItemModel):
         pass
 
     def onWellsAdded(self):
+        gamma_logger.info('Refreshing project browser...')
         self.beginResetModel()
         self._loadWells()
         self.endResetModel()

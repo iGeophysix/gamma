@@ -74,8 +74,7 @@ class ImportExportGui(ComponentGuiConstructor):
 
         # run engine after import completes
         gamma_logger.info("Sending task to engine")
-        workflow_task = celery.current_app.send_task('tasks.async_run_workflow', ())
-        # wait_till_completes((workflow_task, ))
+        celery.current_app.send_task('tasks.async_run_workflow', ())
 
         DbEventDispatcherSingleton().wellsAdded.emit()
 
