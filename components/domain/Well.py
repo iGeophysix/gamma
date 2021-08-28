@@ -17,6 +17,7 @@ class Well:
         """
         self._name = name
         if new and not self.exists():
+            # FIXME: potential data leak if the well will be created after self.exists() and before _s.create_well()
             _s = RedisStorage()
             _s.create_well(wellname=self._name)
 
