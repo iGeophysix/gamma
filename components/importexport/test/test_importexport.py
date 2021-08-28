@@ -4,7 +4,7 @@ import math
 import os
 import unittest
 
-from celery_conf import app as celery_app, check_task_completed
+from celery_conf import app as celery_app, wait_till_completes
 from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
 from components.domain.Well import Well
@@ -149,8 +149,7 @@ class TestAsyncLasLoading(unittest.TestCase):
                 data = f.read()
             async_results.append(celery_app.send_task('tasks.async_read_las', kwargs={'filename': path, 'las_data': data}))
 
-        while not all(map(check_task_completed, async_results)):
-            continue
+        wait_till_completes(async_results)
 
         p = Project()
         wells = p.list_wells()

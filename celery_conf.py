@@ -4,6 +4,7 @@ from typing import Iterable
 
 from celery import Celery
 from celery.result import AsyncResult
+import celery.states
 
 # CELERY CONFIG
 
@@ -22,28 +23,27 @@ app.conf.task_serializer = 'pickle'
 app.conf.accept_content = ['pickle', 'json']
 
 
-def get_running_tasks():
-    i = app.control.inspect()
-    return i.active()
+# def get_running_tasks():
+#     i = app.control.inspect()
+#     return i.active()
 
 
-def get_pending_tasks():
-    i = app.control.inspect()
-    return i.reserved()
+# def get_pending_tasks():
+#     i = app.control.inspect()
+#     return i.reserved()
 
 
-def check_task_completed(asyncresult: AsyncResult) -> bool:
-    return asyncresult.status in ('SUCCESS', 'FAILURE')
+# def check_task_completed(asyncresult: AsyncResult) -> bool:
+#     return asyncresult.ready()
 
 
-def check_task_successful(asyncresult: AsyncResult) -> bool:
-    return asyncresult.successful()
+# def check_task_successful(asyncresult: AsyncResult) -> bool:
+#     return asyncresult.successful()
 
 
 def wait_till_completes(results: Iterable[AsyncResult]) -> None:
-    while not all(map(check_task_completed, results)):
+    while not all(map(AsyncResult.ready, results)):
         time.sleep(0.1)
-        continue
 
 
 def track_progress(tasks: Iterable[AsyncResult], cached=0) -> dict:
@@ -53,20 +53,20 @@ def track_progress(tasks: Iterable[AsyncResult], cached=0) -> dict:
     :param cached: number of tasks cached
     :return:
     """
-    total = len(tasks) + cached
-    success = sum([t.status == 'SUCCESS' for t in tasks])
-    failed = sum([t.status == 'FAILURE' for t in tasks])
-    revoked = sum([t.status == 'REVOKED' for t in tasks])
-    pending = total - cached - success - failed - revoked
+    tobedone = len(tasks)
+    success = sum([t.successful() for t in tasks])
+    failed = sum([t.failed() for t in tasks])
+    revoked = sum([t.status == celery.states.REVOKED for t in tasks])
+    pending = tobedone - success - failed - revoked
 
-    completion = (1 - pending / (total - cached)) if (total - cached) else 1
+    completion = (1 - pending / tobedone) if tobedone else 1
 
     return {
-        'total': total,
+        'total': tobedone + cached,
         'cached': cached,
         'success': success,
         'failed': failed,
         'revoked': revoked,
         'pending': pending,
-        'completion': completion,
+        'completion': completion
     }

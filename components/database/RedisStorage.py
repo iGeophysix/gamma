@@ -95,7 +95,7 @@ class RedisStorage:
         for obj in self.connection.scan_iter():
             name = obj.decode()
             if name not in COMMON_DATA_TABLES:
-                logger.critical(f'DB data leak. Found a lost table "{name}"')
+                logger.error(f'DB data leak. Found a lost table "{name}"')
 
     def common_data_loaded(self) -> bool:
         '''
