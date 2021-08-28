@@ -36,11 +36,11 @@ class RedisEventMonitor:
                     status = json.loads(RedisEventMonitor._redis.object_get(ENGINE_RUNS_TABLE_NAME))
                     if status:
                         current_node_name, current_node_info = tuple(status.items())[-1]
-                        progress = current_node_info['completion'] * 100
+                        progress = int(current_node_info['completion'] * 100)
                         if current_node_name != engine_runs['node'] or progress != engine_runs['progress']:
                             engine_runs['node'] = current_node_name
                             engine_runs['progress'] = progress
-                            progress_msg = f'{current_node_name}: {progress:.0f}%'
+                            progress_msg = f'{current_node_name}: {progress}%'
                             RedisEventMonitor._logger.info(progress_msg)
 
                             if current_node_name == 'VolumetricModelSolverNode' and progress == 100:
