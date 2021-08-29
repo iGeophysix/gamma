@@ -11,3 +11,4 @@ lasio==0.27
 boto3==1.16.63
 catboost==0.25.1
 redlock-py
+docker-compose
