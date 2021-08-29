@@ -143,9 +143,9 @@ def async_get_basic_log_stats(wellname: str,
     :param logs: list of logs names to process. If None then use all logs for the dataset
     """
 
-    BasicStatisticsNode.run_for_item(wellname=wellname,
-                                     datasetnames=datasetnames,
-                                     lognames=lognames)
+    BasicStatisticsNode.run_async(wellname=wellname,
+                                  datasetnames=datasetnames,
+                                  lognames=lognames)
 
 
 @app.task
@@ -158,7 +158,7 @@ def async_log_resolution(dataset_id: str,
     :param dataset_id: Dataset id to process.
     :param log_id: Log id  to process.
     """
-    LogResolutionNode.run_for_item(dataset_id=dataset_id, log_id=log_id)
+    LogResolutionNode.run_async(dataset_id=dataset_id, log_id=log_id)
 
 
 @app.task
@@ -169,8 +169,8 @@ def async_split_by_runs(wellname: str, depth_tolerance: float = 50) -> None:
     :param wellname: well name as string
     :param depth_tolerance: distance to consider as acceptable difference in depth in one run
     """
-    RunDetectionNode.run_for_item(wellname=wellname,
-                                  depth_tolerance=depth_tolerance)
+    RunDetectionNode.run_async(wellname=wellname,
+                               depth_tolerance=depth_tolerance)
 
 
 @app.task
@@ -180,7 +180,7 @@ def async_recognize_family(wellname: str) -> None:
     :param wellname:
     :return:
     """
-    FamilyAssignerNode.run_for_item(wellname=wellname)
+    FamilyAssignerNode.run_async(wellname=wellname)
 
 
 @app.task
@@ -197,11 +197,11 @@ def async_splice_logs(wellname: str,
     :param logs: Logs' names as list of string. If None then uses all logs available in datasets
     :param output_dataset_name: Name of output dataset
     """
-    SpliceLogsNode.run_for_item(wellname=wellname,
-                                datasetnames=datasetnames,
-                                logs=logs,
-                                tags=tags,
-                                output_dataset_name=output_dataset_name)
+    SpliceLogsNode.run_async(wellname=wellname,
+                             datasetnames=datasetnames,
+                             logs=logs,
+                             tags=tags,
+                             output_dataset_name=output_dataset_name)
 
 
 @app.task
@@ -214,20 +214,19 @@ def async_detect_best_log(log_type: str,
     :param log_paths: list of (dataset_id, log_id) - best log candidates
     :param additional_logs_paths: list of (dataset_id, log_id) - additional logs to make statistics represenatative
     '''
-    BestLogDetectionNode.run_for_item(log_type=log_type,
-                                      log_paths=log_paths,
-                                      additional_logs_paths=additional_logs_paths)
+    BestLogDetectionNode.run_async(log_type=log_type,
+                                   log_paths=log_paths,
+                                   additional_logs_paths=additional_logs_paths)
 
 
 @app.task
 def async_define_volumetric_model(well_name: str, input_logs_id: Iterable[str]):
-    VolumetricModelDefineModelNode.run_for_item(well_name=well_name, input_logs_id=input_logs_id)
+    VolumetricModelDefineModelNode.run_async(well_name=well_name, input_logs_id=input_logs_id)
 
 
 @app.task
 def async_calculate_volumetric_model(well_name, model_components):
-    VolumetricModelSolverNode.run_for_item(well_name=well_name,
-                                           model_components=model_components)
+    VolumetricModelSolverNode.run_async(well_name=well_name, model_components=model_components)
 
 
 @app.task
@@ -235,10 +234,10 @@ def async_calculate_porosity_from_density(well_name,
                                           rhob_matrix: float = None,
                                           rhob_fluid: float = None,
                                           output_log_name: str = 'VSH_GR'):
-    PorosityFromDensityNode.run_for_item(well_name=well_name,
-                                         rhob_matrix=rhob_matrix,
-                                         rhob_fluid=rhob_fluid,
-                                         output_log_name=output_log_name)
+    PorosityFromDensityNode.run_async(well_name=well_name,
+                                      rhob_matrix=rhob_matrix,
+                                      rhob_fluid=rhob_fluid,
+                                      output_log_name=output_log_name)
 
 
 @app.task
@@ -247,16 +246,13 @@ def async_calculate_shale_volume(well_name: str,
                                  gr_matrix: float = None,
                                  gr_shale: float = None,
                                  output_log_name: str = 'VSH_GR'):
-    if algorithm == 'ShaleVolumeLarionovOlderRockNode':
-        node = ShaleVolumeLarionovOlderRockNode()
-    elif algorithm == 'ShaleVolumeLarionovTertiaryRockNode':
-        node = ShaleVolumeLarionovTertiaryRockNode()
-    elif algorithm == 'ShaleVolumeLinearMethodNode':
-        node = ShaleVolumeLinearMethodNode()
-    else:
-        raise ValueError(f"Unknown kind of algorithm: {algorithm}."
-                         f"Acceptable values: 'ShaleVolumeLinearMethodNode', 'ShaleVolumeLarionovTertiaryRockNode', 'ShaleVolumeLarionovOlderRockNode'.")
-    node.run_for_item(well_name, gr_matrix, gr_shale, output_log_name)
+    nodes = {
+        'ShaleVolumeLarionovOlderRockNode': ShaleVolumeLarionovOlderRockNode,
+        'ShaleVolumeLarionovTertiaryRockNode': ShaleVolumeLarionovTertiaryRockNode,
+        'ShaleVolumeLinearMethodNode': ShaleVolumeLinearMethodNode
+    }
+    node = nodes[algorithm]
+    node.run_async(well_name, gr_matrix, gr_shale, output_log_name)
 
 
 @app.task
@@ -277,15 +273,14 @@ def async_export_well_to_s3(destination: str,
 
 @app.task
 def async_log_reconstruction(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
-    LogReconstructionNode.run_for_item(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
+    LogReconstructionNode.run_async(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
 
 
 @app.task
 def async_saturation_archie(well_name, a, m, n, rw, output_log_name):
-    node = SaturationArchieNode()
-    node.run_for_item(well_name, a, m, n, rw, output_log_name)
+    SaturationArchieNode.run_async(well_name, a, m, n, rw, output_log_name)
 
 
-build_log_meta_fields_index = app.task(build_log_meta_fields_index)
-build_dataset_meta_fields_index = app.task(build_dataset_meta_fields_index)
-build_well_meta_fields_index = app.task(build_well_meta_fields_index)
+build_log_meta_fields_index_ = app.task(build_log_meta_fields_index)
+build_dataset_meta_fields_index_ = app.task(build_dataset_meta_fields_index)
+build_well_meta_fields_index_ = app.task(build_well_meta_fields_index)

@@ -1,5 +1,3 @@
-import logging
-
 import numpy as np
 
 import celery_conf
@@ -8,8 +6,6 @@ from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode, EngineNodeCache
-
-logging.basicConfig()
 
 
 def _linear_scale(arr, lower_limit, upper_limit):
@@ -24,14 +20,6 @@ class ShaleVolume(EngineNode):
     """
     Shale volume calculations
     """
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
-
     @classmethod
     def version(cls):
         return 1
@@ -71,7 +59,7 @@ class ShaleVolume(EngineNode):
         raise Exception("You are using abstract class instead of")
 
     @classmethod
-    def run_for_item(cls, well_name: str, gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR') -> None:
+    def run_async(cls, well_name: str, gr_matrix: float = None, gr_shale: float = None, output_log_name: str = 'VSH_GR') -> None:
         """
         Function to calculate Shale Volume (VSH) via Linear method
         :param well_name: well name to process
@@ -117,7 +105,7 @@ class ShaleVolume(EngineNode):
         return item_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """Run shale volume calculation for well"""
         gr_matrix = kwargs.get('gr_matrix', None)
         gr_shale = kwargs.get('gr_shale', None)
@@ -129,7 +117,6 @@ class ShaleVolume(EngineNode):
 
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
 
         for well_name in well_names:
 
@@ -142,7 +129,6 @@ class ShaleVolume(EngineNode):
             tasks.append(celery_conf.app.send_task('tasks.async_calculate_shale_volume', (well_name, cls.__name__, gr_matrix, gr_shale, output_log_name)))
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
@@ -164,9 +150,6 @@ class ShaleVolumeLinearMethodNode(ShaleVolume):
     Shale volume calculations
     """
 
-    logger = logging.getLogger("ShaleVolumeLinearMethodNode")
-    logger.setLevel(logging.INFO)
-
     class Meta:
         name = 'Shale Volume Linear Method'
         input = {
@@ -183,10 +166,6 @@ class ShaleVolumeLinearMethodNode(ShaleVolume):
                 "method": "Linear method based on Gamma Ray logs",
             }
         }
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
 
     @classmethod
     def version(cls):
@@ -232,10 +211,6 @@ class ShaleVolumeLarionovOlderRockNode(ShaleVolume):
                 "method": "Larionov older rock method based on Gamma Ray logs",
             }
         }
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
 
     @classmethod
     def version(cls):
@@ -290,10 +265,6 @@ class ShaleVolumeLarionovTertiaryRockNode(ShaleVolume):
                 "method": "Larionov Tertiary Rock based on Gamma Ray logs",
             }
         }
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
 
     @classmethod
     def _calculate(cls, log, gr_matrix: float, gr_shale: float, name: str = None) -> BasicLog:

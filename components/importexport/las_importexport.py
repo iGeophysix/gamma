@@ -9,7 +9,7 @@ from celery_conf import app as celery_app
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.las import import_to_db
 from components.importexport.las.las_export import create_las_file
 from settings import MINIO_HOST, MINIO_PORT, MINIO_USER, MINIO_PASSWORD
@@ -19,8 +19,8 @@ class LasImportNode(EngineNode):
     """
     Engine node to import files
     """
-
-    def run(self, paths: Iterable[str]):
+    @classmethod
+    def run_main(cls, cache: EngineNodeCache, paths: Iterable[str]):
         """
         :param paths: Absolute paths to files, accessible to task reader
         """
@@ -41,10 +41,6 @@ class LasExportNode(EngineNode):
         aws_access_key_id=MINIO_USER,
         aws_secret_access_key=MINIO_PASSWORD,
     )
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
 
     @classmethod
     def version(cls):
@@ -72,7 +68,7 @@ class LasExportNode(EngineNode):
         os.remove(filename)
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         :param destination: Name of output folder in public bucket of S3.
         """
@@ -101,4 +97,4 @@ class LasExportNode(EngineNode):
 
 if __name__ == '__main__':
     node = LasExportNode()
-    node.run(destination='LQC', async_job=False)
+    node.start(destination='LQC', async_job=False)

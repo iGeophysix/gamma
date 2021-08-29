@@ -7,7 +7,6 @@ from components.database.RedisStorage import RedisStorage
 from components.domain.Project import Project
 from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineProgress
 from components.importexport.las_importexport import LasImportNode, LasExportNode
 from settings import BASE_DIR
 from tasks import async_read_las, async_get_basic_log_stats
@@ -22,12 +21,11 @@ class TestLasImporter(unittest.TestCase):
 
     def test_las_import_works(self):
         folder = os.path.join(os.path.dirname(__file__), 'data')
-        paths = ['sample_2.0_large.las',
+        files = ['sample_2.0_large.las',
                  'sample_2.0_minimal.las',
                  'sample_minimal.las']
-        paths = list(map(lambda x: os.path.join(folder, x), paths))
-        node = LasImportNode()
-        node.run([p for p in paths if p.endswith('.las')])
+        paths = list(map(lambda x: os.path.join(folder, x), files))
+        LasImportNode.start(paths=paths)
 
         p = Project()
         wells = p.list_wells()
@@ -60,7 +58,7 @@ class TestLasExportNode(unittest.TestCase):
 
     def test_export_node_works_correctly(self):
         node = LasExportNode()
-        node.run(destination='TestExport')
+        node.start(destination='TestExport')
 
         s3 = LasExportNode.s3
 

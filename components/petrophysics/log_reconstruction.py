@@ -1,4 +1,3 @@
-import logging
 from collections import defaultdict
 from datetime import datetime
 
@@ -13,7 +12,6 @@ from components.domain.Well import Well
 from components.domain.WellDataset import WellDataset
 from components.engine.engine_node import EngineNode, EngineNodeCache
 from components.importexport.FamilyProperties import FamilyProperties
-from settings import LOGGING_LEVEL
 
 
 class LogReconstructionNode(EngineNode):
@@ -22,15 +20,8 @@ class LogReconstructionNode(EngineNode):
     '''
 
     @classmethod
-    def name(cls):
-        return cls.__name__
-
-    @classmethod
     def version(cls):
         return 1
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(LOGGING_LEVEL)
 
     @classmethod
     def __check_well_is_valid_for_training_and_get_output_units(cls, ds, well_name, log_family_to_predict, log_families_to_train):
@@ -39,11 +30,11 @@ class LogReconstructionNode(EngineNode):
         target_logs = ds.get_log_list(family=log_family_to_predict)
         good_target_log = None
         for target_log in target_logs:
-            l = BasicLog(ds.id, target_log)
-            if not 'reconstructed' in l.meta.tags:
+            log = BasicLog(ds.id, target_log)
+            if 'reconstructed' not in log.meta.tags:
                 good_target_log = target_log
                 # TODO: get better solution once we define default units for each family
-                log_to_predict_units = l.meta.units
+                log_to_predict_units = log.meta.units
                 break
 
         if not good_target_log:
@@ -51,17 +42,16 @@ class LogReconstructionNode(EngineNode):
             return False, None
 
         # check if well has good feature logs
-        feature_families = {fam: ds.get_log_list(family=fam) for fam in log_families_to_train}
-        good_feature_logs = {fam: None for fam in log_families_to_train}
-        for family, feature_logs in feature_families.items():
-            for feature_log in feature_logs:
-                l = BasicLog(ds.id, feature_log)
-                if not 'reconstructed' in l.meta.tags:
-                    good_feature_logs[l.meta.family] = feature_log
-
-        if not all(good_feature_logs.values()):
-            cls.logger.debug(f"Well {well_name} doesn't have log of family {log_families_to_train} for train")
-            return False, None
+        for fam in log_families_to_train:
+            found_good_log = False
+            for log in ds.get_log_list(family=fam):
+                log = BasicLog(ds.id, log)
+                if 'reconstructed' not in log.meta.tags and not log.empty():
+                    found_good_log = True
+                    break
+            if not found_good_log:
+                cls.logger.debug(f"Well {well_name} doesn't have log of family {fam} for train")
+                return False, None
 
         return True, log_to_predict_units
 
@@ -96,7 +86,7 @@ class LogReconstructionNode(EngineNode):
                 log = BasicLog(well_dataset.id, log_id)
                 if hasattr(log.meta, 'family') \
                         and log.meta.family in required_families \
-                        and not 'reconstructed' in log.meta.tags:
+                        and 'reconstructed' not in log.meta.tags:
                     logs_in_well.append(log)
 
             # interpolate to common reference
@@ -124,7 +114,7 @@ class LogReconstructionNode(EngineNode):
         try:
             result = model.predict(features)
             return np.vstack((df['__depth'], result)).T
-        except:
+        except Exception:
             LogReconstructionNode.logger.warning(f"Something went wrong in this dataset:{[(log.dataset_id, log.name) for log in input_logs]}")
             raise
 
@@ -148,18 +138,18 @@ class LogReconstructionNode(EngineNode):
 
     @staticmethod
     def _valid_log(log, log_families_to_train) -> bool:
-        return hasattr(log.meta, 'family') and \
-               log.meta.family in log_families_to_train \
-               and 'reconstructed' not in log.meta.tags
+        return hasattr(log.meta, 'family') \
+            and log.meta.family in log_families_to_train \
+            and 'reconstructed' not in log.meta.tags
 
     @staticmethod
     def _predicted_log(log, log_family_to_predict) -> bool:
-        return hasattr(log.meta, 'family') and \
-               log.meta.family in log_family_to_predict \
-               and 'reconstructed' in log.meta.tags
+        return hasattr(log.meta, 'family') \
+            and log.meta.family in log_family_to_predict \
+            and 'reconstructed' in log.meta.tags
 
     @classmethod
-    def run_for_item(cls, well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
+    def run_async(cls, well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs):
         """Run log reconstruction for family"""
         # train
         model, log_to_predict_units = cls._fit(well_names, log_families_to_train, log_family_to_predict, percent_of_wells_to_train, model_kwargs)
@@ -230,7 +220,7 @@ class LogReconstructionNode(EngineNode):
         return out_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """Launch node calculation"""
 
         cases_to_predict = kwargs.values()
@@ -242,7 +232,6 @@ class LogReconstructionNode(EngineNode):
         tasks = []
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
         for case_to_predict in cases_to_predict:
             log_families_to_train = case_to_predict.get('log_families_to_train')
             log_families_to_predict = case_to_predict.get('log_families_to_predict')
@@ -263,7 +252,6 @@ class LogReconstructionNode(EngineNode):
                              )
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
@@ -336,4 +324,4 @@ if __name__ == '__main__':
             }
         }
     }
-    node.run(**parameters)
+    node.start(**parameters)

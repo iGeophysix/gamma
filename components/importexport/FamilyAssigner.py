@@ -303,7 +303,7 @@ class FamilyAssignerNode(EngineNode):
         assert isinstance(log, BasicLog), "log must be instance of BasicLog class"
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         """
         Recognize log family in well datasets
         :param wellname:
@@ -359,13 +359,12 @@ class FamilyAssignerNode(EngineNode):
         return well_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         Run calculations
         """
         p = Project()
         tasks = []
-        cache = EngineNodeCache(cls)
         hashes = []
         cache_hits = 0
         for well_name in p.list_wells():
@@ -377,5 +376,4 @@ class FamilyAssignerNode(EngineNode):
             tasks.append(celery_app.send_task('tasks.async_recognize_family', (well_name,)))
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)

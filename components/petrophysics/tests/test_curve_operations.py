@@ -71,7 +71,7 @@ class TestBasicStatisticsNode(TestCase):
                       }
 
         node = BasicStatisticsNode()
-        node.run()
+        node.start()
 
         l = BasicLog(self.wd.id, "GK_D8106_D")
         self.assertEqual(true_value, l.meta.basic_statistics)

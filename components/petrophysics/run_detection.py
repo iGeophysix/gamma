@@ -32,19 +32,12 @@ class RunDetectionNode(EngineNode):
     Engine node that detects runs in all wells
     """
 
-    def __init__(self):
-        self.cache = EngineNodeCache(self)
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
-
     @classmethod
     def version(cls):
         return 0
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         '''
         Runs the best log detection for all logs
         belonging to the same RUN and the same Family.
@@ -113,10 +106,11 @@ class RunDetectionNode(EngineNode):
                     valid = False
 
         log_hashes = sorted(log_hashes)
-        well_hash = hashlib.md5(json.dumps(log_hashes).encode()).hexdigest()
+        well_hash = cls.item_md5((well_name, log_hashes))
         return well_hash, valid
 
-    def run(self, **kwargs):
+    @classmethod
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         Detect pseudo-runs in each well
         :param depth_tolerance:
@@ -130,8 +124,8 @@ class RunDetectionNode(EngineNode):
         cache_hits = 0
 
         for well_name in p.list_wells():
-            item_hash, valid = self.item_hash(well_name)
-            if valid and item_hash in self.cache:
+            item_hash, valid = cls.item_hash(well_name)
+            if valid and item_hash in cache:
                 hashes.append(item_hash)
                 cache_hits += 1
                 continue
@@ -140,10 +134,9 @@ class RunDetectionNode(EngineNode):
             tasks.append(result)
             hashes.append(item_hash)
 
-        self.cache.set(hashes)
-        self.logger.info(f'Node: {self.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
+        cache.set(hashes)
 
-        self.track_progress(tasks, cached=cache_hits)
+        cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
     def write_history(cls, **kwargs):

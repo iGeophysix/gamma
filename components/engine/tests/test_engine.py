@@ -53,4 +53,3 @@ class TestEngine(unittest.TestCase):
         self.assertTrue((first.status == 'REVOKED') or not first.get()['finished'])
         self.assertTrue((second.status == 'REVOKED') or not second.get()['finished'])
         self.assertTrue((third.status == 'SUCCESS') and third.get()['finished'])
-

@@ -66,7 +66,7 @@ class TestVolumetricModel(unittest.TestCase):
                         'UWater': [0.0, 0.0, 0.0, 0.0, 0.03, 0.05]}
         model_components = list(expected_res.keys())
 
-        module.run(model_components=model_components)
+        module.start(model_components=model_components)
 
         for component in model_components:
             log_name = self.res_component_logs[component]

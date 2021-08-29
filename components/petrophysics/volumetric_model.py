@@ -168,13 +168,11 @@ class VolumetricModelDefineModelNode(EngineNode):
     '''
 
     @classmethod
-    def run(cls, **kwargs) -> None:
-        cache = EngineNodeCache(cls)
+    def run_main(cls, cache: EngineNodeCache, **kwargs) -> None:
         hashes = []
         CORE_MODELS = [model['core'] for model in MODEL_COMPONENT_SET]
         CORE_MODELS_STR = [','.join(sorted(model)) for model in CORE_MODELS]
         min_log_number = max(map(len, CORE_MODELS)) - 1
-        cache_hits = 0
         tasks = []
         reference_wells = []
         for well_name in Project().list_wells():
@@ -185,16 +183,13 @@ class VolumetricModelDefineModelNode(EngineNode):
                 hashes.append(item_hash)
                 well_meta = Well(well_name).meta
                 item_hash_is_valid = hasattr(well_meta, 'volumetric_model_misfit') and len(set(well_meta['volumetric_model_misfit'].keys()).intersection(CORE_MODELS_STR)) == len(CORE_MODELS_STR)
-                if item_hash_is_valid and item_hash in cache:
-                    cache_hits += 1
-                else:
+                if not item_hash_is_valid or item_hash not in cache:
                     tasks.append(celery_app.send_task('tasks.async_calculate_volumetric_model', (well_name, None)))
                 reference_wells.append(well_name)
                 if len(reference_wells) == 5:  # representative number of wells
                     break
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
-        cls.track_progress(tasks, cached=cache_hits)
+        cls.track_progress(tasks)
 
         model_misfit = defaultdict(list)
         for well_name in reference_wells:
@@ -202,8 +197,11 @@ class VolumetricModelDefineModelNode(EngineNode):
             for model, misfit in well_model_stats.items():
                 model_misfit[model].append(misfit)
         misfit_model = [(np.nanmean(misfits), model) for model, misfits in model_misfit.items() if misfits]
-        best_model = sorted(misfit_model)[0][1]
-        Project().update_meta({'volumetric_model': best_model})  # update project-wide component set
+        if misfit_model:
+            best_model = sorted(misfit_model)[0][1]
+            Project().update_meta({'volumetric_model': best_model})  # update project-wide component set
+        else:
+            cls.logger.warning('Project has no wells suitable for automatic volumetric model component set selection')
 
     # @classmethod
     # def item_hash(cls) -> Tuple[str, bool]:
@@ -211,7 +209,7 @@ class VolumetricModelDefineModelNode(EngineNode):
     #     pass
 
     # @classmethod
-    # def run_for_item(cls, **kwargs):
+    # def run_async(cls, **kwargs):
     #     well_name = kwargs['well_name']
     #     input_logs_id = kwargs['input_logs_id']
 
@@ -248,15 +246,15 @@ class VolumetricModelSolverNode(EngineNode):
     Solver of volumetric mineral and fluid components model. EngineNode workstep.
     '''
 
-    class Meta:
-        name = 'Volumetric model solver'
-        input = [
-        ]
-        output = [
-        ]
+    # class Meta:
+    #     name = 'Volumetric model solver'
+    #     input = [
+    #     ]
+    #     output = [
+    #     ]
 
-    class NotEnoughImputLogsError(Exception):
-        pass
+    # class NotEnoughImputLogsError(Exception):
+    #     pass
 
     @classmethod
     def validate_input(cls, model_components: Iterable[str]) -> None:
@@ -270,7 +268,7 @@ class VolumetricModelSolverNode(EngineNode):
             raise ValueError(f'"model_components" contains unknown names: {unknown_components}')
 
     @classmethod
-    def run(cls, **kwargs) -> None:
+    def run_main(cls, cache: EngineNodeCache, **kwargs) -> None:
         '''
         Volumetric model solver
         Creates set of V[COMPONENT] logs - volume of a component and VMISFIT log - Model Fit Error
@@ -287,7 +285,6 @@ class VolumetricModelSolverNode(EngineNode):
 
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
 
         tasks = []
         for well_name in Project().list_wells():
@@ -302,7 +299,6 @@ class VolumetricModelSolverNode(EngineNode):
                                               (well_name, model_components)))
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
@@ -325,7 +321,7 @@ class VolumetricModelSolverNode(EngineNode):
         return item_hash, valid
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         '''
         Runs Volumetrics Model for a given well
         '''

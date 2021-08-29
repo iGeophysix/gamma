@@ -38,7 +38,7 @@ class TestSplitByRun(unittest.TestCase):
         self.assertEqual(l.meta.run['value'], '13_(2657.1-2720.3)')
 
     def test_split_by_runs_engine_node(self):
-        RunDetectionNode().run()
+        RunDetectionNode.start()
 
         w = Well('622')
         d = WellDataset(w, 'Well622_ULN_Combined')

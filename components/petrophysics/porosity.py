@@ -1,7 +1,5 @@
 import logging
-import time
-
-import numpy  as np
+import numpy as np
 
 import celery_conf
 from components.domain.Log import BasicLog
@@ -57,7 +55,7 @@ class PorosityFromDensityNode(EngineNode):
         return phit_d
 
     @classmethod
-    def run_for_item(cls, **kwargs) -> None:
+    def run_async(cls, **kwargs) -> None:
         """
         Function to calculate Porosity from Bulk Density log (PHIT_D) via linear method
         :param well_name: name of well to process
@@ -111,7 +109,7 @@ class PorosityFromDensityNode(EngineNode):
         return item_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
 
         rhob_matrix = kwargs.get('rhob_matrix', None)
         rhob_fluid = kwargs.get('rhob_fluid', None)
@@ -122,7 +120,6 @@ class PorosityFromDensityNode(EngineNode):
         tasks = []
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
 
         for well_name in well_names:
 
@@ -134,7 +131,6 @@ class PorosityFromDensityNode(EngineNode):
             tasks.append(celery_conf.app.send_task('tasks.async_calculate_porosity_from_density', (well_name, rhob_matrix, rhob_fluid, output_log_name)))
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod

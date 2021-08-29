@@ -213,7 +213,7 @@ class BestLogDetectionNode(EngineNode):
         return 0
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         logs = [BasicLog(log[0], log[1]) for log in kwargs['log_paths']]
         log_type = kwargs['log_type']
 
@@ -257,7 +257,7 @@ class BestLogDetectionNode(EngineNode):
             log = BasicLog(log_path[0], log_path[1])
             necessary_meta = {k: log.meta[k] for k in ['basic_statistics', 'name', 'description', 'units', ]}
             log_hashes.append(hashlib.md5(json.dumps(necessary_meta).encode()).hexdigest())
-            if not 'processing' in log.meta.tags:
+            if 'processing' not in log.meta.tags:
                 valid = False
 
         log_hashes = sorted(log_hashes)
@@ -265,16 +265,15 @@ class BestLogDetectionNode(EngineNode):
         return final_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         p = Project()
         tree = p.tree_oop()
 
         tasks = []
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
 
-        for well, datasets in tree.items():
+        for _, datasets in tree.items():
             run_family_logs_paths = defaultdict(lambda: defaultdict(list))
             run_logs_paths = defaultdict(list)
             for dataset, logs in datasets.items():
@@ -322,7 +321,6 @@ class BestLogDetectionNode(EngineNode):
                 tasks.append(celery_app.send_task('tasks.async_detect_best_log', ('resistivity', rt_candidates, None)))
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod

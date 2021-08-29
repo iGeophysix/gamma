@@ -66,7 +66,7 @@ class TestLogResolutionNode(unittest.TestCase):
         async_read_las(wellname=self.w.name, datasetname=filename, filename=os.path.join(PATH_TO_TEST_DATA, filename))
 
     def test_run(self):
-        LogResolutionNode().run()
+        LogResolutionNode().start()
 
         log = BasicLog(self.wd.id, "GK_D0400_D")
         resolution = log.meta['log_resolution']['value']

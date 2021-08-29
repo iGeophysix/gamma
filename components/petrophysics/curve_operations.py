@@ -195,7 +195,7 @@ class LogResolutionNode(EngineNode):
         assert abs(log.meta.basic_statistics['min_depth'] - log.meta.basic_statistics['max_depth']) > 50, 'Log is too short'
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         """
         Calculate Log Resolution for each log
         :param kwargs: dataset_id, log_id
@@ -218,7 +218,7 @@ class LogResolutionNode(EngineNode):
         return log.data_hash, hasattr(log.meta, 'log_resolution')
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         Run Log resolution node
         :param kwargs:
@@ -229,7 +229,6 @@ class LogResolutionNode(EngineNode):
         tasks = []
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
         for well_name in well_names:
             well = Well(well_name)
             for dataset_name in well.datasets:
@@ -263,8 +262,6 @@ class LogResolutionNode(EngineNode):
                     hashes.append(item_hash)
 
         cache.set(hashes)
-        cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
-
         cls.track_progress(tasks, cached=cache_hits)
 
     @classmethod
@@ -288,7 +285,22 @@ class BasicStatisticsNode(EngineNode):
         return 0
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache):
+        p = Project()
+        well_names = p.list_wells()
+        tasks = []
+        for well_name in well_names:
+            well = Well(well_name)
+            for dataset_name in well.datasets:
+                dataset = WellDataset(well, dataset_name)
+                for log_name in dataset.log_list:
+                    result = celery_app.send_task('tasks.async_get_basic_log_stats',
+                                                  (well_name, [dataset_name, ], [log_name, ]))
+                    tasks.append(result)
+        wait_till_completes(tasks)
+
+    @classmethod
+    def run_async(cls, **kwargs):
         """
         Calculates basic log statics for all given lognames
         in the given well and dataset.
@@ -312,21 +324,6 @@ class BasicStatisticsNode(EngineNode):
                 log.meta.update({'basic_statistics': get_basic_curve_statistics(log.values)})
                 cls.write_history(log=log)
                 log.save()
-
-    @classmethod
-    def run(cls):
-        p = Project()
-        well_names = p.list_wells()
-        tasks = []
-        for well_name in well_names:
-            well = Well(well_name)
-            for dataset_name in well.datasets:
-                dataset = WellDataset(well, dataset_name)
-                for log_name in dataset.log_list:
-                    result = celery_app.send_task('tasks.async_get_basic_log_stats',
-                                                  (well_name, [dataset_name, ], [log_name, ]))
-                    tasks.append(result)
-        wait_till_completes(tasks)
 
     @classmethod
     def write_history(cls, **kwargs):

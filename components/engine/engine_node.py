@@ -10,80 +10,6 @@ from components.database.RedisStorage import RedisStorage, ENGINE_NODE_CACHE_TAB
 from settings import LOGGING_LEVEL
 
 
-class EngineNode(ABC):
-    """
-    This class describes general object for all computational nodes
-    """
-    logger = logging.getLogger(__name__)
-    logger.setLevel(LOGGING_LEVEL)
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
-
-    @classmethod
-    def version(cls):
-        pass
-
-    @classmethod
-    def run_for_item(cls, **kwargs):
-        pass
-
-    @staticmethod
-    def item_md5(item) -> str:
-        """Get item md5 as string"""
-        return hashlib.md5(json.dumps(item).encode()).hexdigest()
-
-    @classmethod
-    def item_hash(cls, *args) -> Tuple[str, bool]:
-        """Get item hash to use in cache
-        :return item_value: hash value of the item
-        :return valid: if hash is still valid for the object
-        """
-        item_value = ''
-        valid = False
-        return item_value, valid
-
-    @classmethod
-    def run(cls, **kwargs) -> Any:
-        """
-        Run calculations
-        :param args: positional arguments
-        :param kwargs: keyword arguments
-        """
-        pass
-
-    @classmethod
-    def write_history(cls, **kwargs):
-        """
-        self.history = [
-                        {'node': <NodeClassName>,
-                         'node_version': 4,
-                         'event_timestamp':'2021-05-21 14:32:54.3123',
-                         'parent_logs': ((<dataset_id>, <log_id>),...),
-                         'parameters':{....}
-                         },...
-                       ]
-        """
-        pass
-
-    @classmethod
-    def track_progress(cls, tasks, cached=0):
-        """
-        Tracks progress in EngineProgress object (observer)
-        :param tasks: Celery tasks list
-        :param cached: number of cached tasks
-        :return:
-        """
-        engine_progress = EngineProgress()
-        while True:
-            progress = celery_conf.track_progress(tasks, cached)
-            engine_progress.update(cls.name(), progress)
-            if progress['completion'] == 1:
-                break
-            time.sleep(0.1)
-
-
 class EngineNodeCache:
     """Engine Node Cache to skip already calculated items"""
 
@@ -141,6 +67,92 @@ class EngineNodeCache:
     def version(self):
         """Get Node version"""
         return self._cache['version']
+
+
+class EngineNode(ABC):
+    """
+    This class describes general object for all computational nodes
+    """
+    logger = logging.getLogger(__name__)
+    logger.setLevel(LOGGING_LEVEL)
+
+    @classmethod
+    def name(cls):
+        return cls.__name__
+
+    @classmethod
+    def version(cls):
+        return None
+
+    @staticmethod
+    def item_md5(item) -> str:
+        """Get item md5 as string"""
+        return hashlib.md5(json.dumps(item).encode()).hexdigest()
+
+    @classmethod
+    def item_hash(cls, *args) -> Tuple[str, bool]:
+        """Get item hash to use in cache
+        :return item_value: hash value of the item
+        :return valid: if hash is still valid for the object
+        """
+        item_value = ''
+        valid = False
+        return item_value, valid
+
+    @classmethod
+    def start(cls, **kwargs) -> Any:
+        """
+        Run calculations
+        :param kwargs: keyword arguments
+        """
+        cache = EngineNodeCache(cls)
+        return cls.run_main(cache=cache, **kwargs)
+
+    @classmethod
+    def run_main(cls, cache: EngineNodeCache, **kwargs) -> Any:
+        """
+        Starting point for data processing
+        """
+        pass
+
+    @classmethod
+    def run_async(cls, **kwargs):
+        """
+        Async data processing function
+        """
+        pass
+
+    @classmethod
+    def write_history(cls, **kwargs):
+        """
+        self.history = [
+                        {'node': <NodeClassName>,
+                         'node_version': 4,
+                         'event_timestamp':'2021-05-21 14:32:54.3123',
+                         'parent_logs': ((<dataset_id>, <log_id>),...),
+                         'parameters':{....}
+                         },...
+                       ]
+        """
+        pass
+
+    @classmethod
+    def track_progress(cls, tasks, cached=0):
+        """
+        Tracks progress in EngineProgress object (observer)
+        :param tasks: Celery tasks list
+        :param cached: number of cached tasks
+        :return:
+        """
+        cls.logger.info(f'Node: {cls.name()}: cache hits:{cached} / misses: {len(tasks)}')
+
+        engine_progress = EngineProgress()
+        while True:
+            progress = celery_conf.track_progress(tasks, cached)
+            engine_progress.update(cls.name(), progress)
+            if progress['completion'] == 1:
+                break
+            time.sleep(0.1)
 
 
 class EngineProgress:

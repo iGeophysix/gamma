@@ -15,20 +15,12 @@ class SaturationArchieNode(EngineNode):
     """
     Saturation via Archie method
     """
-
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-
-    @classmethod
-    def name(cls):
-        return cls.__name__
-
     @classmethod
     def version(cls):
         return 1
 
     @classmethod
-    def run_for_item(cls, well_name: str, a: float, m: float, n: float, rw: float, output_log_name: str = 'SW_AR') -> None:
+    def run_async(cls, well_name: str, a: float, m: float, n: float, rw: float, output_log_name: str = 'SW_AR') -> None:
         """
         Function to calculate Saturation via Archie method in a well
         :param well_name: name of well to process
@@ -124,7 +116,7 @@ class SaturationArchieNode(EngineNode):
         return item_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         :param a: tortuousity exponent (unitless)
         :param m: cementation exponent (unitless)
@@ -148,7 +140,6 @@ class SaturationArchieNode(EngineNode):
             tasks = []
             hashes = []
             cache_hits = 0
-            cache = EngineNodeCache(cls)
 
             for well_name in well_names:
 
@@ -160,9 +151,8 @@ class SaturationArchieNode(EngineNode):
                 tasks.append(celery_conf.app.send_task('tasks.async_saturation_archie', (well_name, a, m, n, rw, output_log_name)))
 
             cache.set(hashes)
-            cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
             cls.track_progress(tasks, cached=cache_hits)
 
         else:
             for well_name in well_names:
-                cls.run_for_item(well_name, a, m, n, rw, output_log_name)
+                cls.run_async(well_name, a, m, n, rw, output_log_name)

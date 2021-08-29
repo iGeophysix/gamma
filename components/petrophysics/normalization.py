@@ -8,7 +8,7 @@ from components.domain.Log import BasicLog
 from components.domain.Project import Project
 from components.domain.Well import Well, get_dataset_by_id
 from components.domain.WellDataset import WellDataset
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 
 QUANTILES = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95]
 QUANTILES_TO_TIE = (5, 95)
@@ -90,7 +90,7 @@ class LogNormalizationNode(EngineNode):
         pass
 
     @classmethod
-    def run(cls, lower_quantile: float = 0.05, upper_quantile: float = 0.95) -> None:
+    def run_main(cls, cache: EngineNodeCache, lower_quantile: float = 0.05, upper_quantile: float = 0.95) -> None:
         """
         Run calculations
         :param lower_quantile: lower quantile value to tie to. Default: 0.05
@@ -114,7 +114,7 @@ class LogNormalizationNode(EngineNode):
                         continue
                     logs_by_families[log.meta.family].append(log)
 
-        for family, logs in logs_by_families.items():
+        for logs in logs_by_families.values():
             input_for_normalization = {}
             for log in logs:
                 dataset = get_dataset_by_id(log.dataset_id)
@@ -123,7 +123,7 @@ class LogNormalizationNode(EngineNode):
 
             results = _normalize_logs(input_for_normalization)
             for w_ds_l, log in results.items():
-                well_name, dataset_name, log_name = w_ds_l
+                well_name, dataset_name, _ = w_ds_l
                 well = Well(well_name)
                 dataset = WellDataset(well, 'LQC')
                 if not dataset.exists:

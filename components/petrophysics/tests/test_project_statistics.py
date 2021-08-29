@@ -24,11 +24,11 @@ class TestProjectStatisticsNode(TestCase):
                     f.startswith('200_LAS'):
                 import_to_db(filename=os.path.join(PATH_TO_TEST_DATA, f))
 
-        LogResolutionNode().run()
-        FamilyAssignerNode.run()
+        LogResolutionNode().start()
+        FamilyAssignerNode.start()
 
     def test_node_works(self):
-        ProjectStatisticsNode.run()
+        ProjectStatisticsNode.start()
 
         p = Project()
         stats_by_family = p.meta['basic_statistics']

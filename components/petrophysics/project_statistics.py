@@ -3,7 +3,7 @@ from collections import defaultdict
 import numpy as np
 
 from components.domain.Project import Project
-from components.engine.engine_node import EngineNode
+from components.engine.engine_node import EngineNode, EngineNodeCache
 
 
 class ProjectStatisticsNode(EngineNode):
@@ -16,7 +16,7 @@ class ProjectStatisticsNode(EngineNode):
         return 'bad_quality' not in log.meta.tags and hasattr(log.meta, 'log_resolution') and hasattr(log.meta, 'basic_statistics')
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         p = Project()
         tree = p.tree_oop()
 
@@ -48,4 +48,4 @@ class ProjectStatisticsNode(EngineNode):
 
 if __name__ == '__main__':
     node = ProjectStatisticsNode()
-    node.run()
+    node.start()

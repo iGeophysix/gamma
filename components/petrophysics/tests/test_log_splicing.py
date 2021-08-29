@@ -36,9 +36,9 @@ class TestLogSplicing(unittest.TestCase):
             'GK_D1911_D': {'family': 'Gamma Ray', 'units': 'gAPI', 'run': {'value': '20_(2450_2600)'}, 'tags': ['processing', ]},
         }
         for log_id, values in meta.items():
-            l = BasicLog(self.wd.id, log_id)
-            l.meta = values
-            l.save()
+            log = BasicLog(self.wd.id, log_id)
+            log.meta = values
+            log.save()
 
     def _true_meta(self):
         true_meta = {'AutoSpliced': {'Intervals': 6, 'Uncertainty': 0.5},
@@ -68,8 +68,8 @@ class TestLogSplicing(unittest.TestCase):
             self.assertEqual(val, log.meta[key])
 
     def test_log_splicing_engine_node_works_correctly(self):
-        SpliceLogsNode.run(output_dataset_name='LQC2')
-        SpliceLogsNode.run(output_dataset_name='LQC2')
+        SpliceLogsNode.start(output_dataset_name='LQC2')
+        SpliceLogsNode.start(output_dataset_name='LQC2')
 
         wd = WellDataset(self.w, 'LQC2')
         log = BasicLog(wd.id, 'GR')

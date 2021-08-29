@@ -39,7 +39,7 @@ class TestLogNormalization(unittest.TestCase):
 
     def test_log_normalization_works_correctly(self):
         log_norm = LogNormalizationNode()
-        log_norm.run(lower_quantile=0.05, upper_quantile=0.95)
+        log_norm.start(lower_quantile=0.05, upper_quantile=0.95)
 
         true_q5 = 5.59728
         true_q95 = 26.38376

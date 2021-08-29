@@ -65,7 +65,7 @@ class TestLogReconstructionNode(TestCase):
             }
         }
 
-        node.run(**parameters)
+        node.start(**parameters)
 
         for well_name in well_names_to_predict:
             well = Well(well_name)

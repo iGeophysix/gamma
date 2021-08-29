@@ -88,8 +88,8 @@ class TestFamilyAssignerNode(unittest.TestCase):
         log.meta.family = None  # deleting data
         log.save()
 
-        FamilyAssignerNode.run()
-        FamilyAssignerNode.run()
+        FamilyAssignerNode.start()
+        FamilyAssignerNode.start()
         log_in_db = BasicLog(self.dataset.id, log_id='SP')
         self.assertEqual('Spontaneous Potential', log_in_db.meta.family,
                          'Log family in storage is empty')

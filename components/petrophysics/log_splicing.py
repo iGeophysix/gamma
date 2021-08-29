@@ -147,7 +147,7 @@ class SpliceLogsNode(EngineNode):
         return np.vstack((new_md, result)).T
 
     @classmethod
-    def run_for_item(cls, **kwargs):
+    def run_async(cls, **kwargs):
         """
         Method to splice logs in a well. Takes logs in datasets and outputs it into a specified output dataset
         :param wellname: Well name as string
@@ -164,7 +164,6 @@ class SpliceLogsNode(EngineNode):
 
         w = Well(wellname)
         cls.splice_logs(w, datasetnames, logs, tags, output_dataset_name)
-
 
     @classmethod
     def item_hash(cls, *args) -> tuple[str, bool]:
@@ -203,7 +202,7 @@ class SpliceLogsNode(EngineNode):
         return item_hash, valid
 
     @classmethod
-    def run(cls, **kwargs):
+    def run_main(cls, cache: EngineNodeCache, **kwargs):
         """
         Run log splicing calculations
         :param output_dataset_name:
@@ -215,7 +214,6 @@ class SpliceLogsNode(EngineNode):
 
         hashes = []
         cache_hits = 0
-        cache = EngineNodeCache(cls)
 
         p = Project()
         if async_job:
@@ -235,7 +233,6 @@ class SpliceLogsNode(EngineNode):
                 tasks.append(celery_app.send_task('tasks.async_splice_logs', kwargs=params))
 
             cache.set(hashes)
-            cls.logger.info(f'Node: {cls.name()}: cache hits:{cache_hits} / misses: {len(tasks)}')
             cls.track_progress(tasks, cached=cache_hits)
 
         else:
@@ -244,7 +241,7 @@ class SpliceLogsNode(EngineNode):
                           'tags': ['processing', ],
                           'output_dataset_name': output_dataset_name
                           }
-                cls.run_for_item(**params)
+                cls.run_async(**params)
 
     @classmethod
     def write_history(cls, **kwargs):
@@ -262,4 +259,4 @@ class SpliceLogsNode(EngineNode):
 
 if __name__ == '__main__':
     node = SpliceLogsNode()
-    node.run(async_job=True)
+    node.start(async_job=True)

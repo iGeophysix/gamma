@@ -32,7 +32,7 @@ class Engine:
                 result['nodes'].append(
                     {'node': step['node'].name()}
                 )
-                my_timer(node.run)(**step['parameters'])
+                my_timer(node.start)(**step['parameters'])
                 self.logger.info(f'Finished {step}')
                 result['steps']['completed'] += 1
         except Exception:

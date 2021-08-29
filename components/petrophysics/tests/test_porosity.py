@@ -44,4 +44,4 @@ class TestShaleVolume(unittest.TestCase):
         self.assertAlmostEqual(0.0, np.nanmax(diff, ), 4)
 
     def test_node_works_correctly(self):
-        PorosityFromDensityNode.run()
+        PorosityFromDensityNode.start()
